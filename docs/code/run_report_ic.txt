@@ -1,0 +1,10 @@
+
+$controls = array(
+   'Country_multi_select' => array('USA', 'Mexico'),
+   'Cascading_state_multi_select' => array('CA', 'OR')
+   );
+
+
+$report = $client->runReport('/reports/samples/Cascading_multi_select_report', 'html', null, $controls);
+
+echo $report;

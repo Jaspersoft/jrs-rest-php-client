@@ -1,0 +1,789 @@
+Sample Code for JasperReports PHP Client
+
+Table of Contents
+
+1.  Introduction 
+2.  Preparing the Class 
+	2.a.	Invoking the Client
+3.  Repository Service	
+	3.a.	Obtaining all resources in the repository
+4.	Resource Service
+	4.a.	Getting a Resource
+	4.b.	Deleting a Resource
+	4.c.	Uploading a New Resource
+	4.d.	Updating an Existing Resource
+5.  Report Service
+	5.a.	Retrieving an HTML Report
+	5.b.	Viewing Report Options
+	5.c.	Creating Report Options
+	5.d.	Deleting Report Options
+	5.e.	Viewing Input Controls
+	5.f.	Running a report with input controls
+	5.g.	Offering a report for download
+6. 	User Service
+	6.a.	Getting a user
+	6.b.	Modifying a user
+	6.c. 	Deleting a user
+	6.d.	Creating a new user
+7.	Attribute Service
+	7.a.	Adding an attribute
+8.	Organization Service
+	8.a.	Creating a new Organization
+	8.b.	Getting an Organization
+	8.c.	Deleting an Organization
+	8.d.	Modifying an Organization
+9.	Role Service
+	9.a.	Getting a Role
+	9.b. 	Creating a Role
+	9.c.	Deleting a Role
+	9.d.	Modifying a Role
+10.	JobSummary Service
+	10.a.	Listing report scheduling jobs
+11.	Job Service
+	11.a.	Deleting a scheduled job
+	11.b.	Pausing a scheduled job
+	11.c.	Resuming a scheduled job
+	11.d.	Updating a scheduled job
+	11.e.	Creating a new job
+12.	Permission Service
+	12.a.	Viewing the permissions of a resource
+	12.b.	Deleting a permission of a resource
+	12.c.	Updating a permission of a resource
+
+
+1. Introduction
+
+The JasperReports PHP Client is a wrapper for the JasperReports Web Services API
+that accesses and represents data offered by the JasperReports Server Web
+Services. Data can be requested from the server and stored in objectes that are
+modeled after the objects offered by the server. Objects can be modified on the
+client side, and then "posted" back to the server. The functions in the class
+are modeled after their actions and the HTTP verbs that correspond with them.
+This abstraction allows people familiar with RESTful APIs to recognize the
+intentions and implementations of features, while people unfamiliar with RESTful
+APIs are still not burdened with learning all the details behind interacting
+with the API, building XML requests, and digesting the HTTP responses. Use of
+this wrapper is intented to allow users to focus on their logic and
+implementation rather than detailed communications with a server.
+
+2. 	Preparing the class
+
+2.a.	Invoking the client
+
+In order to use this class you must first invoke the client object. Once the
+client object is initilized, you can begin using its functions. In all the
+following examples it will be assumed the following code is at the beginning of
+the file.
+
+require_once "client/JasperClient.php";
+
+$client = new Jasper\JasperClient('localhost', // Hostname 
+	8080, // Port
+	'jasperadmin', // Username 
+	'jasperadmin', // Password 
+	'/jasperserver-pro', // Base URL 
+	'organization_1'); // Organization (pro only)
+
+		
+3.	Repository Service
+
+3.a.	Obtaining all resources in the repository
+
+The getRepository() function returns an array of objects correlating to the
+request. The objects returned are easily manipulated and have in them all the
+data returned by the server. When echoed, they will output an XML representation
+of themselves.
+
+$repository = $client->getRepository();	
+// Providing no arguments requests top level all resources
+
+foreach ($repository as $resourceDescriptor) { 
+	echo '<pre>'; 
+	printf('Resource Name: %s <br />', $resourceDescriptor->getName()); 
+	echo htmlentities($resourceDescriptor);	
+	// Prints XML of each resourceDescriptor object 
+	echo '</pre>';
+}
+
+		
+4.	Resource Service
+
+4.a.	Getting a Resource
+
+To obtain an object for a 'resource' on the server. It is necessary to provide
+the path to the getResource function. If you want to get a resource while
+supplying information to the input controls, you must define IC_GET_QUERY_DATA
+with the datasource you would like to query. Furthermore, you must supply the
+name of the parameter and the values you wish to set on the select field. See
+the example below to understand how you can select multiple objects from one
+multi-select input control.
+
+try { 
+	$resource = $client->getResource('/reports/samples/
+	Cascading_multi_select_report_files/Cascading_state_multi_select', 
+		null, '/datasources/JServerJNDIDS', 
+		null,
+		array('Country_multi_select', array('USA', 'Mexico')) 
+);
+
+	echo $resource; 
+} catch (Exception $e) { 
+		printf("Resource GET failed: %s", $e-
+	>getMessage()); 
+	}
+
+// Or you can request files with binary data such as an image
+
+$image = $client->getResource('/images/JRLogo', true);	
+// The true flag requests the file data, not the descriptor
+
+printf("<img src='data:image/jpeg;base64,%s' />", base64_encode($image));  
+// This only works on modern browsers
+
+
+4.b.	Deleting a Resource
+
+To delete a resource, simply pass the URI that corresponds to the resource you
+wish to delete to the deleteResource() function. A Boolean value is returned
+that represents the success of the call. Only certain resources can be deleted
+through the API. Please refer to the Web Services Guide PDF to understand which
+resources can be deleted.
+
+			
+try { 
+	$success = $client->deleteResource('/images/presacanario'); 
+} catch (Exception $e) { 
+	printf('Unable to delete resource: ' . $e->getMessage()); 
+}
+
+if ($success) { 
+	printf('The resource was succesfully deleted.'); 
+	}
+
+		
+4.c.	Uploading a new Resource
+
+To upload a resource, create a ResourceDescriptor object that corresponds to the
+resource you are uploading. You must also provide the path to which you wish to
+upload (not the same as the URI string). If you are uploading a file with the
+resource (i.e: an image) you can pass the full file path to the 3rd argument of
+the function.
+
+If there is no file to attach to the resource, simply omit the third argument.
+	
+$rd = new Jasper\ResourceDescriptor('presacanario', 'img',
+'/images/presacanario', 'true'); 
+$rd->setLabel('prescanario'); $rd->setDescription('Ancestors 
+		of pitbulls'); 
+$rd->addProperty(newJasper\ResourceProperty('PROP_PARENT_FOLDER', 
+		'/images')); 
+$rd->addProperty(newJasper\ResourceProperty('PROP_HAS_DATA', 
+		'true'));
+
+try { 
+	$result = $client->putResource('', $rd, 
+	  '/home/user/images/presa_canario.jpg'); 
+} catch (Exception $e) { 
+	printf('Unable to upload resource: %s', $e->getMessage()); 
+}
+
+		
+4.d.	Updating an existing Resource
+
+To update a resource, retrieve its existing ResourceDescriptor using the
+getResource() function. Make changes to the object you retrieved that reflect
+the changes you wish to make using the get/set methods for the
+ResourceDescriptor object. If you are changing a file as well, supply the full
+path to the file you wish to upload as the third argument. The first argument
+must be the URI that matches the resource you wish to change. This may be
+different than the URI path you used when creating the resource using the PUT
+method.
+
+
+			
+$folder = $client->getResource('/test'); 
+$folder->setLabel('New Folder Label');
+
+$client->postResource('/test', $folder);
+
+
+		
+5.	Report Service
+
+5.a.	Retrieving an HTML report
+
+The following code will request the AllAccounts sample report in HTML format.
+Since the data is HTML, we can simply echo it and the report will be presented
+in a webpage. You can do many things with the binary data, including offering
+the file to be downloaded or storing it to a file.
+
+			
+$report = $client->runReport('/reports/samples/AllAccounts', 'html'); 
+// The URI string could also be found from a resourceDescriptor object using 
+	the getUriString() method
+
+echo $report;
+
+		
+5.b.	Viewing Report Options
+
+You can view the different stored options for your reports that have input
+controls using this function. Simply provide the URI of the report that has
+options, and an array of objects representing each report option will be
+returned. The example below shows you how to request all the ReportOptions
+objects, iterate through them, and print the Labels of each of them. There is
+more information available in these objects (URI and ID), and they can also be
+retrieved with get methods.
+
+			
+$report_options = $client-
+>getReportOptions('/reports/samples/Cascading_multi_select_report');
+
+foreach($report_options as $ro) { echo $ro->getLabel() . "<br />"; 
+}
+
+
+5.c.	Creating Report Options
+
+To create a new report option, follow the next example. Note that when you are
+creating the $reportOptions argument for the function, the values for the
+options must be wrapped in an array, even if there is only one element. The
+example below shows how to create a new report that selects two options for
+Country_multi_select and three options for Cascading_state_multi_select.
+
+			
+$success = $client->updateReportOptions(
+	'/reports/samples/Cascading_multi_select_report', 
+		array('Country_multi_select' => array('Canada', 'USA'),	
+	'Cascading_state_multi_select' => array('OR', 'WA','BC')), 
+	'CanadaUSA', 'true'); 
+if ($success) { 
+echo "Created new report option successfully"; 
+}
+
+		
+5.d.	Deleting Report Options
+
+To delete report options, retrieve the URI for the report containing the options
+and provide the label for the option setting. If your report options have
+whitespace in the label, this function might not handle it well. Instead, use
+the deleteResource() function to delete the Report Option. The following example
+will remove the report options created in the previous example.
+
+
+                        
+try {
+	$client->deleteReportOptions('/reports/samples/Cascading_multi_select_report', 
+	'CanadaUSA');
+} catch (Exception $e) {
+	printf("An exception was thrown: ", $e->getMessage());
+}
+
+                
+5.e.	Viewing Input Controls
+
+Reports that have input controls allow you to request the input controls, their
+values, and their default selection status through the API. Using the following
+example, you can see all the possible values for each key listed below the key
+itself.
+
+$input_controls = $client->getReportInputControls
+  ('/reports/samples/Cascading_multi_select_report');
+
+foreach($input_controls as $ic) {
+  printf('Key: %s <br />', $ic->getId());
+  foreach ($ic->getOptions() as $ico) {
+	printf('    -- Value: %s <br />', $ico['label']);
+  }
+}
+
+
+5.f.	Running a report with input controls
+
+The following example displays how a report can be ran with various input
+controls set.
+			
+$controls = array(
+   'Country_multi_select' => array('USA', 'Mexico'),
+   'Cascading_state_multi_select' => array('CA', 'OR')
+   );
+
+
+$report = $client->runReport('/reports/samples/Cascading_multi_select_report', 
+   'html', null, $controls);
+
+echo $report;	
+
+
+5.g.	Offering a report for download
+
+We can serve binary data to a browser as a download by offering the proper
+headers before anything else is sent by the script.
+
+$report = $client->runReport('/reports/samples/AllAccounts', 'pdf');
+
+header('Cache-Control: must-revalidate');
+header('Pragma: public');
+header('Content-Description: File Transfer');
+header('Content-Disposition: attachment; filename=report.pdf');
+header('Content-Transfer-Encoding: binary');
+header('Content-Length: ' . strlen($report));
+header('Content-Type: application/pdf');
+
+echo $report;	
+
+
+
+6.	User Service
+
+6.a.	Getting a user
+
+Using the getUsers() function it is possible to request User objects that can be
+manipulated and provided to other functions. In the following example, the user
+'CaliforniaUser' is requested from the server. This function will always return
+an array of zero or more elements.
+		
+$californiaUser = $client->getUsers('CaliforniaUser');
+
+if($californiaUser[0]->getUsername() == 'CaliforniaUser') { 
+printf('Correct user found! Username is: %s', 
+$californiaUser->getUsername()); 
+}
+
+		
+6.b.	Modifying a user
+
+To modify a user, first request the user object of the user you wish to modify.
+Then manipulate the object with its instance methods, and post it back to the
+server. Any changes made of the local copy of the object should be reflected on
+the server once posted. If data is modified that cannot be changed, or false
+data is provided (such as an invalid email) then the package will throw an
+Exception that reports the HTTP status code received.
+
+Currently it is required to manually set the password before posting a user
+object. Note that you must provide the $old_username argument to the post_user
+function when updating a user's login name. The API must have the old username
+to find the previous user to update its information.
+			
+$californiaUser = $client->getUsers('CaliforniaUser');
+
+if (count($californiaUser) == 1) 
+{
+  $californiaUser->setEmailAddress('sanfrancisco-pasadena@example.com');
+  $californiaUser->setPassword('SUPERstrongPASSWORD###!!!');
+
+  try { $client->postUser($californiaUser); } catch (Exception $e) {
+  printf('Attempt to modify the user failed with error: %s', $e->getMessage());
+  } 
+  } 
+  else { printf('More than one user found. Please be more specific with your
+  query.'); 
+  }
+
+
+6.c.	Deleting a user
+
+You must provide a user object to be deleted to the deleteUser function. The
+following example illustrates how to delete multiple users with only a list of
+usernames.
+			
+$users_to_delete = array( 'user1', 'billy_user', 'fuser');
+
+foreach ($users_to_delete as $user) { try { $userObject = $client-
+>getUsers($user); $client->deleteUser($userObject[0]); 
+} 
+catch (Exception $e) {
+printf('Unable to delete user: %s', $e->getMessage()); 
+} 
+}
+
+		
+6.d.	Creating a new user
+
+To create a new user, one must first construct a User object. Once the user
+object is populated with the appropriate amount of information it can be "put"
+to the server. Take note that this function can also accept multiple user
+objects stored in an array. If you need to create many users at once, it can all
+be done with one request.
+
+$newUser = new Jasper\User(
+		'BI_User',	// username
+		'superSTRENGTHpassw0rd',	// password
+		'clever@email.com',	// email
+		'Business Intelligence User',	// description
+		'organization_1',	// parent organization
+		'true'	// enabled
+);	
+
+$role = new Jasper\Role('ROLE_USER', null, 'false');
+$newUser->addRole($role);
+
+try {
+   $client->putUsers($newUser);
+} catch (Exception $e) {
+   printf('Could not add new user: %s', $e->getMessage());
+}
+
+		
+7.	Attribute Service
+
+7.a.	Adding an attribute
+
+To add attributes, one must first create Attribute objects by providing the name
+and value of the attributes to the constructor. Then one can bundle the
+attributes in an array to pass as an argument. Or one may provide one single
+attribute as the second argument if it is only needed to add one attribute.
+
+$state_attribute = new Jasper\Attribute('State', 'Oklahoma');
+$city_attribute = new Jasper\Attribute('Cities', 'Norman, Tulsa, Stillwater');
+$attributes_to_add = array($state_attribute, $city_attribute);
+
+$user = $client->getUsers('intern_developer');	
+// a user object is required to be passed to the attribute function
+$client->postAttributes($user, $attributes_to_add);
+
+		
+8.	Organization Service
+
+8.a.	Creating a new Organization
+
+Creating a new organization requires constructing a new Organization object and
+sending it to the server with the PUT verb.
+
+$new_organization = new Jasper\Organization(
+			'test_organization',	// alias
+			'test_organization',	// id
+			'organization_1',	// parent organization
+			'test_organization');	// tenantName
+
+try {
+   $client->putOrganization($new_organization);
+} catch (Exception $e) {
+   printf('Creating organization failed: %s', $e->getMessage());
+}
+
+		
+8.b.	Getting an Organization
+
+To get an organization, we can provide the getOrganization function with either
+a string or an Organization object. The __toString method for an Organization
+object will return a string representation of the Organization's ID. Thus,
+passing either will work properly.
+
+$organization = $client->getOrganization('test_organization');
+print_r($organization);
+
+		
+8.c.	Deleting an Organization
+
+An organization may be deleted by providing the Organization Object that
+correlates to the organization that is to be deleted. This can be retrieved as
+shown below by using the getOrganization() method.
+
+$organization_to_remove = $client->getOrganization('test_organization');
+
+try {
+   $client->deleteOrganization($organization_to_remove);
+} catch (Exception $e) {
+   printf('Organization deletion failure: %s', $e->getMessage());
+}
+
+		
+8.d.	Modifying an Organization
+
+Modifying an organization is done in a similar fashion to modifying a user. The
+organization object needs to be obtained with the getOrganization method and
+then modify it with the get/set methods, and post it back to the server, as
+shown below.
+
+$organization = $client->getOrganization('test_organization');
+$organization->setTenantDesc('An organization not yet ready for the world.');
+
+try {
+   $client->postOrganization($organization);
+} catch (Exception $e) {
+   printf('Unable to modify organization: %s', $e->getMessage());
+}
+
+		
+9.	Role Service
+
+9.a.	Getting a Role
+
+It is possible to request roles and their data from web services. It is also
+possible to limit the results by a search term if looking for a specific role.
+The following example shows you how to request the role object. Using print_r
+you can see all the values stored in the object.
+
+$all_roles = $client->getRoles();
+print_r($all_roles);
+
+$role_user = $client->getRoles('ROLE_USER');
+print_r($role_user);
+
+		
+9.b.	Creating a Role
+
+Creating a role is very similar to creating other objects on the server, such as
+creating a user. First, craft the object to be added. Then use the putRole
+method to add the object to the server.
+
+$role_to_add = new Jasper\Role('ROLE_VICE_PRINCIPAL', 'organization_1');
+
+try {
+   $client->putRole($role_to_add);
+} catch (Exception $e) {
+   printf('Adding role failed: %s', $e->getMessage());
+}
+
+		
+9.c.	Deleting a Role
+
+Deleting a role requires you to provide the Role object taken from the
+getRoles() method. If a role belongs to an organization, it must be provided in
+the getRoles method to retrieve the correct Role.
+
+$role_vice_principal = $client->getRoles('ROLE_VICE_PRINCIPAL', 'organization_1');
+
+try {
+   $client->deleteRole($role_vice_principal);
+} catch (Exception $e) {
+   printf('Deleting role failed: %s', $e->getMessage());
+}
+
+		
+9.d.	Modifying a Role
+
+One can really only change a Role's name. You may also change its
+externallyDefined status, but that is not recommended. When you change the name
+of the Role, it is necessary that you provide the old name of the Role so it can
+be properly referenced to be altered.
+
+$role = $client->getRoles('ROLE_VICE_PRINCIPAL', 'organization_1');
+$old_role_name = $role->getRoleName();	// Here we store the old role's name
+$role->setRoleName('ROLE_HALLWAY_MONITOR');
+
+try {
+   $client->postRole($role, $old_role_name);
+} catch (Exception $e) {
+   printf('Updating role failed: %s', $e->getMessage());
+}
+
+		
+10.	JobSummary Service
+
+10.a.	Listing report scheduling jobs
+
+Using the new 'jobs' service offered in JasperReports v4.7 we it is possible to
+query for jobs in three ways. By providing no arguments to the function one can
+request all of the currently scheduled jobs. By providing a URI one can request
+all jobs assigned to a specific report. By providing the name (label) of a
+report, one can request a single report. The function will always return an
+array with 0 or more elements.
+
+try {
+   $jobs = $client->getJobs('dailyReport', true);	
+   
+// can also use a URI... i.e: $client->getJobs('/reports/samples/AllAccounts');
+   if(count($jobs) >= 1) {
+      foreach($jobs as $job) {
+         printf('Job Name: %s<br />Job ID: %s<br /><br />', $job->getLabel(), 
+         $job->getId());
+      }
+   }
+} catch (Exception $e) {
+   printf('Requesting scheduled jobs failed: %s', $e->getMessage());
+}
+
+		
+11.	Job Service
+
+11.a.	Deleting a scheduled job
+
+Jobs can be deleted using this function. This function is best combined with the
+getJobs() function The function below uses getJobs to request all jobs matching
+the title 'jobName' on the server. If we get one result, we know that our
+results are not ambigous and in fact correlate to the job we requested.
+Proceeding we can delete the job by supplying its ID (from the getId function)
+to the deleteJob function. A boolean value is returned to help determine if the
+operation was successful. Similar to all other functions an exception will be
+thrown if the server rejects the request.
+
+try {
+   $jobs = $client->getJobs('jobName', true);	// request job by label
+   if (count($jobs) > 1) {
+      echo "More than one job found, be more specific.";
+   }
+   else {
+      if($client->deleteJob($jobs[0]->getId())) {
+	printf('Deleting job: %s (Job ID: %s) was successful!', 
+	$jobs[0]->getLabel(), $jobs[0]->getId());
+      }  
+   }
+} catch (Exception $e) {
+   printf('Deleting a job failed: %s', $e->getMessage());
+}
+
+		
+11.b.	Pausing a scheduled job
+
+Jobs can be paused using the pauseJob function. The only argument for this
+function accepts either a single job ID as an integer, an array of job IDs; or,
+if no argument is provided all jobs will be paused.
+
+try {
+   if($client->pauseJob()) {
+      printf('All jobs were successfully paused.');
+   }
+} catch (Exception $e) {
+   printf('Unable to pause all jobs. Error: %s', $e->getMessage());
+}
+
+		
+11.c.	Resuming a scheduled job
+
+It is possible to resume a job that has been previously paused. The only
+argument for this function is a form of the ID's of the jobs to be resumed this
+value can be either null (resume all jobs), an integer/string referring to the
+job's ID you wish to use (This can be retrieved using the JobSummary service as
+shown below) or an array of int/strings that refer to the job IDs.
+
+try {
+   $job = $client->getJobs('dailyReport', true);
+   $job_id = $job[0]->getId();
+   $job_label = $job[0]->getLabel();
+   if ($client->resumeJob($job_id)) {
+      printf('Successfully resumed job: %s (name: %s)', $job_id, $job_label);
+   } else {
+      printf('Error resuming job: %s (name: %s)', $job_id, $job_label);
+   }
+} catch (Exception $e) {
+   printf('Unable to resume job. Error: %s', $e->getMessage());
+}
+
+		
+11.d.	Updating a scheduled job
+
+To update a scheduled job, request the old job object from the server, modify
+it, and then use the postJob() function to re-upload it to the server. The Job
+class utilizes properties and arrays to manage its data, which is different from
+the other objects which use only properties. This means you will not use get/set
+methods to alter the data in a Job object, but rather set the properties as if
+they were variables. If a property refers to a nested element of the job class,
+use array functions to manipulate the arrays.
+
+$jobs = $client->getJobs();
+$oj = $client->getJob($jobs[0]->getId());
+$oj->label = "New Label";
+$oj->mailNotification['toAddresses']['address'][] = "email@example.com";
+
+$client->postJob($oj);
+
+		
+11.e.	Creating a new Job
+
+Jobs can be created from scratch. However, the way these objects interact is
+different than the other objects in the package. The values of the Job class are
+varied, and organized through associative arrays. In the following example, you
+can see how the values are set for the various flags of the Job object. If a
+section requires more than one element of the same type (i.e: adding multiple
+toAddresses to send an alert to) it must be added using the PHP array functions.
+See below how this is done
+
+$result = new Job();
+$result->baseOutputFilename = 'test';
+$result->repositoryDestination['folderURI'] = '/folder/for/reports';
+$result->repositoryDestination['overwriteFiles'] = 'false';
+$result->repositoryDestination['sequentialFilenames'] = 'false';
+$result->description = 'test';
+$result->label = 'test';
+$result->outputFormats['outputFormat'][] = 'PDF';
+$result->outputFormats['outputFormat'][] = 'XLS';
+$result->outputFormats['outputFormat'][] = 'RTF';
+$result->source['reportUnitURI'] = '/reports/samples/AllAccounts';
+$result->simpleTrigger['recurrenceInterval'] = '1';
+$result->simpleTrigger['recurrenceIntervalUnit'] = 'DAY';
+$result->simpleTrigger['occurrenceCount'] = '2';
+$result->simpleTrigger['startDate'] = '2025-01-26T00:00:00-07:00';
+$result->simpleTrigger['timezone'] = 'America/Los_Angeles';
+
+$client->putJob($result);
+
+
+12.	Permission Service
+
+12.a.	Viewing the permissions of a resource
+
+You can retrieve all the non-inherited permissions on a resource by providing
+the URI to the getPermissions() function. An array of zero or more items is
+returned, and the array contains Permission objects that represent all
+permissions the server returned. In the following example it is necessary to
+determine whether the PermissionRecipient is a User or Role object by using the
+instanceof function. You can use the object to display the information
+it might contain.
+
+$permissions = $client->getPermissions('/dashboards');
+
+foreach ($permissions as $p) {
+   $recipient = $p->getPermissionRecipient();
+   if($recipient instanceof Jasper\User) {
+      printf("%s has permisison mask of %s <br />", 
+      $recipient->getUsername(), $p->getPermissionMask());
+   } elseif ($recipient instanceof Jasper\Role) {
+      printf("Role %s has permission mask of %s <br />", 
+      $recipient->getRoleName(), $p->getPermissionMask());
+   }
+}
+
+		
+12.b.	Deleting a permission of a resource
+
+Using the deletePermission() function, you can remove a permission that is set.
+You must first request the existing permissions using the getPermissions()
+function. Then send the object of the permission you wish to be deleted to this
+function and it will be done. When a permission is erased, the role or user's
+permissions default back to the inhereted permissions. The following example
+will remove all User-typed permissions set on the dashboards folder.
+
+$permissions = $client->getPermissions('/dashboards');
+
+foreach ($permissions as $p) {
+   $recipient = $p->getPermissionRecipient();
+   if($recipient instanceof Jasper\User) {
+      $client->deletePermission($p);
+   }
+}
+
+		
+12.c.	Updating a permission of a resource
+
+Using the updatePermissions() function, you can alter or change the permissions
+of a resource. You must first request the existing permissions using the
+getPermissions() function. Then create a new Permission object, and add it to
+the current permissions. Once you issue the updatePermissions command, the
+permissions will be updated. The example below lets user 'joeuser' become an
+administer over the /images/JRLogo resource.
+
+$resource = $client->getResource('/images/JRLogo');
+$joeuser = $client->getUsers('joeuser');
+$perms = $client->getPermissions($resource->getUriString());
+
+$perm = new Permission('1', $joeuser[0], $resource->getUriString());
+$perms[] = $perm;
+
+$client->updatePermissions($resource->getUriString(), $perms);
+                
+
+
+_________________________
+
+Part Number: 1112-JSP50-1
+
+Copyright (C) 2012 Jaspersoft Corporation. All rights reserved.
+Printed in the U.S.A. Jaspersoft, the Jaspersoft logo,
+Jaspersoft iReport Designer, JasperReports Library,
+JasperReports Server, Jaspersoft OLAP, and Jaspersoft ETL
+are trademarks and/or registered trademarks of Jaspersoft
+Corporation in the United States and in jurisdictions
+throughout the world. All other company and product names are
+or may be trade names or trademarks of their respective owners.

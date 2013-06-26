@@ -1,0 +1,20 @@
+
+try {
+	$resource = $client->getResource('/reports/samples/Cascading_multi_select_report_files/Cascading_state_multi_select',
+						null,
+						'/datasources/JServerJNDIDS',
+						null,
+						array('Country_multi_select', array('USA', 'Mexico'))
+						);
+						
+	echo $resource;
+} catch (Exception $e) {
+	printf("Resource GET failed: %s", $e->getMessage());
+}
+
+
+// Or you could request files with binary data such as an image
+
+$image = $client->getResource('/images/JRLogo', true);	// The true flag requests the file data, not the descriptor
+
+printf("<img src='data:image/jpeg;base64,%s' />", base64_encode($image));  // This only works on modern browsers

@@ -1,0 +1,6 @@
+
+$report_options = $client->getReportOptions('/reports/samples/Cascading_multi_select_report');
+
+foreach($report_options as $ro) {
+   echo $ro->getLabel() . "<br />";
+}

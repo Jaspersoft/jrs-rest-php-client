@@ -1,0 +1,12 @@
+
+$search = $client->searchUsers('californiaUser', 'organization_1');
+$californiaUser = $client->getUserByLookup($search[0]);
+
+$californiaUser->setEmailAddress('sanfrancisco-oakland@example.com');
+$californiaUser->setPassword('SUPERstrongPASSWORD###!!!');
+
+try {
+    $client->addUsers($californiaUser);
+} catch (Exception $e) {
+    printf('Attempt to modify the user failed with error: %s', $e->getMessage());
+}

@@ -1,0 +1,9 @@
+
+$success = $client->updateReportOptions(
+		'/reports/samples/Cascading_multi_select_report',
+		array('Country_multi_select' => array('Canada', 'USA'),	'Cascading_state_multi_select' => array('OR', 'WA', 'BC')),
+		'CanadaUSA',
+		'true');
+if ($success) {
+   echo "Created new report option successfully";
+}

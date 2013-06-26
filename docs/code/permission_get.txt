@@ -1,0 +1,11 @@
+
+$permissions = $client->getPermissions('/dashboards');
+
+foreach ($permissions as $p) {
+   $recipient = $p->getPermissionRecipient();
+   if($recipient instanceof Jasper\User) {
+      printf("%s has permisison mask of %s <br />", $recipient->getUsername(), $p->getPermissionMask());
+   } elseif ($recipient instanceof Jasper\Role) {
+      printf("Role %s has permission mask of %s <br />", $recipient->getRoleName(), $p->getPermissionMask());
+   }
+}

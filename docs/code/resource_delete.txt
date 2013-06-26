@@ -1,0 +1,10 @@
+
+try {
+   $success = $client->deleteResource('/images/presacanario');
+} catch (Exception $e) {
+   printf('Unable to delete resource: ' . $e->getMessage());
+}
+
+if ($success) {
+   printf('The resource was succesfully deleted.');
+}

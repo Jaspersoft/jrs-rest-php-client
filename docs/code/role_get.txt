@@ -1,0 +1,6 @@
+
+$all_roles = $client->getRoles();
+print_r($all_roles);
+
+$role_user = $client->getRoles('ROLE_USER');
+print_r($role_user);

@@ -1,0 +1,13 @@
+
+$query = <<<EOF
+<query>
+    <queryFields>
+        <queryField id="public_opportunities.amount"/>
+        <queryField id="public_opportunities.name"/>
+    </queryFields>
+</query>
+EOF;
+
+$result = $client->executeQuery('/Domains/Simple_Domain', $query);
+
+print_r($result);

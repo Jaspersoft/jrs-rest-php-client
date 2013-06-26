@@ -1,0 +1,13 @@
+
+$rd = new Jasper\ResourceDescriptor('presacanario', 'img', '/images/presacanario', 'true');
+$rd->setLabel('prescanario');
+$rd->setDescription('Ancestors of pitbulls');
+$rd->addProperty(new Jasper\ResourceProperty('PROP_PARENT_FOLDER', '/images'));
+$rd->addProperty(new Jasper\ResourceProperty('PROP_HAS_DATA', 'true'));
+
+try {
+   $result = $client->putResource('', $rd, '/home/user/images/presa_canario.jpg');
+} catch (Exception $e) {
+   printf('Unable to upload resource: %s', $e->getMessage());
+}
+

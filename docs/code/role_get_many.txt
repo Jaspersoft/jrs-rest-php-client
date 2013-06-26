@@ -1,0 +1,5 @@
+
+$server_roles = $client->getManyRoles();
+foreach ($server_roles as $role)
+    printf('<br> Role: %s', $role->roleName);
+   

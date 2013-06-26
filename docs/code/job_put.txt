@@ -1,0 +1,19 @@
+
+$result = new Job();
+$result->baseOutputFilename = 'test';
+$result->repositoryDestination['folderURI'] = '/folder/for/reports';
+$result->repositoryDestination['overwriteFiles'] = 'false';
+$result->repositoryDestination['sequentialFilenames'] = 'false';
+$result->description = 'test';
+$result->label = 'test';
+$result->outputFormats['outputFormat'][] = 'PDF';
+$result->outputFormats['outputFormat'][] = 'XLS';
+$result->outputFormats['outputFormat'][] = 'RTF';
+$result->source['reportUnitURI'] = '/reports/samples/AllAccounts';
+$result->simpleTrigger['recurrenceInterval'] = '1';
+$result->simpleTrigger['recurrenceIntervalUnit'] = 'DAY';
+$result->simpleTrigger['occurrenceCount'] = '2';
+$result->simpleTrigger['startDate'] = '2025-01-26T00:00:00-07:00';
+$result->simpleTrigger['timezone'] = 'America/Los_Angeles';
+
+$client->putJob($result);

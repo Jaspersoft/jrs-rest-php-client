@@ -1,0 +1,4 @@
+
+$find = $client->searchOrganization('org');
+foreach ($find as $result)
+    printf('<br>Organization Found: %s', $result->id);

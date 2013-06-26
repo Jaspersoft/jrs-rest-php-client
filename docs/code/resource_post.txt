@@ -1,0 +1,6 @@
+
+$folder = $client->getResource('/test');
+$folder->setLabel('New Folder Label');
+
+$client->postResource('/test', $folder);
+

@@ -1,0 +1,9 @@
+
+$resource = $client->getResource('/images/JRLogo');
+$joeuser = $client->getUsers('joeuser');
+$perms = $client->getPermissions($resource->getUriString());
+
+$perm = new Permission('1', $joeuser[0], $resource->getUriString());
+$perms[] = $perm;
+
+$client->updatePermissions($resource->getUriString(), $perms);

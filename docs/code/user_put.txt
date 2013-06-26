@@ -1,0 +1,18 @@
+
+$newUser = new Jasper\User(
+		'BI_User',	// username
+		'superSTRENGTHpassw0rd',	// password
+		'clever@email.com',	// email
+		'Business Intelligence User',	// description
+		'organization_1',	// parent organization
+		'true'	// enabled
+);	
+
+$role = new Jasper\Role('ROLE_USER', null, 'false');
+$newUser->addRole($role);
+
+try {
+   $client->addUsers($newUser);
+} catch (Exception $e) {
+   printf('Could not add new user: %s', $e->getMessage());
+}

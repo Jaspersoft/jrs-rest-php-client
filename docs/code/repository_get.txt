@@ -1,0 +1,9 @@
+
+$repository = $client->getRepository();	// Providing no arguments requests top level all resources
+
+foreach ($repository as $resourceDescriptor) {
+	echo '<pre>';
+	printf('Resource Name: %s <br />', $resourceDescriptor->getName());
+	echo htmlentities($resourceDescriptor);	// Prints XML of each resourceDescriptor object
+	echo '</pre>';
+}

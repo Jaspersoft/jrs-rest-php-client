@@ -1,0 +1,7 @@
+
+$state_attribute = new Jasper\Attribute('State', 'Oklahoma');
+$city_attribute = new Jasper\Attribute('Cities', 'Norman, Tulsa, Stillwater');
+$attributes_to_add = array($state_attribute, $city_attribute);
+
+$user = $client->getUserByLookup( $client->searchUsers('intern_developer')[0] );
+$client->addAttributes($user, $attributes_to_add);

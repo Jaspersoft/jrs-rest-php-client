@@ -1,0 +1,9 @@
+
+require_once "client/JasperClient.php";
+
+$client = new Jasper\JasperClient('localhost', // Hostname
+								   8080, // Port
+								  'jasperadmin', // Username
+								  'jasperadmin', // Password
+								  '/jasperserver-pro', // Base URL
+								  'organization_1'); // Organization (pro only)

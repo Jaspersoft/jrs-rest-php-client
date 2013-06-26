@@ -1,0 +1,10 @@
+
+$role = $client->getRole('ROLE_VICE_PRINCIPAL', 'organization_1');
+$old_role_name = $role->roleName;
+$role->setRoleName('ROLE_HALLWAY_MONITOR');
+
+try {
+   $client->updateRole($role, $old_role_name);
+} catch (Exception $e) {
+   printf('Updating role failed: %s', $e->getMessage());
+}

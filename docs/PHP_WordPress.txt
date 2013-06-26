@@ -1,0 +1,418 @@
+Using the PHP Client with WordPress 
+
+Table of Contents
+
+1.  Introduction 
+	1.a. Requirements
+2.  PHP Script 
+3.  Breaking down the PHP Script
+	3.a.	The Run Function
+	3.b.	The prepareForDownload Function
+4. JavaScript Code
+	4.a.	Ajax
+5. Sample Blog Post
+6. Hosting
+
+
+1. Introduction 
+
+This document demonstrates how to use the PHP Client to connect JasperReports
+Server data with the Wordpress CMS. Wordpress is a very popular PHP application
+that allows plugins and extensions, so that you can write your own code for the
+content on the page. Using the PHP wrapper, it is possible to interface with
+the API to exchange information between a JasperReports Server
+and a blog post.
+
+This example will only cover the runReport feature, although the wrapper has
+much more functionality available to it, covering all endpoints of the API.
+
+1.a.	Requirements: 
+	- A webserver 
+	- PHP >=5.3 PEAR packages required by the PHP Client (see README) 
+	- WordPress blog (see WordPress Installation) 
+
+
+2. PHP Script 
+
+In order to receive data using the PHP wrapper, it is necessary to create and
+host a .php file that you can make requests with. In this example, jQuery will
+be used to request data from a PHP script, and that data will be used to
+populate a drop down menu, as well as execute reports and return their data. We
+will begin with the PHP script used to generate data from the server.
+
+<?php
+require_once('jasperclient/JasperClient.php');
+ 
+class WPReport {
+     
+    public $client;
+    private $mime_types = array(
+            'html' => 'text/html',
+            'pdf' => 'application/pdf',
+            'xls' => 'application/vnd.ms-excel',
+            'csv' => 'text/csv',
+            'docx' => 'application/vnd.openxmlformats-
+			officedocument.wordprocessingml.document',
+            'rtf' => 'text/rtf',
+            'odt' => 'application/vnd.oasis.opendocument.text',
+            'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+            'xlsx' => 'application/vnd.ms-excel'
+            );
+ 
+    public function __construct() {
+        $this->client = new Jasper\JasperClient('localhost', 8080, 
+        'jasperadmin', 'jasperadmin', '/jasperserver-pro', 'organization_1');
+    }
+     
+  
+    /** 
+     * run() is to be called via a GET parameter. Using run() will run a 
+     report specified by URI and FORMAT get calls.
+     * Example: 
+     thisfile.php?func=run&uri=/reports/samples/AllAccounts&format=pdf
+     * Calling the file in this manner will return the binary of the 
+     specified report, in PDF format
+     */
+    public function run() {
+        if(isset($_GET['uri']) && isset($_GET['format'])) {
+            $report_data = $this->client->runReport($_GET['uri'], $_GET['format']);
+            if ($_GET['format'] !== 'html') {
+            echo $this->prepareForDownload($report_data, $_GET['format']);
+            }
+            else {
+                echo $report_data;
+            }
+        }
+    }
+     
+    /**
+     * This function prepares a page with the proper headers to initiate 
+     a download dialog in modern browsers
+     * by using this function we can supply the report binary and users 
+     can download the file
+     */
+    private function prepareForDownload($data, $format) {
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Description: File Transfer');
+            header('Content-Disposition: attachment; 
+    	filename=report.'.$format);
+            header('Content-Transfer-Encoding: binary');
+            header('Content-Length: ' . strlen($data));
+            if(isset($this->mime_types[$format])) {
+                header('Content-Type: ' . $this->mime_types[$format]);
+            } else {
+                header('Content-Type: application/octet-stream');
+            }
+            echo $data;
+    }
+    /**
+     * This function returns the reports vailable at the position 'uri'
+     * the data is echoed in JSON format so it can be used by a jQuery 
+   function
+     * to populate a dropdown select HTML element
+     * example: thisfile.php?func=getReports&uri=/reports/samples
+     */
+    public function getReports() {
+        if(isset($_GET['uri'])) {
+            $result = array();
+            $repo = $this->client->getRepository($_GET['uri']);
+            foreach($repo as $r) {
+                $result[] = array('name' => $r->getName(), 'uri' => 
+                $r->getUriString());
+            }
+            echo json_encode($result);
+        }
+    }
+    /**
+     * This function simply json-ifys the array above to populate a 
+  drop-down menu
+     * select HTML element. This way it is easy to change the formats 
+  available
+     */
+    public function getTypes() {
+        $result = array();
+        foreach($this->mime_types as $key => $val) {
+            $result[] = array('name' => $key, 'value' => $val);
+        }
+        echo json_encode($result);
+    }
+} // WPReport
+ 
+/* If the function exists in our class, and it is requested, then run it */
+ 
+if(isset($_GET['func']) && 
+    method_exists('WPReport', $_GET['func'])) {
+        $r = new WPReport();
+        $r->$_GET['func']();
+}
+?>
+ 
+
+3.	Breaking down the PHP Script 
+
+First, the beginning of the file defines some variables that are needed by the 
+class. $client will hold the client object that commands to the JasperServer 
+can be made through. The $mime_types array is used to map file extensions to 
+their respective MIME types�used when serving files for download.
+
+3.a.	The Run Function 
+
+public function run() {
+        if(isset($_GET['uri']) && isset($_GET['format'])) {
+            $report_data = $this->client->runReport($_GET['uri'], 
+          $_GET['format']);
+            if ($_GET['format'] !== 'html') {
+            echo $this->prepareForDownload($report_data, 
+          $_GET['format']);
+            }
+            else {
+                echo $report_data;
+            }
+        }
+    }
+
+This particular function is used to run a report on the server, and serve
+the data returned by the server. When a uri and format are supplied in the URL
+as GET parameters, this function will use the client object to request a report
+from the server. If the report is requested in HTML, it is echoed. If it is any
+other format but HTML, it is passed to a different function which sends the
+proper headers along with the binary data so the file can be accepted for
+download by a browser.
+
+
+3.b.	The prepareForDownload Function
+
+The prepareForDownload function is only used to prepare the headers to be sent
+and echos the data from the server. This way when the file is retrieved the
+browser knows how large it is, what to do with it, what to name it, and other
+data that signifies a download dialog box.
+
+As you can see, the report is displayed. This data is retrieved from the run
+function.
+
+getReports / getTypes function
+public function getReports() {
+        if(isset($_GET['uri'])) {
+            $result = array();
+            $repo = $this->client->getRepository($_GET['uri']);
+            foreach($repo as $r) {
+                $result[] = array('name' => $r->getName(), 'uri' => 
+             $r->getUriString());
+            }
+            echo json_encode($result);
+        }
+    }
+ 
+    public function getTypes() {
+        $result = array();
+        foreach($this->mime_types as $key => $val) {
+            $result[] = array('name' => $key, 'value' => $val);
+        }
+        echo json_encode($result);
+    }
+    
+These two functions are used to prepare data for the jQuery script to populate 
+the drop-down menus. The first function (getReports) uses getRepository to 
+request all the reports resourceDescriptors as 'uri' (defined by a GET 
+variable). Then it takes this data and maps the name and URI to each other and 
+encodes it in a JSON format that can be easily consumed by JavaScript.
+
+This is an example of the dynamically loaded data from the repository. In
+specific this is a listing of all the reports at the URI "/reports/samples".
+
+The getTypes function does the same, except it only uses the data in the
+$mime_types array to supply the second dropdown menu item with the types that
+can be taken. This data could easily be hard-coded into the HTML, but for
+simplicity this function is used.
+
+Outside the WPReport class
+if(isset($_GET['func']) && 
+    method_exists('WPReport', $_GET['func'])) {
+        $r = new WPReport();
+        $r->$_GET['func']();
+}
+
+These final lines of code interpret the GET data when the page is requested. It
+executes the function determined by the GET parameter 'func' and runs the
+corresponding function. This way we do not have to have separate files to do
+each task.
+
+
+4.	JavaScript Code 
+
+This specific example uses JavaScript to improve the user experience when using
+the report generator, it also prevents the page from reloading when requesting
+different reports. Coupling the JavaScript with an IFRAME we are able to serve
+the data generated by the 'prepareForDownload' function without reloading the
+page as well.
+
+jQuery(function(){
+ 
+    // Manage AJAX loading image
+    jQuery('#loading').hide();
+ 
+    jQuery('#loading').bind("ajaxStart", function(){
+        jQuery(this).show();
+    }).bind("ajaxStop", function() {
+        jQuery(this).hide();
+    });
+     
+    // populate the dropdown box for the names of the reports
+    jQuery.getJSON("http://localhost/runreport.php?func=getReports&uri=
+  /reports/samples",
+        function(data){
+            var sel = jQuery("#reportList").empty();
+                jQuery.each(data, function(){
+                    sel.append(jQuery("<option />").val(this.uri).
+                  text(this.name));
+        });
+    });
+     
+    // populate the dropdown for types of export
+    jQuery.getJSON("http://localhost/runreport.php?func=getTypes",
+        function(data){
+            var sel = jQuery("#exportList").empty();
+                jQuery.each(data, function(){
+                    sel.append(jQuery("<option />").val(this.name).
+                  text(this.name));
+        });
+    });
+     
+    // on 'submit' get the report. display html in div, other formats activate 
+  hidden iframe to trigger download
+    jQuery('#repsub').on('click', function(event) {
+        if (jQuery('#exportList').val() !== 'html') {
+            document.getElementById("hFrame").src = 'http://localhost/
+          runreport.php?func=run&uri='+jQuery('#reportList').val()+'
+          &format='+jQuery('#exportList').val();
+        } else {
+            jQuery('#displayReport').load('/wordpress/wp-content/plugins/
+          jasper/runreport.php?func=run&uri='+jQuery('#reportList').val()+
+          '&format='+jQuery('#exportList').val());
+        }
+ 
+    });
+     
+});
+ 
+4.a.	Ajax
+
+In this file, a loading indicator is created and bound to ajaxStart, so it
+is displayed whenever AJAX requests are being made. It is also set to hide when
+AJAX requests stop being made.
+
+This is a picture of the ajax loader indicator.
+
+The first getJSON function is used to populate the list of reports. It requests
+the data in JSON format from our PHP script. As you can see in the URL, it
+defines the function that is called, as well as the URI we wish to request
+reports about. An example of the data this returns is:
+
+[{"name":"AllAccounts","uri":"\/reports\/samples\/AllAccounts"},{"name":"Cascadi
+ng_multi_select_report","uri":"\/reports\/samples\/Cascading_multi_select_report
+"},{"name":"Department","uri":"\/reports\/samples\/Department"},{"name":"Employe
+eAccounts","uri":"\/reports\/samples\/EmployeeAccounts"},{"name":"Employees","ur
+i":"\/reports\/samples\/Employees"},{"name":"FlashChartReport","uri":"\/reports\
+/samples\/FlashChartReport"},{"name":"FlashMapReport","uri":"\/reports\/samples\
+/FlashMapReport"},{"name":"FlashWidgetReport","uri":"\/reports\/samples\/FlashWi
+dgetReport"},{"name":"Freight","uri":"\/reports\/samples\/Freight"},{"name":"
+PermissionsOfUsersWithARoleSharedByLoggedIn","uri":"\/reports\/samples\/Permissi
+onsOfUsersWithARoleSharedByLoggedIn"},{"name":"SalesByMonth","uri":"\/reports\/s
+amples\/SalesByMonth"},{"name":"StandardChartsAegeanReport","uri":"\/reports\/sa
+mples\/StandardChartsAegeanReport"},{"name":"StandardChartsEyeCandyReport","uri"
+:"\/reports\/samples\/StandardChartsEyeCandyReport"},{"name":"StandardChartsRepo
+rt","uri":"\/reports\/samples\/StandardChartsReport"}] Luckily this data makes
+more sense to JavaScript/jQuery than it does to a human. This data is basically
+a listing of report names and their URIs which can be used to set the name and
+value attributes of the <option> element.
+
+Data is transferred from the PHP script to the second drop down menu in the same
+way in the next getJSON function.
+
+jQuery('#repsub').on('click', function(event) {
+        if (jQuery('#exportList').val() !== 'html') {
+            document.getElementById("hFrame").src = 'http://localhost
+          /runreport.php?func=run&uri='+jQuery('#reportList').val()+'&format=
+          '+jQuery('#exportList').val();
+        } else {
+            jQuery('#displayReport').load('http://localhost/runreport.php
+          ?func=run&uri='+jQuery('#reportList').val()+'&format'
+          +jQuery('#exportList').val());
+        }
+ 
+    });
+
+    
+This final function is bound to the submit button. When it is pressed, two
+things can occur. The values chosen in the drop  down menus are taken using the
+.val() function and are used to fill in the GET arguments for the php script's
+URI and format options. Thus, if the report type is chosen as HTML, when the
+button is pressed, a DIV element will be filled with the HTML produced by the
+script. Otherwise, we will set the SRC attribute of a hidden IFRAME (id =
+hFrame) to the script. This is done due to the fact that the headers must be the
+first thing served if a download dialog box is to be presented. So by loading it
+through an IFRAME we are not complicated by the blog data already loaded before.
+
+5. Sample Blog Post 
+
+With the scripts from before in place, we now need a user-facing form in HTML
+that incorporates the previous two scripts. To do this, we will simply add a new
+post with some HTML. If you are having trouble writing HTML in your posts, you
+may wish to disable the visual text editor (Admin Panel > Users > Your Profile >
+Disable visual editor).
+
+The following code is used in the post:
+
+	<div id="reportBox">
+	<h3 class="widget-title">View My Reports</h3>
+	<label for="reportList"> Report name: </label>
+	<select id="reportList" style="width:150px;">
+	<!-- populated by jquery -->
+	</select>
+	<label for="exportList"> Download as: </label> <br>
+	<select id="exportList">
+	<!-- populated by jquery -->
+	</select>
+	<input name="submit" id="repsub" type="submit" value="submit" /> 
+	  <label for="repsub" id="loading" /> 
+	  <img src="http://localhost/ajax-loader.gif" />  </label>
+	<div id="displayReport">
+	</div>
+	<iframe style="display:none" id="hFrame"></i
+	</div>
+ 
+<!-- Scripts Below -->
+ 
+<script type="application/javascript" 
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"> 
+</script>
+<script src="http://localhost/script.js" 
+type="application/javascript"></script>
+
+Loading the JavaScript, the menus are populated, and the submit button
+becomes interactive.
+
+6. Hosting
+ 
+The JavaScript file can be hosted anywhere accessible to the browser attempting
+to use it. The PHP script must be accessible to the browser using the site, as
+well as the server hosting the WordPress blog. In this example we use full paths
+to define where these scripts are located. However, it is fine to use relative
+paths as well in the correct context. The PHP client must be accessible to the
+PHP script so it can be included properly. You may need to adjust the
+require_once() function to match your environment.
+
+
+
+_________________________
+Part Number: 1112-JSP50-1
+
+Copyright (C) 2012 Jaspersoft Corporation. All rights reserved.
+Printed in the U.S.A. Jaspersoft, the Jaspersoft logo,
+Jaspersoft iReport Designer, JasperReports Library,
+JasperReports Server, Jaspersoft OLAP, and Jaspersoft ETL
+are trademarks and/or registered trademarks of Jaspersoft
+Corporation in the United States and in jurisdictions
+throughout the world. All other company and product names are
+or may be trade names or trademarks of their respective owners.

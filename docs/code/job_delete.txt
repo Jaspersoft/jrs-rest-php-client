@@ -1,0 +1,4 @@
+
+$jobs = $client->searchJobs();
+foreach ($jobs as $j)
+	$client->deleteJob($j);

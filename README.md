@@ -1,4 +1,4 @@
-JasperReports Server - PHP REST Wrapper
+PHP REST Wrapper for JRS
 =======================================
 
 Introduction

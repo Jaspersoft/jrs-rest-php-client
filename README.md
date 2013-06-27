@@ -1,4 +1,4 @@
-PHP REST Wrapper for JRS
+PHP REST Client for JRS
 =======================================
 
 Introduction
@@ -7,7 +7,7 @@ Using this library you can make requests and interact with the Jasper Reports Se
 
 Requirements
 -------------
-To use this wrapper, you will need:
+To use this client, you will need:
 - PHP (version >=5.3)
 - PEAR Package Manager (http://pear.php.net)
 - XML_Serializer PEAR package (dependency soon to be removed!)

@@ -123,6 +123,19 @@ class JasperAttributeServiceTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(count($this->attrArr), $attrCount);
 
     }
-}
+	
+	/**
+	 * Deleting attributes
+	 */
+	 public function testDeleteAttribute() {
+		$this->jc->addUsers($this->newUser);
+		$this->jc->addAttributes($this->newUser, $this->attr);
+		$count = count($this->jc->getAttributes($this->newUser));
+		$this->jc->deleteAttributes($this->newUser);
+		$newcount = count($this->jc->getAttributes($this->newUser));
+		$this->assertEquals(1, $count);
+		$this->assertEquals($newcount, 0);
 
+	}
+}
 ?>

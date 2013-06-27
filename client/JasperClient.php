@@ -308,8 +308,22 @@ class JasperClient {
         if (is_array($existing_attributes) && ($existing_attributes) > 0)
             $attributes = $this::combineAttributeArrays($existing_attributes, $attributes);
         $data = json_encode(array('attribute' => $attributes));
-        $this->prepAndSend($url, array(201, 200), 'PUT', $data, 'application/json', 'application/json');
+        $this->prepAndSend($url, array(201, 200), 'PUT', $data, false, 'application/json', 'application/json');
     }
+	
+	/**
+	 * Remove all attributes, or specific attributes from a user.
+	 * 
+	 * @param $user User object to delete attributes from
+	 * @param $attributes An array of attribute names that are to be removed
+	 */
+	public function deleteAttributes(User $user, $attributes = null) {
+		$url = $this->attributeServiceURL($user->getUsername(), $user->getTenantId());
+		if (!empty($attributes)) {
+			$url .= '?' . JasperClient::query_suffix(array('name' => $attributes));
+		}
+		$this->prepAndSend($url, array(204, 200), 'DELETE', null, false, 'application/json', 'application/json');
+	}
 
 	/***> USER SERVICE <***/
 

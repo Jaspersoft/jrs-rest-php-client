@@ -29,7 +29,7 @@ namespace Jasper;
 @require_once('XML/Serializer.php');
 @require_once('XML/Unserializer.php');
 
-// Objects used by the class
+// Data Transfer Objects
 require_once('Constants.php');
 require_once('REST_Request.php');
 require_once('User.php');
@@ -44,6 +44,7 @@ require_once('Permission.php');
 require_once('ReportOptions.php');
 require_once('ExportTask.php');
 require_once('ImportTask.php');
+require_once('RepositoryPermission.php');
 
 // require_once('Execution.php');
 // require_once('ExecutionRequ.php');
@@ -1221,9 +1222,39 @@ class JasperClient {
 	 * @return array<Permission>
 	 */
 	public function getPermissions($uri) {
+		$result = array();
 		$url = $this->restUrl . '/permission' . $uri;
 		$data = $this->prepAndSend($url, array(200), 'GET', null, true);
 		return Permission::createFromXML($data);
+	}
+	
+	/** Obtain the permissions of a resource on the server
+	 *
+	 *
+	 * @param string $uri URI of resource you wish to obtain permissions
+	 * @param boolean $effectivePermissions shows all permissions who affect uri
+	 * @param string $recipientType type of permission (user or role)  
+	 * @param string $recipientId the id of the recipient (requires recipientType)
+	 * @param boolean $resolveAll resolve for all matched recipients
+	 * @return array<RepositoryPermission> array of permission objects
+	 */	 
+	public function searchRepositoryPermissions($uri, $effectivePermissions = null, $recipientType = null, $recipientId = null, $resolveAll = null) {
+		$result = array();
+		$url = $this->restUrl2 . '/permissions' . $uri;
+		$url .= JasperClient::query_suffix(array(
+								"effectivePermissions" => $effectivePermissions,
+								"recipientType" => $recipientType,
+								"recipientId" => $recipientId,
+								"resolveAll" => $resolveAll));
+		$data = $this->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+		$permissions = json_decode($data);
+		foreach ($permissions->permission as $p) {
+			$result[] = new RepositoryPermission(
+							$p->uri,
+							$p->recipient,
+							$p->mask);
+		}
+		return $result;
 	}
 
 	/**

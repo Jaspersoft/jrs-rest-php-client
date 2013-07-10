@@ -1272,11 +1272,12 @@ class JasperClient {
 		return $result;		
 	}
 
-	/**
+	/** DEPRECATED -> use updateRepositoryPermissions and createRepositoryPermissions
      * PUT/POST Permissions.
 	 *
      * This function updates the permissions for a URI.
 	 *
+	 * @deprecated
 	 * @param string $uri
 	 * @param array<Permission> $permissions
 	 * @return bool
@@ -1305,8 +1306,8 @@ class JasperClient {
 	}
 	
 		
-	/** Obtain the permissions of a resource on the server
-	 *
+	/** 
+	 * Obtain the permissions of a resource on the server
 	 *
 	 * @param string $uri URI of resource you wish to obtain permissions
 	 * @param boolean $effectivePermissions shows all permissions who affect uri
@@ -1337,6 +1338,29 @@ class JasperClient {
 		return $result;
 	}	
 	 
+	/**
+	 * Update a set of permissions on the server.
+	 *
+	 * @param uri URI of the resource in the repository
+	 * @param permissions an array of RepositoryPermission objects representing changes made
+	 */
+	public function updateRepositoryPermissions($uri, $permissions) {
+		$url = $this->restUrl2 . '/permissions' . $uri;
+		$body = json_encode(array('permission' => $permissions));
+		$this->prepAndSend($url, array(201, 200), 'PUT', $body, true, 'application/collection+json', 'application/json');
+	}
+	
+	/**
+	 * Create new permissions on the server.
+	 *
+	 * @param permissions an array of RepositoryPermission objects completely defining new permissions
+	 */
+	public function createRepositoryPermissions($permissions) {
+		$url = $this->restUrl2 . '/permissions';
+		$body = json_encode(array('permission' => $permissions));
+		$this->prepAndSend($url, array(201, 200), 'POST', $body, true, 'application/collection+json', 'application/json');
+	}
+	
 	 /**
      * Remove an already existing permission.
      *

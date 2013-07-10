@@ -20,19 +20,6 @@ class Permission {
 		if (!empty($uri)) { $this->setUri($uri); }
 	}
 
-	public static function createXMLFromArray($permissions) {
-		$xml_string = '<entityResource>';
-		foreach ($permissions as $perm) {
-			$xml_string .= '<Item xsi:type="objectPermissionImpl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
-			$xml_string .= '<permissionMask>' . $perm->getPermissionMask() . '</permissionMask>';
-			$xml_string .= $perm->permissionRecipient->asXML();
-			$xml_string .= '<URI>' . $perm->uri . '</URI>';
-			$xml_string .= '</Item>';
-		}
-		$xml_string .= '</entityResource>';
-		return $xml_string;
-	}
-
 	public function setRecipientUri($uri) {
 		$this->recipientUri = $uri;
 	}
@@ -71,18 +58,6 @@ class Permission {
 		$this->uri = $uri;
 	}
 
-	public function toXML() {
-		$xml_string = '<entityResource><Item xsi:type="objectPermissionImpl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
-		$xml_string .= '<permissionMask>' . $this->getPermissionMask() . '</permissionMask>';
-		$xml_string .= $this->permissionRecipient->asXML();
-		$xml_string .= '<URI>' . $this->uri . '</URI>';
-		$xml_string .= '</Item></entityResource>';
-		return $xml_string;
-	}
-
-	public function __toString() {
-		return htmlentities($this->toXML());
-	}
 } // Permission -- END
 
 class PermissionRole extends Role {
@@ -94,24 +69,8 @@ class PermissionRole extends Role {
 
 	public function __construct($name, $tenantId = null, $externallyDefined = 'false') {
 		parent::__construct($name, $tenantId, $externallyDefined);
-		$this->_attributes = array('xsi:type' => 'roleImpl');
 	}
 
-	public function asXML() {
-		$seri_opt = array(
-			'indent' => '     ',
-			'rootName' => 'permissionRecipient',
-			'ignoreNull' => true,
-			'attributesArray' => '_attributes'	// see Serializer docs
-			);
-		$seri = new \XML_Serializer($seri_opt);
-		$res = $seri->serialize($this);
-		if ($res === true) {
-			return $seri->getSerializedData();
-		} else {
-			return false;
-		}
-	}
 } // PermissionRole -- END
 
 class PermissionUser extends User {
@@ -126,24 +85,8 @@ class PermissionUser extends User {
 		$this->fullName = $fullName;
 		$this->externallyDefined = strval($externallyDefined);
 		$this->tenantId = (!empty($tenantId)) ? strval($tenantId) : null;
-		$this->_attributes = array('xsi:type' => 'userImpl');
 	}
 
-	public function asXML() {
-		$seri_opt = array(
-				'indent' => '     ',
-				'rootName' => 'permissionRecipient',
-				'ignoreNull' => true,
-				'attributesArray' => '_attributes'	// see Serializer docs
-		);
-		$seri = new \XML_Serializer($seri_opt);
-		$res = $seri->serialize($this);
-		if ($res === true) {
-			return $seri->getSerializedData();
-		} else {
-			return false;
-		}
-	}
 } // PermissionUser -- END
 
 ?>

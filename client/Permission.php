@@ -8,53 +8,54 @@ class Permission {
 	public $uri;
 
 	public function __construct($mask = null, $recipient = null, $uri = null) {
-		$this->permissionMask = $mask;
-		$this->setPermissionRecipient($recipient);
-		$this->setUri($uri);
+		if (!empty($mask)) { $this->permissionMask = $mask; }
+		if (!empty($recipient)) { $this->setPermissionRecipient($recipient); }
+		if (!empty($uri)) { $this->setUri($uri); }
 	}
+	
+	
+	// public static function createFromXML($xml) {
+		// $result = array();
 
-	public static function createFromXML($xml) {
-		$result = array();
+		// $sxi = new \SimpleXMLIterator($xml);
+		// foreach ($sxi->Item as $item) {
+			// $recipient = $item->permissionRecipient;
+			// // we pull the first character off the attribute 'type' to determine if a User or a Role is attached to this data
+			// $recipient_type = substr(strval($recipient->attributes('xsi', true)->type), 0, 1);
+			// if($recipient_type == "u") {	// Once we determine, create the correct object to attach to the permission object
+				// $temp = new PermissionUser(
+						// strval($recipient->username),
+						// strval($recipient->fullName),
+						// strval($recipient->externallyDefined),
+						// strval($recipient->tenantId)
+				// );
+			// } elseif ($recipient_type == "r") {
+				// $temp = new PermissionRole(
+						// strval($recipient->name),
+						// strval($recipient->tenantId),
+						// strval($recipient->externallyDefined)
+				// );
+			// } else {
+				// throw \Exception('Unknown data returned by server.');
+			// }
+			// $tempObject = new Permission(strval($item->permissionMask), $temp, strval($item->URI));
+			// $result[] = $tempObject;
+		// }
+		// return $result;
+	// }
 
-		$sxi = new \SimpleXMLIterator($xml);
-		foreach ($sxi->Item as $item) {
-			$recipient = $item->permissionRecipient;
-			// we pull the first character off the attribute 'type' to determine if a User or a Role is attached to this data
-			$recipient_type = substr(strval($recipient->attributes('xsi', true)->type), 0, 1);
-			if($recipient_type == "u") {	// Once we determine, create the correct object to attach to the permission object
-				$temp = new PermissionUser(
-						strval($recipient->username),
-						strval($recipient->fullName),
-						strval($recipient->externallyDefined),
-						strval($recipient->tenantId)
-				);
-			} elseif ($recipient_type == "r") {
-				$temp = new PermissionRole(
-						strval($recipient->name),
-						strval($recipient->tenantId),
-						strval($recipient->externallyDefined)
-				);
-			} else {
-				throw \Exception('Unknown data returned by server.');
-			}
-			$tempObject = new Permission(strval($item->permissionMask), $temp, strval($item->URI));
-			$result[] = $tempObject;
-		}
-		return $result;
-	}
-
-	public static function createXMLFromArray($permissions) {
-		$xml_string = '<entityResource>';
-		foreach ($permissions as $perm) {
-			$xml_string .= '<Item xsi:type="objectPermissionImpl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
-			$xml_string .= '<permissionMask>' . $perm->getPermissionMask() . '</permissionMask>';
-			$xml_string .= $perm->permissionRecipient->asXML();
-			$xml_string .= '<URI>' . $perm->uri . '</URI>';
-			$xml_string .= '</Item>';
-		}
-		$xml_string .= '</entityResource>';
-		return $xml_string;
-	}
+	// public static function createXMLFromArray($permissions) {
+		// $xml_string = '<entityResource>';
+		// foreach ($permissions as $perm) {
+			// $xml_string .= '<Item xsi:type="objectPermissionImpl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
+			// $xml_string .= '<permissionMask>' . $perm->getPermissionMask() . '</permissionMask>';
+			// $xml_string .= $perm->permissionRecipient->asXML();
+			// $xml_string .= '<URI>' . $perm->uri . '</URI>';
+			// $xml_string .= '</Item>';
+		// }
+		// $xml_string .= '</entityResource>';
+		// return $xml_string;
+	// }
 
 	public function getPermissionMask() {
 		return $this->permissionMask;
@@ -80,8 +81,7 @@ class Permission {
 
 	public function getUri() {
 		// The "repo:" of this is cut off when this function is used
-		// if you need the raw form access the property without
-		// this get function
+		// if you need the raw form access the property directly
 		if (substr($this->uri, 0, 5) == "repo:") {
 			return substr($this->uri, 5);
 		} else {
@@ -114,7 +114,7 @@ class Permission {
 class PermissionRole extends Role {
 
 	public static function createFromRole(Role $role) {
-		$result = new self($role->name, $role->tenantId, $role->externallyDefined);
+		$result = new self($role->getRoleName(), $role->getTenantId(), strval($role->getExternallyDefined()));
 		return $result;
 	}
 
@@ -143,14 +143,14 @@ class PermissionRole extends Role {
 class PermissionUser extends User {
 
 	public static function createFromUser(User $user) {
-		$result = new self($user->username, $user->fullName, $user->externallyDefined, $user->tenantId);
+		$result = new self($user->getUsername(), $user->getFullName(), strval($user->externallyDefined), $user->getTenantId());
 		return $result;
 	}
 
 	public function __construct($username, $fullName, $externallyDefined, $tenantId = null) {
 		$this->username = $username;
 		$this->fullName = $fullName;
-		$this->externallyDefined = $externallyDefined;
+		$this->externallyDefined = strval($externallyDefined);
 		$this->tenantId = (!empty($tenantId)) ? strval($tenantId) : null;
 		$this->_attributes = array('xsi:type' => 'userImpl');
 	}

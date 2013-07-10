@@ -3,6 +3,10 @@ namespace Jasper;
 
 class RepositoryPermission implements \JsonSerializable {
 
+	public $uri;
+	public $recipient;
+	public $mask;
+
 	public function __construct($uri, $recipient, $mask) {
 		$this->uri = $uri;
 		$this->recipient = $recipient;

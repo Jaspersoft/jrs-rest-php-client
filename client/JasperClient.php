@@ -410,6 +410,7 @@ class JasperClient {
         $url = $this->userServiceURL($organization, $username);
         $data = $this->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
         $userData = json_decode($data);
+		$userData->externallyDefined = ($user->externallyDefined) ? 'true' : 'false';
         $result = @new User(
             $userData->username,
             $userData->password,
@@ -776,8 +777,9 @@ class JasperClient {
      */
     public function getRole($roleName, $organization = null) {
         $url = $this->roleServiceURL($organization, $roleName);
-        $resp = $this->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
-        $data = json_decode($resp);
+        $resp = $this->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');	
+		$data = json_decode($resp);
+		$data->externallyDefined = ($data->externallyDefined) ? 'true' : 'false';
         return @new Role($data->name, $data->tenantId, $data->externallyDefined);
     }
 
@@ -1218,19 +1220,52 @@ class JasperClient {
 		return $data;
 	}
 
-	/**
-     * Retrieve permissions about a URI.
+	/** DEPRECATED -> use serachRepositoryPermissions
 	 *
+     * Retrieve permissions about a URI.
      * Your result will always be an array of 0 or more items.
 	 *
+	 * @deprecated
 	 * @param string $uri
 	 * @return array<Permission>
 	 */
 	public function getPermissions($uri) {
 		$result = array();
-		$url = $this->restUrl . '/permission' . $uri;
-		$data = $this->prepAndSend($url, array(200), 'GET', null, true);
-		return Permission::createFromXML($data);
+		$url = $this->restUrl2 . '/permissions' . $uri;
+		$data = $this->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+		$permissions = json_decode($data);
+		foreach ($permissions->permission as $p) {						
+			$tempPermission = @new Permission($p->mask, null, $p->uri);
+			// RecipientType is ROLE
+			if (substr($p->recipient, 0, 1) == "r") {
+				// Discard data before : (role/user)
+				strtok($p->recipient, ':');
+				// tokenize string
+				$organization = strtok('/');
+				$name = strtok('/');
+				// If our last token was false, switch them, and nullify $organziation
+				if ($name === false) {
+					$name = $organization;
+					$organization = null;
+				}
+				$role = $this->getRole($name, $organization);
+				$tempPermission->setPermissionRecipient(PermissionRole::createFromRole($role));				
+			} 
+			// RecipientType is USER
+			else {				
+				strtok($p->recipient, ':');
+				$organization = strtok('/');
+				$user = strtok('/');
+				if ($user === false) {
+					$user = $organization;
+					$organization = null;
+				}
+				$userObj = $this->getUser($user, $organization);
+				$tempPermission->setPermissionRecipient(PermissionUser::createFromUser($userObj));
+			}
+			$result[] = $tempPermission;
+		}
+		return $result;		
 	}
 	
 	/** Obtain the permissions of a resource on the server
@@ -1260,7 +1295,7 @@ class JasperClient {
 							$p->mask);
 		}
 		return $result;
-	}
+	}	
 
 	/**
      * PUT/POST Permissions.

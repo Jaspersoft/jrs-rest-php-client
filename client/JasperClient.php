@@ -410,7 +410,7 @@ class JasperClient {
         $url = $this->userServiceURL($organization, $username);
         $data = $this->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
         $userData = json_decode($data);
-		$userData->externallyDefined = ($user->externallyDefined) ? 'true' : 'false';
+		$userData->externallyDefined = ($userData->externallyDefined) ? 'true' : 'false';
         $result = @new User(
             $userData->username,
             $userData->password,
@@ -1235,7 +1235,8 @@ class JasperClient {
 		$data = $this->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
 		$permissions = json_decode($data);
 		foreach ($permissions->permission as $p) {						
-			$tempPermission = @new Permission($p->mask, null, $p->uri);
+			$tempPermission = @new Permission($p->mask, null, 'repo:' . $p->uri);
+			$tempPermission->setRecipientUri($p->recipient);
 			// RecipientType is ROLE
 			if (substr($p->recipient, 0, 1) == "r") {
 				// Discard data before : (role/user)
@@ -1324,19 +1325,27 @@ class JasperClient {
      * @return bool - based on success of function
      */
 	public function deletePermission(Permission $perm) {
-		$url = $this->restUrl . '/permission' . $perm->getUri() . '?';
-		$recipient = $perm->getPermissionRecipient();
-
-		if($recipient instanceof User) {
-			$url .= http_build_query(array('users' => $recipient->getUsername()));
-		} elseif ($recipient instanceof Role) {
-			$url .= http_build_query(array('roles' => $recipient->getRoleName()));
-		} else {
-			throw RESTRequestException('Unacceptable permissionRecipient in Permission object');
-		}
-		$data = $this->prepAndSend($url, array(200), 'DELETE', null);
-		return $data;
+		$url = $this->restUrl2 . '/permissions' . substr($perm->getUri(), 5) . ';recipient=' . str_replace('/', '%2F', $perm->getRecipientUri());
+		$this->prepAndSend($url, array(200, 204), 'DELETE', null);
 	}
+	
+	public function deleteRepositoryPermission(RepositoryPermission $perm) {
+		$url = $this->restUrl2 . '/permissions' . $perm->uri . ';recipient=' . str_replace('/', '%2F', $perm->recipient);
+		$this->prepAndSend($url, array(200, 204), 'DELETE', null);
+	}
+		
+	// $url = $this->restUrl . '/permission' . $perm->getUri() . '?';
+		// $recipient = $perm->getPermissionRecipient();
+
+		// if($recipient instanceof User) {
+			// $url .= http_build_query(array('users' => $recipient->getUsername()));
+		// } elseif ($recipient instanceof Role) {
+			// $url .= http_build_query(array('roles' => $recipient->getRoleName()));
+		// } else {
+			// throw RESTRequestException('Unacceptable permissionRecipient in Permission object');
+		// }
+		// $data = $this->prepAndSend($url, array(200), 'DELETE', null);
+		// return $data;
 
 	/**
 	 * Using this function you can request the report options for a report.

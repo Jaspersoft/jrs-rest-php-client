@@ -1232,8 +1232,11 @@ class JasperClient {
 	public function getPermissions($uri) {
 		$result = array();
 		$url = $this->restUrl2 . '/permissions' . $uri;
-		$data = $this->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+		$data = $this->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
 		$permissions = json_decode($data);
+		if (empty($permissions)) {
+			return $result;
+		}
 		foreach ($permissions->permission as $p) {						
 			$tempPermission = @new Permission($p->mask, null, 'repo:' . $p->uri);
 			$tempPermission->setRecipientUri($p->recipient);
@@ -1268,35 +1271,6 @@ class JasperClient {
 		}
 		return $result;		
 	}
-	
-	/** Obtain the permissions of a resource on the server
-	 *
-	 *
-	 * @param string $uri URI of resource you wish to obtain permissions
-	 * @param boolean $effectivePermissions shows all permissions who affect uri
-	 * @param string $recipient	Type type of permission (user or role)  
-	 * @param string $recipientId the id of the recipient (requires recipientType)
-	 * @param boolean $resolveAll resolve for all matched recipients
-	 * @return array<RepositoryPermission> array of permission objects
-	 */	 
-	public function searchRepositoryPermissions($uri, $effectivePermissions = null, $recipientType = null, $recipientId = null, $resolveAll = null) {
-		$result = array();
-		$url = $this->restUrl2 . '/permissions' . $uri;
-		$url .= '?' . JasperClient::query_suffix(array(
-								"effectivePermissions" => $effectivePermissions,
-								"recipientType" => $recipientType,
-								"recipientId" => $recipientId,
-								"resolveAll" => $resolveAll));
-		$data = $this->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
-		$permissions = json_decode($data);
-		foreach ($permissions->permission as $p) {
-			$result[] = @new RepositoryPermission(
-							$p->uri,
-							$p->recipient,
-							$p->mask);
-		}
-		return $result;
-	}	
 
 	/**
      * PUT/POST Permissions.
@@ -1315,11 +1289,12 @@ class JasperClient {
 		return false;
 	}
 
-    /**
+    /** DEPRECATED -> use deleteRepositoryPermission
      * Remove an already existing permission.
      *
      * Simply provide the permission object you wish to delete. (use getPermissions to fetch existing permissions).
      *
+	 * @deprecated
      * @param Permission $perm - object correlating to permission to be deleted.
      * @throws RESTRequestException
      * @return bool - based on success of function
@@ -1329,23 +1304,52 @@ class JasperClient {
 		$this->prepAndSend($url, array(200, 204), 'DELETE', null);
 	}
 	
+		
+	/** Obtain the permissions of a resource on the server
+	 *
+	 *
+	 * @param string $uri URI of resource you wish to obtain permissions
+	 * @param boolean $effectivePermissions shows all permissions who affect uri
+	 * @param string $recipient	Type type of permission (user or role)  
+	 * @param string $recipientId the id of the recipient (requires recipientType)
+	 * @param boolean $resolveAll resolve for all matched recipients
+	 * @return array<RepositoryPermission> array of permission objects
+	 */	 
+	public function searchRepositoryPermissions($uri, $effectivePermissions = null, $recipientType = null, $recipientId = null, $resolveAll = null) {
+		$result = array();
+		$url = $this->restUrl2 . '/permissions' . $uri;
+		$url .= '?' . JasperClient::query_suffix(array(
+								"effectivePermissions" => $effectivePermissions,
+								"recipientType" => $recipientType,
+								"recipientId" => $recipientId,
+								"resolveAll" => $resolveAll));
+		$data = $this->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
+		$permissions = json_decode($data);
+		if (empty($permissions)) {
+			return $result;
+		}
+		foreach ($permissions->permission as $p) {
+			$result[] = @new RepositoryPermission(
+							$p->uri,
+							$p->recipient,
+							$p->mask);
+		}
+		return $result;
+	}	
+	 
+	 /**
+     * Remove an already existing permission.
+     *
+     * Simply provide the permission object you wish to delete. (use searchRepositoryPermissions to fetch existing permissions).
+     *
+     * @param RepositoryPermission $perm - object correlating to permission to be deleted.
+     * @throws RESTRequestException
+     * @return bool - based on success of function
+     */
 	public function deleteRepositoryPermission(RepositoryPermission $perm) {
 		$url = $this->restUrl2 . '/permissions' . $perm->uri . ';recipient=' . str_replace('/', '%2F', $perm->recipient);
 		$this->prepAndSend($url, array(200, 204), 'DELETE', null);
-	}
-		
-	// $url = $this->restUrl . '/permission' . $perm->getUri() . '?';
-		// $recipient = $perm->getPermissionRecipient();
-
-		// if($recipient instanceof User) {
-			// $url .= http_build_query(array('users' => $recipient->getUsername()));
-		// } elseif ($recipient instanceof Role) {
-			// $url .= http_build_query(array('roles' => $recipient->getRoleName()));
-		// } else {
-			// throw RESTRequestException('Unacceptable permissionRecipient in Permission object');
-		// }
-		// $data = $this->prepAndSend($url, array(200), 'DELETE', null);
-		// return $data;
+	}		
 
 	/**
 	 * Using this function you can request the report options for a report.

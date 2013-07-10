@@ -184,6 +184,11 @@ class JasperClient {
      * @return string
      */
     protected static function query_suffix($params) {
+		foreach ($params as $k => $v) {
+			if (is_bool($v)) {
+				$params[$k] = ($v) ? 'true' : 'false';
+			}
+		}
         $url = http_build_query($params, null, '&');
         return preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', $url);
     }
@@ -1233,7 +1238,7 @@ class JasperClient {
 	 *
 	 * @param string $uri URI of resource you wish to obtain permissions
 	 * @param boolean $effectivePermissions shows all permissions who affect uri
-	 * @param string $recipientType type of permission (user or role)  
+	 * @param string $recipient	Type type of permission (user or role)  
 	 * @param string $recipientId the id of the recipient (requires recipientType)
 	 * @param boolean $resolveAll resolve for all matched recipients
 	 * @return array<RepositoryPermission> array of permission objects
@@ -1241,7 +1246,7 @@ class JasperClient {
 	public function searchRepositoryPermissions($uri, $effectivePermissions = null, $recipientType = null, $recipientId = null, $resolveAll = null) {
 		$result = array();
 		$url = $this->restUrl2 . '/permissions' . $uri;
-		$url .= JasperClient::query_suffix(array(
+		$url .= '?' . JasperClient::query_suffix(array(
 								"effectivePermissions" => $effectivePermissions,
 								"recipientType" => $recipientType,
 								"recipientId" => $recipientId,
@@ -1249,7 +1254,7 @@ class JasperClient {
 		$data = $this->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
 		$permissions = json_decode($data);
 		foreach ($permissions->permission as $p) {
-			$result[] = new RepositoryPermission(
+			$result[] = @new RepositoryPermission(
 							$p->uri,
 							$p->recipient,
 							$p->mask);

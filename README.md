@@ -8,6 +8,7 @@ Using this library you can make requests and interact with the Jasper Reports Se
 Requirements
 -------------
 To use this client, you will need:
+- JasperReports Server (version >=5.1)
 - PHP (version >=5.3)
 - PEAR Package Manager (http://pear.php.net)
 - XML_Serializer PEAR package (dependency soon to be removed!)

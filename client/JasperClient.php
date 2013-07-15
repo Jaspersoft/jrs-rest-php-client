@@ -908,6 +908,7 @@ class JasperClient {
 		return $result;
 	}
 
+
 	/**
      * This function retrieves a resource descriptor for a specified resource at $path on the server.
 	 * If you wish to supply information to the input controls you can supply the data to the $p and $pl arguments.
@@ -1304,19 +1305,19 @@ class JasperClient {
 		$url = $this->restUrl2 . '/permissions' . substr($perm->getUri(), 5) . ';recipient=' . str_replace('/', '%2F', $perm->getRecipientUri());
 		$this->prepAndSend($url, array(200, 204), 'DELETE', null);
 	}
-	
-		
-	/** 
-	 * Obtain the permissions of a resource on the server
-	 *
-	 * @param string $uri URI of resource you wish to obtain permissions
-	 * @param boolean $effectivePermissions shows all permissions who affect uri
-	 * @param string $recipient	Type type of permission (user or role)  
-	 * @param string $recipientId the id of the recipient (requires recipientType)
-	 * @param boolean $resolveAll resolve for all matched recipients
-	 * @return array<RepositoryPermission> array of permission objects
-	 */	 
-	public function searchRepositoryPermissions($uri, $effectivePermissions = null, $recipientType = null, $recipientId = null, $resolveAll = null) {
+
+
+    /**
+     * Obtain the permissions of a resource on the server
+     *
+     * @param $uri URI of resource you wish to obtain permissions
+     * @param $effectivePermissions shows all permissions who affect uri
+     * @param $recipientType	Type type of permission (user or role)
+     * @param $recipientId the id of the recipient (requires recipientType)
+     * @param $resolveAll resolve for all matched recipients
+     * @return array<RepositoryPermission> array of permission objects
+     */
+    public function searchRepositoryPermissions($uri, $effectivePermissions = null, $recipientType = null, $recipientId = null, $resolveAll = null) {
 		$result = array();
 		$url = $this->restUrl2 . '/permissions' . $uri;
 		$url .= '?' . JasperClient::query_suffix(array(
@@ -1341,8 +1342,8 @@ class JasperClient {
 	/**
 	 * Update a set of permissions on the server.
 	 *
-	 * @param uri URI of the resource in the repository
-	 * @param permissions an array of RepositoryPermission objects representing changes made
+	 * @param $uri URI of the resource in the repository
+	 * @param $permissions an array of RepositoryPermission objects representing changes made
 	 */
 	public function updateRepositoryPermissions($uri, $permissions) {
 		$url = $this->restUrl2 . '/permissions' . $uri;
@@ -1353,7 +1354,7 @@ class JasperClient {
 	/**
 	 * Create new permissions on the server.
 	 *
-	 * @param permissions an array of RepositoryPermission objects completely defining new permissions
+	 * @param $permissions an array of RepositoryPermission objects completely defining new permissions
 	 */
 	public function createRepositoryPermissions($permissions) {
 		$url = $this->restUrl2 . '/permissions';

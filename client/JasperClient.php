@@ -24,6 +24,8 @@
 
 namespace Jasper;
 
+define("JASPERCLIENT_ROOT", __DIR__);
+
 // PEAR Packages (soon to be removed)
 // These libraries are old and throw standards errors, thus their import is squelched
 @require_once('XML/Serializer.php');
@@ -31,7 +33,7 @@ namespace Jasper;
 
 // Data Transfer Objects
 require_once('Constants.php');
-require_once('REST_Request.php');
+// require_once('REST_Request.php');
 require_once('User.php');
 require_once('UserLookup.php');
 require_once('Organization.php');
@@ -46,8 +48,17 @@ require_once('ExportTask.php');
 require_once('ImportTask.php');
 require_once('RepositoryPermission.php');
 
-// require_once('Execution.php');
-// require_once('ExecutionRequ.php');
+// In the next release, all includes will be autoloaded as seen below. Currently only the new Resource services are
+// loaded in this manner. This reduces the overhead of including all files each time JasperClient is loaded.
+spl_autoload_register(function($class) {
+	$filename = JASPERCLIENT_ROOT . '/' . $class . '.class.php';
+	if (!is_readable($filename)) return;
+
+	require_once $filename;
+});
+
+use jaspersoft\tools\RESTRequest;
+use jaspersoft\service\Repository;
 
 class JasperClient {
 
@@ -83,7 +94,7 @@ class JasperClient {
 		$this->baseUrl = $baseUrl;
 		$this->orgId = $orgId;
 
-		$this->restReq = new \REST_Request();
+		$this->restReq = new RESTRequest();
 		if (!empty($this->orgId)) {
 			$this->restReq->setUsername($this->username .'|'. $this->orgId);
 		} else {
@@ -93,6 +104,13 @@ class JasperClient {
 		$this->restUrl = PROTOCOL . $this->hostname . ':' . $this->port . $this->baseUrl . BASE_REST_URL;
 		$this->restUrl2 = PROTOCOL . $this->hostname . ':' . $this->port . $this->baseUrl . BASE_REST2_URL;
 	}
+
+    /** SERVICE EXPOSURE **/
+
+    public function repository_service() {
+        return new Repository($this->restReq, $this->restUrl2);
+    }
+
 
     /**
      * Internal function that prepares and send the request. This function validates that

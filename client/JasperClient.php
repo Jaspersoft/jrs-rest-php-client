@@ -157,7 +157,7 @@ class JasperClient {
 				throw new RESTRequestException('Unexpected HTTP code returned: ' . $statusCode);
 			}
 		}
-		if($returnData == true) {
+		if ($returnData == true) {
 			return $this->restReq->getResponseBody();
 		}
 		return true;

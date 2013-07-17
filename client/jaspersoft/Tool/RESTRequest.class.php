@@ -48,7 +48,7 @@ class RESTRequest {
 		$this->accept_type 		= 'application/xml';
 		$this->file_to_upload	= null;
         $this->headers          = null;
-		}
+	}
 
 	public function execute ()
 	{
@@ -117,11 +117,11 @@ class RESTRequest {
 		{
 			$this->buildPostBody();
 		}
-
+/*
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 		'Content-Type: .' . $this->content_type
 		));
-
+*/
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->request_body);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
 
@@ -216,10 +216,13 @@ class RESTRequest {
 		curl_setopt($curlHandle, CURLOPT_URL, $this->url);
 		curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curlHandle, CURLOPT_COOKIEFILE, '/dev/null');
+
+        if (!empty($this->content_type))
+            $this->headers[] = "Content-Type: " . $this->content_type;
         if (!empty($this->accept_type))
-		    curl_setopt($curlHandle, CURLOPT_HTTPHEADER, array('Content-Type: ' . $this->content_type, 'Accept: ' . $this->accept_type));
-        else
-            curl_setopt($curlHandle, CURLOPT_HTTPHEADER, array('Content-Type: ' . $this->content_type));
+		    $this->headers[] = "Accept: " . $this->accept_type;
+        if (!empty($this->headers))
+            curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $this->headers);
 	}
 
 	protected function setAuth (&$curlHandle)
@@ -306,7 +309,7 @@ class RESTRequest {
 	}
 
     public function prepAndSend($url, $expectedCodes = array(200), $verb = null, $reqBody = null, $returnData = false,
-                                   $contentType = 'application/xml', $acceptType = 'application/xml') {
+                                   $contentType = 'application/xml', $acceptType = 'application/xml', $headers = array()) {
         $this->flush();
         $this->setUrl($url);
         if ($verb !== null) {
@@ -321,6 +324,8 @@ class RESTRequest {
         if(!empty($acceptType)) {
             $this->setAcceptType($acceptType);
         }
+        if (!empty($headers))
+            $this->headers = $headers;
 
         $this->execute();
         $statusCode = $this->getResponseInfo();

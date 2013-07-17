@@ -56,7 +56,7 @@ class Repository
         if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
             return $class::createFromJSON(json_decode($data), $class);
         } else {
-            throw new \Exception("Unknown Resource Type: " . $lookup->resourceType);
+            return Resource::createFromJSON(json_decode($data));
         }
     }
 
@@ -103,4 +103,14 @@ class Repository
         $response = $this->service->sendBinary($url, array(201), $body, $mimeType, 'attachment; filename=' . $resource->label, $resource->description);
         return ResourceLookup::createFromJSON(json_decode($response));
     }
+
+    public function copyResource($oldLocation, $newLocation, $createFolders = null, $overwrite = null)
+    {
+        $url = self::make_url(null, $newLocation);
+        if (!empty($createFolders) || !empty($overwrite))
+            $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
+        $data = $this->service->prepAndSend($url, array(200), 'POST', null, true, 'application/json', 'application/json', array("Content-Location: " . $oldLocation));
+        return ResourceLookup::createFromJSON(json_decode($data));
+    }
+
 }

@@ -57,8 +57,8 @@ spl_autoload_register(function($class) {
 	require_once $filename;
 });
 
-use jaspersoft\tools\RESTRequest;
-use jaspersoft\service\Repository;
+use Jaspersoft\Tool\RESTRequest;
+use Jaspersoft\Service\Repository;
 
 class JasperClient {
 
@@ -107,7 +107,7 @@ class JasperClient {
 
     /** SERVICE EXPOSURE **/
 
-    public function repository_service() {
+    public function repositoryService() {
         return new Repository($this->restReq, $this->restUrl2);
     }
 

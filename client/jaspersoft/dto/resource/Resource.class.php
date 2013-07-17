@@ -1,9 +1,50 @@
 <?php
-namespace jaspersoft\dto\resource;
+namespace Jaspersoft\Dto\Resource;
 
-class Resource {
+class Resource implements \JsonSerializable
+{
 
-    function __construct() {
+    public $uri;
+    public $label;
+    public $description;
+    public $permissionMask;
+    public $creationDate;
+    public $updateDate;
+    public $version;
+    public $timezone;
+
+    public static function createFromJSON($json_data, $type = null)
+    {
+        $result = (empty($type)) ? new self : new $type();
+        foreach($json_data as $k => $v) {
+            $result->$k = $v;
+        }
+        return $result;
+    }
+
+    public function jsonSerialize()
+    {
+        $result = array();
+        foreach (get_object_vars($this) as $k => $v)
+            if (!empty($v))
+                $result[$k] = $v;
+        return $result;
+    }
+
+    /*
+    function __get($key)
+    {
+        return $this->$key;
+    }
+
+    function __set($key, $value)
+    {
+        $this->$key = $value;
+    }
+    */
+
+    function __construct()
+    {
 
     }
 

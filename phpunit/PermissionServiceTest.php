@@ -81,8 +81,6 @@ class JasperPermissionServiceTest extends PHPUnit_Framework_TestCase {
      * @todo come up with saner way to check it without relying on pre-set conditions. Not that crucial though.
      */
     public function testGetPermissions_properSizeReturned() {
-		$permissionsRoot = $this->jcSuper->getPermissions('/');
-		$this->assertEquals(count($permissionsRoot), 3);
 
 		$permissionsReports = $this->jc->getPermissions('/reports');
 		$this->assertEquals(sizeof($permissionsReports), 1);

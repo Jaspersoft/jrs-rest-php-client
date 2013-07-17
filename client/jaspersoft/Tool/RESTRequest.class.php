@@ -1,6 +1,6 @@
 <?php
-namespace jaspersoft\tools;
-use jaspersoft\RESTRequestException;
+namespace Jaspersoft\Tool;
+use Jaspersoft\Exception\RESTRequestException;
 
 class RESTRequest {
 
@@ -15,6 +15,7 @@ class RESTRequest {
 	protected $response_body;
 	protected $response_info;
 	protected $file_to_upload = array();
+    protected $headers;
 
 	public function __construct ($url = null, $verb = 'GET', $request_body = null)
 	{
@@ -46,6 +47,7 @@ class RESTRequest {
 		$this->content_type		= 'application/xml';
 		$this->accept_type 		= 'application/xml';
 		$this->file_to_upload	= null;
+        $this->headers          = null;
 		}
 
 	public function execute ()
@@ -73,10 +75,14 @@ class RESTRequest {
 					$this->verb = 'PUT';
 					$this->executePutMultipart($ch);
 					break;
-				case 'POST_MP':
-					$this->verb = 'POST';
-					$this->executePostMultipart($ch);
-					break;
+                case 'POST_MP':
+                    $this->verb = 'POST';
+                    $this->executePostMultipart($ch);
+                    break;
+                case 'POST_BIN':
+                    $this->verb = 'POST';
+                    $this->executeBinarySend($ch);
+                    break;
 				default:
 					throw new \InvalidArgumentException('Current verb (' . $this->verb . ') is an invalid REST verb.');
 			}
@@ -97,8 +103,6 @@ class RESTRequest {
 	public function buildPostBody ($data = null)
 	{
 		$data = ($data !== null) ? $data : $this->request_body;
-
-
 		$this->request_body = $data;
 	}
 
@@ -124,6 +128,24 @@ class RESTRequest {
 		$this->doExecute($ch);
 	}
 
+    protected function executeBinarySend ($ch)
+    {
+        $post = $this->request_body;
+
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->verb);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($ch, CURLOPT_URL, $this->url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
+
+        $this->response_body = curl_exec($ch);
+        $this->response_info = curl_getinfo($ch);
+
+        curl_close($ch);
+
+    }
+
 	// Set verb to PUT_MP to use this function
 	protected function executePutMultipart ($ch)
 	{
@@ -136,7 +158,7 @@ class RESTRequest {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 		$this->response_body = curl_exec($ch);
-		$this->response_info	= curl_getinfo($ch);
+		$this->response_info = curl_getinfo($ch);
 
 		curl_close($ch);
 
@@ -283,9 +305,6 @@ class RESTRequest {
 		$this->verb = $verb;
 	}
 
-    // Temporary location for prepAndSend funtions
-    // TODO: remove these and place them in a more logical place !!!!!!!!!!!!!!!!!!!!!!!!!!
-
     public function prepAndSend($url, $expectedCodes = array(200), $verb = null, $reqBody = null, $returnData = false,
                                    $contentType = 'application/xml', $acceptType = 'application/xml') {
         $this->flush();
@@ -322,7 +341,6 @@ class RESTRequest {
         return true;
     }
 
-
     /**
      * This function creates a multipart/form-data request and sends it to the server.
      * this function should only be used when a file is to be sent with a request (PUT/POST).
@@ -355,4 +373,30 @@ class RESTRequest {
         return array($statusCode, $responseBody);
     }
 
+
+    public function sendBinary($url, $expectedCodes = array(200), $body, $contentType, $contentDisposition, $contentDescription)
+    {
+        $this->flush();
+        $this->setUrl($url);
+        $this->setVerb('POST_BIN');
+        $this->buildPostBody($body);
+        $this->setContentType($contentType);
+        $this->headers = array('Content-Type: ' . $contentType, 'Content-Disposition: ' . $contentDisposition, 'Content-Description: ' . $contentDescription, 'Accept: application/json');
+
+        $this->execute();
+
+        $statusCode = $this->getResponseInfo();
+        $responseBody = $this->getResponseBody();
+        $statusCode = $statusCode['http_code'];
+
+        if (!in_array($statusCode, $expectedCodes)) {
+            if(!empty($responseBody)) {
+                throw new RESTRequestException('Unexpected HTTP code returned: ' . $statusCode . ' Body of response: ' . strip_tags($responseBody));
+            } else {
+                throw new RESTRequestException('Unexpected HTTP code returned: ' . $statusCode);
+            }
+        }
+        return $this->getResponseBody();
+
+    }
 }

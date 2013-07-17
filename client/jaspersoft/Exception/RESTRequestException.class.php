@@ -1,5 +1,5 @@
 <?php
-namespace jaspersoft;
+namespace Jaspersoft\Exception;
 
 class RESTRequestException extends \Exception {
 

@@ -1,5 +1,5 @@
 <?php
-namespace jaspersoft\tools;
+namespace Jaspersoft\Tool;
 
 
 class Util {

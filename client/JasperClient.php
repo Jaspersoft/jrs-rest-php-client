@@ -24,10 +24,13 @@
 
 namespace Jasper;
 
+use Jaspersoft\Tool\RESTRequest;
+use Jaspersoft\Service\Repository;
+
 define("JASPERCLIENT_ROOT", __DIR__);
 
 // PEAR Packages (soon to be removed)
-// These libraries are old and throw standards errors, thus their import is squelched
+// These libraries are old and throw standards errors, thus their import is error-squelched
 @require_once('XML/Serializer.php');
 @require_once('XML/Unserializer.php');
 
@@ -48,7 +51,7 @@ require_once('ExportTask.php');
 require_once('ImportTask.php');
 require_once('RepositoryPermission.php');
 
-// In the next release, all includes will be autoloaded as seen below. Currently only the new Resource services are
+// In the next major release, all includes will be autoloaded as seen below. Currently only the new Resource services are
 // loaded in this manner. This reduces the overhead of including all files each time JasperClient is loaded.
 spl_autoload_register(function($class) {
 	$filename = JASPERCLIENT_ROOT . '/' . $class . '.class.php';
@@ -56,9 +59,6 @@ spl_autoload_register(function($class) {
 
 	require_once $filename;
 });
-
-use Jaspersoft\Tool\RESTRequest;
-use Jaspersoft\Service\Repository;
 
 class JasperClient {
 
@@ -1288,7 +1288,7 @@ class JasperClient {
 			}
 			$result[] = $tempPermission;
 		}
-		return $result;		
+		return $result;
 	}
 
 	/** DEPRECATED -> use updateRepositoryPermissions and createRepositoryPermissions

@@ -10,13 +10,16 @@ Requirements
 To use this client, you will need:
 - JasperReports Server (version >=5.1)
 - PHP (version >=5.3)
+- PHP cURL
 - PEAR Package Manager (http://pear.php.net)
 - XML_Serializer PEAR package (dependency soon to be removed!)
-- PHPUnit PEAR package (for testing)
+- PHPUnit package (for testing)
 
 Installation
 -------------
-Be sure your php.ini is configured properly to use the proper timezone settings.
+Include the autoloader in your project
+
+    <?php require_once 'jasperclient/autoload.php'; ?>
 
 Security Notice
 ----------------

@@ -899,10 +899,11 @@ class JasperClient {
 
 	/***> REPOSITORY SERVICE <***/
 
-	/**
+	/** DEPRECATED -> use repositoryService()->searchRepository
 	 * This function retrieves the Resources from the server.
      * It returns an array consisting of ResourceDescriptor objects that represent the data.
 	 *
+     * @deprecated
 	 * @param string $uri
 	 * @param string $query
 	 * @param string $wsType
@@ -927,10 +928,11 @@ class JasperClient {
 	}
 
 
-	/**
+	/** DEPRECATED -> use repositoryService()->getResourceByLookup
      * This function retrieves a resource descriptor for a specified resource at $path on the server.
 	 * If you wish to supply information to the input controls you can supply the data to the $p and $pl arguments.
 	 *
+     * @deprecated
 	 * @param string $path
 	 * @param bool $fileData - set to true if you wish to receive the binary data of the resource (i.e: with images)
 	 * @param string $ic_get_query_data - the datasource to query
@@ -959,11 +961,12 @@ class JasperClient {
 		}
 	}
 
-    /**
+    /** DEPRECATED use repositoryService()->createResource
      * Upload a new resource to the repository.
      *
      * Note: first create a ResourceDescriptor object.
      *
+     * @deprecated
      * @param string $path
      * @param ResourceDescriptor $rd - ResourceDescriptor object that relates to the resource being uploaded
      * @param string $file - File path to file being uploaded
@@ -996,9 +999,10 @@ class JasperClient {
 		}
 	}
 
-    /**
+    /** DEPRECATED -> use repositoryService()->updateResource
      * Update a resource that is already in existence by providing a new ResourceDescriptor defining the object at the URI provided.
      *
+     * @deprecated
      * @param string $path - The path to the resource you wish to change
      * @param ResourceDescriptor $rd - a ResourceDescriptor object that correlates to the object you wish to modify (with the changes)
      * @param string $file - full file path to the image you wish to upload
@@ -1028,11 +1032,12 @@ class JasperClient {
 		}
 	}
 
-	/**
+	/** DEPRECATED use repositoryService()->deleteResource
      * This function deletes a resource.
      *
 	 * Note: it will only succeed if certain requirements are met. See "Web Services Guide" to see these requirements.
 	 *
+     * @deprecated
 	 * @param string $path - path to resource to be deleted
 	 * @return bool
 	 */

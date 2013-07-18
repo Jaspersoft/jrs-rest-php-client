@@ -23,6 +23,11 @@
 =========================================================================== */
 namespace Jasper;
 
+/** DEPRECATED use Jaspersoft\Dto\Resource\Resource
+ * Class ResourceProperty
+ * @deprecated
+ * @package Jasper
+ */
 class ResourceProperty {
 	public $name;
 	public $value;
@@ -66,6 +71,12 @@ class ResourceProperty {
 	public function addChild($child) { $this->children[] = $child; }
 }
 
+/** DEPRECATED use Jaspersoft\Dto\Resource objects
+ * Class ResourceDescriptor
+ *
+ * @deprecated
+ * @package Jasper
+ */
 class ResourceDescriptor {
 
 	// root node attributes

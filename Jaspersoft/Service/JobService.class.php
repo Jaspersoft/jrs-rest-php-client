@@ -4,6 +4,7 @@ namespace Jaspersoft\Service;
 use Jaspersoft\Tool\RESTRequest;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Job\Job;
+use Jaspersoft\Dto\Job\JobSummary;
 
 class JobService
 {
@@ -109,8 +110,6 @@ class JobService
 	{
 		if(!isset($job->id)) return false;
 		$url = $this->restUrl2 . '/jobs/' . $job->id;
-		echo json_encode($job);
-		echo "<br><br>".$url;
 		$data = $this->service->prepAndSend($url, array(201, 200), 'POST', json_encode($job), true, 'application/json', 'application/json');
 		return new Job(json_decode($data, true));
 	}
@@ -125,8 +124,8 @@ class JobService
 	 * @return bool - based on success of function
 	 */
 	public function deleteJob($id) {
-		$url = $this->restUrl2 . JOB_2_BASE_URL . '/' . $id;
-		$data = $this->service->prepAndSend($url, array(200), 'DELETE');
+		$url = $this->restUrl2 . '/jobs/' . $id;
+		$data = $this->service->prepAndSend($url, array(200, 204), 'DELETE');
 		if ($data)
             return true;
 		return false;

@@ -22,9 +22,6 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 		
 	}
 	
-	public function testNull() {
-		// Avoid warning that no tests exist
-	}
 	
 }
 

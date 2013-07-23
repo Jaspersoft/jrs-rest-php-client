@@ -31,18 +31,6 @@ class Resource implements \JsonSerializable
         return $result;
     }
 
-    /*
-    function __get($key)
-    {
-        return $this->$key;
-    }
-
-    function __set($key, $value)
-    {
-        $this->$key = $value;
-    }
-    */
-
     function __construct()
     {
 

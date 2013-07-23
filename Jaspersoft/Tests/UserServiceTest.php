@@ -28,7 +28,7 @@ use Jaspersoft\Dto\User\User;
 use Jaspersoft\Dto\User\UserLookup;
 use Jaspersoft\Dto\Role\Role;
 
-class JasperUserServiceTest extends BaseTest {
+class UserServiceTest extends BaseTest {
 
 	protected $jc;
 	protected $newUser;

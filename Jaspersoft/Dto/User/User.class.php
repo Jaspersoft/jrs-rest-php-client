@@ -29,8 +29,6 @@ use Jaspersoft\Dto\Role\Role;
  * this class represents Users from the JasperServer and contains data that is
  * accessible via the user service in the REST API.
  *
- * author: gbacon
- * date: 06/06/2012
  */
 class User implements \JsonSerializable {
 

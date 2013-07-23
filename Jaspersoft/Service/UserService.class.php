@@ -141,6 +141,17 @@ class UserService
         }
         return true;
     }
+	
+	/**
+	 * This function is an alias to addUsers which will also update a user
+	 * NOTE: You cannot change a user's username with this functoin
+	 * 
+	 * @param User A user object that represents the updated user
+	 */
+	public function updateUser(User $user)
+	{
+		self::addUsers($user);
+	}
 
 	/**
 	 * This function will delete a user

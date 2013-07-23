@@ -66,5 +66,40 @@ class Client
 	public function permissionService() {
 		return new service\PermissionService($this->restReq, $this->restUrl2);
 	}
+	
+	public function optionsService() {
+		return new service\OptionsService($this->restReq, $this->restUrl2);
+	}
+	
+	public function reportService() {
+		return new service\ReportService($this->restReq, $this->restUrl2);
+	}
+	
+	public function importExportService() {
+		return new service\ImportExportService($this->restReq, $this->restUrl2);
+	}
+	
+	public function queryService() {
+		return new service\QueryService($this->restReq, $this->restUrl2);
+	}
+	
+    /** This function returns information about the server in an associative array.
+     * Information provided is:
+     *
+     * - Date/Time Formatting Patterns
+     * - Edition
+     * - Version
+     * - Build
+     * - Features
+     * - License type and expiration
+     *
+     * @return array
+     */
+    public function serverInfo() {
+        $url = $this->restUrl2 . '/serverInfo';
+        $data = $this->restReq->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+        return json_decode($data, true);
+    }
+
 
 }

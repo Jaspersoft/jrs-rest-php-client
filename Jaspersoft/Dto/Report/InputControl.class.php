@@ -1,7 +1,7 @@
 <?php
-namespace Jaspersoft\Dto\Options;
+namespace Jaspersoft\Dto\Report;
 
-class InputOptions {
+class InputControl {
 
 	public $uri;
 	public $id;

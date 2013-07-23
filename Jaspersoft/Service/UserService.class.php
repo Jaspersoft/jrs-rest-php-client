@@ -9,7 +9,6 @@ use Jaspersoft\Tool\RESTRequest;
 
 class UserService
 {
-
 	protected $service;
 	protected $restUrl2;
 	

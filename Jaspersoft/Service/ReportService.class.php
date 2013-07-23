@@ -2,6 +2,8 @@
 namespace Jaspersoft\Service;
 
 use Jaspersoft\Tool\RESTRequest;
+use Jaspersoft\Dto\Report\InputControl;
+
 
 class ReportService
 {
@@ -31,6 +33,18 @@ class ReportService
 		}
 		$binary = $this->service->prepAndSend($url, array(200), 'GET', null, true);
 		return $binary;
+	}
+		
+	/**
+	 * This function will request the possible values and data behind all the input controls of a report.
+     *
+	 * @param string $uri
+	 * @return Array<\Jasper\InputOptions>
+	 */
+	public function getReportInputControls($uri) {
+		$url = $this->restUrl2 . '/reports' . $uri . '/inputControls/values';
+		$data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+		return InputControl::createFromJSON($data);
 	}
 
 }

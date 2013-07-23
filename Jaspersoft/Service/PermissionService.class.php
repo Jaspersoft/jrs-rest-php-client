@@ -34,7 +34,7 @@ class PermissionService
 								"recipientType" => $recipientType,
 								"recipientId" => $recipientId,
 								"resolveAll" => $resolveAll));
-		$data = $this->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
+		$data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
 		$permissions = json_decode($data);
 		if (empty($permissions)) {
 			return $result;
@@ -57,7 +57,7 @@ class PermissionService
 	public function updateRepositoryPermissions($uri, $permissions) {
 		$url = $this->restUrl2 . '/permissions' . $uri;
 		$body = json_encode(array('permission' => $permissions));
-		$this->prepAndSend($url, array(201, 200), 'PUT', $body, true, 'application/collection+json', 'application/json');
+		$this->service->prepAndSend($url, array(201, 200), 'PUT', $body, true, 'application/collection+json', 'application/json');
 	}
 	
 	/**
@@ -68,7 +68,7 @@ class PermissionService
 	public function createRepositoryPermissions($permissions) {
 		$url = $this->restUrl2 . '/permissions';
 		$body = json_encode(array('permission' => $permissions));
-		$this->prepAndSend($url, array(201, 200), 'POST', $body, true, 'application/collection+json', 'application/json');
+		$this->service->prepAndSend($url, array(201, 200), 'POST', $body, true, 'application/collection+json', 'application/json');
 	}
 	
 	 /**
@@ -82,7 +82,7 @@ class PermissionService
      */
 	public function deleteRepositoryPermission(RepositoryPermission $perm) {
 		$url = $this->restUrl2 . '/permissions' . $perm->uri . ';recipient=' . str_replace('/', '%2F', $perm->recipient);
-		$this->prepAndSend($url, array(200, 204), 'DELETE', null);
+		$this->service->prepAndSend($url, array(200, 204), 'DELETE', null);
 	}		
 
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Jasper;
+namespace Jaspersoft\Dto\Options;
 
 class ReportOptions {
 

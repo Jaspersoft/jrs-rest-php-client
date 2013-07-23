@@ -10,7 +10,7 @@ use Jaspersoft\Tool\Util;
 
 define("RESOURCE_NAMESPACE", "Jaspersoft\\Dto\\Resource");
 
-class Repository
+class RepositoryService
 {
     private $service;
     private $base_url;

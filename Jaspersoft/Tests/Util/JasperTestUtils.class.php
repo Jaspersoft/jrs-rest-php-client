@@ -1,5 +1,8 @@
 <?php
-namespace Jasper;
+namespace Jaspersoft\Tests\Util;
+
+use Jaspersoft\Dto\Role\Role;
+use Jaspersoft\Dto\User\User;
 
 class JasperTestUtils {
 
@@ -7,7 +10,7 @@ class JasperTestUtils {
 	 * These utilities are used to create objects to work with so that they can be used across the test suite.
 	 * These are good examples for the minimum required values when creating objects to use with the server.
 	 */
-
+/* DEPRECATED 
 	// Creates an image ResourceDescriptor object to work with
 	// You must supply a parent folder ResourceDescriptor object that the image will belong to
 	public static function createImage(ResourceDescriptor $folder) {
@@ -72,7 +75,7 @@ class JasperTestUtils {
 
 		return $result;
 	}
-
+*/
 	public static function createUser() {
 		$timecode = substr(md5(microtime()), 0, 5);
 

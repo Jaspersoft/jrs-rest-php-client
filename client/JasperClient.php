@@ -22,10 +22,11 @@
 
 =========================================================================== */
 
-namespace Jasper;
+namespace Jaspersoft;
 
 use Jaspersoft\Tool\RESTRequest;
-use Jaspersoft\Service\Repository;
+use Jaspersoft\Service\RepositoryService;
+use Jaspersoft\Service\UserService;
 
 define("JASPERCLIENT_ROOT", __DIR__);
 
@@ -108,9 +109,12 @@ class JasperClient {
     /** SERVICE EXPOSURE **/
 
     public function repositoryService() {
-        return new Repository($this->restReq, $this->restUrl2);
+        return new RepositoryService($this->restReq, $this->restUrl2);
     }
 
+	public function userService() {
+		return new UserService($this->restReq, $this->restUrl2);
+	}
 
     /**
      * Internal function that prepares and send the request. This function validates that

@@ -21,37 +21,32 @@ You should have received a copy of the GNU Affero General Public  License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =========================================================================== */
+/**
+ * @author gbacon
+ */
 
-use Jasper\JasperClient;
+namespace Jasper;
 
-require_once(dirname(__FILE__) . '/lib/JasperTestUtils.php');
-require_once(dirname(__FILE__) . '/../client/JasperClient.php');
 
-class ServerInfoTest extends PHPUnit_Framework_TestCase {
+class ImportTask {
 
-    /** @var JasperClient */
-    protected $jc;
-    protected $newUser;
+    public $update;
+    public $skipUserUpdate;
+    public $includeAccessEvents;
+    public $includeAuditEvents;
+    public $includeMonitoringEvents;
+    public $includeServerSettings;
 
-    public function setUp() {
-        $bootstrap = parse_ini_file(dirname(__FILE__) . '/test.properties');
-        $this->jc = new JasperClient(
-            $bootstrap['hostname'],
-            $bootstrap['port'],
-            $bootstrap['admin_username'],
-            $bootstrap['admin_password'],
-            $bootstrap['base_url'],
-            $bootstrap['admin_org']
-        );
-
+    public function queryData() {
+        $data = array();
+        foreach (get_object_vars($this) as $k => $v) {
+            if (!empty($v) && $v == true) {
+                $data[$k] = 'true';
+            } elseif (!empty($v)) {
+                $data[$k] = $v;
+            }
+        }
+        return $data;
     }
 
-    public function tearDown() {
-
-    }
-
-    public function testServerInfo() {
-        $info = $this->jc->info();
-        $this->assertTrue(isset($info['version']));
-    }
 }

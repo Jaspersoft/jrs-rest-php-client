@@ -50,5 +50,21 @@ class Client
 	public function userService() {
 		return new service\UserService($this->restReq, $this->restUrl2);
 	}
+	
+	public function organizationService() {
+		return new service\OrganizationService($this->restReq, $this->restUrl2);
+	}
+	
+	public function roleService() {
+		return new service\RoleService($this->restReq, $this->restUrl2);
+	}
+	
+	public function jobService() {
+		return new service\JobService($this->restReq, $this->restUrl2);
+	}
+	
+	public function permissionService() {
+		return new service\PermissionService($this->restReq, $this->restUrl2);
+	}
 
 }

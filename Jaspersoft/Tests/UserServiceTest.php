@@ -77,7 +77,6 @@ class JasperUserServiceTest extends BaseTest {
 		$this->assertEquals($user->username, $this->newUser->username);
 	}
 
-
 }
 
 ?>

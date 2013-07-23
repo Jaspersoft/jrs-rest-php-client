@@ -22,8 +22,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =========================================================================== */
 
+
 namespace Jaspersoft\Dto\Job;
 
+
+/** 
+ * The Job class is a holder for several properties and arrays
+ * you must refer to documentation to understand how to properly construct a job object
+ */
 class Job {
 /*
     public $alert = array();
@@ -37,7 +43,7 @@ class Job {
 	public $outputFormats = array();
 	public $outputLocale;
 	public $source = array();
-	public $simpleTrigger = array();
+	public $trigger = array();
 	public $username;
 	public $version = 0;
 */
@@ -49,80 +55,6 @@ class Job {
         foreach ($job_data as $k => $v) {
             $this->$k = $v;
         }
-	}
-/*
-    public function jsonSerialize() {
-        return array(
-            'alert' => $this->alert,
-            'baseOutputFilename' => $this->baseOutputFilename,
-            'repositoryDestination' => $this->repositoryDestination,
-            'creationDate' => $this->creationDate,
-            'description' => $this->description,
-            'id' => $this->id,
-            'label' => $this->label,
-            'mailNotification' => $this->mailNotification,
-            'outputFormats' => $this->outputFormats,
-            'outputLocale' => $this->outputLocale,
-            'source' => $this->source,
-            'simpleTrigger' => $this->simpleTrigger,
-            'username' => $this->username,
-            'version' => $this->version
-        );
-    }*/
-
-	/**
-     * Build XML segment by segment and append it to a preexisting SimpleXMLElement
-	 * if a value to a key is an associative array, a new node is created and the data is recursed. If
-	 * the value of a key is a non-associative array (numerical) then we will set the key of each element as the same thing.
-	 *
-	 * @param \SimpleXMLElement &$xml
-	 * @param array $data - An array of data to be serialized
-	 */
-	protected function buildXMLSegment(\SimpleXMLElement &$xml, $data) {
-		foreach($data as $k => $v) {
-			// Ignore null values
-			if(!empty($v) || $v == 0) {
-				// If we have an associative array, make a node for our key, then recur through the values
-				if (is_array($v) && is_string(key($v))) {
-					$kNode = $xml->addChild($k);
-					$this->buildXMLSegment($kNode, $v);
-				// if we have a numerical array (like for toAddress and outputFormats), use the key of the array containing the numerical array
-				} elseif (is_array($v) && is_int(key($v))) {
-					foreach($v as $key => $val) {
-						$xml->addChild($k, $val);
-					}
-				// if we don't have an array, make a child node
-				} else {
-					$xml->addChild($k, $v);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Represent this object as XML.
-     *
-	 * @param boolean $asObj - If this is true, return a SimpleXMLElement object instead of a string
-	 * @return string|SimpleXMLElement
-	 */
-	public function toXML($asObj = false) {
-		$result = new \SimpleXMLElement('<job></job>');
-		$this->buildXMLSegment($result, $this);	// We pass the entire data of this object to our XML Segment builder
-		if ($asObj) { return $result; }
-		$stripped_result = preg_replace('/\<\?xml(.*)\?\>/', '', $result->asXML());	// Remove the XML prolog
-		return $stripped_result;
-	}
-
-	public static function createFromXML($xml) {
-		$unserializer = new \XML_Unserializer();
-		$unserializer->unserialize($xml);
-		$data = $unserializer->getUnserializedData();
-		$result = new self();
-
-		foreach($data as $k => $v) {
-			$result->$k = $v;
-		}
-		return $result;
 	}
 
 

@@ -19,7 +19,7 @@ Add the following to your composer.json file for your project
 
     {
 	    "require": {
-		    "jaspersoft/rest_client": ">=2.0"
+		    "jaspersoft/rest-client": ">=2.0"
 	    }
     }
 

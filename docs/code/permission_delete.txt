@@ -1,9 +1,0 @@
-
-$permissions = $client->getPermissions('/dashboards');
-
-foreach ($permissions as $p) {
-   $recipient = $p->getPermissionRecipient();
-   if($recipient instanceof Jasper\User) {
-      $client->deletePermission($p);
-   }
-}

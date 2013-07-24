@@ -1,5 +1,0 @@
-
-$search = $client->searchJobs('/reports/samples/AllAccounts');
-
-foreach($search as $job)
-    printf('Job found, ID: %s', $job->id);

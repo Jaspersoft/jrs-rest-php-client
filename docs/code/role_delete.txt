@@ -1,8 +1,0 @@
-
-$role_vice_principal = $client->getRole('ROLE_VICE_PRINCIPAL', 'organization_1');
-
-try {
-   $client->deleteRole($role_vice_principal);
-} catch (Exception $e) {
-   printf('Deleting role failed: %s', $e->getMessage());
-}

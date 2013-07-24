@@ -1,9 +1,0 @@
-
-$search = $client->searchOrganizations('test_organization');
-$organization = $search[0];
-
-try {
-   $client->deleteOrganization($organization);
-} catch (Exception $e) {
-   printf('Organization deletion failure: %s', $e->getMessage());
-}

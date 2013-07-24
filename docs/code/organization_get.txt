@@ -1,3 +1,0 @@
-
-$organization = $client->getOrganization('test_organization');
-print_r($organization->id);

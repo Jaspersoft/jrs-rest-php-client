@@ -1,7 +1,0 @@
-
-$jobs = $client->searchJobs();
-$oj = $client->getJob($jobs[0]->getId());
-$oj->label = "New Label";
-$oj->mailNotification['toAddresses']['address'][] = "email@example.com";
-
-$client->postJob($oj);

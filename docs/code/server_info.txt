@@ -1,4 +1,0 @@
-
-$info = $client->info();
-
-print_r($info);

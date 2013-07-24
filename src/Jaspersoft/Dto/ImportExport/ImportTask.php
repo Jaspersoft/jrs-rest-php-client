@@ -25,8 +25,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  * @author gbacon
  */
 
-namespace Jasper;
-
+namespace Jaspersoft\Dto\ImportExport;
 
 class ImportTask {
 

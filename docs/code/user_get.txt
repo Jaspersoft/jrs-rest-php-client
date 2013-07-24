@@ -1,6 +1,0 @@
-
-$californiaUser = $client->getUsers('CaliforniaUser');
-
-if($californiaUser[0]->getUsername() == 'CaliforniaUser') {
-   printf('Correct user found! Username is: %s', $californiaUser->getUsername());
-}

@@ -1,8 +1,0 @@
-
-$role_to_add = new Jasper\Role('ROLE_VICE_PRINCIPAL', 'organization_1');
-
-try {
-   $client->createRole($role_to_add);
-} catch (Exception $e) {
-   printf('Adding role failed: %s', $e->getMessage());
-}

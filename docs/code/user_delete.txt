@@ -1,6 +1,0 @@
-
-$user = $client->getUserByLookup(
-    $client->searchUsers('california', 'organization_1')[0]
-);
-
-$client->deleteUser($user);

@@ -1,9 +1,0 @@
-
-$results = $client->searchUsers('j', 'organization_1');
-
-foreach ($results as $userLookup) {
-    $user = $client->getUserByLookup($userLookup);
-    printf('<br>Found user: %s', $user->getFullName());
-    foreach ($user->getRoles() as $role)
-        printf('<br> %10s User has role: %s', '&nbsp;', $role->roleName);
-}

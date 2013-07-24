@@ -95,14 +95,13 @@ class RepositoryService
         $url = self::make_url(null, $parentFolder);
         if (!empty($createFolders))
             $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
-        $body = json_encode($resource);
-
+        $body = json_encode($resource);	
         // Isolate the class name, lowercase it, and provide it as a filetype in the headers
         $type = explode('\\', get_class($resource));
         $type = lcfirst(end($type));
         $file_type = 'application/repository.' . $type . '+json';
         $verb = ($update) ? 'PUT' : 'POST';
-        $data = $this->service->prepAndSend($url, array(201), $verb, $body, true, $file_type, 'application/json');
+        $data = $this->service->prepAndSend($url, array(201, 200), $verb, $body, true, $file_type, 'application/json');
         return ResourceLookup::createFromJSON(json_decode($data));
     }
 
@@ -113,9 +112,9 @@ class RepositoryService
      * @throws \Exception
      * @return ResourceLookup object describing new resource
      */
-    public function updateResource(Resource $resource, $parentFolder)
+    public function updateResource(Resource $resource)
     {
-        $this->createResource($resource, $parentFolder, null, true);
+        $this->createResource($resource, $resource->uri, null, true);
     }
 
     /** Create a binary file on the server

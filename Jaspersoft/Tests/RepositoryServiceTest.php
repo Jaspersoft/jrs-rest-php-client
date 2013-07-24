@@ -69,13 +69,15 @@ class RepositoryServiceTest extends BaseTest {
 		$this->rs->deleteResource($folder->uri);
 	}
 	
+	/** Coverage: createResource, resourceSearch, getResourceByLookup,
+			deleteResource **/
 	public function testCreateResource()
 	{
 		$folder = u::createFolder();
 		$this->rs->createResource($folder, "/", true);
 		
 		$criteria = new RepositorySearchCriteria();
-		$criteria->folderUri = $folder->uri;
+		$criteria->q = $folder->label;
 		$search = $this->rs->resourceSearch($criteria);
 		$this->assertTrue(sizeof($search) > 0);
 		$folder_info = $this->rs->getResourceByLookup($search[0]);
@@ -84,91 +86,43 @@ class RepositoryServiceTest extends BaseTest {
 		$this->rs->deleteResource($folder->uri);
 	}
 	
-    // /**
-     // * Checks putResource() with image file - whether it actually uploads the image Resource to the server.
-     // */
-    // public function testPutResource_withImage() {
-		// $folder = JasperTestUtils::createFolder();
-		// $image = JasperTestUtils::createImage($folder);
-		// $this->jc->putResource('', $folder);
-		// $test = $this->jc->putResource('', $image, $this->image_location);
-		// $image_data = $this->jc->getResource($image->getUriString(), true);
-		// $this->jc->deleteResource($image->getUriString());
-		// $this->jc->deleteResource($folder->getUriString());
-		// $this->assertEquals(filesize($this->image_location), strlen($image_data));
- 	// }
-
-    // /**
-     // * Checks putResource() with folder descriptor - whether it creates a folder Resource on the server.
-     // */
-    // public function testPutResource_withFolder() {
-		// $folder = JasperTestUtils::createFolder();
-		// $success = $this->jc->putResource('', $folder);
-		// $folder_data = $this->jc->getResource($folder->getUriString());
-		// $this->jc->deleteResource($folder->getUriString());
-		// $this->assertEquals($folder_data->getLabel(), $folder->getLabel());
-	// }
-
-    // /**
-     // * Checks postResource() - whether it actually updates folder Resource properties on the server.
-     // */
-    // public function testPostResource_withFolder() {
-		// $folder = JasperTestUtils::createFolder();
-		// $this->jc->putResource('', $folder);
-		// $folder_data = $this->jc->getResource($folder->getUriString());
-		// $folder_data->setLabel('testTWO');
-		// $this->jc->postResource($folder->getUriString(), $folder_data);
-		// $updated_folder = $this->jc->getResource($folder->getUriString());
-		// $this->jc->deleteResource($updated_folder->getUriString());
-
-		// $this->assertEquals('testTWO', $updated_folder->getLabel());
-	// }
-
-    // /**
-     // * Checks putResource() with Data Source - whether it actually puts the data source Resource on the server.
-     // */
-    // public function testPutResource_withDataSource() {
-		// $folder = JasperTestUtils::createFolder();
-		// $datasource = JasperTestUtils::createDataSource($folder);
-		// $this->jc->putResource('', $folder);
-		// $this->jc->putResource($folder->getUriString(), $datasource);
-
-		// $datasource_data = $this->jc->getResource($datasource->getUriString());
-		// $this->jc->deleteResource($datasource->getUriString());
-		// $this->jc->deleteResource($folder->getUriString());
-		// $this->assertEquals($datasource_data->getName(), $datasource->getName());
-	// }
-
-    // // The next three tests operate with existing sample data (sample reports etc).
-
-    // /**
-     // * Checks getRepository() without parameters - verifies if it returns a plausible amount of Resources in root folder.
-     // */
-    // public function testGetRepository_simple() {
-        // $repository = $this->jc->getRepository();
-        // $this->assertGreaterThan(10, count($repository));
-    // }
-
-    // /**
-     // * Checks getRepository() with limit parameter - verifies whether it actually limits the output to the desired size.
-     // */
-    // public function testGetRepository_limit() {
-        // $repository = $this->jc->getRepository(null, null, null, null, 5);
-        // $this->assertEquals(5, count($repository));
-
-        // $repository = $this->jc->getRepository(null, null, null, null, 1);
-        // $this->assertEquals(1, count($repository));
-    // }
-
-    // /**
-     // * Checks getRepository() with recursive parameter on - verifies whether reportUnit Resources are found and
-     // * returned from child folders too (by a plausible number of those).
-     // */
-    // public function testGetRepository_recursive() {
-        // $repoSimple = $this->jc->getRepository('/reports', null, 'reportUnit', true);
-        // $this->assertGreaterThan(15, count($repoSimple));
-    // }
-
+	public function testUpdateResource()
+	{
+		$folder = u::createFolder();
+		$this->rs->createResource($folder, "/", true);
+		
+		$criteria = new RepositorySearchCriteria();
+		$criteria->q = $folder->label;
+		$search = $this->rs->resourceSearch($criteria);
+		$this->assertTrue(sizeof($search) > 0);
+		
+		$obj = $this->rs->getResourceByLookup($search[0]);
+		$obj->label = "test_label";
+		$this->rs->updateResource($obj);
+		
+		$criteria->q = $obj->label;
+		$search = $this->rs->resourceSearch($criteria);
+		$this->assertTrue(sizeof($search) > 0);
+		$this->assertEquals($search[0]->label, $obj->label);
+		$this->rs->deleteResource($obj->uri);		
+	}
+	
+    /** Coverage: createResource, moveResource, resourceSearch, getResourceByLookup 
+			deleteResource **/
+    public function testMoveResource()
+	{
+		$folder = u::createFolder();
+		$this->rs->createResource($folder, "/", true);
+		$this->rs->moveResource($folder->uri, $folder->uri . "_new", true);
+		
+		$search = $this->rs->resourceSearch(new RepositorySearchCriteria($folder->label));		
+		$obj = $this->rs->getResourceByLookup($search[0]);
+		
+		$this->assertEquals($obj->uri, $folder->uri . "_new" . $folder->uri);
+		
+		$this->rs->deleteResource($obj->uri);
+	}
+	
 }
 
 ?>

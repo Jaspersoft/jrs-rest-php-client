@@ -9,14 +9,14 @@ class RepositorySearchCriteria extends Criterion
     public $forceTotalCount;
     public $limit;
     public $offset;
-    public $query;
+    public $q;
     public $recursive;
     public $showHiddenItems;
     public $sortBy;
     public $type;
 
-    public function __construct() {
-
+    public function __construct($q = null) {
+		$this->q = $q;
     }
 
 }

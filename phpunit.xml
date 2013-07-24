@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<phpunit bootstrap="./autoload.php">
+<phpunit bootstrap="./vendor/autoload.php">
 	<testsuites>
 		<testsuite name="Jaspersoft Integration Tests">
-			<directory>./Jaspersoft/Tests</directory>
+			<directory>./src/Jaspersoft/Tests</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>

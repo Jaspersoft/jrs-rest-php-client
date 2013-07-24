@@ -108,7 +108,7 @@ class RepositoryServiceTest extends BaseTest {
 	}
 	
     /** Coverage: createResource, moveResource, resourceSearch, getResourceByLookup 
-			deleteResource **/
+			deleteManyResources **/
     public function testMoveResource()
 	{
 		$folder = u::createFolder();
@@ -120,7 +120,7 @@ class RepositoryServiceTest extends BaseTest {
 		
 		$this->assertEquals($obj->uri, $folder->uri . "_new" . $folder->uri);
 		
-		$this->rs->deleteResource($obj->uri);
+		$this->rs->deleteManyResources(array($obj->uri, $folder->uri."_new"));
 	}
 	
 }

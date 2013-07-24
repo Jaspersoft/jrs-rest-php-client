@@ -47,6 +47,7 @@ class RoleServiceTest extends BaseTest {
 	
 	/** Coverage: deleteRole **/
 	public function tearDown() {
+		parent::tearDown();
 		$this->rs->deleteRole($this->newRole);	
 	}
 

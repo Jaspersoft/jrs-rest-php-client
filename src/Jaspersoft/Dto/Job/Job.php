@@ -23,7 +23,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 =========================================================================== */
 namespace Jaspersoft\Dto\Job;
 
-
 /** 
  * The Job class is a holder for several properties and arrays
  * you must refer to documentation to understand how to properly construct a job object
@@ -48,8 +47,8 @@ class Job {
 
 
 	public function __construct($job_data = null) {
-        if (empty($job_data))
-            return null;
+		if (empty($job_data))
+			return null;
         foreach ($job_data as $k => $v) {
             $this->$k = $v;
         }

@@ -21,7 +21,6 @@ You should have received a copy of the GNU Affero General Public  License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =========================================================================== */
-use Jaspersoft\Client\Client as c;
 use Jaspersoft\Tests\BaseTest;	
 use Jaspersoft\Tests\Util\JasperTestUtils as u;
 use Jaspersoft\Dto\User\User;

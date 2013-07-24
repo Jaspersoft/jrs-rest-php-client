@@ -1,26 +1,28 @@
 <?php
 namespace Jaspersoft\Tests;
-
 use Jaspersoft\Client\Client as c;
+use Jaspersoft\Dto\Job\Job;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
 {
-
+	public $bootstrap;
+	
 	public function setUp() {
-		$bootstrap = parse_ini_file(dirname(__FILE__) . '/test.properties');
+		$this->bootstrap = parse_ini_file(dirname(__FILE__) . '/test.properties');
 		$this->jc = new c(
-				$bootstrap['hostname'],
-				$bootstrap['port'],
-				$bootstrap['admin_username'],
-				$bootstrap['admin_password'],
-				$bootstrap['base_url'],
-				$bootstrap['admin_org']
+				$this->bootstrap['hostname'],
+				$this->bootstrap['port'],
+				$this->bootstrap['admin_username'],
+				$this->bootstrap['admin_password'],
+				$this->bootstrap['base_url'],
+				$this->bootstrap['admin_org']
 		);
 	}
 	
 	public function tearDown() {
 		
 	}
+
 	
 	
 }

@@ -29,7 +29,7 @@ class PermissionService
     public function searchRepositoryPermissions($uri, $effectivePermissions = null, $recipientType = null, $recipientId = null, $resolveAll = null) {
 		$result = array();
 		$url = $this->restUrl2 . '/permissions' . $uri;
-		$url .= '?' . JasperClient::query_suffix(array(
+		$url .= '?' . Util::query_suffix(array(
 								"effectivePermissions" => $effectivePermissions,
 								"recipientType" => $recipientType,
 								"recipientId" => $recipientId,

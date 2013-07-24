@@ -22,11 +22,10 @@ class ImportExportService
      *
      * @param $et - ExportTask object defining the exporting you want to do
      * @return array metadata of export job
-     *
      */
     public function startExportTask(ExportTask $et) {
         $url = $this->restUrl2 . '/export';
-        $data = $this->prepAndSend($url, array(200), 'POST', json_encode($et), true, 'application/json', 'application/json');
+        $data = $this->service->prepAndSend($url, array(200), 'POST', json_encode($et), true, 'application/json', 'application/json');
         return json_decode($data, true);
     }
 
@@ -38,7 +37,7 @@ class ImportExportService
      */
     public function getExportState($id) {
         $url = $this->restUrl2 . '/export' . '/' . $id . '/state';
-        $data = $this->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
         return json_decode($data, true);
     }
 
@@ -53,7 +52,7 @@ class ImportExportService
      */
     public function fetchExport($id, $filename = 'export.zip') {
         $url = $this->restUrl2 . '/export' . '/' . $id . '/' . $filename;
-        $data = $this->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/zip');
+        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/zip');
         return $data;
     }
 
@@ -65,7 +64,7 @@ class ImportExportService
      */
    public function startImportTask(ImportTask $it, $file_data) {
        $url = $this->restUrl2 . '/import' . '?' . Util::query_suffix($it->queryData());
-       $data = $this->prepAndSend($url, array(200, 201), 'POST', $file_data, true, 'application/zip', 'application/json');
+       $data = $this->service->prepAndSend($url, array(200, 201), 'POST', $file_data, true, 'application/zip', 'application/json');
        return json_decode($data, true);
    }
 
@@ -76,7 +75,7 @@ class ImportExportService
      */
     public function getImportState($id) {
        $url = $this->restUrl2 . '/import' . '/' . $id . '/state';
-       $data = $this->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+       $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
        return json_decode($data, true);
    }
 	

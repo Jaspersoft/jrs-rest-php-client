@@ -21,37 +21,37 @@ You should have received a copy of the GNU Affero General Public  License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =========================================================================== */
-/**
- * UserLookup object
- * this object represents a summary user object that is found when using searchUsers
- *
- * It is not a full representation of a User. You must use getUser
- */
+use Jaspersoft\Tests\BaseTest;
+use Jaspersoft\Tests\Util\JasperTestUtils as u;
 
-namespace Jasper;
+class QueryServiceTest extends BaseTest {
 
+    protected $jc;
+    protected $newUser;
+    protected $query;
 
-class UserLookup implements \JsonSerializable{
-    public $username;
-    public $fullName;
-    public $externallyDefined;
-    public $tenantId;
+    public function setUp() {
+		parent::setUp();
+		
+		$this->qs = $this->jc->queryService();
+        $this->query = <<<EOF
+<query>
+    <queryFields>
+        <queryField id="public_opportunities.amount"/>
+        <queryField id="public_opportunities.name"/>
+    </queryFields>
+</query>
+EOF;
 
-    public function __construct($username, $fullName, $externallyDefined, $tenantId = null) {
-        $this->username = $username;
-        $this->fullName = $fullName;
-        $this->externallyDefined = $externallyDefined;
-        $this->tenantId = $tenantId;
     }
 
-    public function jsonSerialize() {
-        return array(
-            'username' => $this->username,
-            'fullName' => $this->fullName,
-            'externallyDefined' => $this->externallyDefined
-        );
+    public function tearDown() {
+		parent::tearDown();
     }
 
-
-
+    public function testQueryExecution() {
+        $run = $this->qs->executeQuery('/Domains/Simple_Domain', $this->query);
+        // If data is set, then data was collected and the requst was successful
+        $this->assertTrue(isset($run['values'][0]['value'][0]));
+    }
 }

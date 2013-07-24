@@ -25,7 +25,7 @@ class QueryService
     public function executeQuery($sourceUri, $query)
 	{
         $url = $this->restUrl2 . '/queryExecutor' . $sourceUri;
-        $data = $this->prepAndSend($url, array(200), 'POST', $query, true, 'text/plain', 'application/json');
+        $data = $this->service->prepAndSend($url, array(200), 'POST', $query, true, 'text/plain', 'application/json');
         return json_decode($data, true);
     }
 

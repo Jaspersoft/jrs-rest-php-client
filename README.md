@@ -8,18 +8,24 @@ Using this library you can make requests and interact with the Jasper Reports Se
 Requirements
 -------------
 To use this client, you will need:
-- JasperReports Server (version >=5.1)
-- PHP (version >=5.3)
-- PHP cURL
-- PEAR Package Manager (http://pear.php.net)
-- XML_Serializer PEAR package (dependency soon to be removed!)
-- PHPUnit package (for testing)
+- JasperReports Server (version >= 5.2)
+- PHP (version >= 5.3)
+- Composer dependency manager (http://getcomposer.org/download)
+
 
 Installation
 -------------
-Include the autoloader in your project
+Add the following to your composer.json file for your project
 
-    <?php require_once 'jasperclient/autoload.php'; ?>
+    {
+	    "require": {
+		    "jaspersoft/rest_client": ">=2.0"
+	    }
+    }
+
+Or alternatively, download this package from github, and run `php composer.phar install` in the directory containing composer.json to generate the autoloader, then require the autoloader using
+    require_once "vendor/autoload.php"
+
 
 Security Notice
 ----------------
@@ -27,5 +33,5 @@ This package uses BASIC authentication to identify itself with the server. This 
 
 PHPUnits
 --------
-The PHPUnits are provided both as an example of code, and to test for quality assurance. It is *not advised to run these tests on a production server!!* As some of the features tested do overwrite existing data (import/export service specifically)
+The tests contained in this package are integration tests and are _not intended to be ran on a production server!_
 

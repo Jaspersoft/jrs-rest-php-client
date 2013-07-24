@@ -41,6 +41,7 @@ class RepositoryService
         $url = self::make_url($criteria);
         $result = array();
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
+		if (empty($data)) return null;
         $data = json_decode($data);
         foreach ($data->resourceLookup as $rl)
             $result[] = ResourceLookup::createFromJSON($rl);

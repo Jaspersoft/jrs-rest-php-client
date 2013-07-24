@@ -4,6 +4,7 @@ namespace Jaspersoft\Tests\Util;
 use Jaspersoft\Dto\Role\Role;
 use Jaspersoft\Dto\User\User;
 use Jaspersoft\Dto\Resource\Folder;
+use Jaspersoft\Dto\Resource\File;
 use Jaspersoft\Dto\Resource\Resource;
 use Jaspersoft\Dto\Job\Job;
 
@@ -51,8 +52,9 @@ class JasperTestUtils {
 		return $entity;
 	}
 	
-	public static function createUser() {
-		$timecode = substr(md5(microtime()), 0, 5);
+	public static function createUser()
+	{
+		$timecode = self::makeID();
 
 		$role = new Role('ROLE_USER', null, 'false');
 
@@ -67,7 +69,17 @@ class JasperTestUtils {
 		$result->addRole($role);
 		return $result;
 	}
-	 
+	
+	public static function createImage(Folder $f)
+	{
+		$uuid = self::makeID();
+		$entity = new File();
+		$entity->label = "file_" . $uuid;
+		$entity->description = "test file";
+		$entity->uri = $f->uri . "/" . "file_".$uuid;
+		return $entity;
+	}
+	
 /* DEPRECATED 
 	// Creates an image ResourceDescriptor object to work with
 	// You must supply a parent folder ResourceDescriptor object that the image will belong to

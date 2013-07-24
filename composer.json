@@ -1,0 +1,19 @@
+{
+    "name": "jaspersoft/rest_client",
+    "description": "A client for the JasperReports Server REST API",
+    "license": "GNU Affero General Public License",
+    "authors": [
+        {
+            "name": "Jaspersoft Corporation",
+            "email": "support@jaspersoft.com"
+        }
+    ],
+    "require": {
+
+    },
+	"autoload": {
+		"psr-0": {
+			"Jaspersoft": "src/"
+		}
+	}
+}

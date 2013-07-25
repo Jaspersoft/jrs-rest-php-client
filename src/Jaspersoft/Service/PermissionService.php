@@ -19,11 +19,11 @@ class PermissionService
     /**
      * Obtain the permissions of a resource on the server
      *
-     * @param $uri URI of resource you wish to obtain permissions
-     * @param $effectivePermissions shows all permissions who affect uri
-     * @param $recipientType	Type type of permission (user or role)
-     * @param $recipientId the id of the recipient (requires recipientType)
-     * @param $resolveAll resolve for all matched recipients
+     * @param $uri string of resource you wish to obtain permissions
+     * @param $effectivePermissions string shows all permissions who affect uri
+     * @param $recipientType string Type type of permission (user or role)
+     * @param $recipientId string the id of the recipient (requires recipientType)
+     * @param $resolveAll string resolve for all matched recipients
      * @return array<RepositoryPermission> array of permission objects
      */
     public function searchRepositoryPermissions($uri, $effectivePermissions = null, $recipientType = null, $recipientId = null, $resolveAll = null) {

@@ -119,8 +119,8 @@ class JobService
      * This function will delete a job that is scheduled.
      * You must supply the Job's ID to this function to delete it.
 	 *
-	 * @param int|string $id - can be retrieved using getId() on a JobSummary object
-	 * @return bool - based on success of function
+	 * @param int|string $id - can be retrieved from JobSummary properties
+     * @return bool - based on success of function
 	 */
 	public function deleteJob($id) {
 		$url = $this->restUrl2 . '/jobs/' . $id;

@@ -21,7 +21,6 @@ You should have received a copy of the GNU Affero General Public  License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =========================================================================== */
-use Jaspersoft\Client\Client as JasperClient;
 require_once "BaseTest.php";
 use Jaspersoft\Tool\TestUtils as u;
 use Jaspersoft\Dto\Organization\Organization;

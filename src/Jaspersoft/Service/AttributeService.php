@@ -70,7 +70,7 @@ class AttributeService
     public function getAttributes(User $user, $attributeNames = null)
 	{
         $result = array();
-        $url = self::make_url($user->getUsername(), $user->getTenantId(), $attributeNames);
+        $url = self::make_url($user->username, $user->tenantId, $attributeNames);
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
 
         if(!empty($data)) {
@@ -96,7 +96,7 @@ class AttributeService
      */
     public function updateAttributes(User $user, $attributes)
 	{
-        $url = self::make_url($user->getUsername(), $user->getTenantId());
+        $url = self::make_url($user->username, $user->tenantId);
         $data = json_encode(array('attribute' => $attributes));
         $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, 'application/json', 'application/json');
     }
@@ -111,7 +111,7 @@ class AttributeService
      */
     public function addAttributes(User $user, $attributes)
 	{
-        $url = self::make_url($user->getUsername(), $user->getTenantId());
+        $url = self::make_url($user->username, $user->tenantId);
         if (!is_array($attributes))
             $attributes = array($attributes);
         $existing_attributes = $this->getAttributes($user);
@@ -129,9 +129,9 @@ class AttributeService
 	 */
 	public function deleteAttributes(User $user, $attributes = null)
 	{
-		$url = self::make_url($user->getUsername(), $user->getTenantId());
+		$url = self::make_url($user->username, $user->tenantId);
 		if (!empty($attributes)) {
-			$url .= '?' . JasperClient::query_suffix(array('name' => $attributes));
+			$url .= '?' . Util::query_suffix(array('name' => $attributes));
 		}
 		$this->service->prepAndSend($url, array(204, 200), 'DELETE', null, false, 'application/json', 'application/json');
 	}

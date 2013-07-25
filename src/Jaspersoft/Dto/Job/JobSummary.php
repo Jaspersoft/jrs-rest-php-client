@@ -67,25 +67,6 @@ class JobSummary implements \JsonSerializable{
 	public function getNextFireTime() { return $this->state['nextFireTime']; }
 	public function getPreviousFireTime() { return $this->state['previousFireTime']; }
 
-	public function asXML() {
-		$seri_opt = array(
-				'indent' => '     ',
-				'rootName' => 'jobsummary',
-				'ignoreNull' => true
-		);
-		$seri = new \XML_Serializer($seri_opt);
-		$res = $seri->serialize($this);
-		if ($res === true) {
-			return $seri->getSerializedData();
-		} else {
-			return false;
-		}
-	}
-
-	public function __toString() {
-		return htmlentities($this->asXML());
-	}
-
 }
 
 ?>

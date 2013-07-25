@@ -26,7 +26,7 @@ class RESTRequest {
 		$this->username			= null;
 		$this->password			= null;
 		$this->accept_type		= null;
-		$this->content_type		= 'application/xml';
+		$this->content_type		= 'application/json';
 		$this->response_body	= null;
 		$this->response_info	= null;
 		$this->file_to_upload	= array();
@@ -44,8 +44,8 @@ class RESTRequest {
 		$this->verb				= 'GET';
 		$this->response_body	= null;
 		$this->response_info	= null;
-		$this->content_type		= 'application/xml';
-		$this->accept_type 		= 'application/xml';
+		$this->content_type		= 'application/json';
+		$this->accept_type 		= 'application/json';
 		$this->file_to_upload	= null;
         $this->headers          = null;
 	}
@@ -309,7 +309,7 @@ class RESTRequest {
 	}
 
     public function prepAndSend($url, $expectedCodes = array(200), $verb = null, $reqBody = null, $returnData = false,
-                                   $contentType = 'application/xml', $acceptType = 'application/xml', $headers = array()) {
+                                   $contentType = 'application/json', $acceptType = 'application/json', $headers = array()) {
         $this->flush();
         $this->setUrl($url);
         if ($verb !== null) {

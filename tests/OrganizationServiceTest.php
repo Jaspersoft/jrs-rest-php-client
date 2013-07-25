@@ -22,8 +22,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =========================================================================== */
 use Jaspersoft\Client\Client as JasperClient;
-use Jaspersoft\Tests\BaseTest;	
-use Jaspersoft\Tests\Util\JasperTestUtils as u;
+require_once "BaseTest.php";
+use Jaspersoft\Tool\TestUtils as u;
 use Jaspersoft\Dto\Organization\Organization;
 
 class JasperOrganizationServiceTest extends BaseTest {

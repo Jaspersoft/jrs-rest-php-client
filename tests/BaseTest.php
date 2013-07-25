@@ -1,5 +1,5 @@
 <?php
-namespace Jaspersoft\Tests;
+
 use Jaspersoft\Client\Client as c;
 use Jaspersoft\Dto\Job\Job;
 

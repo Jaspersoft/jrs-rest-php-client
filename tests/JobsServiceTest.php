@@ -1,6 +1,6 @@
 <?php
-use Jaspersoft\Tests\BaseTest;	
-use Jaspersoft\Tests\Util\JasperTestUtils as u;
+require_once "BaseTest.php";
+use Jaspersoft\Tool\TestUtils as u;
 use Jaspersoft\Dto\Resource\Folder;
 use Jaspersoft\Dto\Job\Job;
 use Jaspersoft\Dto\Job\JobSummary;

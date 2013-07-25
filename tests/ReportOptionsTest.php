@@ -1,6 +1,6 @@
 <?php
-use Jaspersoft\Tests\BaseTest;
-use Jaspersoft\Tests\Util\JasperTestUtils as u;
+require_once __DIR__ . "/BaseTest.php";
+use Jaspersoft\Tool\TestUtils as u;
 
 class ReportOptionsTest extends BaseTest {
 

@@ -90,7 +90,7 @@ class JobService
 	/**
 	 * This function creates a new job on the server
 	 * 
-	 * @param Job job object describing new job
+	 * @param Job $job object describing new job
 	 * @return Job the server returned job with assigned ID
 	 */
 	public function createJob(Job $job)
@@ -103,12 +103,11 @@ class JobService
 	/**
 	 * This function updates a new job on the server
 	 * 
-	 * @param Job job object describing new data for the job
+	 * @param Job $job object describing new data for the job
 	 * @return Job the server returned job as it is now stored
 	 */
-	public function updateJob(Job $job)
+	public function updateJob($job)
 	{
-		if(!isset($job->id)) return false;
 		$url = $this->restUrl2 . '/jobs/' . $job->id;
 		$data = $this->service->prepAndSend($url, array(201, 200), 'POST', json_encode($job), true, 'application/json', 'application/json');
 		return new Job(json_decode($data, true));

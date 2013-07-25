@@ -43,8 +43,8 @@ class Job {
 	public $trigger = array();
 	public $username;
 	public $version = 0;
-*/
 
+*/
 
 	public function __construct($job_data = null) {
 		if (empty($job_data))

@@ -51,8 +51,8 @@ class PermissionService
 	/**
 	 * Update a set of permissions on the server.
 	 *
-	 * @param $uri URI of the resource in the repository
-	 * @param $permissions an array of RepositoryPermission objects representing changes made
+	 * @param $uri string URI of the resource in the repository
+	 * @param $permissions array an array of RepositoryPermission objects representing changes made
 	 */
 	public function updateRepositoryPermissions($uri, $permissions) {
 		$url = $this->restUrl2 . '/permissions' . $uri;

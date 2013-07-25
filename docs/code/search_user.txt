@@ -1,0 +1,9 @@
+
+$results = $c->userService()->searchUsers('j', 'organization_1');
+
+foreach ($results as $userLookup) {
+    $user = $c->userService()->getUserByLookup($userLookup);
+    printf('<br>Found user: %s', $user->fullName);
+    foreach ($user->roles as $role)
+        printf('<br> %10s User has role: %s', '&nbsp;', $role->roleName);
+}

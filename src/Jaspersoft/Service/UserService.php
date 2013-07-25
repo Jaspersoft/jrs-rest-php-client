@@ -145,7 +145,7 @@ class UserService
 	 * This function is an alias to addUsers which will also update a user
 	 * NOTE: You cannot change a user's username with this functoin
 	 * 
-	 * @param User A user object that represents the updated user
+	 * @param $user User A user object that represents the updated user
 	 */
 	public function updateUser(User $user)
 	{

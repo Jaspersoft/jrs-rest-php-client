@@ -1,0 +1,29 @@
+
+header('Content-Type: text/html; charset=utf-8');
+// The export service can take longer than 60 seconds to execute, so it is necessary to change the server execution time limit
+set_time_limit(0);
+
+$request->users[] = "jasperadmin";
+
+$metadata = $c->importExportService()->startExportTask($request);
+
+$decline = true;
+while ($decline) {
+    $state = $c->importExportService()->getExportState($metadata['id']);
+    if ($state['phase'] == "finished") {
+        $decline = false;
+        echo "<br>Export task complete, downloading....";
+    } else {
+        echo "Export not yet completed...<br>";
+        @flush();
+        @ob_flush();
+        sleep(10);
+    }
+}
+
+$f = fopen('export.zip', 'w');
+$data = $c->importExportService()->fetchExport($metadata['id']);
+fwrite($f, $data);
+fclose($f);
+
+echo "<br><br>File available for download <a href='export.zip'>here</a>";

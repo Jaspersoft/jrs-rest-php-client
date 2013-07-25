@@ -1,0 +1,7 @@
+
+// Store service for several calls
+$js = $c->jobService();
+$js->getJobs("/reports/samples/AllAccounts");
+
+// Or access service methods directly
+$c->jobService()->getJobs("/reports/samples/AllAccounts");

@@ -1,0 +1,6 @@
+
+$joeUser = $c->userService()->getUser("joeuser", "organization_1");
+
+$age_attr = new Attribute("Age", "22");
+$beer_attr = new Attribute("Beer of Choice", "Anchor Steam");
+$c->attributeService()->updateAttributes($joeUser, array($age_attr, $beer_attr));

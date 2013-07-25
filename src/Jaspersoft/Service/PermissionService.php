@@ -63,7 +63,7 @@ class PermissionService
 	/**
 	 * Create new permissions on the server.
 	 *
-	 * @param $permissions an array of RepositoryPermission objects completely defining new permissions
+	 * @param $permissions array RepositoryPermission objects in an array completely defining new permissions
 	 */
 	public function createRepositoryPermissions($permissions) {
 		$url = $this->restUrl2 . '/permissions';

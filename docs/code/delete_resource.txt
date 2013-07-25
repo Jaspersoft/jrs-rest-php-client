@@ -1,0 +1,6 @@
+
+$c->repositoryService()->deleteResource("/ImageFolder/pitbull");
+
+// OR!
+
+$c->repositoryService()->deleteManyResources(array("/ImageFolder/pitbull", "/ImageFolder"));

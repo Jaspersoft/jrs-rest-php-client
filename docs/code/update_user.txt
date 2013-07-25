@@ -1,0 +1,13 @@
+
+$search = $c->userService()->searchUsers('californiaUser', 'organization_1');
+$californiaUser = $c->userService()->getUserByLookup($search[0]);
+
+$californiaUser->emailAddress('sanfrancisco-oakland@example.com');
+$californiaUser->password('SUPERstrongPASSWORD###!!!');
+
+try {
+    $c->userService()->updateUser($californiaUser);
+} catch (Exception $e) {
+    printf('Attempt to modify the user failed with error: %s', $e->getMessage());
+}
+  

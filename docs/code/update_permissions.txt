@@ -1,0 +1,5 @@
+
+$perms = $c->permissionService()->searchRepositoryPermissions("/reports/samples/AllAccounts");
+$perms[0]->mask = 0;
+
+$c->permissionService()->updateRepositoryPermissions("/reports/samples/AllAccounts", $perms);

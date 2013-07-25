@@ -1,0 +1,4 @@
+
+$permissions = $c->permissionService()->searchRepositoryPermissions("/reports/samples/AllAccounts");
+foreach($permissions as $p)
+    echo $p->recipient . "<br>";

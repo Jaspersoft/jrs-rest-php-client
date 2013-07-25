@@ -1,0 +1,7 @@
+
+$folder = new Folder;
+
+$folder->label = "ImageFolder";
+$folder->description = "A folder for storing images";
+
+$c->repositoryService()->createResource($folder, "/");

@@ -1,0 +1,6 @@
+
+try {
+  $c->optionsService()->deleteReportOptions('/reports/samples/Cascading_multi_select_report', 'CanadaUSA');
+} catch (Exception $e) {
+  printf("An exception was thrown: ", $e->getMessage());
+}

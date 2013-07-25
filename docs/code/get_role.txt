@@ -1,0 +1,2 @@
+
+$user_role = $c->roleService()->getRole("ROLE_USER");

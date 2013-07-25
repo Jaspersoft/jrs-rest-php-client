@@ -1,0 +1,9 @@
+
+$search = $c->organizationService()->searchOrganizations('test_organization');
+$organization = $search[0];
+
+try {
+   $c->organizationService->deleteOrganization($organization);
+} catch (Exception $e) {
+   printf('Organization deletion failure: %s', $e->getMessage());
+}

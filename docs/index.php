@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 
+<?php
+	function inject_sample($file) {
+		$dirfile = dirname(__FILE__) . '/'. $file;
+		if(empty($dirfile) || !file_exists($dirfile)) { 
+			printf('Cannot open sample code: %s', $dirfile);
+			return false;
+		}
+		$fh = fopen($dirfile, 'r')
+			or printf('Cannot open sample code');
+		$contents = fread($fh, filesize($dirfile));
+		echo htmlentities($contents);
+		fclose($fh);
+	}
+?>
 
 <html>
   <head>
@@ -55,12 +69,7 @@
 		</p>
 		<pre>
 		<code>
-			<br />
-<b>Warning</b>:  fopen(C:\Jasper\php\f_version\docs/): failed to open stream: No such file or directory in <b>C:\Jasper\php\f_version\docs\index.php</b> on line <b>10</b><br />
-Cannot open sample code<br />
-<b>Warning</b>:  fread() expects parameter 1 to be resource, boolean given in <b>C:\Jasper\php\f_version\docs\index.php</b> on line <b>12</b><br />
-<br />
-<b>Warning</b>:  fclose() expects parameter 1 to be resource, boolean given in <b>C:\Jasper\php\f_version\docs\index.php</b> on line <b>14</b><br />
+			<?php inject_sample(''); ?>
 		</code>
 		</pre>
 	</article>
@@ -78,19 +87,8 @@ end of skeleton -->
 
 		<pre>
 		<code>
-			
-require_once __DIR__ . &quot;/vendor/autoload.php&quot;;
-
-use Jaspersoft\Client\Client;
-
-$c = new Client(
-				&quot;localhost&quot;,
-				&quot;8080&quot;,
-				&quot;jasperadmin&quot;,
-				&quot;jasperadmin&quot;,
-				&quot;/jasperserver-pro&quot;,
-				&quot;organization_1&quot;
-			);		</code>
+			<?php inject_sample('code/client_invokation.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -102,10 +100,8 @@ $c = new Client(
 
 		<pre>
 		<code>
-			
-$info = $c-&gt;serverInfo();
-
-print_r($info);    		</code>
+			<?php inject_sample('code/server_info.txt'); ?>
+		</code>
 		</pre>
 	</article>
 
@@ -132,13 +128,8 @@ print_r($info);    		</code>
 		</p>
 		<pre>
 		<code>
-			
-// Store service for several calls
-$js = $c-&gt;jobService();
-$js-&gt;getJobs(&quot;/reports/samples/AllAccounts&quot;);
-
-// Or access service methods directly
-$c-&gt;jobService()-&gt;getJobs(&quot;/reports/samples/AllAccounts&quot;);		</code>
+			<?php inject_sample('code/service_access.txt'); ?>
+		</code>
 		</pre>
 	</article>
 
@@ -152,9 +143,8 @@ $c-&gt;jobService()-&gt;getJobs(&quot;/reports/samples/AllAccounts&quot;);		</co
 		</p>
 		<pre>
 		<code>
-			
-$californiaUser = $c-&gt;userService()-&gt;getUser(&quot;CaliforniaUser&quot;, &quot;organization_1&quot;);
-$attributes = $c-&gt;attributeService()-&gt;getAttributes($californiaUser);		</code>
+			<?php inject_sample('code/get_attributes.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -166,12 +156,8 @@ $attributes = $c-&gt;attributeService()-&gt;getAttributes($californiaUser);		</c
 		</p>
 		<pre>
 		<code>
-			
-$joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
-
-$age_attr = new Attribute(&quot;Age&quot;, &quot;22&quot;);
-$beer_attr = new Attribute(&quot;Beer of Choice&quot;, &quot;Anchor Steam&quot;);
-$c-&gt;attributeService()-&gt;updateAttributes($joeUser, array($age_attr, $beer_attr));		</code>
+			<?php inject_sample('code/update_attributes.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -182,12 +168,8 @@ $c-&gt;attributeService()-&gt;updateAttributes($joeUser, array($age_attr, $beer_
 		</p>
 		<pre>
 		<code>
-			
-$joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
-
-$uni_attr = new Attribute(&quot;University&quot;, &quot;University of Oklahoma&quot;);
-$animal_attr = new Attribute(&quot;Favorite Animal&quot;, &quot;Bear&quot;);
-$c-&gt;attributeService()-&gt;addAttributes($joeUser, array($uni_attr, $animal_attr));		</code>
+			<?php inject_sample('code/add_attributes.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -198,9 +180,8 @@ $c-&gt;attributeService()-&gt;addAttributes($joeUser, array($uni_attr, $animal_a
 		</p>
 		<pre>
 		<code>
-			
-$joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
-$c-&gt;attributeService()-&gt;deleteAttributes($joeUser);		</code>
+			<?php inject_sample('code/delete_attributes.txt'); ?>
+		</code>
 		</pre>
 	</article>
 
@@ -214,25 +195,8 @@ $c-&gt;attributeService()-&gt;deleteAttributes($joeUser);		</code>
 		</p>
 		<pre>
 		<code>
-			
-$request = new ImportTask;
-$request-&gt;update = true;
-
-$metadata = $c-&gt;importExportService()-&gt;startImportTask($request, file_get_contents('import_data.zip'));
-
-$continue = true;
-while($continue) {
-    $state = $c-&gt;importExportService()-&gt;getImportState($metadata['id']);
-    if ($state['phase'] == 'finished') {
-        $continue = false;
-        echo &quot;&lt;br&gt;&lt;br&gt;Import complete!&quot;;
-    } else {
-        echo &quot;Still importing...&lt;br&gt;&quot;;
-        @ob_flush();
-        @flush();
-        sleep(10);
-    }
-}		</code>
+			<?php inject_sample('code/import_service.txt'); ?>
+		</code>
 		</pre>
 	</article>
 
@@ -245,35 +209,8 @@ while($continue) {
 		</p>
 		<pre>
 		<code>
-			
-header('Content-Type: text/html; charset=utf-8');
-// The export service can take longer than 60 seconds to execute, so it is necessary to change the server execution time limit
-set_time_limit(0);
-
-$request-&gt;users[] = &quot;jasperadmin&quot;;
-
-$metadata = $c-&gt;importExportService()-&gt;startExportTask($request);
-
-$decline = true;
-while ($decline) {
-    $state = $c-&gt;importExportService()-&gt;getExportState($metadata['id']);
-    if ($state['phase'] == &quot;finished&quot;) {
-        $decline = false;
-        echo &quot;&lt;br&gt;Export task complete, downloading....&quot;;
-    } else {
-        echo &quot;Export not yet completed...&lt;br&gt;&quot;;
-        @flush();
-        @ob_flush();
-        sleep(10);
-    }
-}
-
-$f = fopen('export.zip', 'w');
-$data = $c-&gt;importExportService()-&gt;fetchExport($metadata['id']);
-fwrite($f, $data);
-fclose($f);
-
-echo &quot;&lt;br&gt;&lt;br&gt;File available for download &lt;a href='export.zip'&gt;here&lt;/a&gt;&quot;;		</code>
+			<?php inject_sample('code/export_service.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -287,9 +224,8 @@ echo &quot;&lt;br&gt;&lt;br&gt;File available for download &lt;a href='export.zi
 		</p>
 		<pre>
 		<code>
-			
-$allJobs = $c-&gt;jobService()-&gt;searchJobs(&quot;/reports/samples/AllAccounts&quot;);
-print_r($allJobs);		</code>
+			<?php inject_sample('code/search_jobs.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -301,9 +237,8 @@ print_r($allJobs);		</code>
 		</p>
 		<pre>
 		<code>
-			
-$allJobs = $c-&gt;jobService()-&gt;searchJobs(&quot;/reports/samples/AllAccounts&quot;);
-$first_job_details = $c-&gt;jobService()-&gt;getJob($allJobs[0]-&gt;id);		</code>
+			<?php inject_sample('code/get_job.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -314,25 +249,8 @@ $first_job_details = $c-&gt;jobService()-&gt;getJob($allJobs[0]-&gt;id);		</code
 		</p>
 		<pre>
 		<code>
-			
-$job = new Job;
-$job-&gt;baseOutputFilename = 'test';
-$job-&gt;repositoryDestination['folderURI'] = '/Generated';
-$job-&gt;repositoryDestination['overwriteFiles'] = 'false';
-$job-&gt;repositoryDestination['sequentialFilenames'] = 'false';
-$job-&gt;description = 'test';
-$job-&gt;label = 'test';
-$job-&gt;outputFormats['outputFormat'][] = 'PDF';
-$job-&gt;outputFormats['outputFormat'][] = 'XLS';
-$job-&gt;outputFormats['outputFormat'][] = 'RTF';
-$job-&gt;source['reportUnitURI'] = '/reports/samples/AllAccounts';
-$job-&gt;trigger-&gt;simpleTrigger['recurrenceInterval'] = '1';
-$job-&gt;trigger-&gt;simpleTrigger['recurrenceIntervalUnit'] = 'DAY';
-$job-&gt;trigger-&gt;simpleTrigger['occurrenceCount'] = '2';
-$job-&gt;trigger-&gt;simpleTrigger['startDate'] = '2025-01-26T00:00:00-07:00';
-$job-&gt;trigger-&gt;simpleTrigger['timezone'] = 'America/Los_Angeles';
-
-$c-&gt;jobService()-&gt;createJob($job);		</code>
+			<?php inject_sample('code/create_job.txt'); ?>
+		</code>
 		</pre>
 	</article>	
 	
@@ -343,12 +261,8 @@ $c-&gt;jobService()-&gt;createJob($job);		</code>
 		</p>
 		<pre>
 		<code>
-			
-$allJobs = $c-&gt;jobService()-&gt;searchJobs(&quot;/reports/samples/AllAccounts&quot;);
-$job = $c-&gt;jobService()-&gt;getJob($allJobs[0]-&gt;id);
-
-$job-&gt;label = &quot;new label&quot;;
-$c-&gt;jobService()-&gt;updateJob($job);		</code>
+			<?php inject_sample('code/update_job.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -359,8 +273,8 @@ $c-&gt;jobService()-&gt;updateJob($job);		</code>
 		</p>
 		<pre>
 		<code>
-			
-$c-&gt;jobService()-&gt;pauseJob();		</code>
+			<?php inject_sample('code/pause_job.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -371,8 +285,8 @@ $c-&gt;jobService()-&gt;pauseJob();		</code>
 		</p>
 		<pre>
 		<code>
-			
-$c-&gt;jobService()-&gt;resumeJob();		</code>
+			<?php inject_sample('code/resume_job.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -383,8 +297,8 @@ $c-&gt;jobService()-&gt;resumeJob();		</code>
 		</p>
 		<pre>
 		<code>
-			
-$c-&gt;jobService()-&gt;deleteJob('90210');		</code>
+			<?php inject_sample('code/delete_job.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -397,12 +311,8 @@ $c-&gt;jobService()-&gt;deleteJob('90210');		</code>
 		</p>
 		<pre>
 		<code>
-			
-$report_options = $c-&gt;optionsService()-&gt;getReportOptions('/reports/samples/Cascading_multi_select_report');
-
-foreach($report_options as $ro) {
-   echo $ro-&gt;label . &quot;&lt;br /&gt;&quot;;
-}		</code>
+			<?php inject_sample('code/get_options.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -413,15 +323,8 @@ foreach($report_options as $ro) {
 		</p>
 		<pre>
 		<code>
-			
-$success = $c-&gt;optionsService()-&gt;updateReportOptions(
-    '/reports/samples/Cascading_multi_select_report',
-    array('Country_multi_select' =&gt; array('Canada', 'USA'),	'Cascading_state_multi_select' =&gt; array('OR', 'WA', 'BC')),
-    'CanadaUSA',
-    'true');
-if ($success) {
-   echo &quot;Created new report option successfully&quot;;
-}		</code>
+			<?php inject_sample('code/update_options.txt'); ?>
+		</code>
 		</pre>
 	</article>	
 	
@@ -432,12 +335,8 @@ if ($success) {
 		</p>
 		<pre>
 		<code>
-			
-try {
-  $c-&gt;optionsService()-&gt;deleteReportOptions('/reports/samples/Cascading_multi_select_report', 'CanadaUSA');
-} catch (Exception $e) {
-  printf(&quot;An exception was thrown: &quot;, $e-&gt;getMessage());
-}		</code>
+			<?php inject_sample('code/delete_options.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -450,18 +349,8 @@ try {
 		</p>
 		<pre>
 		<code>
-			
-$new_organization = new Organization(
-      'test_organization',	// alias
-      'test_organization',	// id
-      'organization_1',	// parent organization
-      'test_organization');	// tenantName
-
-try {
-   $c-&gt;organizationService()-&gt;createOrganization($new_organization);
-} catch (Exception $e) {
-   printf('Creating organization failed: %s', $e-&gt;getMessage());
-}		</code>
+			<?php inject_sample('code/create_organization.txt'); ?>
+		</code>
 		</pre>
 	</article>
 
@@ -472,10 +361,8 @@ try {
 		</p>
 		<pre>
 		<code>
-			
-$find = $c-&gt;organizationService()-&gt;searchOrganization('org');
-foreach ($find as $result)
-    printf('&lt;br&gt;Organization Found: %s', $result-&gt;id);		</code>
+			<?php inject_sample('code/search_organization.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -486,15 +373,8 @@ foreach ($find as $result)
 		</p>
 		<pre>
 		<code>
-			
-$search = $c-&gt;organizationService()-&gt;searchOrganizations('test_organization');
-$organization = $search[0];
-
-try {
-   $c-&gt;organizationService-&gt;deleteOrganization($organization);
-} catch (Exception $e) {
-   printf('Organization deletion failure: %s', $e-&gt;getMessage());
-}		</code>
+			<?php inject_sample('code/delete_organization.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -505,16 +385,8 @@ try {
 		</p>
 		<pre>
 		<code>
-			
-$search = $c-&gt;organizationService()-&gt;searchOrganization('organization_wave');
-$organization = $search[0];
-$organization-&gt;tenantDesc = &quot;Do the wave&quot;;
-
-try {
-    $c-&gt;organizationService()-&gt;updateOrganization($organization);
-} catch (Exception $e) {
-    printf('Unable to modify organization: %s', $e-&gt;getMessage());
-}		</code>
+			<?php inject_sample('code/update_organization.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -527,10 +399,8 @@ try {
 		</p>
 		<pre>
 		<code>
-			
-$permissions = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
-foreach($permissions as $p)
-    echo $p-&gt;recipient . &quot;&lt;br&gt;&quot;;		</code>
+			<?php inject_sample('code/search_permissions.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -541,11 +411,8 @@ foreach($permissions as $p)
 		</p>
 		<pre>
 		<code>
-			
-$perms = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
-$perms[0]-&gt;mask = 0;
-
-$c-&gt;permissionService()-&gt;updateRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;, $perms);		</code>
+			<?php inject_sample('code/update_permissions.txt'); ?>
+		</code>
 		</pre>
 	</article>	
 
@@ -556,9 +423,8 @@ $c-&gt;permissionService()-&gt;updateRepositoryPermissions(&quot;/reports/sample
 		</p>
 		<pre>
 		<code>
-			
-$p = new RepositoryPermission(&quot;/reports/samples/AllAccounts&quot;, &quot;user:/organization_1/joeuser&quot;, 1);
-$c-&gt;permissionService()-&gt;createRepositoryPermissions(array($p));		</code>
+			<?php inject_sample('code/create_permissions.txt'); ?>
+		</code>
 		</pre>
 	</article>	
 
@@ -569,9 +435,8 @@ $c-&gt;permissionService()-&gt;createRepositoryPermissions(array($p));		</code>
 		</p>
 		<pre>
 		<code>
-			
-$p = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllACcounts&quot;, null, null, &quot;user:/organization_1/joeuser&quot;);
-$c-&gt;permissionService()-&gt;deleteRepositoryPermission($p[0]);		</code>
+			<?php inject_sample('code/delete_permissions.txt'); ?>
+		</code>
 		</pre>
 	</article>	
 
@@ -584,19 +449,8 @@ $c-&gt;permissionService()-&gt;deleteRepositoryPermission($p[0]);		</code>
 		</p>
 		<pre>
 		<code>
-			
-$query = &lt;&lt;&lt;EOF
-&lt;query&gt;
-    &lt;queryFields&gt;
-        &lt;queryField id=&quot;public_opportunities.amount&quot;/&gt;
-        &lt;queryField id=&quot;public_opportunities.name&quot;/&gt;
-    &lt;/queryFields&gt;
-&lt;/query&gt;
-EOF;
-
-$result = $c-&gt;queryService()-&gt;executeQuery('/Domains/Simple_Domain', $query);
-
-print_r($result);  		</code>
+			<?php inject_sample('code/execute_query.txt'); ?>
+		</code>
 		</pre>
 	</article>	
 	
@@ -609,10 +463,8 @@ print_r($result);  		</code>
 		</p>
 		<pre>
 		<code>
-			
-$report = $c-&gt;reportService()-&gt;runReport('/reports/samples/AllAccounts', 'html');
-
-echo $report;		</code>
+			<?php inject_sample('code/run_report_html.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -623,16 +475,8 @@ echo $report;		</code>
 		</p>
 		<pre>
 		<code>
-			
-$controls = array(
-   'Country_multi_select' =&gt; array('USA', 'Mexico'),
-   'Cascading_state_multi_select' =&gt; array('CA', 'OR')
-   );
-
-
-$report = $c-&gt;reportService()-&gt;runReport('/reports/samples/Cascading_multi_select_report', 'html', null, null, $controls);
-
-echo $report;			</code>
+			<?php inject_sample('code/run_report_ic.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -643,18 +487,8 @@ echo $report;			</code>
 		</p>
 		<pre>
 		<code>
-			
-$report = $c-&gt;reportService()-&gt;runReport('/reports/samples/AllAccounts', 'pdf');
-
-header('Cache-Control: must-revalidate');
-header('Pragma: public');
-header('Content-Description: File Transfer');
-header('Content-Disposition: attachment; filename=report.pdf');
-header('Content-Transfer-Encoding: binary');
-header('Content-Length: ' . strlen($report));
-header('Content-Type: application/pdf');
-
-echo $report;		</code>
+			<?php inject_sample('code/download_report.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -665,15 +499,8 @@ echo $report;		</code>
 		</p>
 		<pre>
 		<code>
-			
-$input_controls = $c-&gt;reportService()-&gt;getReportInputControls('/reports/samples/Cascading_multi_select_report');
-
-foreach($input_controls as $ic) {
-    printf('Key: %s &lt;br /&gt;', $ic-&gt;id);
-    foreach ($ic-&gt;options as $ico) {
-        printf('    -- Value: %s &lt;br /&gt;', $ico['label']);
-    }
-}		</code>
+			<?php inject_sample('code/get_input_controls.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -690,8 +517,8 @@ foreach($input_controls as $ic) {
 		</p>
 		<pre>
 		<code>
-			
-$repo = $c-&gt;repositoryService()-&gt;resourceSearch();		</code>
+			<?php inject_sample('code/get_repository.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -703,13 +530,7 @@ $repo = $c-&gt;repositoryService()-&gt;resourceSearch();		</code>
 		</p>
 		<pre>
 		<code>
-			
-$folder = new Folder;
-
-$folder-&gt;label = &quot;ImageFolder&quot;;
-$folder-&gt;description = &quot;A folder for storing images&quot;;
-
-$c-&gt;repositoryService()-&gt;createResource($folder, &quot;/&quot;);
+			<?php inject_sample('code/create_resource.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -723,19 +544,7 @@ $c-&gt;repositoryService()-&gt;createResource($folder, &quot;/&quot;);
 		</p>
 		<pre>
 		<code>
-			
-$file = new File;
-
-$file-&gt;description = &quot;Image of a Pitbull&quot;;
-$file-&gt;label = &quot;pitbull&quot;;
-
-$c-&gt;repositoryService()-&gt;createFileResource(
-		$file,
-		file_get_contents(&quot;/home/grant/pitbull.jpg&quot;),
-		&quot;image/jpeg&quot;,
-		&quot;/ImageFolder&quot;,
-		);
-
+			<?php inject_sample('code/create_binary_resource.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -747,15 +556,8 @@ $c-&gt;repositoryService()-&gt;createFileResource(
 		</p>
 		<pre>
 		<code>
-			
-$criteria = new RepositorySearchCriteria();
-$criteria-&gt;q = &quot;pitbull&quot;;
-
-$search = $c-&gt;repositoryService()-&gt;resourceSearch($criteria);
-$image = $c-&gt;repositoryService()-&gt;getResourceByLookup($search[0]);
-$image_data = $c-&gt;repositoryService()-&gt;getBinaryFileData($image);
-
-echo &quot;&lt;h1&gt; Its a pitbull! &lt;/h1&gt;&lt;br&gt;&lt;img src=\&quot;data:image/jpeg;base64,&quot;.base64_encode($image_data).&quot;\&quot;&gt;&quot;;		</code>
+			<?php inject_sample('code/search_resource.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -767,12 +569,7 @@ echo &quot;&lt;h1&gt; Its a pitbull! &lt;/h1&gt;&lt;br&gt;&lt;img src=\&quot;dat
 		</p>
 		<pre>
 		<code>
-			
-$c-&gt;repositoryService()-&gt;deleteResource(&quot;/ImageFolder/pitbull&quot;);
-
-// OR!
-
-$c-&gt;repositoryService()-&gt;deleteManyResources(array(&quot;/ImageFolder/pitbull&quot;, &quot;/ImageFolder&quot;));
+			<?php inject_sample('code/delete_resource.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -784,8 +581,8 @@ $c-&gt;repositoryService()-&gt;deleteManyResources(array(&quot;/ImageFolder/pitb
 		</p>
 		<pre>
 		<code>
-			
-$c-&gt;repositoryService()-&gt;moveResource(&quot;/ImageFolder/anchorsteam&quot;, &quot;/&quot;);		</code>
+			<?php inject_sample('code/move_resource.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -797,8 +594,8 @@ $c-&gt;repositoryService()-&gt;moveResource(&quot;/ImageFolder/anchorsteam&quot;
 		</p>
 		<pre>
 		<code>
-			
-$c-&gt;repositoryService()-&gt;copyResource(&quot;/anchorsteam&quot;, &quot;/ImageFolder&quot;, true);		</code>
+			<?php inject_sample('code/copy_resource.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -812,8 +609,8 @@ $c-&gt;repositoryService()-&gt;copyResource(&quot;/anchorsteam&quot;, &quot;/Ima
 		</p>
 		<pre>
 		<code>
-			
-$server_roles = $c-&gt;roleService()-&gt;getManyRoles();		</code>
+			<?php inject_sample('code/get_many_roles.txt'); ?>
+		</code>
 		</pre>
 	</article>
 		
@@ -824,8 +621,8 @@ $server_roles = $c-&gt;roleService()-&gt;getManyRoles();		</code>
 		</p>
 		<pre>
 		<code>
-			
-$user_role = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_USER&quot;);		</code>
+			<?php inject_sample('code/get_role.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -836,9 +633,8 @@ $user_role = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_USER&quot;);		</code>
 		</p>
 		<pre>
 		<code>
-			
-$robot_role = new Role(&quot;ROLE_ROBOT&quot;, &quot;organization_1&quot;);
-$c-&gt;roleService()-&gt;createRole($robot_role);		</code>
+			<?php inject_sample('code/create_role.txt'); ?>
+		</code>
 		</pre>
 	</article>	
 
@@ -849,11 +645,7 @@ $c-&gt;roleService()-&gt;createRole($robot_role);		</code>
 		</p>
 		<pre>
 		<code>
-			
-$robot_role = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_ROBOT&quot;, &quot;organization_1&quot;);
-$old_name = $robot_role-&gt;roleName;
-$robot_role-&gt;roleName = &quot;ROLE_HUMAN&quot;;
-$c-&gt;roleService()-&gt;updateRole($robot_role, $old_name);
+			<?php inject_sample('code/update_role.txt'); ?>
 		</code>
 		</pre>
 	</article>	
@@ -865,9 +657,8 @@ $c-&gt;roleService()-&gt;updateRole($robot_role, $old_name);
 		</p>
 		<pre>
 		<code>
-			
-$role_human = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_HUMAN&quot;, &quot;organization_1&quot;);
-$c-&gt;roleService()-&gt;deleteRole($role_human);		</code>
+			<?php inject_sample('code/delete_role.txt'); ?>
+		</code>
 		</pre>
 	</article>		
 	
@@ -880,15 +671,8 @@ $c-&gt;roleService()-&gt;deleteRole($role_human);		</code>
 		</p>
 		<pre>
 		<code>
-			
-$results = $c-&gt;userService()-&gt;searchUsers('j', 'organization_1');
-
-foreach ($results as $userLookup) {
-    $user = $c-&gt;userService()-&gt;getUserByLookup($userLookup);
-    printf('&lt;br&gt;Found user: %s', $user-&gt;fullName);
-    foreach ($user-&gt;roles as $role)
-        printf('&lt;br&gt; %10s User has role: %s', '&amp;nbsp;', $role-&gt;roleName);
-}		</code>
+			<?php inject_sample('code/search_user.txt'); ?>
+		</code>
 		</pre>
 	</article>
 	
@@ -899,15 +683,8 @@ foreach ($results as $userLookup) {
 		</p>
 		<pre>
 		<code>
-			
-$results = $c-&gt;userService()-&gt;searchUsers('j', 'organization_1');
-
-foreach ($results as $userLookup) {
-    $user = $c-&gt;userService()-&gt;getUserByLookup($userLookup);
-    printf('&lt;br&gt;Found user: %s', $user-&gt;fullName);
-    foreach ($user-&gt;roles as $role)
-        printf('&lt;br&gt; %10s User has role: %s', '&amp;nbsp;', $role-&gt;roleName);
-}		</code>
+			<?php inject_sample('code/search_user.txt'); ?>
+		</code>
 		</pre>
 	</article>	
 
@@ -918,19 +695,8 @@ foreach ($results as $userLookup) {
 		</p>
 		<pre>
 		<code>
-			
-$search = $c-&gt;userService()-&gt;searchUsers('californiaUser', 'organization_1');
-$californiaUser = $c-&gt;userService()-&gt;getUserByLookup($search[0]);
-
-$californiaUser-&gt;emailAddress('sanfrancisco-oakland@example.com');
-$californiaUser-&gt;password('SUPERstrongPASSWORD###!!!');
-
-try {
-    $c-&gt;userService()-&gt;updateUser($californiaUser);
-} catch (Exception $e) {
-    printf('Attempt to modify the user failed with error: %s', $e-&gt;getMessage());
-}
-  		</code>
+			<?php inject_sample('code/update_user.txt'); ?>
+		</code>
 		</pre>
 	</article>
 
@@ -941,12 +707,8 @@ try {
 		</p>
 		<pre>
 		<code>
-			
-$user = $c-&gt;userService()-&gt;getUserByLookup(
-    $c-&gt;userService()-&gt;searchUsers('california', 'organization_1')[0]
-);
-
-$c-&gt;userService()-&gt;deleteUser($user);		</code>
+			<?php inject_sample('code/delete_user.txt'); ?>
+		</code>
 		</pre>
 	</article>		
 	
@@ -966,6 +728,7 @@ $c-&gt;userService()-&gt;deleteUser($user);		</code>
   </script>
   <script type="text/javascript">
 	$(document).ready(function() {
+		$('code').addClass("php")
 	
 		toc = $('nav ul')
 	
@@ -973,7 +736,12 @@ $c-&gt;userService()-&gt;deleteUser($user);		</code>
 			toc.append('<li><a href="#'+$(v).attr('id')+'">'+$(v).text()+'</a></li>')
 			$(this).nextUntil('h2', 'h3').each(function() {
 				toc.append("<li>"+$(this).text()+"</li>")
-			});	
+			});
+	/*		$(v).nextUntil('h2', 'h3').each(function(x, h) {
+				$(v).append('<li class="subitem"><a href="#'+$(h).attr('id')+'">'+$(h).text()+'</a></li>')
+			});
+	*/
+				
 		});
 		
 	});

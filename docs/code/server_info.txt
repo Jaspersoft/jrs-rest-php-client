@@ -1,0 +1,4 @@
+
+$info = $c->serverInfo();
+
+print_r($info);    

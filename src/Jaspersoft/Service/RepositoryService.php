@@ -81,9 +81,9 @@ class RepositoryService
     /** Create a resource using a resource descriptor
      *
      * @param \Jaspersoft\Dto\Resource\Resource $resource Descriptive resource object representing object
-     * @param $parentFolder The folder in which the resource should be created
-     * @param string $createFolders Create folders in the path that may not exist
-     * @param boolean $update Set to true if updating an existing resource
+     * @param $parentFolder string folder in which the resource should be created
+     * @param $createFolders string Create folders in the path that may not exist
+     * @param $update boolean Set to true if updating an existing resource
      * @throws \Exception
      * @return ResourceLookup object describing new resource
      */
@@ -107,9 +107,7 @@ class RepositoryService
 
     /** Update a resource using a resource descriptor
      *
-     * @param \Jaspersoft\Dto\Resource\Resource $resource Descriptive resource object representing object
-     * @param $parentFolder string the folder in which the resource should be created
-     * @throws \Exception
+     * @param $resource Resource Object describing new resource
      * @return ResourceLookup object describing new resource
      */
     public function updateResource(Resource $resource)

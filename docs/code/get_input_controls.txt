@@ -1,0 +1,9 @@
+
+$input_controls = $c->reportService()->getReportInputControls('/reports/samples/Cascading_multi_select_report');
+
+foreach($input_controls as $ic) {
+    printf('Key: %s <br />', $ic->id);
+    foreach ($ic->options as $ico) {
+        printf('    -- Value: %s <br />', $ico['label']);
+    }
+}

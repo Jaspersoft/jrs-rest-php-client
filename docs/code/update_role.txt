@@ -1,0 +1,5 @@
+
+$robot_role = $c->roleService()->getRole("ROLE_ROBOT", "organization_1");
+$old_name = $robot_role->roleName;
+$robot_role->roleName = "ROLE_HUMAN";
+$c->roleService()->updateRole($robot_role, $old_name);

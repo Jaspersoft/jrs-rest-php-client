@@ -86,6 +86,7 @@ class RepositoryServiceTest extends BaseTest {
 		$this->rs->deleteResource($folder->uri);
 	}
 	
+	/** Coverage: updateResource, createResource, resourceSearch, ResourceSearchCriteria, deleteResource **/
 	public function testUpdateResource()
 	{
 		$folder = u::createFolder();

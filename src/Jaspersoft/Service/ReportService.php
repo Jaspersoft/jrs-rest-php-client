@@ -39,7 +39,7 @@ class ReportService
 	 * This function will request the possible values and data behind all the input controls of a report.
      *
 	 * @param string $uri
-	 * @return Array<\Jasper\InputOptions>
+	 * @return Array<InputOptions>
 	 */
 	public function getReportInputControls($uri) {
 		$url = $this->restUrl2 . '/reports' . $uri . '/inputControls/values';

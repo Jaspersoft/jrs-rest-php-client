@@ -22,8 +22,17 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 	public function tearDown() {
 		
 	}
-
 	
+	public function createSuperClient()
+	{
+		$this->jcSuper = new c(
+			$this->bootstrap['hostname'],
+			$this->bootstrap['port'],
+			$this->bootstrap['super_username'],
+			$this->bootstrap['super_password'],
+			$this->bootstrap['base_url']
+		);
+	}
 	
 }
 

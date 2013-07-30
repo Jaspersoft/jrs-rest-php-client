@@ -15,17 +15,21 @@ To use this client, you will need:
 
 Installation
 -------------
-Add the following to your composer.json file for your project
+Add the following to your composer.json file for your project, or run `php composer.phar reqiure jaspersoft/rest-client dev-master` in the directory of your project
 
     {
 	    "require": {
-		    "jaspersoft/rest-client": ">=2.0"
+		    "jaspersoft/rest-client": "dev-master"
 	    }
     }
 
 Or alternatively, download this package from github, and run `php composer.phar install` in the directory containing composer.json to generate the autoloader, then require the autoloader using
 
     require_once "vendor/autoload.php"
+	
+Additionally, a distributed autoloader is included if oyu want to simply include it in an existing project, or do not want to bother with Composer.
+
+	`require_once "autoload.dist.php"`
 
 
 Security Notice

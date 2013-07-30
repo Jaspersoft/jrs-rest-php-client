@@ -899,14 +899,23 @@ foreach ($results as $userLookup) {
 		</p>
 		<pre>
 		<code>
-			
-$results = $c-&gt;userService()-&gt;searchUsers('j', 'organization_1');
+			      
+$newUser = new User(
+    'BI_User',	
+    'superSTRENGTHpassw0rd',
+    'clever@email.com',	
+    'Business Intelligence User',
+    'organization_1',
+    'true'
+);	
 
-foreach ($results as $userLookup) {
-    $user = $c-&gt;userService()-&gt;getUserByLookup($userLookup);
-    printf('&lt;br&gt;Found user: %s', $user-&gt;fullName);
-    foreach ($user-&gt;roles as $role)
-        printf('&lt;br&gt; %10s User has role: %s', '&amp;nbsp;', $role-&gt;roleName);
+$role = new Role('ROLE_USER', null, 'false');
+$newUser-&gt;addRole($role);
+
+try {
+   $c-&gt;userService()-&gt;addUsers($newUser);
+} catch (Exception $e) {
+   printf('Could not add new user: %s', $e-&gt;getMessage());
 }		</code>
 		</pre>
 	</article>	
@@ -966,6 +975,7 @@ $c-&gt;userService()-&gt;deleteUser($user);		</code>
   </script>
   <script type="text/javascript">
 	$(document).ready(function() {
+		$('code').addClass("php")
 	
 		toc = $('nav ul')
 	
@@ -973,7 +983,12 @@ $c-&gt;userService()-&gt;deleteUser($user);		</code>
 			toc.append('<li><a href="#'+$(v).attr('id')+'">'+$(v).text()+'</a></li>')
 			$(this).nextUntil('h2', 'h3').each(function() {
 				toc.append("<li>"+$(this).text()+"</li>")
-			});	
+			});
+	/*		$(v).nextUntil('h2', 'h3').each(function(x, h) {
+				$(v).append('<li class="subitem"><a href="#'+$(h).attr('id')+'">'+$(h).text()+'</a></li>')
+			});
+	*/
+				
 		});
 		
 	});

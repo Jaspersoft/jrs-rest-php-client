@@ -683,7 +683,7 @@ end of skeleton -->
 		</p>
 		<pre>
 		<code>
-			<?php inject_sample('code/search_user.txt'); ?>
+			<?php inject_sample('code/create_user.txt'); ?>
 		</code>
 		</pre>
 	</article>	

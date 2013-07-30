@@ -10,7 +10,7 @@ Requirements
 To use this client, you will need:
 - JasperReports Server (version >= 5.2)
 - PHP (version >= 5.3, with cURL extension)
-- Composer dependency manager <http://getcomposer.org/download>
+- Composer dependency manager <http://getcomposer.org/download> (Optional, but recommended)
 
 
 Installation
@@ -29,7 +29,7 @@ Or alternatively, download this package from github, and run `php composer.phar 
 	
 Additionally, a distributed autoloader is included if oyu want to simply include it in an existing project, or do not want to bother with Composer.
 
-	`require_once "autoload.dist.php"`
+	require_once "autoload.dist.php"
 
 
 Security Notice

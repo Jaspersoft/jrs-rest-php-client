@@ -9,7 +9,7 @@ Requirements
 -------------
 To use this client, you will need:
 - JasperReports Server (version >= 5.2)
-- PHP (version >= 5.3)
+- PHP (version >= 5.3, with cURL extension)
 - Composer dependency manager <http://getcomposer.org/download>
 
 

@@ -5,14 +5,15 @@
     "license": "GNU Affero General Public License",
     "authors": [
         {
-            "name": "Jaspersoft Corporation",
-            "email": "support@jaspersoft.com"
+            "name": "Jaspersoft",
+            "email": "code@jaspersoft.com"
         }
     ],
 	"homepage": "http://github.com/Jaspersoft/jrs-rest-php-client",
-	"keywords": ["jasperreports","jaspersoft"],
+	"keywords": ["jasperreports","jaspersoft", "jasper-reports", "reporting"],
     "require": {
-		"php": ">=5.3.0"
+		"php": ">=5.3.0",
+		"ext-curl": "*"
     },
 	"autoload": {
 		"psr-0": {

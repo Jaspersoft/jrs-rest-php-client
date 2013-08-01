@@ -19,7 +19,7 @@ Add the following to your composer.json file for your project, or run `php compo
 
     {
 	    "require": {
-		    "jaspersoft/rest-client": "dev-master"
+		    "jaspersoft/rest-client": "*"
 	    }
     }
 

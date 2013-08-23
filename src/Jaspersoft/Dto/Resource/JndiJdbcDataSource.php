@@ -1,7 +1,7 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
-class JndiJdbcDataSource
+class JndiJdbcDataSource extends Resource
 {
     public $jndiName;
 }

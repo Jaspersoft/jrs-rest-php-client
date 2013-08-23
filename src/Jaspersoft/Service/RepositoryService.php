@@ -135,7 +135,7 @@ class RepositoryService
      */
     public function updateResource(Resource $resource)
     {
-        $this->createResource($resource, $resource->uri, null, true);
+        return $this->createResource($resource, $resource->uri, null, true);
     }
 
     /** Create a binary file on the server

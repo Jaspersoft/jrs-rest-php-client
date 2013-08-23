@@ -80,7 +80,6 @@ class RepositoryService
         $headers = $response['headers'];
         $content_type = array_values(preg_grep("#repository\.(.*)\+#", $headers));
         preg_match("#repository\.(.*)\+#", $content_type[0], $resource_type);
-        print_r($resource_type);
 
         $class = RESOURCE_NAMESPACE . '\\' . ucfirst($resource_type[1]);
         if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {

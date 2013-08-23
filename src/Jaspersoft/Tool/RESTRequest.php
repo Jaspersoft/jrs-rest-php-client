@@ -204,8 +204,13 @@ class RESTRequest {
 	protected function doExecute (&$curlHandle)
 	{
 		$this->setCurlOpts($curlHandle);
-		$this->response_body = curl_exec($curlHandle);
-		$this->response_info	= curl_getinfo($curlHandle);
+        $response = curl_exec($curlHandle);
+        $this->response_info = curl_getinfo($curlHandle);
+        list($headerblock, $this->response_body) = explode("\r\n\r\n", $response, 2);
+        $this->response_headers = explode("\n", $headerblock);
+
+//		$this->response_body = curl_exec($curlHandle);
+//		$this->response_info	= curl_getinfo($curlHandle);
 
 		curl_close($curlHandle);
 	}
@@ -216,6 +221,7 @@ class RESTRequest {
 		curl_setopt($curlHandle, CURLOPT_URL, $this->url);
 		curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curlHandle, CURLOPT_COOKIEFILE, '/dev/null');
+        curl_setopt($curlHandle, CURLOPT_HEADER, true);
 
         if (!empty($this->content_type))
             $this->headers[] = "Content-Type: " . $this->content_type;
@@ -307,6 +313,50 @@ class RESTRequest {
 	{
 		$this->verb = $verb;
 	}
+
+
+    /** Experimental replacement for prepAndSend **/
+
+    public function makeRequest($url, $expectedCodes = array(200), $verb = null, $reqBody = null, $returnData = false,
+                                   $contentType = 'application/json', $acceptType = 'application/json', $headers = array()) {
+
+        $result = array();                                       
+
+        $this->flush();
+        $this->setUrl($url);
+        if ($verb !== null) {
+            $this->setVerb($verb);
+        }
+        if ($reqBody !== null) {
+            $this->buildPostBody($reqBody);
+        }
+        if (!empty($contentType)) {
+            $this->setContentType($contentType);
+        }
+        if(!empty($acceptType)) {
+            $this->setAcceptType($acceptType);
+        }
+
+        $this->execute();
+
+        $info = $this->getResponseInfo();
+        $statusCode = $info['http_code'];
+        $body = $this->getResponseBody();
+
+        $headers = $this->response_headers;
+
+
+        // An exception is thrown here if the expected code does not match the status code in the response
+        if (!in_array($statusCode, $expectedCodes)) {
+            if(!empty($responseBody)) {
+                throw new RESTRequestException('Unexpected HTTP code returned: ' . $statusCode . ' Body of response: ' . strip_tags($responseBody));
+            } else {
+                throw new RESTRequestException('Unexpected HTTP code returned: ' . $statusCode);
+            }
+        }
+ 
+        return compact("body", "statusCode", "headers");
+    }
 
     public function prepAndSend($url, $expectedCodes = array(200), $verb = null, $reqBody = null, $returnData = false,
                                    $contentType = 'application/json', $acceptType = 'application/json', $headers = array()) {

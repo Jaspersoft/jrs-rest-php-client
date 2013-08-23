@@ -2,7 +2,7 @@
 namespace Jaspersoft\Dto\Resource;
 
 
-class VirtualDataSource
+class VirtualDataSource extends Resource
 {
     public $subDataSources;
 }

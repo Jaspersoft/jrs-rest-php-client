@@ -66,6 +66,30 @@ class RepositoryService
         }
     }
 
+    /** Get resource by URI
+     *
+     * @param string $uri - The URI of the string
+     * @return Resource
+     */
+    public function getResource($uri)
+    {
+        $url = self::make_url(null, $uri);
+        $response = $this->service->makeRequest($url, array(200, 204), 'GET', null, true, 'application/json', 'application/repository.file+json');
+
+        $data = $response['body'];
+        $headers = $response['headers'];
+        $content_type = array_values(preg_grep("#repository\.(.*)\+#", $headers));
+        preg_match("#repository\.(.*)\+#", $content_type[0], $resource_type);
+        print_r($resource_type);
+
+        $class = RESOURCE_NAMESPACE . '\\' . ucfirst($resource_type[1]);
+        if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
+            return $class::createFromJSON(json_decode($data), $class);
+        } else {
+            return Resource::createFromJSON(json_decode($data));
+        }
+    }
+
     /** Obtain the raw binary data of a file resource stored on the server (e.x: image)
      *
      * @param File $file

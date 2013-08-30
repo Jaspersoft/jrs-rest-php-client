@@ -11,7 +11,6 @@ class Resource implements \JsonSerializable
     public $creationDate;
     public $updateDate;
     public $version;
-    public $timezone;
 
     public static function createFromJSON($json_data, $type = null)
     {

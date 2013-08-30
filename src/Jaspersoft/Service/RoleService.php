@@ -59,7 +59,6 @@ class RoleService
         $url = self::make_url($organization, $roleName);
         $resp = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');	
 		$data = json_decode($resp);
-		$data->externallyDefined = ($data->externallyDefined) ? 'true' : 'false';
         return @new Role($data->name, $data->tenantId, $data->externallyDefined);
     }
 	

@@ -98,7 +98,6 @@ class UserService
         $url = self::make_url($organization, $username);
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
         $userData = json_decode($data);
-		$userData->externallyDefined = ($userData->externallyDefined) ? 'true' : 'false';
         $result = @new User(
             $userData->username,
             $userData->password,
@@ -110,7 +109,7 @@ class UserService
             $userData->previousPasswordChangeTime
         );
         foreach ($userData->roles as $role) {
-            $result->addRole(@new Role($role->name, $role->externallyDefined));
+            $result->addRole(@new Role($role->name, $role->tenantId, $role->externallyDefined));
         }
         return $result;
     }

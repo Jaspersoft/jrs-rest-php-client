@@ -31,8 +31,8 @@ class Role implements \JsonSerializable {
 
 	public function __construct(
 		$roleName = null,
-		$tenantId = null,
-		$externallyDefined = null)
+        $tenantId = null,
+        $externallyDefined = null)
 	{
         $this->roleName = $roleName;
         $this->externallyDefined = $externallyDefined;

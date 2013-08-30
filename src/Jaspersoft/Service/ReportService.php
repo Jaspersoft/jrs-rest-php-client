@@ -28,9 +28,7 @@ class ReportService
 	 */
 	public function runReport($uri, $format = 'pdf', $page = null, $attachmentsPrefix = null, $inputControls = null) {
 		$url = $this->restUrl2 . '/reports' . $uri . '.' . $format;
-		if(!(empty($page) && empty($inputControls))) {
-			$url .= '?' . preg_replace('/%5B([0-9]{1,})%5D/', null, http_build_query(array('page' => $page) + array('attachmentsPrefix' => $attachmentsPrefix) + (array) $inputControls));
-		}
+		$url .= '?' . preg_replace('/%5B([0-9]{1,})%5D/', null, http_build_query(array('page' => $page) + array('attachmentsPrefix' => $attachmentsPrefix) + (array) $inputControls));
 		$binary = $this->service->prepAndSend($url, array(200), 'GET', null, true);
 		return $binary;
 	}

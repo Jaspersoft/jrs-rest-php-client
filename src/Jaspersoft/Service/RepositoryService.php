@@ -21,13 +21,15 @@ class RepositoryService
         $this->base_url = $url;
     }
 
-    private function make_url(RepositorySearchCriteria $criteria = null, $uri = null)
+    private function make_url(RepositorySearchCriteria $criteria = null, $uri = null, $expanded = null)
     {
         $result = $this->base_url . '/resources';
         if (!empty($criteria))
             $result .= '?' . $criteria->toQueryParams();
         else
             $result = $this->base_url . '/resources' . $uri;
+        if (!empty($expanded))
+            $result .= '?expanded=true';
         return $result;
     }
 
@@ -69,11 +71,15 @@ class RepositoryService
     /** Get resource by URI
      *
      * @param string $uri - The URI of the string
+     * @param string $expanded - Returns subresources with resource object
      * @return Resource
      */
-    public function getResource($uri)
+    public function getResource($uri, $expanded = false)
     {
-        $url = self::make_url(null, $uri);
+        if (!$expanded)
+            $url = self::make_url(null, $uri);
+        else
+            $url = self::make_url(null, $uri, true);
         $response = $this->service->makeRequest($url, array(200, 204), 'GET', null, true, 'application/json', 'application/repository.file+json');
 
         $data = $response['body'];
@@ -121,11 +127,10 @@ class RepositoryService
         $body = json_encode($resource);	
         // Isolate the class name, lowercase it, and provide it as a filetype in the headers
         $type = explode('\\', get_class($resource));
-        $type = lcfirst(end($type));
-        $file_type = 'application/repository.' . $type . '+json';
+        $file_type = 'application/repository.' . lcfirst(end($type)) . '+json';
         $verb = ($update) ? 'PUT' : 'POST';
         $data = $this->service->prepAndSend($url, array(201, 200), $verb, $body, true, $file_type, 'application/json');
-        return ResourceLookup::createFromJSON(json_decode($data));
+        return Resource::createFromJSON(json_decode($data), get_class($resource));
     }
 
     /** Update a resource using a resource descriptor

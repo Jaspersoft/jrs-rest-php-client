@@ -61,7 +61,7 @@ class UserService
                   'requiredRole' => $requiredRoles,
                   'hasAllRequiredRoles' => $hasAllRequiredRoles,
                   'includeSubOrgs' => $includeSubOrgs));
-        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
         if (!empty($data)) {
             $users = json_decode($data);
             foreach ($users->user as $user) {

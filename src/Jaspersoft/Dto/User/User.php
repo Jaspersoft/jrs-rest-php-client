@@ -73,7 +73,7 @@ class User implements \JsonSerializable {
     public function jsonSerialize() {
         $data = array();
         foreach (get_object_vars($this) as $k => $v) {
-            if (!empty($v)) {
+            if (!empty($v) || $v === false) {
                 $data[$k] = $v;
             }
         }

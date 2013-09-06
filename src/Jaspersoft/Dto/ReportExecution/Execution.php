@@ -28,7 +28,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 namespace Jaspersoft\Dto\ReportExecution;
 
-class Execution implements \JsonSerializable {
+class Execution  {
 
     public $status;
     public $totalPages;

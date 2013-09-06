@@ -1,7 +1,7 @@
 <?php
 namespace Jaspersoft\Dto\Permission;
 
-class RepositoryPermission implements \JsonSerializable {
+class RepositoryPermission  {
 
 	public $uri;
 	public $recipient;

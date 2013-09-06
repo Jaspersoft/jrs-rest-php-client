@@ -24,7 +24,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 namespace Jaspersoft\Dto\Job;
 
-class JobSummary implements \JsonSerializable{
+class JobSummary {
 
 	public $id;
 	public $label;

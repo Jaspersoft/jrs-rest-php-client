@@ -30,7 +30,7 @@ namespace Jaspersoft\Dto\Attribute;
  * author: gbacon
  * date: 06/13/2012
  */
-class Attribute implements \JsonSerializable {
+class Attribute  {
 
     public $name;
     public $value;
@@ -55,11 +55,6 @@ class Attribute implements \JsonSerializable {
     public function setValue($value) { $this->value = $value; }
 
     public function jsonSerialize() {
-        return array('name' => $this->name, 'value' => $this->value);
-    }
-
-
-    public function asAssoc() {
         return array('name' => $this->name, 'value' => $this->value);
     }
 

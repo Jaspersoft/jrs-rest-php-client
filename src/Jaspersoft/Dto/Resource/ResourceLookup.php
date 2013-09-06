@@ -1,7 +1,7 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
-class ResourceLookup implements \JsonSerializable {
+class ResourceLookup  {
 
     public $uri;
     public $label;

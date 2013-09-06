@@ -1,7 +1,7 @@
 <?php
 namespace Jaspersoft\Dto\ImportExport;
 
-class ExportTask implements \JsonSerializable {
+class ExportTask  {
 
     public $users = array();
     public $uris = array();

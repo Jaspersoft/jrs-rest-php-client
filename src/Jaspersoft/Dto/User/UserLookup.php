@@ -31,7 +31,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 namespace Jaspersoft\Dto\User;
 
 
-class UserLookup implements \JsonSerializable{
+class UserLookup {
     public $username;
     public $fullName;
     public $externallyDefined;

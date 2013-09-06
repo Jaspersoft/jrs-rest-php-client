@@ -1,7 +1,7 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
-class Resource implements \JsonSerializable
+class Resource 
 {
 
     public $uri;

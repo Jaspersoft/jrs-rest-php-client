@@ -23,34 +23,34 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 =========================================================================== */
 namespace Jaspersoft\Dto\Role;
 
-class Role implements \JsonSerializable {
+class Role  {
 
-	public $roleName;
+	public $name;
 	public $tenantId;
 	public $externallyDefined;
 
 	public function __construct(
-		$roleName = null,
+		$name = null,
         $tenantId = null,
         $externallyDefined = null)
 	{
-        $this->roleName = $roleName;
+        $this->name = $name;
         $this->externallyDefined = $externallyDefined;
         $this->tenantId = $tenantId;
 	}
 
     public function jsonSerialize() {
         return array(
-            'name' => $this->roleName,
+            'name' => $this->name,
             'externallyDefined' => $this->externallyDefined
         );
     }
 
-	public function getRoleName() { return $this->roleName; }
+	public function getRoleName() { return $this->name; }
 	public function getTenantId() { return $this->tenantId; }
 	public function getExternallyDefined() { return $this->externallyDefined; }
 
-	public function setRoleName($roleName) { $this->roleName = $roleName; }
+	public function setRoleName($name) { $this->name = $name; }
 	public function setTenantId($tenantId) { $this->tenantId = $tenantId; }
 	public function setExternallyDefined($externallyDefined) { $this->externallyDefined = $externallyDefined; }
 

@@ -30,7 +30,7 @@ namespace Jaspersoft\Dto\Organization;
  * author: gbacon
  * date: 06/07/2012
  */
-class Organization implements \JsonSerializable {
+class Organization  {
 
 	public $alias;
 	public $id;

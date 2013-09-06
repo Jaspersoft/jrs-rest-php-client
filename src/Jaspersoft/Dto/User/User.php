@@ -30,7 +30,7 @@ use Jaspersoft\Dto\Role\Role;
  * accessible via the user service in the REST API.
  *
  */
-class User implements \JsonSerializable {
+class User  {
 
 	public $username;
 	public $password;
@@ -104,8 +104,8 @@ class User implements \JsonSerializable {
 	public function delRole(Role $role) {
 		$data_changed = false;
 		for($i = 0; ($i < count($this->roles)) || ($i == -1); $i++) {
-			if ($this->roles[$i]->getRoleName() == $role->getRoleName()
-					&& $this->roles[$i]->getTenantId() == $role->getTenantId()) {
+			if ($this->roles[$i]->name == $role->name
+					&& $this->roles[$i]->tenantId == $role->tenantId) {
 				unset($this->roles[$i]);
 				$data_changed = true;
 				$i = -1;

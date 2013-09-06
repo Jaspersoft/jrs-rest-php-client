@@ -56,12 +56,12 @@ class RoleServiceTest extends BaseTest {
 	/** Coverage: updateRole, getRole **/
 	public function testUpdateRole()
 	{
-		$oldName = $this->newRole->roleName;
-		$this->newRole->roleName = "ROLE_QA";
+		$oldName = $this->newRole->name;
+		$this->newRole->name = "ROLE_QA";
 		$this->rs->updateRole($this->newRole, $oldName);
-		$actual = $this->rs->getRole($this->newRole->roleName, $this->newRole->tenantId);
-		$this->assertEquals($this->newRole->roleName, $actual->roleName);
-		$this->newRole->roleName = $oldName;
+		$actual = $this->rs->getRole($this->newRole->name, $this->newRole->tenantId);
+		$this->assertEquals($this->newRole->name, $actual->name);
+		$this->newRole->name = $oldName;
 		$this->rs->updateRole($this->newRole, "ROLE_QA");
 	}
 	

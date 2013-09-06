@@ -29,7 +29,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 namespace Jaspersoft\Dto\ReportExecution;
 
 
-class ExecutionRequest implements \JsonSerializable {
+class ExecutionRequest  {
 
     public $reportUnitUri;
     public $async;

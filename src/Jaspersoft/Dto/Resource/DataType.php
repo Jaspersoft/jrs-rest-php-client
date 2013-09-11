@@ -12,7 +12,6 @@ class DataType extends Resource
     public $minValue;
     public $strictMin;
     public $maxLength;
-    public $decimals;
 
     public function __construct()
     {

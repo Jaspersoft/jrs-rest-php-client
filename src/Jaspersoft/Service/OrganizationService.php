@@ -77,12 +77,12 @@ class OrganizationService
      * supply false as the second parameter.
      *
      * @param Organization $org
-     * @param bool $defaultUsers
+     * @param bool $createDefaultUsers
      * @return bool
      */
-    public function createOrganization(Organization $org, $defaultUsers = true)
+    public function createOrganization(Organization $org, $createDefaultUsers = true)
 	{
-        $url = self::make_url(null, array('defaultUsers' => $defaultUsers));
+        $url = self::make_url(null, array('createDefaultUsers' => $createDefaultUsers));
         $data = json_encode($org);
         if ($this->service->prepAndSend($url, array(201), 'POST', $data, false, 'application/json', 'application/json'))
             return true;

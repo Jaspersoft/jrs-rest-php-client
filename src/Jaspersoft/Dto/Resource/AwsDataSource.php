@@ -14,4 +14,5 @@ class AwsDataSource extends Resource
     public $dbName;
     public $dbInstanceIdentifier;
     public $dbService;
+    public $timezone;
 }

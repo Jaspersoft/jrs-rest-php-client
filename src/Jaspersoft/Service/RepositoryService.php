@@ -58,7 +58,11 @@ class RepositoryService
     public function getResourceByLookup(ResourceLookup $lookup)
     {
         $url = self::make_url(null, $lookup->uri);
-        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/repository.file+json');
+        if ($lookup->uri == "/")
+            $type = "application/repository.folder+json";
+        else
+            $type = "application/repository.file+json";
+        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', $type);
 
         $class = RESOURCE_NAMESPACE . '\\' . ucfirst($lookup->resourceType);
         if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
@@ -80,7 +84,14 @@ class RepositoryService
             $url = self::make_url(null, $uri);
         else
             $url = self::make_url(null, $uri, true);
-        $response = $this->service->makeRequest($url, array(200, 204), 'GET', null, true, 'application/json', 'application/repository.file+json');
+
+        // If getting the root folder, we must use repository.folder+json
+        if ($uri == "/")
+            $type = "application/repository.folder+json";
+        else
+            $type = "application/repository.file+json";
+
+        $response = $this->service->makeRequest($url, array(200, 204), 'GET', null, true, 'application/json', $type);
 
         $data = $response['body'];
         $headers = $response['headers'];

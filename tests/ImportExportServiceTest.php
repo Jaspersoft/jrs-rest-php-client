@@ -53,7 +53,11 @@ class ImportExportServiceTest extends BaseTest
         $metadata = $this->ies->startImportTask($task, $this->import_file);
         $state = $this->ies->getImportState($metadata['id']);
 
-        $running = true;
+        if (!$state == "finished")
+            $running = true;
+        else
+            $running = false;
+
         while ($running) {
             $state = $this->ies->getImportState($metadata['id']);
             if ($state['phase'] == "inprogress")

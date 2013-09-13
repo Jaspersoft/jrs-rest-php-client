@@ -206,11 +206,13 @@ class RESTRequest {
 		$this->setCurlOpts($curlHandle);
         $response = curl_exec($curlHandle);
         $this->response_info = curl_getinfo($curlHandle);
-        list($headerblock, $this->response_body) = explode("\r\n\r\n", $response, 2);
-        $this->response_headers = explode("\n", $headerblock);
+        // For 100-continue many chunks may be returned
+        // We'll ignore 100-continue responses and pop off n and n-1 for useful info (headers/response body)
+        $response_chunks = explode("\r\n\r\n", $response);
+        $this->response_body = array_pop($response_chunks);
+        $headerblock = array_pop($response_chunks);
 
-//		$this->response_body = curl_exec($curlHandle);
-//		$this->response_info	= curl_getinfo($curlHandle);
+        $this->response_headers = explode("\n", $headerblock);
 
 		curl_close($curlHandle);
 	}

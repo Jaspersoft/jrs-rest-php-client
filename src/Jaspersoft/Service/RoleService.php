@@ -42,7 +42,6 @@ class RoleService
     public function getManyRoles($organization = null, $includeSubOrgs = null, $user = null, $hasAllUsers = false) {
         $result = array();
         $url = self::make_url($organization, null, array('includeSubOrgs' => $includeSubOrgs, 'user' => $user, 'hasAllUsers' => $hasAllUsers));
-        var_dump($url);
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
         $data = (!empty($data)) ? json_decode($data, true) : null;
         if ($data === null)

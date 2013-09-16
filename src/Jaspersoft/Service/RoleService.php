@@ -33,13 +33,16 @@ class RoleService
      * Search for many or all roles on the server.
      * You can search by organization as well.
      *
-     * @param null $organization
-     * @param null $includeSubOrgs
+     * @param $organization string the organizations to search for roles within
+     * @param $includeSubOrgs boolean return roles of suborganizations
+     * @param $user array retrieves the roles of specific user(s) in the array, users must be defined as username|organization if multitenancy is enabled (pro)
+     * @param $hasAllUsers boolean return the intersection of roles defined on all users in $user
      * @return array
      */
-    public function getManyRoles($organization = null, $includeSubOrgs = null) {
+    public function getManyRoles($organization = null, $includeSubOrgs = null, $user = null, $hasAllUsers = false) {
         $result = array();
-        $url = self::make_url($organization, null, array('includeSubOrgs' => $includeSubOrgs));
+        $url = self::make_url($organization, null, array('includeSubOrgs' => $includeSubOrgs, 'user' => $user, 'hasAllUsers' => $hasAllUsers));
+        var_dump($url);
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
         $data = (!empty($data)) ? json_decode($data, true) : null;
         if ($data === null)

@@ -1,7 +1,7 @@
 <?php
 namespace Jaspersoft\Dto\ImportExport;
 
-class ExportTask  {
+class ExportTask {
 
     public $users = array();
     public $uris = array();
@@ -21,6 +21,11 @@ class ExportTask  {
                 $data[$k] = $v;
         }
         return $data;
+    }
+
+    public function toJSON()
+    {
+        return json_encode($this->jsonSerialize());
     }
 
 }

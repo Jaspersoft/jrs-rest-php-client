@@ -25,7 +25,8 @@ class ImportExportService
      */
     public function startExportTask(ExportTask $et) {
         $url = $this->restUrl2 . '/export';
-        $data = $this->service->prepAndSend($url, array(200), 'POST', json_encode($et), true, 'application/json', 'application/json');
+        $json_data = $et->toJSON();
+        $data = $this->service->prepAndSend($url, array(200), 'POST', $json_data, true, 'application/json', 'application/json');
         return json_decode($data, true);
     }
 

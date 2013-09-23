@@ -83,6 +83,10 @@ class RESTRequest {
                     $this->verb = 'POST';
                     $this->executeBinarySend($ch);
                     break;
+                case 'PUT_BIN':
+                    $this->verb = 'PUT';
+                    $this->executeBinarySend($ch);
+                    break;
 				default:
 					throw new \InvalidArgumentException('Current verb (' . $this->verb . ') is an invalid REST verb.');
 			}
@@ -431,11 +435,11 @@ class RESTRequest {
     }
 
 
-    public function sendBinary($url, $expectedCodes = array(200), $body, $contentType, $contentDisposition, $contentDescription)
+    public function sendBinary($url, $expectedCodes = array(200), $body, $contentType, $contentDisposition, $contentDescription, $verb = "POST")
     {
         $this->flush();
         $this->setUrl($url);
-        $this->setVerb('POST_BIN');
+        $this->setVerb($verb . '_BIN');
         $this->buildPostBody($body);
         $this->setContentType($contentType);
         $this->headers = array('Content-Type: ' . $contentType, 'Content-Disposition: ' . $contentDisposition, 'Content-Description: ' . $contentDescription, 'Accept: application/json');

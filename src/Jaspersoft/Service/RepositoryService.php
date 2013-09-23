@@ -129,13 +129,10 @@ class RepositoryService
      */
     public function createResource(Resource $resource, $parentFolder, $createFolders = "true", $update = null)
     {
-        if ($resource instanceof File)
-            throw new \Exception("Please use createFileResource for File resources");
-
         $url = self::make_url(null, $parentFolder);
         if (!empty($createFolders))
             $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
-        $body = json_encode($resource);	
+        $body = json_encode($resource);
         // Isolate the class name, lowercase it, and provide it as a filetype in the headers
         $type = explode('\\', get_class($resource));
         $file_type = 'application/repository.' . lcfirst(end($type)) . '+json';
@@ -154,22 +151,36 @@ class RepositoryService
         return $this->createResource($resource, $resource->uri, null, true);
     }
 
-    /** Create a binary file on the server
+    /** Update a file on the server by supplying binary data
+     *
+     * @param File $resource A resource descriptor for the File
+     * @param string $binaryData The binary data of the file to update
+     * @param string $mimeType The MIME type of the file you are updating
+     * @param string $parentFolder a URI to the folder the file is located in
+     */
+    public function updateFileResource(File $resource, $binaryData, $mimeType)
+    {
+        $this->createFileResource($resource, $binaryData, $mimeType, $resource->uri, true, true);
+    }
+
+    /** Create a file on the server by supplying binary data
      *
      * @param File $resource
      * @param $binaryData
-     * @param $mimeType
-     * @param $parentFolder
-     * @param string $createFolders
+     * @param $mimeType string The MIME type of the file
+     * @param $parentFolder string The folder to place the file in
+     * @param $createFolders boolean
+     * @param $update boolean If updating a file resource, set true
      * @return ResourceLookup
      */
-    public function createFileResource(File $resource, $binaryData, $mimeType, $parentFolder, $createFolders = "true")
+    public function createFileResource(File $resource, $binaryData, $mimeType, $parentFolder, $createFolders = true, $update = false)
     {
         $url = self::make_url(null, $parentFolder);
         if (!empty($createFolders))
             $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
         $body = $binaryData;
-        $response = $this->service->sendBinary($url, array(201), $body, $mimeType, 'attachment; filename=' . $resource->label, $resource->description);
+        $verb = ($update) ? "PUT" : "POST";
+        $response = $this->service->sendBinary($url, array(201, 200), $body, $mimeType, 'attachment; filename=' . $resource->label, $resource->description, $verb);
         return ResourceLookup::createFromJSON(json_decode($response));
     }
 

@@ -342,6 +342,8 @@ class RESTRequest {
         if(!empty($acceptType)) {
             $this->setAcceptType($acceptType);
         }
+        if (!empty($headers))
+            $this->headers = $headers;
 
         $this->execute();
 

@@ -197,8 +197,20 @@ class RepositoryService
         $url = self::make_url(null, $newLocation);
         if (!empty($createFolders) || !empty($overwrite))
             $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
-        $data = $this->service->prepAndSend($url, array(200), 'POST', null, true, 'application/json', 'application/json', array("Content-Location: " . $oldLocation));
-        return ResourceLookup::createFromJSON(json_decode($data));
+        $response = $this->service->makeRequest($url, array(200), 'POST', null, true, 'application/json', 'application/json', array("Content-Location: " . $oldLocation));
+
+        $data = $response['body'];
+        $headers = $response['headers'];
+        $content_type = array_values(preg_grep("#repository\.(.*)\+#", $headers));
+        preg_match("#repository\.(.*)\+#", $content_type[0], $resource_type);
+
+        $class = RESOURCE_NAMESPACE . '\\' . ucfirst($resource_type[1]);
+        if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
+            return $class::createFromJSON(json_decode($data), $class);
+        } else {
+            return Resource::createFromJSON(json_decode($data));
+        }
+
     }
 
     /** Move a resource from one location to another location within the repository
@@ -214,8 +226,19 @@ class RepositoryService
         $url = self::make_url(null, $newLocation);
         if (!empty($createFolders) || !empty($overwrite))
             $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
-        $data = $this->service->prepAndSend($url, array(200), 'PUT', null, true, 'application/json', 'application/json', array("Content-Location: " . $oldLocation));
-        return ResourceLookup::createFromJSON(json_decode($data));
+        $response = $this->service->makeRequest($url, array(200), 'PUT', null, true, 'application/json', 'application/json', array("Content-Location: " . $oldLocation));
+
+        $data = $response['body'];
+        $headers = $response['headers'];
+        $content_type = array_values(preg_grep("#repository\.(.*)\+#", $headers));
+        preg_match("#repository\.(.*)\+#", $content_type[0], $resource_type);
+
+        $class = RESOURCE_NAMESPACE . '\\' . ucfirst($resource_type[1]);
+        if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
+            return $class::createFromJSON(json_decode($data), $class);
+        } else {
+            return Resource::createFromJSON(json_decode($data));
+        }
     }
 
     /** Remove a resource from the repository

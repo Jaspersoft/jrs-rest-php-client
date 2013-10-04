@@ -2,6 +2,7 @@
 namespace Jaspersoft\Service;
 
 use Jaspersoft\Tool\RESTRequest;
+use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Report\InputControl;
 
 
@@ -26,9 +27,10 @@ class ReportService
 	 * @param array $inputControls - associative array of key => value for any input controls
 	 * @return string - the binary data of the report to be handled by external functions
 	 */
-	public function runReport($uri, $format = 'pdf', $page = null, $attachmentsPrefix = null, $inputControls = null) {
+	public function runReport($uri, $format = 'pdf', $page = null, $attachmentsPrefix = null, $inputControls = null,
+                                $interactive = true, $onePagePerSheet = false) {
 		$url = $this->restUrl2 . '/reports' . $uri . '.' . $format;
-		$url .= '?' . preg_replace('/%5B([0-9]{1,})%5D/', null, http_build_query(array('page' => $page) + array('attachmentsPrefix' => $attachmentsPrefix) + (array) $inputControls));
+        $url .= '?' . Util::query_suffix(array_merge(compact("page", "attachmentsPrefix", "interactive", "onePagePerSheet"), $inputControls));
 		$binary = $this->service->prepAndSend($url, array(200), 'GET', null, true);
 		return $binary;
 	}

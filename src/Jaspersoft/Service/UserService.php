@@ -35,9 +35,9 @@ class UserService
         }
         return $url;
     }
-	
-	
-	/**
+
+
+    /**
      * Search for users based on the searchTerm provided.
      *
      * An array of zero or more UserLookup objects will be returned. These can then be passed one by one to
@@ -46,21 +46,25 @@ class UserService
      * If defining requiredRoles that exist in multiple organizations, you must suffix the ROLE name with
      * |organization_id (i.e: ROLE_USER|organization_1)
      *
-     * @param null $searchTerm
-     * @param null $organization
-     * @param $requiredRoles
-     * @param $hasAllRequiredRoles
-     * @param $includeSubOrgs
+     * @param string $searchTerm A query to filter results by
+     * @param string $organization
+     * @param array $requiredRoles
+     * @param boolean $hasAllRequiredRoles
+     * @param boolean $includeSubOrgs
+     * @param int $limit A number to limit results by (pagination controls)
+     * @param int $offset A number to offset the results by (pagination controls)
      * @return array
      */
     public function searchUsers($searchTerm = null, $organization = null,
-                                $requiredRoles = null, $hasAllRequiredRoles = null, $includeSubOrgs = true) {
+                                $requiredRoles = null, $hasAllRequiredRoles = null, $includeSubOrgs = true, $limit = 0, $offset = 0) {
         $result = array();
         $url = self::make_url($organization, null,
-            array('search' => $searchTerm,
+            array('q' => $searchTerm,
                   'requiredRole' => $requiredRoles,
                   'hasAllRequiredRoles' => $hasAllRequiredRoles,
-                  'includeSubOrgs' => $includeSubOrgs));
+                  'includeSubOrgs' => $includeSubOrgs,
+                  'limit' => $limit,
+                  'offset' => $offset));
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
         if (!empty($data)) {
             $users = json_decode($data);

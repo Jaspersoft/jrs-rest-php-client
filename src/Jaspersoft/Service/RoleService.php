@@ -37,11 +37,14 @@ class RoleService
      * @param $includeSubOrgs boolean return roles of suborganizations
      * @param $user array retrieves the roles of specific user(s) in the array, users must be defined as username|organization if multitenancy is enabled (pro)
      * @param $hasAllUsers boolean return the intersection of roles defined on all users in $user
+     * @param $q string A query string to filter results by
+     * @param $limit int Limit the amount of results (pagination controls)
+     * @param $offset int Begin search results at this offset (pagination controls)
      * @return array
      */
-    public function getManyRoles($organization = null, $includeSubOrgs = null, $user = null, $hasAllUsers = false) {
+    public function getManyRoles($organization = null, $includeSubOrgs = null, $user = null, $hasAllUsers = false, $q = null, $limit = 0, $offset = 0) {
         $result = array();
-        $url = self::make_url($organization, null, array('includeSubOrgs' => $includeSubOrgs, 'user' => $user, 'hasAllUsers' => $hasAllUsers));
+        $url = self::make_url($organization, null, compact('includeSubOrgs', 'user', 'hasAllUsers', 'q', 'limit', 'offset'));
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
         $data = (!empty($data)) ? json_decode($data, true) : null;
         if ($data === null)

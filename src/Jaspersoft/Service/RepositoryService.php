@@ -160,7 +160,7 @@ class RepositoryService
      */
     public function updateFileResource(File $resource, $binaryData, $mimeType)
     {
-        $this->createFileResource($resource, $binaryData, $mimeType, $resource->uri, true, true);
+        return $this->createFileResource($resource, $binaryData, $mimeType, $resource->uri, true, true);
     }
 
     /** Create a file on the server by supplying binary data
@@ -181,7 +181,7 @@ class RepositoryService
         $body = $binaryData;
         $verb = ($update) ? "PUT" : "POST";
         $response = $this->service->sendBinary($url, array(201, 200), $body, $mimeType, 'attachment; filename=' . $resource->label, $resource->description, $verb);
-        return ResourceLookup::createFromJSON(json_decode($response));
+        return File::createFromJSON(json_decode($response), get_class($resource));
     }
 
     /** Copy a resource from one location to another

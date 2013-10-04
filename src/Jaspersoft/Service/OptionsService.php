@@ -40,15 +40,16 @@ class OptionsService
 	 * @param string $uri
 	 * @param array<string> $controlOptions
 	 * @param string $label
-	 * @param string $overwrite
+	 * @param bool $overwrite
 	 * @return bool
 	 */
 	public function updateReportOptions($uri, $controlOptions, $label, $overwrite) {
 		$url = $this->restUrl2 . '/reports' . $uri . '/options';
-		$url .= '?' . http_build_query(array('label' => utf8_encode($label), 'overwrite' => $overwrite));
+        $url .= '?' . Util::query_suffix(array('label' => utf8_encode($label), 'overwrite' => $overwrite));
 		$body = json_encode($controlOptions);
-		$data = $this->service->prepAndSend($url, array(200), 'POST', $body, false, 'application/json', 'application/json');
-		return $data;
+		$data = $this->service->prepAndSend($url, array(200), 'POST', $body, true, 'application/json', 'application/json');
+        $data_array = json_decode($data, true);
+        return new ReportOptions($data_array['uri'], $data_array['id'], $data_array['label']);
 	}
 
 	/**

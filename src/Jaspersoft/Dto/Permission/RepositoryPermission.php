@@ -23,6 +23,10 @@ class RepositoryPermission  {
         return $data;
 	}
 
+    public static function createFromJSON($json_data) {
+        $perm = json_decode($json_data);
+        return new self($perm->uri, $perm->recipient, $perm->mask);
+    }
 }
 
 ?>

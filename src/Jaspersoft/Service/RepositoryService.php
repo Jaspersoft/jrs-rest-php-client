@@ -121,13 +121,13 @@ class RepositoryService
     /** Create a resource using a resource descriptor
      *
      * @param \Jaspersoft\Dto\Resource\Resource $resource Descriptive resource object representing object
-     * @param $parentFolder string folder in which the resource should be created
-     * @param $createFolders string Create folders in the path that may not exist
-     * @param $update boolean Set to true if updating an existing resource
+     * @param string $parentFolder folder in which the resource should be created
+     * @param boolean $createFolders Create folders in the path that may not exist
+     * @param boolean $update Set to true if updating an existing resource
      * @throws \Exception
      * @return ResourceLookup object describing new resource
      */
-    public function createResource(Resource $resource, $parentFolder, $createFolders = "true", $update = null)
+    public function createResource(Resource $resource, $parentFolder, $createFolders = true, $update = null)
     {
         $url = self::make_url(null, $parentFolder);
         if (!empty($createFolders))
@@ -143,8 +143,8 @@ class RepositoryService
 
     /** Update a resource using a resource descriptor
      *
-     * @param $resource Resource Object describing new resource
-     * @return ResourceLookup object describing new resource
+     * @param \Jaspersoft\Dto\Resource\Resource $resource Object describing new resource
+     * @return \Jaspersoft\Dto\Resource\Resource
      */
     public function updateResource(Resource $resource)
     {

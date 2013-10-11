@@ -31,7 +31,7 @@ class ReportService
      * @param string $transformerKey For use when running a report as a JasperPrint. Specifies print element transformers
 	 * @return string - the binary data of the report to be handled by external functions
 	 */
-	public function runReport($uri, $format = 'pdf', $page = null, $attachmentsPrefix = null, $inputControls = null,
+	public function runReport($uri, $format = 'pdf', $page = null, $attachmentsPrefix = null, $inputControls = array(),
                                 $interactive = true, $onePagePerSheet = false, $freshData = true, $saveDataSnapshot = false, $pages = null, $transformerKey = null) {
 		$url = $this->restUrl2 . '/reports' . $uri . '.' . $format;
         $url .= '?' . Util::query_suffix(array_merge(compact("page", "attachmentsPrefix", "interactive", "onePagePerSheet", "freshData", "saveDataSnapshot", "pages", "transformerKey"), $inputControls));

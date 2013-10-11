@@ -26,7 +26,8 @@ class PermissionService
     private function batchDataToArray($json_data)
     {
         $result = array();
-        foreach (json_decode($json_data) as $perm) {
+        $data_array = json_decode($json_data);
+        foreach ($data_array->permission as $perm) {
             $result[] = @new RepositoryPermission($perm->uri, $perm->recipient, $perm->mask);
         }
         return $result;
@@ -50,7 +51,7 @@ class PermissionService
 								"recipientId" => $recipientId,
 								"resolveAll" => $resolveAll));
 		$data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
-        if (empty($data)) return false;
+        if (empty($data)) return array();
         return self::batchDataToArray($data);
 	}
 

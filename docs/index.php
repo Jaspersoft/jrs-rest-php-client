@@ -414,9 +414,23 @@ end of skeleton -->
 			<?php inject_sample('code/update_permissions.txt'); ?>
 		</code>
 		</pre>
-	</article>	
+	</article>
 
-	<article id="create_permissions">
+    <article id="update_permission">
+        <h3> Updating a single Permission </h3>
+        <p>
+            You can update one permission at a time in using the following code. It is also possible to create a new permission object from
+            scratch and use it to update a single permission if desired.
+        </p>
+            <pre>
+            <code>
+                <?php inject_sample('code/update_permission.txt'); ?>
+            </code>
+            </pre>
+    </article>
+
+
+<article id="create_permissions">
 		<h3> Creating Permissions </h3>
 		<p>
 			Permissions can be created by first describing the permissions in Permission objects, then passing them to the server. The example below will create a new permisison for joeuser in organization 1 to administer the AllAccounts report.

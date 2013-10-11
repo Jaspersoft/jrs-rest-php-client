@@ -75,15 +75,14 @@ class PermissionService
      *
      * Note that only the mask of a RepositoryPermission can be changed using this method.
      *
-     * @param $uri string Location of the repository item
      * @param $permission \Jaspersoft\Dto\Permission\RepositoryPermission The object representing the revised Permission
      * @return RepositoryPermission
      */
-    public function updateRepositoryPermission($uri, $permission)
+    public function updateRepositoryPermission(RepositoryPermission $permission)
     {
-        $url = $this->restUrl2 . '/permissions' . $uri;
+        $url = $this->restUrl2 . '/permissions' . $permission->uri;
         $url .= ";recipient=" . str_replace('/', '%2F', $permission->recipient);
-        $data = $this->service->prepAndSend($url, array(200, 201), 'PUT', null, true);
+        $data = $this->service->prepAndSend($url, array(200, 201), 'PUT', json_encode($permission), true);
         return RepositoryPermission::createFromJSON($data);
     }
 

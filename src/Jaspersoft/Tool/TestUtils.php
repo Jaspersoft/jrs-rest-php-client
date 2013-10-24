@@ -77,6 +77,7 @@ class TestUtils {
 		$entity->label = "file_" . $uuid;
 		$entity->description = "test file";
 		$entity->uri = $f->uri . "/" . "file_".$uuid;
+        $entity->type = "img";
 		return $entity;
 	}
 

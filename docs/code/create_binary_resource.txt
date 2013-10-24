@@ -7,7 +7,6 @@ $file->label = "pitbull";
 $c->repositoryService()->createFileResource(
 		$file,
 		file_get_contents("/home/grant/pitbull.jpg"),
-		"image/jpeg",
 		"/ImageFolder",
 		);
 

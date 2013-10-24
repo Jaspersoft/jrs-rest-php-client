@@ -7,6 +7,7 @@ use Jaspersoft\Dto\Resource\File;
 use Jaspersoft\Service\Criteria\RepositorySearchCriteria;
 use Jaspersoft\Tool\RESTRequest;
 use Jaspersoft\Tool\Util;
+use Jaspersoft\Tool\MimeMapper;
 
 define("RESOURCE_NAMESPACE", "Jaspersoft\\Dto\\Resource");
 
@@ -75,7 +76,7 @@ class RepositoryService
     /** Get resource by URI
      *
      * @param string $uri - The URI of the string
-     * @param string $expanded - Returns subresources with resource object
+     * @param bool $expanded - Returns subresources with resource object
      * @return Resource
      */
     public function getResource($uri, $expanded = false)
@@ -155,32 +156,33 @@ class RepositoryService
      *
      * @param File $resource A resource descriptor for the File
      * @param string $binaryData The binary data of the file to update
-     * @param string $mimeType The MIME type of the file you are updating
-     * @param string $parentFolder a URI to the folder the file is located in
+     * @return \Jaspersoft\Dto\Resource\Resource
      */
-    public function updateFileResource(File $resource, $binaryData, $mimeType)
+    public function updateFileResource(File $resource, $binaryData)
     {
-        return $this->createFileResource($resource, $binaryData, $mimeType, $resource->uri, true, true);
+        return $this->createFileResource($resource, $binaryData, $resource->uri, true, true, $resource->type);
     }
 
     /** Create a file on the server by supplying binary data
      *
+     * If you are using a custom MIME type, you must add the type => mimeType mapping
+     * to the \Jaspersoft\Tool\MimeMapper mimeMap.
+     *
      * @param File $resource
      * @param $binaryData
-     * @param $mimeType string The MIME type of the file
      * @param $parentFolder string The folder to place the file in
      * @param $createFolders boolean
      * @param $update boolean If updating a file resource, set true
      * @return ResourceLookup
      */
-    public function createFileResource(File $resource, $binaryData, $mimeType, $parentFolder, $createFolders = true, $update = false)
+    public function createFileResource(File $resource, $binaryData, $parentFolder, $createFolders = true, $update = false)
     {
         $url = self::make_url(null, $parentFolder);
         if (!empty($createFolders))
             $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
         $body = $binaryData;
         $verb = ($update) ? "PUT" : "POST";
-        $response = $this->service->sendBinary($url, array(201, 200), $body, $mimeType, 'attachment; filename=' . $resource->label, $resource->description, $verb);
+        $response = $this->service->sendBinary($url, array(201, 200), $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, $verb);
         return File::createFromJSON(json_decode($response), get_class($resource));
     }
 

@@ -555,6 +555,8 @@ end of skeleton -->
 			Using the repository service, you can create new resources in your repository. These can be both binary files, or descriptors such as folders, and data sources. This exmaple will
 			explain how you can upload an image to your repository. In the example below, we'll be uploading a JPEG image of a pitbull to the folder /ImageFolder created in the last example. You must first describe
 			the resource in a File object, and then supply it using the php builtin function file_get_contents() which will retrieve the binary content of a file on the local machine.
+
+            Note: If your isntance of JRS employs custom file types, you must define the mapping of the server type to the proper MIME type in the Jaspersoft\Tool\MimeMapper object which contains an associative array of JRS file types mapped to their relevant MIME type.
 		</p>
 		<pre>
 		<code>

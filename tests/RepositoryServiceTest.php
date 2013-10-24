@@ -55,7 +55,7 @@ class RepositoryServiceTest extends BaseTest {
 	{
 		$folder = u::createFolder();
 		$img = u::createImage($folder);
-		$fileInfo = $this->rs->createFileResource($img, file_get_contents($this->image_location), 'image/jpg', $folder->uri, true);
+		$fileInfo = $this->rs->createFileResource($img, file_get_contents($this->image_location), $folder->uri, true);
 		$criteria = new RepositorySearchCriteria();
 		$criteria->folderUri = $folder->uri;
 		$search = $this->rs->resourceSearch($criteria);

@@ -5,7 +5,7 @@ use Jaspersoft\Dto\Resource\ResourceLookup;
 use Jaspersoft\Dto\Resource\Resource;
 use Jaspersoft\Dto\Resource\File;
 use Jaspersoft\Service\Criteria\RepositorySearchCriteria;
-use Jaspersoft\Service\Result\SearchResourceResult;
+use Jaspersoft\Service\Result\SearchResourcesResult;
 use Jaspersoft\Tool\RESTRequest;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Tool\MimeMapper;
@@ -38,7 +38,7 @@ class RepositoryService
     /** Search repository for objects based on a defined criteria
      *
      * @param RepositorySearchCriteria $criteria
-     * @return array of ResourceLookup objects
+     * @return \Jaspersoft\Service\Result\SearchResourcesResult
      */
     public function searchResources(RepositorySearchCriteria $criteria = null)
     {
@@ -50,7 +50,7 @@ class RepositoryService
 
         $headers = RESTRequest::splitHeaderArray($response['headers']);
 
-        return new SearchResourceResult(json_decode($data), (int) $headers['Result-Count'], (int) $headers['Start-Index'], (int) $headers['Total-Count']);
+        return new SearchResourcesResult(json_decode($data), (int) $headers['Result-Count'], (int) $headers['Start-Index'], (int) $headers['Total-Count']);
     }
 
     /** Obtain an object that fully describes the resource by supplying its ResourceLookup object

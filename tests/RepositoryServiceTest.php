@@ -59,9 +59,9 @@ class RepositoryServiceTest extends BaseTest {
 		$criteria = new RepositorySearchCriteria();
 		$criteria->folderUri = $folder->uri;
 		$search = $this->rs->resourceSearch($criteria);
-		$this->assertTrue(sizeof($search) > 0);
+		$this->assertTrue(sizeof($search->items) > 0);
 		
-		$file = $this->rs->getResourceByLookup($search[0]);
+		$file = $this->rs->getResourceByLookup($search->items[0]);
 		$file_data = $this->rs->getBinaryFileData($file);
 		$this->assertEquals(file_get_contents($this->image_location), $file_data);
 		
@@ -79,8 +79,8 @@ class RepositoryServiceTest extends BaseTest {
 		$criteria = new RepositorySearchCriteria();
 		$criteria->q = $folder->label;
 		$search = $this->rs->resourceSearch($criteria);
-		$this->assertTrue(sizeof($search) > 0);
-		$folder_info = $this->rs->getResourceByLookup($search[0]);
+		$this->assertTrue(sizeof($search->items) > 0);
+		$folder_info = $this->rs->getResourceByLookup($search->items[0]);
 		$this->assertEquals($folder_info->label, $folder->label);
 		
 		$this->rs->deleteResource($folder->uri);
@@ -95,16 +95,16 @@ class RepositoryServiceTest extends BaseTest {
 		$criteria = new RepositorySearchCriteria();
 		$criteria->q = $folder->label;
 		$search = $this->rs->resourceSearch($criteria);
-		$this->assertTrue(sizeof($search) > 0);
+		$this->assertTrue(sizeof($search->items) > 0);
 		
-		$obj = $this->rs->getResourceByLookup($search[0]);
+		$obj = $this->rs->getResourceByLookup($search->items[0]);
 		$obj->label = "test_label";
 		$this->rs->updateResource($obj);
 		
 		$criteria->q = $obj->label;
 		$search = $this->rs->resourceSearch($criteria);
-		$this->assertTrue(sizeof($search) > 0);
-		$this->assertEquals($search[0]->label, $obj->label);
+		$this->assertTrue(sizeof($search->items) > 0);
+		$this->assertEquals($search->items[0]->label, $obj->label);
 		$this->rs->deleteResource($obj->uri);		
 	}
 	
@@ -117,7 +117,7 @@ class RepositoryServiceTest extends BaseTest {
 		$this->rs->moveResource($folder->uri, $folder->uri . "_new", true);
 		
 		$search = $this->rs->resourceSearch(new RepositorySearchCriteria($folder->label));		
-		$obj = $this->rs->getResourceByLookup($search[0]);
+		$obj = $this->rs->getResourceByLookup($search->items[0]);
 		
 		$this->assertEquals($obj->uri, $folder->uri . "_new" . $folder->uri);
 		

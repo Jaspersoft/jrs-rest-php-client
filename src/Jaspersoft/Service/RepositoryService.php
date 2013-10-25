@@ -5,6 +5,7 @@ use Jaspersoft\Dto\Resource\ResourceLookup;
 use Jaspersoft\Dto\Resource\Resource;
 use Jaspersoft\Dto\Resource\File;
 use Jaspersoft\Service\Criteria\RepositorySearchCriteria;
+use Jaspersoft\Service\Result\ResourceSearchResult;
 use Jaspersoft\Tool\RESTRequest;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Tool\MimeMapper;
@@ -42,13 +43,14 @@ class RepositoryService
     public function resourceSearch(RepositorySearchCriteria $criteria = null)
     {
         $url = self::make_url($criteria);
-        $result = array();
-        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
-		if (empty($data)) return null;
-        $data = json_decode($data);
-        foreach ($data->resourceLookup as $rl)
-            $result[] = ResourceLookup::createFromJSON($rl);
-        return $result;
+        $response = $this->service->makeRequest($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
+
+        $data = $response['body'];
+        if (empty($data)) return null;
+
+        $headers = RESTRequest::splitHeaderArray($response['headers']);
+
+        return new ResourceSearchResult(json_decode($data), (int) $headers['Result-Count'], (int) $headers['Start-Index'], (int) $headers['Total-Count']);
     }
 
     /** Obtain an object that fully describes the resource by supplying its ResourceLookup object

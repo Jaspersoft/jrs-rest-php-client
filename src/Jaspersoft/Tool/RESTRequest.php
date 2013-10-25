@@ -37,6 +37,28 @@ class RESTRequest {
 		}
 	}
 
+    /** This function will convert an indexed array of headers into an associative array where the key matches
+     * the key of the headers, and the value matches the value of the header.
+     *
+     * This is useful to access headers by name that may be returned in the response from makeRequest.
+     *
+     * @param $array array Indexed header array returned by makeRequest
+     * @return array
+     */
+    public static function splitHeaderArray($array)
+    {
+        $result = array();
+        foreach (array_values($array) as $value) {
+            $pair = explode(':', $value, 2);
+            if (count($pair) > 1) {
+                $result[$pair[0]] = ltrim($pair[1]);
+            } else {
+                $result[] = $value;
+            }
+        }
+        return $result;
+    }
+
 	public function flush ()
 	{
 		$this->request_body		= null;

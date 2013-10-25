@@ -65,10 +65,10 @@ class RoleServiceTest extends BaseTest {
 		$this->rs->updateRole($this->newRole, "ROLE_QA");
 	}
 	
-	/** Coverage: getManyRoles **/
-	public function testGetManyRoles()
+	/** Coverage: searchRoles **/
+	public function testsearchRoles()
 	{
-		$roleCount = sizeof($this->rs->getManyRoles());
+		$roleCount = sizeof($this->rs->searchRoles());
 		$this->assertTrue($roleCount > 2);
 	}
 	

@@ -42,7 +42,7 @@ class RoleService
      * @param $offset int Begin search results at this offset (pagination controls)
      * @return array
      */
-    public function getManyRoles($organization = null, $includeSubOrgs = null, $user = null, $hasAllUsers = false, $q = null, $limit = 0, $offset = 0) {
+    public function searchRoles($organization = null, $includeSubOrgs = null, $user = null, $hasAllUsers = false, $q = null, $limit = 0, $offset = 0) {
         $result = array();
         $url = self::make_url($organization, null, compact('includeSubOrgs', 'user', 'hasAllUsers', 'q', 'limit', 'offset'));
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');

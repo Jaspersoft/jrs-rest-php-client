@@ -2,7 +2,7 @@
 $criteria = new RepositorySearchCriteria();
 $criteria->q = "pitbull";
 
-$search = $c->repositoryService()->resourceSearch($criteria);
+$search = $c->repositoryService()->searchResources($criteria);
 $image = $c->repositoryService()->getResourceByLookup($search->items[0]);
 $image_data = $c->repositoryService()->getBinaryFileData($image);
 

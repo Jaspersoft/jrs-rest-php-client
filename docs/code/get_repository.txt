@@ -1,2 +1,2 @@
 
-$repo = $c->repositoryService()->resourceSearch();
+$repo = $c->repositoryService()->searchResources();

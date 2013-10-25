@@ -1,2 +1,2 @@
 
-$server_roles = $c->roleService()->getManyRoles();
+$server_roles = $c->roleService()->searchRoles();

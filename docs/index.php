@@ -623,7 +623,8 @@ end of skeleton -->
 	<article id="get_many_roles">
 		<h3> Get Many Roles </h3>
 		<p>
-			You can request all the roles of an organization, or of the server using this function. The example below will request all roles on the server.
+			You can request all the roles of an organization, or of the server using this function. The example below will request all roles on the server. Optionally, you can
+            search based on specific criteria for roles.
 		</p>
 		<pre>
 		<code>

@@ -702,7 +702,7 @@ end of skeleton -->
 		<pre>
 		<code>
 
-            $repo = $c-&gt;repositoryService()-&gt;resourceSearch();		</code>
+            $repo = $c-&gt;repositoryService()-&gt;searchResources();		</code>
 		</pre>
 </article>
 
@@ -731,6 +731,8 @@ end of skeleton -->
         Using the repository service, you can create new resources in your repository. These can be both binary files, or descriptors such as folders, and data sources. This exmaple will
         explain how you can upload an image to your repository. In the example below, we'll be uploading a JPEG image of a pitbull to the folder /ImageFolder created in the last example. You must first describe
         the resource in a File object, and then supply it using the php builtin function file_get_contents() which will retrieve the binary content of a file on the local machine.
+
+        Note: If your isntance of JRS employs custom file types, you must define the mapping of the server type to the proper MIME type in the Jaspersoft\Tool\MimeMapper object which contains an associative array of JRS file types mapped to their relevant MIME type.
     </p>
 		<pre>
 		<code>
@@ -743,7 +745,6 @@ end of skeleton -->
             $c-&gt;repositoryService()-&gt;createFileResource(
             $file,
             file_get_contents(&quot;/home/grant/pitbull.jpg&quot;),
-            &quot;image/jpeg&quot;,
             &quot;/ImageFolder&quot;,
             );
 
@@ -755,6 +756,8 @@ end of skeleton -->
     <h3> Searching Resources and Requesting Binary Content </h3>
     <p>
         You are able to request specific details about existing resources in the server. Using the search resource function you can filter for specific files. The example below will show how you can request an image, and display it in inline HTML using base64 encoding.
+        When a search is performed, a ResourceSearchResult object is returned. Within this objects are information about pagination (results returned, total results, index), the items array within this object contains
+        the lookup data about the resource which can be used with getResourceByLookup to request the full description of the resource.
     </p>
 		<pre>
 		<code>
@@ -762,8 +765,8 @@ end of skeleton -->
             $criteria = new RepositorySearchCriteria();
             $criteria-&gt;q = &quot;pitbull&quot;;
 
-            $search = $c-&gt;repositoryService()-&gt;resourceSearch($criteria);
-            $image = $c-&gt;repositoryService()-&gt;getResourceByLookup($search[0]);
+            $search = $c-&gt;repositoryService()-&gt;searchResources($criteria);
+            $image = $c-&gt;repositoryService()-&gt;getResourceByLookup($search-&gt;items[0]);
             $image_data = $c-&gt;repositoryService()-&gt;getBinaryFileData($image);
 
             echo &quot;&lt;h1&gt; Its a pitbull! &lt;/h1&gt;&lt;br&gt;&lt;img src=\&quot;data:image/jpeg;base64,&quot;.base64_encode($image_data).&quot;\&quot;&gt;&quot;;		</code>
@@ -819,12 +822,13 @@ end of skeleton -->
 <article id="get_many_roles">
     <h3> Get Many Roles </h3>
     <p>
-        You can request all the roles of an organization, or of the server using this function. The example below will request all roles on the server.
+        You can request all the roles of an organization, or of the server using this function. The example below will request all roles on the server. Optionally, you can
+        search based on specific criteria for roles.
     </p>
 		<pre>
 		<code>
 
-            $server_roles = $c-&gt;roleService()-&gt;getManyRoles();		</code>
+            $server_roles = $c-&gt;roleService()-&gt;searchRoles();		</code>
 		</pre>
 </article>
 

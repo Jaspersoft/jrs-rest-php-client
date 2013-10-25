@@ -4,7 +4,7 @@ namespace Jaspersoft\Service\Result;
 use Jaspersoft\Dto\Resource\ResourceLookup;
 
 
-class ResourceSearchResult {
+class SearchResourceResult {
 
     public $items;
     public $resultCount;

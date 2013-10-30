@@ -24,22 +24,22 @@ class TestUtils {
 	{
 		$uuid = self::makeID();
 		$job = new Job;
-		$job->baseOutputFilename = 'test';
-		$job->repositoryDestination['folderURI'] = $f->uri;
-		$job->repositoryDestination['overwriteFiles'] = 'false';
-		$job->repositoryDestination['sequentialFilenames'] = 'false';
-		$job->description = 'test';
-		$job->label = 'test';
-		$job->outputFormats['outputFormat'][] = 'PDF';
-		$job->outputFormats['outputFormat'][] = 'XLS';
-		$job->outputFormats['outputFormat'][] = 'RTF';
-		$job->source['reportUnitURI'] = '/reports/samples/AllAccounts';
-		$job->trigger->simpleTrigger['recurrenceInterval'] = '1';
-		$job->trigger->simpleTrigger['recurrenceIntervalUnit'] = 'DAY';
-		$job->trigger->simpleTrigger['occurrenceCount'] = '2';
-		$job->trigger->simpleTrigger['startDate'] = '2025-01-26T00:00:00-07:00';
-		$job->trigger->simpleTrigger['timezone'] = 'America/Los_Angeles';
-		return $job;
+        $job->label = "Sample Job Name";
+        $job->description = "Sample description";
+        $job->trigger->simpleTrigger['timezone'] = "America/Los_Angeles";
+        $job->trigger->simpleTrigger['startType'] = 2;
+        $job->trigger->simpleTrigger['startDate'] = "2025-10-26 10:00";
+        $job->trigger->simpleTrigger['occurrenceCount'] = 1;
+        $job->source['reportUnitURI'] = "/adhoc/topics/Cascading_multi_select_topic";
+        $job->source['parameters']['parameterValues']['Country_multi_select'] = array("Mexico");
+        $job->source['parameters']['parameterValues']['Country_name_single_select'] = array("Chin-Lovell Engineering Associates");
+        $job->source['parameters']['parameterValues']['Country_state_multi_select'] = array("DF", "Jalisco", "Mexico");
+        $job->baseOutputFilename = "Cascading_multi_select_test";
+        $job->outputTimeZone = "America/Los_Angeles";
+        $job->repositoryDestination['folderURI'] = $f->uri;
+        $job->outputFormats['outputFormat'] = array("PDF", "XLS");
+        return $job;
+
 	}
 	
 	public static function createFolder()

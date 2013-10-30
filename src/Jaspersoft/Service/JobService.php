@@ -83,7 +83,7 @@ class JobService
 	 */
 	public function getJob($id) {
 		$url = $this->restUrl2 . '/jobs/' . $id;
-		$data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+		$data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/job+json', 'application/job+json');
         return new Job(json_decode($data, true));
 	}
 	
@@ -96,7 +96,7 @@ class JobService
 	public function createJob(Job $job)
 	{
 		$url = $this->restUrl2 . '/jobs';
-		$data = $this->service->prepAndSend($url, array(201, 200), 'PUT', json_encode($job), true, 'application/json', 'application/json');
+		$data = $this->service->prepAndSend($url, array(201, 200), 'PUT', json_encode($job), true, 'application/job+json', 'application/job+json');
 		return new Job(json_decode($data, true));
 	}
 
@@ -109,7 +109,7 @@ class JobService
 	public function updateJob($job)
 	{
 		$url = $this->restUrl2 . '/jobs/' . $job->id;
-		$data = $this->service->prepAndSend($url, array(201, 200), 'POST', json_encode($job), true, 'application/json', 'application/json');
+		$data = $this->service->prepAndSend($url, array(201, 200), 'POST', json_encode($job), true, 'application/job+json', 'application/job+json');
 		return new Job(json_decode($data, true));
 	}
 	

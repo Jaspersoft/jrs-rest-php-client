@@ -89,6 +89,22 @@ end of skeleton -->
 </article>
 
 <article>
+    <h3> Altering the request timeout </h3>
+    <p>
+        If you are having issues with requests timing out, you can alter the amount of time the client waits for a response
+        before timing out. The default timeout is 30 seconds.
+    </p>
+
+            <pre>
+            <code>
+
+                // Let the client wait one whole minute before timing out
+                $c-&gt;setRequestTimeout(60);            </code>
+            </pre>
+</article>
+
+
+<article>
     <h3> Server Information </h3>
     <p>
         The client class can also return data about the sever it is connecting to. This data includes date formats, license information and other info about the server's configruation. It is returned in an associative array format.

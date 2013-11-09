@@ -91,7 +91,22 @@ end of skeleton -->
 		</code>
 		</pre>
 	</article>
-	
+
+    <article>
+        <h3> Altering the request timeout </h3>
+        <p>
+            If you are having issues with requests timing out, you can alter the amount of time the client waits for a response
+            before timing out. The default timeout is 30 seconds.
+        </p>
+
+            <pre>
+            <code>
+                <?php inject_sample('code/client_timeout.txt'); ?>
+            </code>
+            </pre>
+    </article>
+
+
 	<article>
 		<h3> Server Information </h3>
 		<p>

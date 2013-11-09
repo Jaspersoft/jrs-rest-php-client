@@ -1,8 +1,7 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
-
-class ReportUnit extends Resource {
+class ReportUnit extends CompositeResource {
 
     public $alwaysPromptControls;
     public $controlsLayout;
@@ -14,6 +13,5 @@ class ReportUnit extends Resource {
     public $jrxml;
     public $inputControls;
     public $files;
-
 
 }

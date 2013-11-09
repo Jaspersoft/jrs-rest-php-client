@@ -69,9 +69,9 @@ class RepositoryService
 
         $class = RESOURCE_NAMESPACE . '\\' . ucfirst($lookup->resourceType);
         if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
-            return $class::createFromJSON(json_decode($data), $class);
+            return $class::createFromJSON(json_decode($data, true), $class);
         } else {
-            return Resource::createFromJSON(json_decode($data));
+            return Resource::createFromJSON(json_decode($data, true));
         }
     }
 
@@ -103,9 +103,9 @@ class RepositoryService
 
         $class = RESOURCE_NAMESPACE . '\\' . ucfirst($resource_type[1]);
         if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
-            return $class::createFromJSON(json_decode($data), $class);
+            return $class::createFromJSON(json_decode($data, true), $class);
         } else {
-            return Resource::createFromJSON(json_decode($data));
+            return Resource::createFromJSON(json_decode($data, true));
         }
     }
 
@@ -141,7 +141,7 @@ class RepositoryService
         $file_type = 'application/repository.' . lcfirst(end($type)) . '+json';
         $verb = ($update) ? 'PUT' : 'POST';
         $data = $this->service->prepAndSend($url, array(201, 200), $verb, $body, true, $file_type, 'application/json');
-        return Resource::createFromJSON(json_decode($data), get_class($resource));
+        return Resource::createFromJSON(json_decode($data, true), get_class($resource));
     }
 
     /** Update a resource using a resource descriptor
@@ -185,7 +185,7 @@ class RepositoryService
         $body = $binaryData;
         $verb = ($update) ? "PUT" : "POST";
         $response = $this->service->sendBinary($url, array(201, 200), $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, $verb);
-        return File::createFromJSON(json_decode($response), get_class($resource));
+        return File::createFromJSON(json_decode($response, true), get_class($resource));
     }
 
     /** Copy a resource from one location to another
@@ -210,9 +210,9 @@ class RepositoryService
 
         $class = RESOURCE_NAMESPACE . '\\' . ucfirst($resource_type[1]);
         if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
-            return $class::createFromJSON(json_decode($data), $class);
+            return $class::createFromJSON(json_decode($data, true), $class);
         } else {
-            return Resource::createFromJSON(json_decode($data));
+            return Resource::createFromJSON(json_decode($data, true));
         }
 
     }
@@ -239,9 +239,9 @@ class RepositoryService
 
         $class = RESOURCE_NAMESPACE . '\\' . ucfirst($resource_type[1]);
         if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
-            return $class::createFromJSON(json_decode($data), $class);
+            return $class::createFromJSON(json_decode($data, true), $class);
         } else {
-            return Resource::createFromJSON(json_decode($data));
+            return Resource::createFromJSON(json_decode($data, true));
         }
     }
 

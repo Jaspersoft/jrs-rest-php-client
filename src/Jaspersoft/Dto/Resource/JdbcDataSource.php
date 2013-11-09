@@ -2,7 +2,8 @@
 namespace Jaspersoft\Dto\Resource;
 
 
-class JdbcDataSource extends Resource {
+class JdbcDataSource extends Resource
+{
 
     public $driverClass;
     public $password;

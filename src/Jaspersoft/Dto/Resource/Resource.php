@@ -1,7 +1,7 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
-class Resource 
+class Resource
 {
 
     public $uri;
@@ -20,6 +20,11 @@ class Resource
         return $result;
     }
 
+    public function toJSON()
+    {
+        return json_encode($this->jsonSerialize());
+    }
+
     public function jsonSerialize()
     {
         $result = array();
@@ -29,11 +34,22 @@ class Resource
         return $result;
     }
 
-    function __construct()
+    public function __construct()
     {
 
     }
 
+    public function name()
+    {
+        $type = explode('\\', get_class($this));
+        $type = lcfirst(end($type));
+        return $type;
+    }
+
+    public function contentType()
+    {
+        return "application/repository.".$this->name()."+json";
+    }
 
 
 

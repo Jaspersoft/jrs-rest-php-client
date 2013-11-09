@@ -2,7 +2,7 @@
 namespace Jaspersoft\Dto\Resource;
 
 
-class InputControl extends Resource
+class InputControl extends CompositeResource
 {
     public $mandatory;
     public $readOnly;

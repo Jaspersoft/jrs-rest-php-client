@@ -2,7 +2,7 @@
 namespace Jaspersoft\Dto\Resource;
 
 
-class Query extends Resource
+class Query extends CompositeResource
 {
     public $value;
     public $language;

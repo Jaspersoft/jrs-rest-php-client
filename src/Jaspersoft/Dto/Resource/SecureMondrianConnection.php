@@ -2,7 +2,7 @@
 namespace Jaspersoft\Dto\Resource;
 
 
-class SecureMondrianConnection extends Resource
+class SecureMondrianConnection extends CompositeResource
 {
     public $schema;
     public $dataSource;

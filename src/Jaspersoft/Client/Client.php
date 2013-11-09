@@ -79,6 +79,16 @@ class Client
 	public function queryService() {
 		return new service\QueryService($this->restReq, $this->restUrl2);
 	}
+
+    /** setRequestTimeout
+     *
+     * Set the amount of time cURL is permitted to wait for a response to a request before timing out.
+     *
+     * @param $seconds int Time in seconds
+     */
+    public function setRequestTimeout($seconds) {
+        $this->restReq->defineTimeout($seconds);
+    }
 	
     /** This function returns information about the server in an associative array.
      * Information provided is:

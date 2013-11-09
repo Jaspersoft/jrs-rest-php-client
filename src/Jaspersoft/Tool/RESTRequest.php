@@ -16,6 +16,7 @@ class RESTRequest {
 	protected $response_info;
 	protected $file_to_upload = array();
     protected $headers;
+    protected $curl_timeout;
 
 	public function __construct ($url = null, $verb = 'GET', $request_body = null)
 	{
@@ -30,6 +31,7 @@ class RESTRequest {
 		$this->response_body	= null;
 		$this->response_info	= null;
 		$this->file_to_upload	= array();
+        $this->curl_timeout = 30;
 
 		if ($this->request_body !== null)
 		{
@@ -76,7 +78,7 @@ class RESTRequest {
 	{
 		$ch = curl_init();
 		$this->setAuth($ch);
-
+        $this->setTimeout($ch);
 		try
 		{
 			switch (strtoupper($this->verb))
@@ -158,7 +160,6 @@ class RESTRequest {
     {
         $post = $this->request_body;
 
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->verb);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         curl_setopt($ch, CURLOPT_URL, $this->url);
@@ -177,7 +178,6 @@ class RESTRequest {
 	{
         $post = $this->request_body;
 
-		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 		curl_setopt($ch, CURLOPT_URL, $this->url);
@@ -194,7 +194,6 @@ class RESTRequest {
 	{
 		$post = $this->request_body;
 
-		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 		curl_setopt($ch, CURLOPT_URL, $this->url);
@@ -245,7 +244,6 @@ class RESTRequest {
 
 	protected function setCurlOpts (&$curlHandle)
 	{
-		curl_setopt($curlHandle, CURLOPT_TIMEOUT, 10);
 		curl_setopt($curlHandle, CURLOPT_URL, $this->url);
 		curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curlHandle, CURLOPT_COOKIEFILE, '/dev/null');
@@ -267,6 +265,16 @@ class RESTRequest {
 			curl_setopt($curlHandle, CURLOPT_USERPWD, $this->username . ':' . $this->password);
 		}
 	}
+
+    protected function setTimeout(&$curlHandle)
+    {
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, $this->curl_timeout);
+    }
+
+    public function defineTimeout($seconds)
+    {
+        $this->curl_timeout = $seconds;
+    }
 
 	public function getFileToUpload()
 	{

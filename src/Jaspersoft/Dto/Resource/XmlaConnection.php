@@ -2,10 +2,10 @@
 namespace Jaspersoft\Dto\Resource;
 
 
-class XmlaConnection extends CompositeResource
+class XmlaConnection extends Resource
 {
     public $url;
-    public $dataSource;
+    public $xmlaDataSource;
     public $catalog;
     public $username;
     public $password;

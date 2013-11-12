@@ -1,0 +1,18 @@
+
+$report_shop = new \Jaspersoft\DTO\Resource\ReportUnit();
+$city_control = new \Jaspersoft\DTO\Resource\InputControl();
+
+$city_control->listOfValues = "/listValues/cities";
+$city_control->query = "/queries/cityQuery";
+
+$report_shop->label = "All Accounts Report of Shops";
+$report_shop->description = "AllAccounts style report derived from the shops JDBC datasource";
+$report_shop->uri = "/my_reports/allaccount_shop";
+$report_shop->dataSource = "/datasources/shopJDBC";
+$report_shop->inputControls = array(
+                                "/inputcontrols/age",
+                                "/inputcontrols/state",
+                                $city_control);
+
+$report_shop->query = "/queries/shop_accounts";
+$report_shop->jrxml = "/jrxml/allaccounts";

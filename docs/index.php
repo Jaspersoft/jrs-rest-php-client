@@ -563,6 +563,29 @@ end of skeleton -->
 		</code>
 		</pre>
 	</article>
+
+    <article id="composite_resource">
+        <h3> Working with Composite Resources </h3>
+        <p>
+            Some resources can reference or define subresources, these resources are known as composite resources. When dealing
+            with such resources while using the PHP Client, you can decide to provide a reference to an existing resource,
+            or define the resource completely and locally.
+            <br><br>
+            For example, if you create a ReportUnit object, and wish to link to a datasource you can set the field "datasource"
+            to a string or a concrete DataSource object which will create a reference or a local definition respectively.
+            <br><br>
+            In the example below, a ReportUnit is defined with a reference to a datasource, and query. <br><br>
+            In addition, the Input Controls are set to an array of both referenced and locally defined input controls.
+
+
+        </p>
+            <pre>
+            <code>
+                <?php inject_sample('code/composite_resource.txt'); ?>
+            </code>
+            </pre>
+    </article>
+
 	
 	<article id="create_binary_resource">
 		<h3> Create Binary Resource </h3>

@@ -741,6 +741,46 @@ end of skeleton -->
 		</pre>
 </article>
 
+<article id="composite_resource">
+    <h3> Working with Composite Resources </h3>
+    <p>
+        Some resources can reference or define subresources, these resources are known as composite resources. When dealing
+        with such resources while using the PHP Client, you can decide to provide a reference to an existing resource,
+        or define the resource completely and locally.
+        <br><br>
+        For example, if you create a ReportUnit object, and wish to link to a datasource you can set the field "datasource"
+        to a string or a concrete DataSource object which will create a reference or a local definition respectively.
+        <br><br>
+        In the example below, a ReportUnit is defined with a reference to a datasource, and query. <br><br>
+        In addition, the Input Controls are set to an array of both referenced and locally defined input controls.
+
+
+    </p>
+            <pre>
+            <code>
+
+                $report_shop = new \Jaspersoft\DTO\Resource\ReportUnit();
+                $city_control = new \Jaspersoft\DTO\Resource\InputControl();
+
+                $city_control-&gt;listOfValues = &quot;/listValues/cities&quot;;
+                $city_control-&gt;query = &quot;/queries/cityQuery&quot;;
+
+                $report_shop-&gt;label = &quot;All Accounts Report of Shops&quot;;
+                $report_shop-&gt;description = &quot;AllAccounts style report derived from the shops JDBC datasource&quot;;
+                $report_shop-&gt;uri = &quot;/my_reports/allaccount_shop&quot;;
+                $report_shop-&gt;dataSource = &quot;/datasources/shopJDBC&quot;;
+                $report_shop-&gt;inputControls = array(
+                &quot;/inputcontrols/age&quot;,
+                &quot;/inputcontrols/state&quot;,
+                $city_control);
+
+                $report_shop-&gt;query = &quot;/queries/shop_accounts&quot;;
+                $report_shop-&gt;jrxml = &quot;/jrxml/allaccounts&quot;;
+            </code>
+            </pre>
+</article>
+
+
 <article id="create_binary_resource">
     <h3> Create Binary Resource </h3>
     <p>

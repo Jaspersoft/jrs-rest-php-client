@@ -135,7 +135,8 @@ class RepositoryService
         $url = self::make_url(null, $parentFolder);
         if (!empty($createFolders))
             $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
-        $body = json_encode($resource);
+        // $body = json_encode($resource);
+        $body = $resource->toJSON();
         // Isolate the class name, lowercase it, and provide it as a filetype in the headers
         $type = explode('\\', get_class($resource));
         $file_type = 'application/repository.' . lcfirst(end($type)) . '+json';

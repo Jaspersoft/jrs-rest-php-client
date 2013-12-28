@@ -81,4 +81,19 @@ class OutputFTPInfo {
         return $result;
     }
 
+    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
+     * and casts it as a OutputFTPInfo Object
+     *
+     * @param \stdClass $json_obj
+     * @return OutputFTPInfo
+     */
+    public static function createFromJSON($json_obj)
+    {
+        $result = new self();
+        foreach ($json_obj as $k => $v) {
+            $result->$k = $v;
+        }
+        return $result;
+    }
+
 }

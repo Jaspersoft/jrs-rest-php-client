@@ -75,7 +75,7 @@ class CalendarTrigger extends Trigger {
     public $monthDays;
 
 
-    public function __construct($minutes, $hours, $daysType, $weekDays, $monthDays)
+    public function __construct($minutes = null, $hours = null, $daysType = null, $weekDays = null, $monthDays = null)
     {
         $this->minutes = $minutes;
         $this->hours = $hours;
@@ -103,6 +103,29 @@ class CalendarTrigger extends Trigger {
             }
             else {
                 $result[$k] = $v;
+            }
+        }
+        return $result;
+    }
+
+    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
+     * and casts it as a CalendarTrigger Object
+     *
+     * @param \stdClass $json_obj
+     * @return CalendarTrigger
+     */
+    public static function createFromJSON($json_obj)
+    {
+        $result = new self();
+        foreach ($json_obj as $k => $v) {
+            if ($k == "months") {
+                $result->$k = $v->month;
+            }
+            else if ($k == "weekDays") {
+                $result->$k = $v->day;
+            }
+            else {
+                $result->$k = $v;
             }
         }
         return $result;

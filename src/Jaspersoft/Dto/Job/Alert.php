@@ -83,4 +83,22 @@ class Alert {
         return $result;
     }
 
+    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
+     * and casts it as a Alert Object
+     *
+     * @param \stdClass $json_obj
+     * @return Alert
+     */
+    public static function createFromJSON($json_obj) {
+        $result = new self();
+        if (isset($json_obj->toAddresses)) {
+            $result->toAddresses = (array) $json_obj->toAddresses->address;
+            unset($json_obj->toAddresses);
+        }
+        foreach ($json_obj as $k => $v) {
+            $result->$k = $v;
+        }
+        return $result;
+    }
+
 }

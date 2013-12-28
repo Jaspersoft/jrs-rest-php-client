@@ -31,7 +31,8 @@ namespace Jaspersoft\Dto\Job;
  *
  * @package Jaspersoft\Dto\Job
  */
-class Job {
+class Job
+{
 
     /** Job execution alert settings
      *
@@ -161,6 +162,50 @@ class Job {
         return json_encode($this->jsonSerialize());
     }
 
+    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
+     * and casts it as a Job Object
+     *
+     * @param \stdClass $json_obj
+     * @return Job
+     */
+    public static function createFromJSON($json_obj)
+    {
+        $result = new self();        
+
+        // Handle complex and special cases
+        // Then remove them from the data array as not to be reprocessed below
+        if (isset($json_obj->alert)) {
+            $result->alert = Alert::createFromJSON($json_obj->alert);
+            unset($json_obj->alert);
+        }
+        if (isset($json_obj->trigger)) {
+            $result->trigger = Trigger::createFromJSON($json_obj->trigger);
+            unset ($json_obj->trigger);
+        }
+        if (isset($json_obj->source)) {
+            $result->source = Source::createFromJSON($json_obj->source);
+            unset ($json_obj->source);
+        }
+        if (isset($json_obj->outputFormats)) {
+            $result->outputFormats = $json_obj->outputFormats->outputFormat;
+            unset ($json_obj->outputFormats);
+        }
+        if (isset($json_obj->repositoryDestination)) {
+            $result->repositoryDestination = RepositoryDestination::createFromJSON($json_obj->repositoryDestination);
+            unset($json_obj->repositoryDestination);
+        }
+        if (isset($json_obj->mailNotification)) {
+            $result->mailNotification = MailNotification::createFromJSON($json_obj->mailNotification);
+            unset($json_obj->mailNotification);
+        }
+
+        // Handle the remaining simple attributes
+        foreach ($json_obj as $k => $v) {
+            $result->$k = $v;
+        }
+
+        return $result;
+    }
 
 }
 

@@ -24,11 +24,26 @@ class SimpleTrigger extends Trigger {
      */
     public $recurrenceIntervalUnit;
 
-
-    public function __construct($occurrenceCount = null, $recurrenceInterval = null, $recurrenceIntervalUnit = null) {
+    public function __construct($occurrenceCount = null, $recurrenceInterval = null, $recurrenceIntervalUnit = null)
+    {
         $this->occurrenceCount = $occurrenceCount;
         $this->recurrenceInterval = $recurrenceInterval;
         $this->recurrenceIntervalUnit = $recurrenceIntervalUnit;
+    }
+
+    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
+     * and casts it as a SimpleTrigger Object
+     *
+     * @param \stdClass $json_obj
+     * @return SimpleTrigger
+     */
+    public static function createFromJSON($json_obj)
+    {
+        $result = new self();
+        foreach ($json_obj as $k => $v) {
+            $result->$k = $v;
+        }
+        return $result;
     }
 
 } 

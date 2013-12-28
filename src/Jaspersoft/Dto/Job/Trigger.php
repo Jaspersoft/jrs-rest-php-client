@@ -104,5 +104,25 @@ abstract class Trigger {
         return array($this->name() => $result);
     }
 
+    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
+     * and casts it as a subclass of Trigger
+     *
+     * @param \stdClass $json_obj
+     * @return SimpleTrigger|CalendarTrigger
+     */
+    public static function createFromJSON($json_obj)
+    {
+        if (isset($json_obj->simpleTrigger)) {
+            return SimpleTrigger::createFromJSON($json_obj->simpleTrigger);
+        }
+        else if (isset($json_obj->calendarTrigger)) {
+            return CalendarTrigger::createFromJSON($json_obj->calendarTrigger);
+        }
+        else {
+            //TODO: add proper exception handling
+            return null;
+        }
+    }
+
 
 } 

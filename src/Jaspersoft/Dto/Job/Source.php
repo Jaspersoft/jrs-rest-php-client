@@ -32,4 +32,24 @@ class Source {
         return $result;
     }
 
+    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
+     * and casts it as a Source Object
+     *
+     * @param \stdClass $json_obj
+     * @return Source
+     */
+    public static function createFromJSON($json_obj)
+    {
+        $result = new self();
+        foreach ($json_obj as $k => $v) {
+            if ($k == "parameters") {
+                $result->parameters = (array) $v->parameterValues;
+            }
+            else {
+                $result->$k = $v;
+            }
+        }
+        return $result;
+    }
+
 } 

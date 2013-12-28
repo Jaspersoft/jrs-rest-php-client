@@ -94,4 +94,23 @@ class RepositoryDestination {
         }
         return $result;
     }
+
+    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
+     * and casts it as a RepositoryDestination Object
+     *
+     * @param \stdClass $json_obj
+     * @return RepositoryDestination
+     */
+    public static function createFromJSON($json_obj)
+    {
+        $result = new self();
+        if (isset($json_obj->outputFTPInfo)) {
+            $result->outputFTPInfo = OutputFTPInfo::createFromJSON($json_obj->outputFTPInfo);
+            unset($json_obj->outputFTPInfo);
+        }
+        foreach ($json_obj as $k => $v) {
+            $result->$k = $v;
+        }
+        return $result;
+    }
 }

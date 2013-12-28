@@ -108,4 +108,27 @@ class MailNotification {
         return $result;
     }
 
+    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
+     * and casts it as a MailNotification Object
+     *
+     * @param \stdClass $json_obj
+     * @return MailNotification
+     */
+    public static function createFromJSON($json_obj)
+    {
+        $result = new self();
+        foreach ($json_obj as $k => $v) {
+            if ($k == "toAddresses") {
+                $result->toAddresses = (array) $v->address;
+            } else if ($k == "ccAddresses") {
+                $result->ccAddresses = (array) $v->address;
+            } else if ($k == "bccAddresses") {
+                $result->bccAddresses = (array) $v->address;
+            } else {
+                $result->$k = $v;
+            }
+        }
+        return $result;
+    }
+
 }

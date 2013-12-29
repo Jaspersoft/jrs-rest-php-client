@@ -28,22 +28,12 @@ class TestUtils {
 	
     public static function createJob(Folder $f)
 	{
-		$uuid = self::makeID();
-        $f = self::createFolder();
-		$job = new Job;        
-        $job->label = "Sample Job Name";
-        $job->description = "Sample description";
-        $job->baseOutputFilename = "Cascading_multi_select_test";
-        $job->outputFormats = array("PDF", "XLS");
-        $job->outputTimeZone = "America/Los_Angeles";
-
         // SimpleTrigger
         $trigger = new SimpleTrigger;
         $trigger->timezone = "America/Los_Angeles";
         $trigger->startType = 2;
         $trigger->startDate = "2025-10-26 10:00";
         $trigger->occurrenceCount = 1;
-        $job->trigger = $trigger;
 
         // Source
         $source = new Source;
@@ -51,13 +41,15 @@ class TestUtils {
         $source->parameters = array("Country_multi_select" => array("Mexico"),
                                     "Country_name_single_select" => array("Chin-Lovell Engineering Associates"),
                                     "Country_state_multi_select" => array("DF", "Jalisco", "Mexico"));
-        $job->source = $source; 
 
         // Repository Destination
         $repoDest = new RepositoryDestination;
         $repoDest->folderURI = $f->uri;
-        $job->repositoryDestination = $repoDest;
-        
+
+        $job = new Job("Sample Job Name", $trigger, $source, "Cascading_multi_select_test",
+                        array("PDF", "XLS"), $repoDest);
+        $job->description = "Sample Description";
+
         return $job;
 
 	}

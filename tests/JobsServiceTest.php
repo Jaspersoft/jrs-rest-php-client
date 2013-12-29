@@ -41,7 +41,7 @@ class JobServiceTest extends BaseTest {
 	/** Coverage: searchJobs **/
     public function testPutJob_createsNewJob()
 	{
-		$search = $this->js->searchJobs($this->testJob->source['reportUnitURI']);
+		$search = $this->js->searchJobs($this->testJob->source->reportUnitURI);
 		$this->assertTrue(sizeof($search) > 0);
 		$this->assertEquals($search[0]->label, $this->testJob->label);
 	}
@@ -51,7 +51,7 @@ class JobServiceTest extends BaseTest {
 	{
 		$this->testJob->label = "UPDATED_TO_TEST";
 		$this->js->updateJob($this->testJob);
-		$search = $this->js->searchJobs($this->testJob->source['reportUnitURI']);
+		$search = $this->js->searchJobs($this->testJob->source->reportUnitURI);
 		$this->assertEquals($search[0]->label, "UPDATED_TO_TEST");
 	}
 	

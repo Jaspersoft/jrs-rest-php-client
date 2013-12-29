@@ -7,6 +7,12 @@ use Jaspersoft\Dto\Resource\Folder;
 use Jaspersoft\Dto\Resource\File;
 use Jaspersoft\Dto\Resource\Resource;
 use Jaspersoft\Dto\Job\Job;
+use Jaspersoft\Dto\Job\Alert;
+use Jaspersoft\Dto\Job\MailNotification;
+use Jaspersoft\Dto\Job\SimpleTrigger;
+use Jaspersoft\Dto\Job\OutputFTPInfo;
+use Jaspersoft\Dto\Job\RepositoryDestination;
+use Jaspersoft\Dto\Job\Source;
 
 class TestUtils {
 
@@ -20,24 +26,30 @@ class TestUtils {
 		return substr(md5(microtime()), 0, 5);
 	}
 	
-	public static function createJob(Folder $f)
+    public static function createJob(Folder $f)
 	{
-		$uuid = self::makeID();
-		$job = new Job;
-        $job->label = "Sample Job Name";
-        $job->description = "Sample description";
-        $job->trigger->simpleTrigger['timezone'] = "America/Los_Angeles";
-        $job->trigger->simpleTrigger['startType'] = 2;
-        $job->trigger->simpleTrigger['startDate'] = "2025-10-26 10:00";
-        $job->trigger->simpleTrigger['occurrenceCount'] = 1;
-        $job->source['reportUnitURI'] = "/adhoc/topics/Cascading_multi_select_topic";
-        $job->source['parameters']['parameterValues']['Country_multi_select'] = array("Mexico");
-        $job->source['parameters']['parameterValues']['Country_name_single_select'] = array("Chin-Lovell Engineering Associates");
-        $job->source['parameters']['parameterValues']['Country_state_multi_select'] = array("DF", "Jalisco", "Mexico");
-        $job->baseOutputFilename = "Cascading_multi_select_test";
-        $job->outputTimeZone = "America/Los_Angeles";
-        $job->repositoryDestination['folderURI'] = $f->uri;
-        $job->outputFormats['outputFormat'] = array("PDF", "XLS");
+        // SimpleTrigger
+        $trigger = new SimpleTrigger;
+        $trigger->timezone = "America/Los_Angeles";
+        $trigger->startType = 2;
+        $trigger->startDate = "2025-10-26 10:00";
+        $trigger->occurrenceCount = 1;
+
+        // Source
+        $source = new Source;
+        $source->reportUnitURI = "/adhoc/topics/Cascading_multi_select_topic";
+        $source->parameters = array("Country_multi_select" => array("Mexico"),
+                                    "Country_name_single_select" => array("Chin-Lovell Engineering Associates"),
+                                    "Country_state_multi_select" => array("DF", "Jalisco", "Mexico"));
+
+        // Repository Destination
+        $repoDest = new RepositoryDestination;
+        $repoDest->folderURI = $f->uri;
+
+        $job = new Job("Sample Job Name", $trigger, $source, "Cascading_multi_select_test",
+                        array("PDF", "XLS"), $repoDest);
+        $job->description = "Sample Description";
+
         return $job;
 
 	}

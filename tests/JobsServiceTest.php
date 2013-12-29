@@ -38,6 +38,28 @@ class JobServiceTest extends BaseTest {
 		$this->rs->deleteResource($this->testFolder->uri);
 	}
 
+    /** Coverage: createFromJSON, toJSON
+     *
+     * This test ensures that objects created by createFromJSON are identical to the object from which the JSON came
+     **/
+    public function testCreateFromJSON_roundTripPolicy_object()
+    {
+        $castedObj = Job::createFromJSON(json_decode($this->testJob->toJSON()));
+        $this->assertEquals($castedObj, $this->testJob);
+    }
+
+    /** Coverage: createFromJSON, toJSON
+     *
+     * This test ensures that json created by toJSON are identical to the json created by a casted version of the object
+     **/
+    public function testCreateFromJSON_roundTripPolicy_json()
+    {
+        $testJob_json = $this->testJob->toJSON();
+        $castedJob_json = Job::createFromJSON(json_decode($testJob_json))->toJSON();
+
+        $this->assertEquals($testJob_json, $castedJob_json);
+    }
+
 	/** Coverage: searchJobs **/
     public function testPutJob_createsNewJob()
 	{

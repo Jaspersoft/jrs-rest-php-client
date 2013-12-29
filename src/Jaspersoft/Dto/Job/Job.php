@@ -121,6 +121,10 @@ class Job
      */
     public $version;
 
+    /** Output Time Zone
+     *
+     * @var string */
+    public $outputTimeZone;
 
 	public function __construct($label = null, $trigger = null, $source = null, $baseOutputFilename = null,
                                 $outputFormats = null, $repositoryDestination = null)

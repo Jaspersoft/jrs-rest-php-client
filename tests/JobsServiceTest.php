@@ -81,7 +81,7 @@ class JobServiceTest extends BaseTest {
 	public function testJobState()
 	{
 		$jobState = $this->js->getJobState($this->testJob->id);
-		$this->assertTrue(!empty($jobState['value']));
+		$this->assertTrue(!empty($jobState->value));
 	}
 	
 	/** Coverage: pauseJob, getJobState **/
@@ -89,7 +89,7 @@ class JobServiceTest extends BaseTest {
 	{
 		$this->js->pauseJob($this->testJob->id);
 		$jobState = $this->js->getJobState($this->testJob->id);
-		$this->assertEquals($jobState['value'], "PAUSED");
+		$this->assertEquals($jobState->value, "PAUSED");
 	}
 	
 	/** Coverage: pauseJob, getJobState, resumeJob **/
@@ -98,7 +98,7 @@ class JobServiceTest extends BaseTest {
 		self::testPauseJob();
 		$this->js->resumeJob($this->testJob->id);
 		$jobState = $this->js->getJobState($this->testJob->id);
-		$this->assertEquals($jobState['value'], "NORMAL");
+		$this->assertEquals($jobState->value, "NORMAL");
 	}
 	
 

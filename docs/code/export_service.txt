@@ -9,8 +9,8 @@ $metadata = $c->importExportService()->startExportTask($request);
 
 $decline = true;
 while ($decline) {
-    $state = $c->importExportService()->getExportState($metadata['id']);
-    if ($state['phase'] == "finished") {
+    $state = $c->importExportService()->getExportState($metadata->id);
+    if ($state->phase == "finished") {
         $decline = false;
         echo "<br>Export task complete, downloading....";
     } else {
@@ -22,7 +22,7 @@ while ($decline) {
 }
 
 $f = fopen('export.zip', 'w');
-$data = $c->importExportService()->fetchExport($metadata['id']);
+$data = $c->importExportService()->fetchExport($metadata->id);
 fwrite($f, $data);
 fclose($f);
 

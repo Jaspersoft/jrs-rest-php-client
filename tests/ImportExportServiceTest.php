@@ -40,6 +40,7 @@ class ImportExportServiceTest extends BaseTest
                 $running = false;
         }
 
+        $this->assertEquals("Jaspersoft\\Dto\\ImportExport\\TaskState", get_class($state));
         $this->assertEquals('finished', $state->phase);
         $data = $this->ies->fetchExport($metadata->id);
 		$this->assertTrue(strlen($data) > 100);
@@ -65,6 +66,7 @@ class ImportExportServiceTest extends BaseTest
             else
                 $running = false;
         }
+        $this->assertEquals("Jaspersoft\\Dto\\ImportExport\\TaskState", get_class($state));
         $this->assertEquals('finished', $state->phase);
         unset($this->import_file);
     }

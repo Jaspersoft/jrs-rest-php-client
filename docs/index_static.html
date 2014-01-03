@@ -497,7 +497,23 @@ foreach ($find as $result)
     printf('&lt;br&gt;Organization Found: %s', $result-&gt;id);		</code>
 		</pre>
 	</article>
-	
+
+    <article id="get_organization">
+        <h3> Get Organization </h3>
+        <p>
+            Using the getOrganization function you can request the data about a specific organization for which you know
+            the ID of.
+        </p>
+            <pre>
+            <code>
+                
+$org_one = $c-&gt;organizationService()-&gt;getOrganization(&quot;organization_1&quot;);
+
+// Print the details of the $org_one Organization object
+var_dump($org_one);            </code>
+            </pre>
+    </article>
+
 	<article id="delete_organization">
 		<h3> Deleting Organizations </h3>
 		<p>

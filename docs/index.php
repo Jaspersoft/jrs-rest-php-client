@@ -380,7 +380,20 @@ end of skeleton -->
 		</code>
 		</pre>
 	</article>
-	
+
+    <article id="get_organization">
+        <h3> Get Organization </h3>
+        <p>
+            Using the getOrganization function you can request the data about a specific organization for which you know
+            the ID of.
+        </p>
+            <pre>
+            <code>
+                <?php inject_sample('code/get_organization.txt'); ?>
+            </code>
+            </pre>
+    </article>
+
 	<article id="delete_organization">
 		<h3> Deleting Organizations </h3>
 		<p>

@@ -89,6 +89,7 @@ class JobServiceTest extends BaseTest {
 	{
 		$this->js->pauseJob($this->testJob->id);
 		$jobState = $this->js->getJobState($this->testJob->id);
+        $this->assertEquals("Jaspersoft\\Dto\\Job\\JobState", get_class($jobState));
 		$this->assertEquals($jobState->value, "PAUSED");
 	}
 	
@@ -98,6 +99,7 @@ class JobServiceTest extends BaseTest {
 		self::testPauseJob();
 		$this->js->resumeJob($this->testJob->id);
 		$jobState = $this->js->getJobState($this->testJob->id);
+        $this->assertEquals("Jaspersoft\\Dto\\Job\\JobState", get_class($jobState));
 		$this->assertEquals($jobState->value, "NORMAL");
 	}
 	

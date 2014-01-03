@@ -22,28 +22,29 @@ class ReportService
      *
      * @param string $uri - URI for the report you wish to run
      * @param string $format - The format you wish to receive the report in (default: pdf)
-     * @param string $page - Request a specific page
-     * @param string $attachmentsPrefix - a URI to prefix all image attachment sources with (must include trailing slash if needed)
+     * @param string $pages - Request a specific page, or range of pages. Separate multiple pages or ranges by commas.
+     *                          (e.g: "1,4-22,42,55-100")
+     * @param string $attachmentsPrefix - a URI to prefix all image attachment sources with
+     *                                  (must include trailing slash if needed)
      * @param array $inputControls - associative array of key => value for any input controls
      * @param bool $interactive Should reports using Highcharts be interactive?
      * @param bool $onePagePerSheet Produce paginated XLS or XLSX?
      * @param bool $freshData
      * @param bool $saveDataSnapshot
-     * @param string $pages Return a set of continous pages (example "5-10")
      * @param string $transformerKey For use when running a report as a JasperPrint. Specifies print element transformers
      * @return string Binary data of report
      */
-	public function runReport($uri, $format = 'pdf', $page = null, $attachmentsPrefix = null, $inputControls = null,
-                                $interactive = true, $onePagePerSheet = false, $freshData = true, $saveDataSnapshot = false, $pages = null, $transformerKey = null) {
+	public function runReport($uri, $format = 'pdf', $pages = null, $attachmentsPrefix = null, $inputControls = null,
+                                $interactive = true, $onePagePerSheet = false, $freshData = true, $saveDataSnapshot = false, $transformerKey = null) {
 		$url = $this->restUrl2 . '/reports' . $uri . '.' . $format;
         if (empty($inputControls))
-            $url .= '?' . Util::query_suffix(compact("page", "attachmentsPrefix", "interactive", "onePagePerSheet", "freshData", "saveDataSnapshot", "pages", "transformerKey"));
+            $url .= '?' . Util::query_suffix(compact("pages", "attachmentsPrefix", "interactive", "onePagePerSheet", "freshData", "saveDataSnapshot", "transformerKey"));
         else
-            $url .= '?' . Util::query_suffix(array_merge(compact("page", "attachmentsPrefix", "interactive", "onePagePerSheet", "freshData", "saveDataSnapshot", "pages", "transformerKey"), $inputControls));
+            $url .= '?' . Util::query_suffix(array_merge(compact("pages", "attachmentsPrefix", "interactive", "onePagePerSheet", "freshData", "saveDataSnapshot", "transformerKey"), $inputControls));
 		$binary = $this->service->prepAndSend($url, array(200), 'GET', null, true);
 		return $binary;
 	}
-		
+
 	/**
 	 * This function will request the possible values and data behind all the input controls of a report.
      *

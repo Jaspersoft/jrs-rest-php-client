@@ -2,50 +2,50 @@
 
 
 <html>
-<head>
+  <head>
     <title>Documentation</title>
 
     <meta charset='utf-8'>
-    <link rel="stylesheet" href="highlight/styles/github.css">
+	<link rel="stylesheet" href="highlight/styles/github.css">
 
-    <style>
-        .deprecated_notice { color: #f00; font-style: italic; }
+  <style>
+  .deprecated_notice { color: #f00; font-style: italic; }
 
-    </style>
+  </style>
 
-</head>
-<body>
+  </head>
+  <body>
 
-<header id='intro'>
-    <h1 class='introduction'>
-        Sample Code for JasperReports PHP Client
-    </h1>
-    <p>
-        JasperSoft Corporation, &copy; 2013
-        <br>
-        <br>
-        Code highlighting for this page provided by <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>, written by Ivan Sagalaev (<a href="highlight/LICENSE">license</a>/<a href="highlight/AUTHORS.en.txt">authors</a>).
-    </p>
-</header>
-
-<nav>
-    <h1> Table of Contents </h1>
-    <ul></ul>
-</nav>
-
-<section class='about'>
-    <article id='about_class'>
-        <h3> About the class </h3>
+      <header id='intro'>
+        <h1 class='introduction'>
+			Sample Code for JasperReports PHP Client
+        </h1>
         <p>
-            The JasperReports PHP Client is a wrapper for the JasperReports Web Services REST API. This client abstracts the details behind the communications with the server
-            into simple to use functions representative of their functionality on the server. Users do not have to deal with parsing and creating JSON data, but rather deal with
-            objects that represent objects within the server.<br>
-            Use of this wrapper is intented to allow users to focus on their logic and implementation rather than detailed communications with a server.
+			JasperSoft Corporation, &copy; 2013
+		  <br>
+		  <br>
+			Code highlighting for this page provided by <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>, written by Ivan Sagalaev (<a href="highlight/LICENSE">license</a>/<a href="highlight/AUTHORS.en.txt">authors</a>).
         </p>
-    </article>
-</section>
+      </header>
 
-<section class='examples'>
+	<nav>
+	<h1> Table of Contents </h1>
+	<ul></ul>
+	</nav>
+
+	<section class='about'>
+		<article id='about_class'>
+			<h3> About the class </h3>
+			<p>
+			   The JasperReports PHP Client is a wrapper for the JasperReports Web Services REST API. This client abstracts the details behind the communications with the server
+			   into simple to use functions representative of their functionality on the server. Users do not have to deal with parsing and creating JSON data, but rather deal with
+			   objects that represent objects within the server.<br>
+			   Use of this wrapper is intented to allow users to focus on their logic and implementation rather than detailed communications with a server.
+			</p>
+		</article>
+	</section>
+
+	<section class='examples'>
 
 <!-- skeleton
 	<article id="">
@@ -61,1009 +61,1018 @@
 end of skeleton -->
 
 
-<h2 id='prep'> Preparing the class </h2>
+	<h2 id='prep'> Preparing the class </h2>
 
-<article>
-    <h3> Invoking the client </h3>
-    <p>
-        In your project, you must include the autoloader so that classes can be loaded as needed. If you have not generated the autoloader file, please follow the instructions in the README for installation. Then you must initialize a client with your login credentials.
-        In addition, please note that the examples below assume you are importing objects using the PHP 'use' keyword. If you are not, you must refer to the objects using the full qualified namespace.
-    </p>
+	<article>
+		<h3> Invoking the client </h3>
+		<p>
+			In your project, you must include the autoloader so that classes can be loaded as needed. If you have not generated the autoloader file, please follow the instructions in the README for installation. Then you must initialize a client with your login credentials.
+			In addition, please note that the examples below assume you are importing objects using the PHP 'use' keyword. If you are not, you must refer to the objects using the full qualified namespace.
+		</p>
 
 		<pre>
 		<code>
+			
+require_once __DIR__ . &quot;/vendor/autoload.php&quot;;
 
-            require_once __DIR__ . &quot;/vendor/autoload.php&quot;;
+use Jaspersoft\Client\Client;
 
-            use Jaspersoft\Client\Client;
-
-            $c = new Client(
-            &quot;localhost&quot;,
-            &quot;8080&quot;,
-            &quot;jasperadmin&quot;,
-            &quot;jasperadmin&quot;,
-            &quot;/jasperserver-pro&quot;,
-            &quot;organization_1&quot;
-            );		</code>
+$c = new Client(
+				&quot;localhost&quot;,
+				&quot;8080&quot;,
+				&quot;jasperadmin&quot;,
+				&quot;jasperadmin&quot;,
+				&quot;/jasperserver-pro&quot;,
+				&quot;organization_1&quot;
+			);		</code>
 		</pre>
-</article>
+	</article>
 
-<article>
-    <h3> Altering the request timeout </h3>
-    <p>
-        If you are having issues with requests timing out, you can alter the amount of time the client waits for a response
-        before timing out. The default timeout is 30 seconds.
-    </p>
+    <article>
+        <h3> Altering the request timeout </h3>
+        <p>
+            If you are having issues with requests timing out, you can alter the amount of time the client waits for a response
+            before timing out. The default timeout is 30 seconds.
+        </p>
 
             <pre>
             <code>
-
-                // Let the client wait one whole minute before timing out
-                $c-&gt;setRequestTimeout(60);            </code>
+                
+// Let the client wait one whole minute before timing out
+$c-&gt;setRequestTimeout(60);            </code>
             </pre>
-</article>
+    </article>
 
 
-<article>
-    <h3> Server Information </h3>
-    <p>
-        The client class can also return data about the sever it is connecting to. This data includes date formats, license information and other info about the server's configruation. It is returned in an associative array format.
-    </p>
+	<article>
+		<h3> Server Information </h3>
+		<p>
+			The client class can also return data about the sever it is connecting to. This data includes date formats, license information and other info about the server's configruation. It is returned in an associative array format.
+		</p>
 
 		<pre>
 		<code>
+			
+$info = $c-&gt;serverInfo();
 
-            $info = $c-&gt;serverInfo();
-
-            print_r($info);    		</code>
+print_r($info);    		</code>
 		</pre>
-</article>
+	</article>
 
-<h2 id='service_access'> Available Services </h2>
+	<h2 id='service_access'> Available Services </h2>
 
-<article id="service_access">
-    <h3> List of Services </h3>
-    <p>
-        There are many services exposed through the client. Each can be requested as an object or accessed through the client itself each time.
-
-    <ul>
-        <li> attributeService </li>
-        <li> importExportService </li>
-        <li> jobService </li>
-        <li> optionsService </li>
-        <li> organizationService </li>
-        <li> permissionService </li>
-        <li> queryService </li>
-        <li> reportService </li>
-        <li> repositoryService </li>
-        <li> roleService </li>
-        <li> userService </li>
-    </ul>
-    </p>
+	<article id="service_access">
+		<h3> List of Services </h3>
+		<p>
+		There are many services exposed through the client. Each can be requested as an object or accessed through the client itself each time.
+		
+		<ul>
+			<li> attributeService </li>
+			<li> importExportService </li>
+			<li> jobService </li>
+			<li> optionsService </li>
+			<li> organizationService </li>
+			<li> permissionService </li>
+			<li> queryService </li>
+			<li> reportService </li>
+			<li> repositoryService </li>
+			<li> roleService </li>
+			<li> userService </li>
+		</ul>
+		</p>
 		<pre>
 		<code>
+			
+// Store service for several calls
+$js = $c-&gt;jobService();
+$js-&gt;getJobs(&quot;/reports/samples/AllAccounts&quot;);
 
-            // Store service for several calls
-            $js = $c-&gt;jobService();
-            $js-&gt;getJobs(&quot;/reports/samples/AllAccounts&quot;);
-
-            // Or access service methods directly
-            $c-&gt;jobService()-&gt;getJobs(&quot;/reports/samples/AllAccounts&quot;);		</code>
+// Or access service methods directly
+$c-&gt;jobService()-&gt;getJobs(&quot;/reports/samples/AllAccounts&quot;);		</code>
 		</pre>
-</article>
+	</article>
 
-<h2 id='attribute_service'> Attribute Service </h2>
+		<h2 id='attribute_service'> Attribute Service </h2>
 
-<article id="attribute_functions">
-    <h3> Get Attributes </h3>
-    <p>
-        Using this function, you can request the attributes of a user. You are able to specifiy specific attributes that you wish to get, otherwise all attributes for user will be returned.
-        You must supply a User object representing the user you wish to find the attributes of.
-    </p>
+	<article id="attribute_functions">
+		<h3> Get Attributes </h3>
+		<p>
+			Using this function, you can request the attributes of a user. You are able to specifiy specific attributes that you wish to get, otherwise all attributes for user will be returned.
+			You must supply a User object representing the user you wish to find the attributes of.
+		</p>
 		<pre>
 		<code>
-
-            $californiaUser = $c-&gt;userService()-&gt;getUser(&quot;CaliforniaUser&quot;, &quot;organization_1&quot;);
-            $attributes = $c-&gt;attributeService()-&gt;getAttributes($californiaUser);		</code>
+			
+$californiaUser = $c-&gt;userService()-&gt;getUser(&quot;CaliforniaUser&quot;, &quot;organization_1&quot;);
+$attributes = $c-&gt;attributeService()-&gt;getAttributes($californiaUser);		</code>
 		</pre>
-</article>
-
-<article id="update_attributes">
-    <h3> Update Attributes </h3>
-    <p>
-        To update a user's attributes, you must supply the User object, and an array of Attribute objects describing such attributes. This function will replace all the attributes of the user
-        with the ones supplied in the second argument. For convenience, the <a href="#add_attributes">addAttributes function</a> is provided to simply add attributes instead of replace them.
-    </p>
+	</article>
+	
+	<article id="update_attributes">
+		<h3> Update Attributes </h3>
+		<p>
+			To update a user's attributes, you must supply the User object, and an array of Attribute objects describing such attributes. This function will replace all the attributes of the user
+			with the ones supplied in the second argument. For convenience, the <a href="#add_attributes">addAttributes function</a> is provided to simply add attributes instead of replace them.
+		</p>
 		<pre>
 		<code>
+			
+$joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
 
-            $joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
-
-            $age_attr = new Attribute(&quot;Age&quot;, &quot;22&quot;);
-            $beer_attr = new Attribute(&quot;Beer of Choice&quot;, &quot;Anchor Steam&quot;);
-            $c-&gt;attributeService()-&gt;updateAttributes($joeUser, array($age_attr, $beer_attr));		</code>
+$age_attr = new Attribute(&quot;Age&quot;, &quot;22&quot;);
+$beer_attr = new Attribute(&quot;Beer of Choice&quot;, &quot;Anchor Steam&quot;);
+$c-&gt;attributeService()-&gt;updateAttributes($joeUser, array($age_attr, $beer_attr));		</code>
 		</pre>
-</article>
-
-<article id="add_attributes">
-    <h3> Add Attributes </h3>
-    <p>
-        This function will add attributes to a user without removing the old ones. If a new attribute is added which has the same name as an old attribute, it will be replaced by the new value.
-    </p>
+	</article>
+	
+	<article id="add_attributes">
+		<h3> Add Attributes </h3>
+		<p>
+			This function will add attributes to a user without removing the old ones. If a new attribute is added which has the same name as an old attribute, it will be replaced by the new value.
+		</p>
 		<pre>
 		<code>
+			
+$joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
 
-            $joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
-
-            $uni_attr = new Attribute(&quot;University&quot;, &quot;University of Oklahoma&quot;);
-            $animal_attr = new Attribute(&quot;Favorite Animal&quot;, &quot;Bear&quot;);
-            $c-&gt;attributeService()-&gt;addAttributes($joeUser, array($uni_attr, $animal_attr));		</code>
+$uni_attr = new Attribute(&quot;University&quot;, &quot;University of Oklahoma&quot;);
+$animal_attr = new Attribute(&quot;Favorite Animal&quot;, &quot;Bear&quot;);
+$c-&gt;attributeService()-&gt;addAttributes($joeUser, array($uni_attr, $animal_attr));		</code>
 		</pre>
-</article>
-
-<article id="delete_attributes">
-    <h3> Delete Attributes </h3>
-    <p>
-        To remove attributes of a user, you must supply a User object of the user to remove from, and an array of the names of the attributes (Not attribute objects) If no attribute names are given, all attributes will be removed.
-    </p>
+	</article>
+	
+	<article id="delete_attributes">
+		<h3> Delete Attributes </h3>
+		<p>
+			To remove attributes of a user, you must supply a User object of the user to remove from, and an array of the names of the attributes (Not attribute objects) If no attribute names are given, all attributes will be removed.
+		</p>
 		<pre>
 		<code>
-
-            $joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
-            $c-&gt;attributeService()-&gt;deleteAttributes($joeUser);		</code>
+			
+$joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
+$c-&gt;attributeService()-&gt;deleteAttributes($joeUser);		</code>
 		</pre>
-</article>
+	</article>
 
-<h2 id="importExportService"> Import/Export Service </h2>
-
-<article id="import_service">
-    <h3> Import Service </h3>
-    <p>
-        The import service allows you to import data that was previously exported. There are various flags that can be set to alter what data is imported, see the REST API documentation for more specific examples of such flags. The example below will submit an import from the file "import_data.zip" assumed to be stored in the same folder as the PHP file.
-        It will repeat "Still importing..." and check the status every 10 seconds until it is complete. Then it will announce that the import has completed.
-    </p>
+		<h2 id="importExportService"> Import/Export Service </h2>
+	
+	<article id="import_service">
+		<h3> Import Service </h3>
+		<p>
+			The import service allows you to import data that was previously exported. There are various flags that can be set to alter what data is imported, see the REST API documentation for more specific examples of such flags. The example below will submit an import from the file "import_data.zip" assumed to be stored in the same folder as the PHP file.
+			It will repeat "Still importing..." and check the status every 10 seconds until it is complete. Then it will announce that the import has completed. 
+		</p>
 		<pre>
 		<code>
+			
+$request = new ImportTask;
+$request-&gt;update = true;
 
-            $request = new ImportTask;
-            $request-&gt;update = true;
+$metadata = $c-&gt;importExportService()-&gt;startImportTask($request, file_get_contents('import_data.zip'));
 
-            $metadata = $c-&gt;importExportService()-&gt;startImportTask($request, file_get_contents('import_data.zip'));
-
-            $continue = true;
-            while($continue) {
-            $state = $c-&gt;importExportService()-&gt;getImportState($metadata['id']);
-            if ($state['phase'] == 'finished') {
-            $continue = false;
-            echo &quot;&lt;br&gt;&lt;br&gt;Import complete!&quot;;
-            } else {
-            echo &quot;Still importing...&lt;br&gt;&quot;;
-            @ob_flush();
-            @flush();
-            sleep(10);
-            }
-            }		</code>
+$continue = true;
+while($continue) {
+    $state = $c-&gt;importExportService()-&gt;getImportState($metadata['id']);
+    if ($state['phase'] == 'finished') {
+        $continue = false;
+        echo &quot;&lt;br&gt;&lt;br&gt;Import complete!&quot;;
+    } else {
+        echo &quot;Still importing...&lt;br&gt;&quot;;
+        @ob_flush();
+        @flush();
+        sleep(10);
+    }
+}		</code>
 		</pre>
-</article>
+	</article>
 
-<article id="export_service">
-    <h3> Export Service </h3>
-    <p>
-        Using this service you can export data from the server to store or import to another server. You must be authorized as the superuesr to use this service. data is compressed as a zip archive and sent as binary data. First construct an ExportTask object that defines what data is to be extracted, then pass it to the startExportTask function. Data can then be stored using PHP file I/O functions, or streamed to a browser by preparing the proper headers and echoing the binary data.
-        <br>
-        The example below will request an export, then refresh the status of the export every 10 seconds. When it is finished, it will download the data as a zip file, and then store it in a file (export.zip) and offer a link to download the file.
-    </p>
+	<article id="export_service">
+		<h3> Export Service </h3>
+		<p>
+			Using this service you can export data from the server to store or import to another server. You must be authorized as the superuesr to use this service. data is compressed as a zip archive and sent as binary data. First construct an ExportTask object that defines what data is to be extracted, then pass it to the startExportTask function. Data can then be stored using PHP file I/O functions, or streamed to a browser by preparing the proper headers and echoing the binary data.
+			<br>
+			The example below will request an export, then refresh the status of the export every 10 seconds. When it is finished, it will download the data as a zip file, and then store it in a file (export.zip) and offer a link to download the file. 
+		</p>
 		<pre>
 		<code>
+			
+header('Content-Type: text/html; charset=utf-8');
+// The export service can take longer than 60 seconds to execute, so it is necessary to change the server execution time limit
+set_time_limit(0);
 
-            header('Content-Type: text/html; charset=utf-8');
-            // The export service can take longer than 60 seconds to execute, so it is necessary to change the server execution time limit
-            set_time_limit(0);
+$request-&gt;users[] = &quot;jasperadmin&quot;;
 
-            $request-&gt;users[] = &quot;jasperadmin&quot;;
+$metadata = $c-&gt;importExportService()-&gt;startExportTask($request);
 
-            $metadata = $c-&gt;importExportService()-&gt;startExportTask($request);
+$decline = true;
+while ($decline) {
+    $state = $c-&gt;importExportService()-&gt;getExportState($metadata['id']);
+    if ($state['phase'] == &quot;finished&quot;) {
+        $decline = false;
+        echo &quot;&lt;br&gt;Export task complete, downloading....&quot;;
+    } else {
+        echo &quot;Export not yet completed...&lt;br&gt;&quot;;
+        @flush();
+        @ob_flush();
+        sleep(10);
+    }
+}
 
-            $decline = true;
-            while ($decline) {
-            $state = $c-&gt;importExportService()-&gt;getExportState($metadata['id']);
-            if ($state['phase'] == &quot;finished&quot;) {
-            $decline = false;
-            echo &quot;&lt;br&gt;Export task complete, downloading....&quot;;
-            } else {
-            echo &quot;Export not yet completed...&lt;br&gt;&quot;;
-            @flush();
-            @ob_flush();
-            sleep(10);
-            }
-            }
+$f = fopen('export.zip', 'w');
+$data = $c-&gt;importExportService()-&gt;fetchExport($metadata['id']);
+fwrite($f, $data);
+fclose($f);
 
-            $f = fopen('export.zip', 'w');
-            $data = $c-&gt;importExportService()-&gt;fetchExport($metadata['id']);
-            fwrite($f, $data);
-            fclose($f);
-
-            echo &quot;&lt;br&gt;&lt;br&gt;File available for download &lt;a href='export.zip'&gt;here&lt;/a&gt;&quot;;		</code>
+echo &quot;&lt;br&gt;&lt;br&gt;File available for download &lt;a href='export.zip'&gt;here&lt;/a&gt;&quot;;		</code>
 		</pre>
-</article>
-
-<h2 id="job_service"> Job Service </h2>
-
-<article id="search_jobs">
-    <h3> Search Jobs </h3>
-    <p>
-        Using the searchJobs function, you can search for existing jobs. There are various options that can be set to filter your results. With no options set, you will recieve all existing jobs on the server.
-        The example below will search for all jobs schedule for the report at the URI "/reports/samples/AllAccounts"
-    </p>
+	</article>
+	
+		<h2 id="job_service"> Job Service </h2>
+	
+	<article id="search_jobs">
+		<h3> Search Jobs </h3>
+		<p>
+			Using the searchJobs function, you can search for existing jobs. There are various options that can be set to filter your results. With no options set, you will recieve all existing jobs on the server.
+			The example below will search for all jobs schedule for the report at the URI "/reports/samples/AllAccounts"
+		</p>
 		<pre>
 		<code>
-
-            $allJobs = $c-&gt;jobService()-&gt;searchJobs(&quot;/reports/samples/AllAccounts&quot;);
-            print_r($allJobs);		</code>
+			
+$allJobs = $c-&gt;jobService()-&gt;searchJobs(&quot;/reports/samples/AllAccounts&quot;);
+print_r($allJobs);		</code>
 		</pre>
-</article>
-
-<article id="get_job">
-    <h3> Get Job by ID </h3>
-    <p>
-        If you know the ID of a job, you can request the specific details of that job. All results for searchJobs are JobSummary objects which contain IDs. Also when you create a new job, the ID will be returned in the response data.
-        You can use these IDs with this function to request the details of the jobs.
-    </p>
+	</article>
+	
+	<article id="get_job">
+		<h3> Get Job by ID </h3>
+		<p>
+			If you know the ID of a job, you can request the specific details of that job. All results for searchJobs are JobSummary objects which contain IDs. Also when you create a new job, the ID will be returned in the response data.
+			You can use these IDs with this function to request the details of the jobs.
+		</p>
 		<pre>
 		<code>
-
-            $allJobs = $c-&gt;jobService()-&gt;searchJobs(&quot;/reports/samples/AllAccounts&quot;);
-            $first_job_details = $c-&gt;jobService()-&gt;getJob($allJobs[0]-&gt;id);		</code>
+			
+$allJobs = $c-&gt;jobService()-&gt;searchJobs(&quot;/reports/samples/AllAccounts&quot;);
+$first_job_details = $c-&gt;jobService()-&gt;getJob($allJobs[0]-&gt;id);		</code>
 		</pre>
-</article>
-
-<article id="create_job">
-    <h3> Create Job </h3>
-    <p>
-        Jobs can be created from scratch. However, the way these objects interact is different than the other objects in the package. The values of the Job class are varied, and organized through associative arrays. In the example below you can see how the values are set for the various flags of the Job object. If a section requires more than one element of the same type (i.e: adding multiple toAddresses to send an alert to) it must be added using the PHP array functions. See below how this is done
-    </p>
+	</article>
+	
+	<article id="create_job">
+		<h3> Create Job </h3>
+		<p>
+			Jobs can be created from scratch. However, the way these objects interact is different than the other objects in the package. The values of the Job class are varied, and organized through associative arrays. In the example below you can see how the values are set for the various flags of the Job object. If a section requires more than one element of the same type (i.e: adding multiple toAddresses to send an alert to) it must be added using the PHP array functions. See below how this is done 
+		</p>
 		<pre>
 		<code>
+			
+// SimpleTrigger
+$trigger = new SimpleTrigger();
+$trigger-&gt;timezone = &quot;America/Los_Angeles&quot;;
+$trigger-&gt;startType = 2;
+$trigger-&gt;startDate = &quot;2025-10-26 10:00&quot;;
+$trigger-&gt;occurrenceCount = 1;
 
-            $job = new Job;
-            $job-&gt;baseOutputFilename = 'test';
-            $job-&gt;repositoryDestination['folderURI'] = '/Generated';
-            $job-&gt;repositoryDestination['overwriteFiles'] = 'false';
-            $job-&gt;repositoryDestination['sequentialFilenames'] = 'false';
-            $job-&gt;description = 'test';
-            $job-&gt;label = 'test';
-            $job-&gt;outputFormats['outputFormat'][] = 'PDF';
-            $job-&gt;outputFormats['outputFormat'][] = 'XLS';
-            $job-&gt;outputFormats['outputFormat'][] = 'RTF';
-            $job-&gt;source['reportUnitURI'] = '/reports/samples/AllAccounts';
-            $job-&gt;trigger-&gt;simpleTrigger['recurrenceInterval'] = '1';
-            $job-&gt;trigger-&gt;simpleTrigger['recurrenceIntervalUnit'] = 'DAY';
-            $job-&gt;trigger-&gt;simpleTrigger['occurrenceCount'] = '2';
-            $job-&gt;trigger-&gt;simpleTrigger['startDate'] = '2025-01-26T00:00:00-07:00';
-            $job-&gt;trigger-&gt;simpleTrigger['timezone'] = 'America/Los_Angeles';
+// Source
+$source = new Source();
+$source-&gt;reportUnitURI = &quot;/adhoc/topics/Cascading_multi_select_topic&quot;;
+$source-&gt;parameters = array(&quot;Country_multi_select&quot; =&gt; array(&quot;Mexico&quot;),
+                            &quot;Country_name_single_select&quot; =&gt; array(&quot;Chin-Lovell Engineering Associates&quot;),
+                            &quot;Country_state_multi_select&quot; =&gt; array(&quot;DF&quot;, &quot;Jalisco&quot;, &quot;Mexico&quot;));
 
-            $c-&gt;jobService()-&gt;createJob($job);		</code>
+// Repository Destination
+$repoDest = new RepositoryDestination();
+$repoDest-&gt;folderURI = $f-&gt;uri;
+
+$job = new Job(&quot;Sample Job Name&quot;, $trigger, $source, &quot;Cascading_multi_select_test&quot;,
+                array(&quot;PDF&quot;, &quot;XLS&quot;), $repoDest);
+$job-&gt;description = &quot;Sample Description&quot;;
+
+try {
+    $c-&gt;jobService()-&gt;createJob($job);
+} catch (\Exception e) {
+    printf('Caught Exception: %s', $e-&gt;getMessage());
+}		</code>
 		</pre>
-</article>
-
-<article id="update_job">
-    <h3> Updating Job </h3>
-    <p>
-        To update a scheduled job, simply request the old job object from the server, modify it, and then use the updateJob() function to reupload it to the server to be updated. The Job class utilizes properties and arrays to manage its data, which is different from the other objects which use only properties. This means you will not use get/set methods to alter the data in a Job object, but rather set the properties as if they were variables. If a property refers to a nested element of the job class, use array functions to manipulate the arrays.
-    </p>
+	</article>	
+	
+	<article id="update_job">
+		<h3> Updating Job </h3>
+		<p>
+			To update a scheduled job, simply request the old job object from the server, modify it, and then use the updateJob() function to reupload it to the server to be updated. The Job class utilizes properties and arrays to manage its data, which is different from the other objects which use only properties. This means you will not use get/set methods to alter the data in a Job object, but rather set the properties as if they were variables. If a property refers to a nested element of the job class, use array functions to manipulate the arrays. 
+		</p>
 		<pre>
 		<code>
+			
+$allJobs = $c-&gt;jobService()-&gt;searchJobs(&quot;/reports/samples/AllAccounts&quot;);
+$job = $c-&gt;jobService()-&gt;getJob($allJobs[0]-&gt;id);
 
-            $allJobs = $c-&gt;jobService()-&gt;searchJobs(&quot;/reports/samples/AllAccounts&quot;);
-            $job = $c-&gt;jobService()-&gt;getJob($allJobs[0]-&gt;id);
-
-            $job-&gt;label = &quot;new label&quot;;
-            $c-&gt;jobService()-&gt;updateJob($job);		</code>
+$job-&gt;label = &quot;new label&quot;;
+$c-&gt;jobService()-&gt;updateJob($job);		</code>
 		</pre>
-</article>
-
-<article id="pause_job">
-    <h3> Pause Job </h3>
-    <p>
-        Jobs can be paused using the pauseJob function. The only argument for this function accepts either a single job ID as an integer, an array of job IDs; or, if no argument is provided all jobs will be paused.
-    </p>
+	</article>
+	
+	<article id="pause_job">
+		<h3> Pause Job </h3>
+		<p>
+			Jobs can be paused using the pauseJob function. The only argument for this function accepts either a single job ID as an integer, an array of job IDs; or, if no argument is provided all jobs will be paused. 
+		</p>
 		<pre>
 		<code>
-
-            $c-&gt;jobService()-&gt;pauseJob();		</code>
+			
+$c-&gt;jobService()-&gt;pauseJob();		</code>
 		</pre>
-</article>
-
-<article id="resume_job">
-    <h3> Resume Job </h3>
-    <p>
-        To resume a job, pass the job's ID to the resumeJob function. For convenience you may also pass an array of job IDs. Similarly, all jobs will be resumed if no IDs are provided.
-    </p>
+	</article>
+	
+	<article id="resume_job">
+		<h3> Resume Job </h3>
+		<p>
+			To resume a job, pass the job's ID to the resumeJob function. For convenience you may also pass an array of job IDs. Similarly, all jobs will be resumed if no IDs are provided.
+		</p>
 		<pre>
 		<code>
-
-            $c-&gt;jobService()-&gt;resumeJob();		</code>
+			
+$c-&gt;jobService()-&gt;resumeJob();		</code>
 		</pre>
-</article>
-
-<article id="delete_job">
-    <h3> Delete Job </h3>
-    <p>
-        To delete a job, search for the job by name or URI, then hand its ID to the deleteJob function. The example below will delete all scheduled jobs on the server.
-    </p>
+	</article>
+	
+	<article id="delete_job">
+		<h3> Delete Job </h3>
+		<p>
+			To delete a job, search for the job by name or URI, then hand its ID to the deleteJob function. The example below will delete all scheduled jobs on the server. 
+		</p>
 		<pre>
 		<code>
-
-            $c-&gt;jobService()-&gt;deleteJob('90210');		</code>
+			
+$c-&gt;jobService()-&gt;deleteJob('90210');		</code>
 		</pre>
-</article>
-
-<h2 id="options_service"> Options Service </h2>
-
-<article id="get_options">
-    <h3> Get Report Options </h3>
-    <p>
-        You can view the different stored options for your reports that have input controls using this function. Simply provide the URI of the report that has options, and an array of objects representing each report option will be returned. The example below shows you how to request all the ReportOptions objects, iterate through them and print the Labels of each of them.
-    </p>
+	</article>
+	
+		<h2 id="options_service"> Options Service </h2>
+	
+	<article id="get_options">
+		<h3> Get Report Options </h3>
+		<p>
+			You can view the different stored options for your reports that have input controls using this function. Simply provide the URI of the report that has options, and an array of objects representing each report option will be returned. The example below shows you how to request all the ReportOptions objects, iterate through them and print the Labels of each of them.
+		</p>
 		<pre>
 		<code>
+			
+$report_options = $c-&gt;optionsService()-&gt;getReportOptions('/reports/samples/Cascading_multi_select_report');
 
-            $report_options = $c-&gt;optionsService()-&gt;getReportOptions('/reports/samples/Cascading_multi_select_report');
-
-            foreach($report_options as $ro) {
-            echo $ro-&gt;label . &quot;&lt;br /&gt;&quot;;
-            }		</code>
+foreach($report_options as $ro) {
+   echo $ro-&gt;label . &quot;&lt;br /&gt;&quot;;
+}		</code>
 		</pre>
-</article>
-
-<article id="update_options">
-    <h3> Update/Create Report Options </h3>
-    <p>
-        The updateReportOptions function can be used both to create new, or update existing report options. The example below shows how to create a new report that makes selections for existing input controls.
-    </p>
+	</article>
+	
+	<article id="update_options">
+		<h3> Update/Create Report Options </h3>
+		<p>
+			The updateReportOptions function can be used both to create new, or update existing report options. The example below shows how to create a new report that makes selections for existing input controls.
+		</p>
 		<pre>
 		<code>
-
-            $success = $c-&gt;optionsService()-&gt;updateReportOptions(
-            '/reports/samples/Cascading_multi_select_report',
-            array('Country_multi_select' =&gt; array('Canada', 'USA'),	'Cascading_state_multi_select' =&gt; array('OR', 'WA', 'BC')),
-            'CanadaUSA',
-            'true');
-            if ($success) {
-            echo &quot;Created new report option successfully&quot;;
-            }		</code>
+			
+$success = $c-&gt;optionsService()-&gt;updateReportOptions(
+    '/reports/samples/Cascading_multi_select_report',
+    array('Country_multi_select' =&gt; array('Canada', 'USA'),	'Cascading_state_multi_select' =&gt; array('OR', 'WA', 'BC')),
+    'CanadaUSA',
+    'true');
+if ($success) {
+   echo &quot;Created new report option successfully&quot;;
+}		</code>
 		</pre>
-</article>
-
-<article id="delete_options">
-    <h3> Delete Report Options </h3>
-    <p>
-        To delete report options, you must retrieve the URI for the report containing the options, and provide the label for the option setting. If your report options has whitespace in the label, currently this function may not handle it well. Instead use the deleteResource() function to delete the Report Option. The example below will remove the report options created in the example above.
-    </p>
+	</article>	
+	
+	<article id="delete_options">
+		<h3> Delete Report Options </h3>
+		<p>
+			To delete report options, you must retrieve the URI for the report containing the options, and provide the label for the option setting. If your report options has whitespace in the label, currently this function may not handle it well. Instead use the deleteResource() function to delete the Report Option. The example below will remove the report options created in the example above.
+		</p>
 		<pre>
 		<code>
-
-            try {
-            $c-&gt;optionsService()-&gt;deleteReportOptions('/reports/samples/Cascading_multi_select_report', 'CanadaUSA');
-            } catch (Exception $e) {
-            printf(&quot;An exception was thrown: &quot;, $e-&gt;getMessage());
-            }		</code>
+			
+try {
+  $c-&gt;optionsService()-&gt;deleteReportOptions('/reports/samples/Cascading_multi_select_report', 'CanadaUSA');
+} catch (Exception $e) {
+  printf(&quot;An exception was thrown: &quot;, $e-&gt;getMessage());
+}		</code>
 		</pre>
-</article>
-
-<h2 id="organization_service"> Organization Service </h2>
-
-<article id="create_organization">
-    <h3> Create Organization </h3>
-    <p>
-        Creating a new organization requires constructing a new Organization object and sending it using the createOrganization function.
-    </p>
+	</article>
+	
+		<h2 id="organization_service"> Organization Service </h2>
+	
+	<article id="create_organization">
+		<h3> Create Organization </h3>
+		<p>
+			Creating a new organization requires constructing a new Organization object and sending it using the createOrganization function.
+		</p>
 		<pre>
 		<code>
+			
+$new_organization = new Organization(
+      'test_organization',	// alias
+      'test_organization',	// id
+      'organization_1',	// parent organization
+      'test_organization');	// tenantName
 
-            $new_organization = new Organization(
-            'test_organization',	// alias
-            'test_organization',	// id
-            'organization_1',	// parent organization
-            'test_organization');	// tenantName
-
-            try {
-            $c-&gt;organizationService()-&gt;createOrganization($new_organization);
-            } catch (Exception $e) {
-            printf('Creating organization failed: %s', $e-&gt;getMessage());
-            }		</code>
+try {
+   $c-&gt;organizationService()-&gt;createOrganization($new_organization);
+} catch (Exception $e) {
+   printf('Creating organization failed: %s', $e-&gt;getMessage());
+}		</code>
 		</pre>
-</article>
+	</article>
 
-<article id="search_organization">
-    <h3> Searching Organizations </h3>
-    <p>
-        Using the searchOrganization function you can search for organizations by ID.
-    </p>
+	<article id="search_organization">
+		<h3> Searching Organizations </h3>
+		<p>
+			Using the searchOrganization function you can search for organizations by ID.
+		</p>
 		<pre>
 		<code>
-
-            $find = $c-&gt;organizationService()-&gt;searchOrganization('org');
-            foreach ($find as $result)
-            printf('&lt;br&gt;Organization Found: %s', $result-&gt;id);		</code>
+			
+$find = $c-&gt;organizationService()-&gt;searchOrganization('org');
+foreach ($find as $result)
+    printf('&lt;br&gt;Organization Found: %s', $result-&gt;id);		</code>
 		</pre>
-</article>
-
-<article id="delete_organization">
-    <h3> Deleting Organizations </h3>
-    <p>
-        An organization may be deleted by providing the Organization Object that correlates to the organization that is to be deleted. This can be retrieved as shown below by using the searchOrganizations() method.
-    </p>
+	</article>
+	
+	<article id="delete_organization">
+		<h3> Deleting Organizations </h3>
+		<p>
+			An organization may be deleted by providing the Organization Object that correlates to the organization that is to be deleted. This can be retrieved as shown below by using the searchOrganizations() method.
+		</p>
 		<pre>
 		<code>
+			
+$search = $c-&gt;organizationService()-&gt;searchOrganizations('test_organization');
+$organization = $search[0];
 
-            $search = $c-&gt;organizationService()-&gt;searchOrganizations('test_organization');
-            $organization = $search[0];
-
-            try {
-            $c-&gt;organizationService-&gt;deleteOrganization($organization);
-            } catch (Exception $e) {
-            printf('Organization deletion failure: %s', $e-&gt;getMessage());
-            }		</code>
+try {
+   $c-&gt;organizationService-&gt;deleteOrganization($organization);
+} catch (Exception $e) {
+   printf('Organization deletion failure: %s', $e-&gt;getMessage());
+}		</code>
 		</pre>
-</article>
-
-<article id="update_organization">
-    <h3> Updating Organizations </h3>
-    <p>
-        Modifying an organization is done in a similar fashion to modifying a user. The organization object needs to be obtained with the searchOrganization method and then modify it with the get/set methods, and return it back to the server, as shown below.
-    </p>
+	</article>
+	
+	<article id="update_organization">
+		<h3> Updating Organizations </h3>
+		<p>
+			Modifying an organization is done in a similar fashion to modifying a user. The organization object needs to be obtained with the searchOrganization method and then modify it with the get/set methods, and return it back to the server, as shown below. 
+		</p>
 		<pre>
 		<code>
+			
+$search = $c-&gt;organizationService()-&gt;searchOrganization('organization_wave');
+$organization = $search[0];
+$organization-&gt;tenantDesc = &quot;Do the wave&quot;;
 
-            $search = $c-&gt;organizationService()-&gt;searchOrganization('organization_wave');
-            $organization = $search[0];
-            $organization-&gt;tenantDesc = &quot;Do the wave&quot;;
-
-            try {
-            $c-&gt;organizationService()-&gt;updateOrganization($organization);
-            } catch (Exception $e) {
-            printf('Unable to modify organization: %s', $e-&gt;getMessage());
-            }		</code>
+try {
+    $c-&gt;organizationService()-&gt;updateOrganization($organization);
+} catch (Exception $e) {
+    printf('Unable to modify organization: %s', $e-&gt;getMessage());
+}		</code>
 		</pre>
-</article>
-
-<h2 id="permission_service"> Permission Service </h2>
-
-<article id="search_permissions">
-    <h3> Searching Permissions </h3>
-    <p>
-        You can search for user permissions in regards to a resource in the repository by using the searchRepositoryPermissions function. Provide the URI for the resource as the first argument. Other arguments are available to filter the results as needed. The example below will list all the set permission recipients for "/reports/samples/AllAccounts"
-    </p>
+	</article>
+	
+		<h2 id="permission_service"> Permission Service </h2>
+	
+	<article id="search_permissions">
+		<h3> Searching Permissions </h3>
+		<p>
+			You can search for user permissions in regards to a resource in the repository by using the searchRepositoryPermissions function. Provide the URI for the resource as the first argument. Other arguments are available to filter the results as needed. The example below will list all the set permission recipients for "/reports/samples/AllAccounts"
+		</p>
 		<pre>
 		<code>
-
-            $permissions = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
-            foreach($permissions as $p)
-            echo $p-&gt;recipient . &quot;&lt;br&gt;&quot;;		</code>
+			
+$permissions = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
+foreach($permissions as $p)
+    echo $p-&gt;recipient . &quot;&lt;br&gt;&quot;;		</code>
 		</pre>
-</article>
-
-<article id="update_permissions">
-    <h3> Updating Permissions </h3>
-    <p>
-        To update permissions, you must retrieve existing permissions, modify them, and then return them to the server. The example below will retrieve permissions for a report, alter the first one to have no access, and update it.
-    </p>
+	</article>
+	
+	<article id="update_permissions">
+		<h3> Updating Permissions </h3>
+		<p>
+			To update permissions, you must retrieve existing permissions, modify them, and then return them to the server. The example below will retrieve permissions for a report, alter the first one to have no access, and update it.
+		</p>
 		<pre>
 		<code>
+			
+$perms = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
+$perms[0]-&gt;mask = 0;
 
-            $perms = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
-            $perms[0]-&gt;mask = 0;
-
-            $c-&gt;permissionService()-&gt;updateRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;, $perms);		</code>
+$c-&gt;permissionService()-&gt;updateRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;, $perms);		</code>
 		</pre>
-</article>
+	</article>
 
-<article id="update_permission">
-    <h3> Updating a single Permission </h3>
-    <p>
-        You can update one permission at a time in using the following code. It is also possible to create a new permission object from
-        scratch and use it to update a single permission if desired.
-    </p>
+    <article id="update_permission">
+        <h3> Updating a single Permission </h3>
+        <p>
+            You can update one permission at a time in using the following code. It is also possible to create a new permission object from
+            scratch and use it to update a single permission if desired.
+        </p>
             <pre>
             <code>
+                
+$perms = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
+$perms[0]-&gt;mask = 0;
 
-                $perms = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
-                $perms[0]-&gt;mask = 0;
-
-                $c-&gt;permissionService()-&gt;updateRepositoryPermission($perms[0]);            </code>
+$c-&gt;permissionService()-&gt;updateRepositoryPermission($perms[0]);            </code>
             </pre>
-</article>
+    </article>
 
 
 <article id="create_permissions">
-    <h3> Creating Permissions </h3>
-    <p>
-        Permissions can be created by first describing the permissions in Permission objects, then passing them to the server. The example below will create a new permisison for joeuser in organization 1 to administer the AllAccounts report.
-    </p>
+		<h3> Creating Permissions </h3>
+		<p>
+			Permissions can be created by first describing the permissions in Permission objects, then passing them to the server. The example below will create a new permisison for joeuser in organization 1 to administer the AllAccounts report.
+		</p>
 		<pre>
 		<code>
-
-            $p = new RepositoryPermission(&quot;/reports/samples/AllAccounts&quot;, &quot;user:/organization_1/joeuser&quot;, 1);
-            $c-&gt;permissionService()-&gt;createRepositoryPermissions(array($p));		</code>
+			
+$p = new RepositoryPermission(&quot;/reports/samples/AllAccounts&quot;, &quot;user:/organization_1/joeuser&quot;, 1);
+$c-&gt;permissionService()-&gt;createRepositoryPermissions(array($p));		</code>
 		</pre>
-</article>
+	</article>	
 
-<article id="delete_permissions">
-    <h3> Deleting Permissions </h3>
-    <p>
-        Removing permissions is possible by passing the permission to the deleteRepositoryPermissions function. The example below will delete the permission created in the previous example.
-    </p>
+	<article id="delete_permissions">
+		<h3> Deleting Permissions </h3>
+		<p>
+			Removing permissions is possible by passing the permission to the deleteRepositoryPermissions function. The example below will delete the permission created in the previous example.
+		</p>
 		<pre>
 		<code>
-
-            $p = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllACcounts&quot;, null, null, &quot;user:/organization_1/joeuser&quot;);
-            $c-&gt;permissionService()-&gt;deleteRepositoryPermission($p[0]);		</code>
+			
+$p = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllACcounts&quot;, null, null, &quot;user:/organization_1/joeuser&quot;);
+$c-&gt;permissionService()-&gt;deleteRepositoryPermission($p[0]);		</code>
 		</pre>
-</article>
+	</article>	
 
-<h2 id="query_service"> Query Executor Service </h2>
-
-<article id="execute_query">
-    <h3> Execute Query </h3>
-    <p>
-        This service allows you to execute a query on a data source or domain. Pass the URI and a properly written query string as parameters. An associative array representing the names and values of the query passed will be returned to you.
-    </p>
+		<h2 id="query_service"> Query Executor Service </h2>
+	
+	<article id="execute_query">
+		<h3> Execute Query </h3>
+		<p>
+			This service allows you to execute a query on a data source or domain. Pass the URI and a properly written query string as parameters. An associative array representing the names and values of the query passed will be returned to you.
+		</p>
 		<pre>
 		<code>
+			
+$query = &lt;&lt;&lt;EOF
+&lt;query&gt;
+    &lt;queryFields&gt;
+        &lt;queryField id=&quot;public_opportunities.amount&quot;/&gt;
+        &lt;queryField id=&quot;public_opportunities.name&quot;/&gt;
+    &lt;/queryFields&gt;
+&lt;/query&gt;
+EOF;
 
-            $query = &lt;&lt;&lt;EOF
-            &lt;query&gt;
-            &lt;queryFields&gt;
-            &lt;queryField id=&quot;public_opportunities.amount&quot;/&gt;
-            &lt;queryField id=&quot;public_opportunities.name&quot;/&gt;
-            &lt;/queryFields&gt;
-            &lt;/query&gt;
-            EOF;
+$result = $c-&gt;queryService()-&gt;executeQuery('/Domains/Simple_Domain', $query);
 
-            $result = $c-&gt;queryService()-&gt;executeQuery('/Domains/Simple_Domain', $query);
-
-            print_r($result);  		</code>
+print_r($result);  		</code>
 		</pre>
-</article>
-
-<h2 id="report_service"> Report Service </h2>
-
-<article id="run_report">
-    <h3> Running a Report </h3>
-    <p>
-        The following code will request the AllAccounts sample report in HTML format. Since the data is HTML, we can simply echo it and the report will be presented in a webpage. You can do many things with the binary data, including offering the file to be downloaded or storing it to a file.
-    </p>
+	</article>	
+	
+		<h2 id="report_service"> Report Service </h2>
+		
+	<article id="run_report">
+		<h3> Running a Report </h3>
+		<p>
+			The following code will request the AllAccounts sample report in HTML format. Since the data is HTML, we can simply echo it and the report will be presented in a webpage. You can do many things with the binary data, including offering the file to be downloaded or storing it to a file.
+		</p>
 		<pre>
 		<code>
+			
+$report = $c-&gt;reportService()-&gt;runReport('/reports/samples/AllAccounts', 'html');
 
-            $report = $c-&gt;reportService()-&gt;runReport('/reports/samples/AllAccounts', 'html');
-
-            echo $report;		</code>
+echo $report;		</code>
 		</pre>
-</article>
-
-<article id="run_report_ic">
-    <h3> Running a Report with Input Controls </h3>
-    <p>
-        The following example displays how a report can be ran with various input controls set.
-    </p>
+	</article>
+	
+	<article id="run_report_ic">
+		<h3> Running a Report with Input Controls </h3>
+		<p>
+			The following example displays how a report can be ran with various input controls set. 
+		</p>
 		<pre>
 		<code>
+			
+$controls = array(
+   'Country_multi_select' =&gt; array('USA', 'Mexico'),
+   'Cascading_state_multi_select' =&gt; array('CA', 'OR')
+   );
 
-            $controls = array(
-            'Country_multi_select' =&gt; array('USA', 'Mexico'),
-            'Cascading_state_multi_select' =&gt; array('CA', 'OR')
-            );
 
+$report = $c-&gt;reportService()-&gt;runReport('/reports/samples/Cascading_multi_select_report', 'html', null, null, $controls);
 
-            $report = $c-&gt;reportService()-&gt;runReport('/reports/samples/Cascading_multi_select_report', 'html', null, null, $controls);
-
-            echo $report;			</code>
+echo $report;			</code>
 		</pre>
-</article>
-
-<article id="download_report">
-    <h3> Offering a Binary Report to Download </h3>
-    <p>
-        By offering the proper headers before anything else is sent by the script, we can serve binary data to a browser as a download.
-    </p>
+	</article>
+	
+	<article id="download_report">
+		<h3> Offering a Binary Report to Download </h3>
+		<p>
+			By offering the proper headers before anything else is sent by the script, we can serve binary data to a browser as a download. 
+		</p>
 		<pre>
 		<code>
+			
+$report = $c-&gt;reportService()-&gt;runReport('/reports/samples/AllAccounts', 'pdf');
 
-            $report = $c-&gt;reportService()-&gt;runReport('/reports/samples/AllAccounts', 'pdf');
+header('Cache-Control: must-revalidate');
+header('Pragma: public');
+header('Content-Description: File Transfer');
+header('Content-Disposition: attachment; filename=report.pdf');
+header('Content-Transfer-Encoding: binary');
+header('Content-Length: ' . strlen($report));
+header('Content-Type: application/pdf');
 
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Description: File Transfer');
-            header('Content-Disposition: attachment; filename=report.pdf');
-            header('Content-Transfer-Encoding: binary');
-            header('Content-Length: ' . strlen($report));
-            header('Content-Type: application/pdf');
-
-            echo $report;		</code>
+echo $report;		</code>
 		</pre>
-</article>
-
-<article id="get_input_controls">
-    <h3> Retrieving the Input Controls and Values for a Report </h3>
-    <p>
-        You can retrieve the input controls defined for a report, their possible values, and other metadata about controls with the report service. The example below will list each control, and its corresponding values.
-    </p>
+	</article>
+	
+	<article id="get_input_controls">
+		<h3> Retrieving the Input Controls and Values for a Report </h3>
+		<p>
+			You can retrieve the input controls defined for a report, their possible values, and other metadata about controls with the report service. The example below will list each control, and its corresponding values.
+		</p>
 		<pre>
 		<code>
+			
+$input_controls = $c-&gt;reportService()-&gt;getReportInputControls('/reports/samples/Cascading_multi_select_report');
 
-            $input_controls = $c-&gt;reportService()-&gt;getReportInputControls('/reports/samples/Cascading_multi_select_report');
-
-            foreach($input_controls as $ic) {
-            printf('Key: %s &lt;br /&gt;', $ic-&gt;id);
-            foreach ($ic-&gt;options as $ico) {
-            printf('    -- Value: %s &lt;br /&gt;', $ico['label']);
-            }
-            }		</code>
+foreach($input_controls as $ic) {
+    printf('Key: %s &lt;br /&gt;', $ic-&gt;id);
+    foreach ($ic-&gt;options as $ico) {
+        printf('    -- Value: %s &lt;br /&gt;', $ico['label']);
+    }
+}		</code>
 		</pre>
-</article>
-
-<h2 id="repository_service"> Repository Service </h2>
-
-<article id="get_repository">
-    <h3> Obtain List of Repository Items </h3>
-    <p>
-        You can search the repository for items in it, and get an array of Resource items back. If you provide no filter criteria, all items in the repository will be returned.
-        There is a criteria object "\Jaspersoft\Service\Criteria\RepositorySearchCriteria" that can be used to filter for items. This is the only search function that uses a criteria object currently.
-        In the future, all search functions will have criteria objects used to filter results.
-        <br>
-        The code below will populate a variable with an array of items that describe objects in the repository.
-    </p>
+	</article>
+	
+		<h2 id="repository_service"> Repository Service </h2>
+		
+	<article id="get_repository">
+		<h3> Obtain List of Repository Items </h3>
+		<p>
+			You can search the repository for items in it, and get an array of Resource items back. If you provide no filter criteria, all items in the repository will be returned.
+			There is a criteria object "\Jaspersoft\Service\Criteria\RepositorySearchCriteria" that can be used to filter for items. This is the only search function that uses a criteria object currently.
+			In the future, all search functions will have criteria objects used to filter results.
+			<br>
+			The code below will populate a variable with an array of items that describe objects in the repository.
+		</p>
 		<pre>
 		<code>
-
-            $repo = $c-&gt;repositoryService()-&gt;searchResources();		</code>
+			
+$repo = $c-&gt;repositoryService()-&gt;searchResources();		</code>
 		</pre>
-</article>
-
-<article id="create_resource">
-    <h3> Create Resource </h3>
-    <p>
-        In addition to binary resources, you can also create other types of resources in the repository, such as Folders, Data Sources, and most all Resources available in the repository. The example below
-        will show how to create a new Folder on the server.
-    </p>
+	</article>
+	
+	<article id="create_resource">
+		<h3> Create Resource </h3>
+		<p>
+			In addition to binary resources, you can also create other types of resources in the repository, such as Folders, Data Sources, and most all Resources available in the repository. The example below
+			will show how to create a new Folder on the server.
+		</p>
 		<pre>
 		<code>
+			
+$folder = new Folder;
 
-            $folder = new Folder;
+$folder-&gt;label = &quot;ImageFolder&quot;;
+$folder-&gt;description = &quot;A folder for storing images&quot;;
 
-            $folder-&gt;label = &quot;ImageFolder&quot;;
-            $folder-&gt;description = &quot;A folder for storing images&quot;;
-
-            $c-&gt;repositoryService()-&gt;createResource($folder, &quot;/&quot;);
-        </code>
+$c-&gt;repositoryService()-&gt;createResource($folder, &quot;/&quot;);
+		</code>
 		</pre>
-</article>
+	</article>
 
-<article id="composite_resource">
-    <h3> Working with Composite Resources </h3>
-    <p>
-        Some resources can reference or define subresources, these resources are known as composite resources. When dealing
-        with such resources while using the PHP Client, you can decide to provide a reference to an existing resource,
-        or define the resource completely and locally.
-        <br><br>
-        For example, if you create a ReportUnit object, and wish to link to a datasource you can set the field "datasource"
-        to a string or a concrete DataSource object which will create a reference or a local definition respectively.
-        <br><br>
-        In the example below, a ReportUnit is defined with a reference to a datasource, and query. <br><br>
-        In addition, the Input Controls are set to an array of both referenced and locally defined input controls.
+    <article id="composite_resource">
+        <h3> Working with Composite Resources </h3>
+        <p>
+            Some resources can reference or define subresources, these resources are known as composite resources. When dealing
+            with such resources while using the PHP Client, you can decide to provide a reference to an existing resource,
+            or define the resource completely and locally.
+            <br><br>
+            For example, if you create a ReportUnit object, and wish to link to a datasource you can set the field "datasource"
+            to a string or a concrete DataSource object which will create a reference or a local definition respectively.
+            <br><br>
+            In the example below, a ReportUnit is defined with a reference to a datasource, and query. <br><br>
+            In addition, the Input Controls are set to an array of both referenced and locally defined input controls.
 
 
-    </p>
+        </p>
             <pre>
             <code>
+                
+$report_shop = new \Jaspersoft\DTO\Resource\ReportUnit();
+$city_control = new \Jaspersoft\DTO\Resource\InputControl();
 
-                $report_shop = new \Jaspersoft\DTO\Resource\ReportUnit();
-                $city_control = new \Jaspersoft\DTO\Resource\InputControl();
+$city_control-&gt;listOfValues = &quot;/listValues/cities&quot;;
+$city_control-&gt;query = &quot;/queries/cityQuery&quot;;
 
-                $city_control-&gt;listOfValues = &quot;/listValues/cities&quot;;
-                $city_control-&gt;query = &quot;/queries/cityQuery&quot;;
+$report_shop-&gt;label = &quot;All Accounts Report of Shops&quot;;
+$report_shop-&gt;description = &quot;AllAccounts style report derived from the shops JDBC datasource&quot;;
+$report_shop-&gt;uri = &quot;/my_reports/allaccount_shop&quot;;
+$report_shop-&gt;dataSource = &quot;/datasources/shopJDBC&quot;;
+$report_shop-&gt;inputControls = array(
+                                &quot;/inputcontrols/age&quot;,
+                                &quot;/inputcontrols/state&quot;,
+                                $city_control);
 
-                $report_shop-&gt;label = &quot;All Accounts Report of Shops&quot;;
-                $report_shop-&gt;description = &quot;AllAccounts style report derived from the shops JDBC datasource&quot;;
-                $report_shop-&gt;uri = &quot;/my_reports/allaccount_shop&quot;;
-                $report_shop-&gt;dataSource = &quot;/datasources/shopJDBC&quot;;
-                $report_shop-&gt;inputControls = array(
-                &quot;/inputcontrols/age&quot;,
-                &quot;/inputcontrols/state&quot;,
-                $city_control);
-
-                $report_shop-&gt;query = &quot;/queries/shop_accounts&quot;;
-                $report_shop-&gt;jrxml = &quot;/jrxml/allaccounts&quot;;
+$report_shop-&gt;query = &quot;/queries/shop_accounts&quot;;
+$report_shop-&gt;jrxml = &quot;/jrxml/allaccounts&quot;;
             </code>
             </pre>
-</article>
+    </article>
 
+	
+	<article id="create_binary_resource">
+		<h3> Create Binary Resource </h3>
+		<p>
+			Using the repository service, you can create new resources in your repository. These can be both binary files, or descriptors such as folders, and data sources. This exmaple will
+			explain how you can upload an image to your repository. In the example below, we'll be uploading a JPEG image of a pitbull to the folder /ImageFolder created in the last example. You must first describe
+			the resource in a File object, and then supply it using the php builtin function file_get_contents() which will retrieve the binary content of a file on the local machine.
 
-<article id="create_binary_resource">
-    <h3> Create Binary Resource </h3>
-    <p>
-        Using the repository service, you can create new resources in your repository. These can be both binary files, or descriptors such as folders, and data sources. This exmaple will
-        explain how you can upload an image to your repository. In the example below, we'll be uploading a JPEG image of a pitbull to the folder /ImageFolder created in the last example. You must first describe
-        the resource in a File object, and then supply it using the php builtin function file_get_contents() which will retrieve the binary content of a file on the local machine.
-
-        Note: If your isntance of JRS employs custom file types, you must define the mapping of the server type to the proper MIME type in the Jaspersoft\Tool\MimeMapper object which contains an associative array of JRS file types mapped to their relevant MIME type.
-    </p>
+            Note: If your isntance of JRS employs custom file types, you must define the mapping of the server type to the proper MIME type in the Jaspersoft\Tool\MimeMapper object which contains an associative array of JRS file types mapped to their relevant MIME type.
+		</p>
 		<pre>
 		<code>
+			
+$file = new File;
 
-            $file = new File;
+$file-&gt;description = &quot;Image of a Pitbull&quot;;
+$file-&gt;label = &quot;pitbull&quot;;
 
-            $file-&gt;description = &quot;Image of a Pitbull&quot;;
-            $file-&gt;label = &quot;pitbull&quot;;
+$c-&gt;repositoryService()-&gt;createFileResource(
+		$file,
+		file_get_contents(&quot;/home/grant/pitbull.jpg&quot;),
+		&quot;/ImageFolder&quot;,
+		);
 
-            $c-&gt;repositoryService()-&gt;createFileResource(
-            $file,
-            file_get_contents(&quot;/home/grant/pitbull.jpg&quot;),
-            &quot;/ImageFolder&quot;,
-            );
-
-        </code>
+		</code>
 		</pre>
-</article>
-
-<article id="search_resource">
-    <h3> Searching Resources and Requesting Binary Content </h3>
-    <p>
-        You are able to request specific details about existing resources in the server. Using the search resource function you can filter for specific files. The example below will show how you can request an image, and display it in inline HTML using base64 encoding.
-        When a search is performed, a ResourceSearchResult object is returned. Within this objects are information about pagination (results returned, total results, index), the items array within this object contains
-        the lookup data about the resource which can be used with getResourceByLookup to request the full description of the resource.
-    </p>
+	</article>
+	
+	<article id="search_resource">
+		<h3> Searching Resources and Requesting Binary Content </h3>
+		<p>
+			You are able to request specific details about existing resources in the server. Using the search resource function you can filter for specific files. The example below will show how you can request an image, and display it in inline HTML using base64 encoding.
+            When a search is performed, a ResourceSearchResult object is returned. Within this objects are information about pagination (results returned, total results, index), the items array within this object contains
+            the lookup data about the resource which can be used with getResourceByLookup to request the full description of the resource.
+		</p>
 		<pre>
 		<code>
+			
+$criteria = new RepositorySearchCriteria();
+$criteria-&gt;q = &quot;pitbull&quot;;
 
-            $criteria = new RepositorySearchCriteria();
-            $criteria-&gt;q = &quot;pitbull&quot;;
+$search = $c-&gt;repositoryService()-&gt;searchResources($criteria);
+$image = $c-&gt;repositoryService()-&gt;getResourceByLookup($search-&gt;items[0]);
+$image_data = $c-&gt;repositoryService()-&gt;getBinaryFileData($image);
 
-            $search = $c-&gt;repositoryService()-&gt;searchResources($criteria);
-            $image = $c-&gt;repositoryService()-&gt;getResourceByLookup($search-&gt;items[0]);
-            $image_data = $c-&gt;repositoryService()-&gt;getBinaryFileData($image);
-
-            echo &quot;&lt;h1&gt; Its a pitbull! &lt;/h1&gt;&lt;br&gt;&lt;img src=\&quot;data:image/jpeg;base64,&quot;.base64_encode($image_data).&quot;\&quot;&gt;&quot;;		</code>
+echo &quot;&lt;h1&gt; Its a pitbull! &lt;/h1&gt;&lt;br&gt;&lt;img src=\&quot;data:image/jpeg;base64,&quot;.base64_encode($image_data).&quot;\&quot;&gt;&quot;;		</code>
 		</pre>
-</article>
-
-
-<article id="delete_resource">
-    <h3> Delete Resource </h3>
-    <p>
-        You can remove resources from the repository, either one at a time, or several at a time. Using deleteResource or deleteManyResources.
-    </p>
+	</article>
+	
+		
+	<article id="delete_resource">
+		<h3> Delete Resource </h3>
+		<p>
+			You can remove resources from the repository, either one at a time, or several at a time. Using deleteResource or deleteManyResources.
+		</p>
 		<pre>
 		<code>
+			
+$c-&gt;repositoryService()-&gt;deleteResource(&quot;/ImageFolder/pitbull&quot;);
 
-            $c-&gt;repositoryService()-&gt;deleteResource(&quot;/ImageFolder/pitbull&quot;);
+// OR!
 
-            // OR!
-
-            $c-&gt;repositoryService()-&gt;deleteManyResources(array(&quot;/ImageFolder/pitbull&quot;, &quot;/ImageFolder&quot;));
-        </code>
+$c-&gt;repositoryService()-&gt;deleteManyResources(array(&quot;/ImageFolder/pitbull&quot;, &quot;/ImageFolder&quot;));
+		</code>
 		</pre>
-</article>
+	</article>
 
-<article id="move_resource">
-    <h3> Move Resource </h3>
-    <p>
-        Resources can be moved from one location to another within the Repository. The example below will move the folder "/ImageFolder/anchorsteam" to "/anchorsteam"
-    </p>
+	<article id="move_resource">
+		<h3> Move Resource </h3>
+		<p>
+			Resources can be moved from one location to another within the Repository. The example below will move the folder "/ImageFolder/anchorsteam" to "/anchorsteam"
+		</p>
 		<pre>
 		<code>
-
-            $c-&gt;repositoryService()-&gt;moveResource(&quot;/ImageFolder/anchorsteam&quot;, &quot;/&quot;);		</code>
+			
+$c-&gt;repositoryService()-&gt;moveResource(&quot;/ImageFolder/anchorsteam&quot;, &quot;/&quot;);		</code>
 		</pre>
-</article>
-
-<article id="copy_resource">
-    <h3> Copy Resource </h3>
-    <p>
-        Resources can be copied from one location to another within the Repository. The example below will copy the folder "/anchorsteam" to the new location "/ImageFolder/anchorsteam". By setting the last
-        argument to true, folders which do not exist will be created when copying the file.
-    </p>
+	</article>
+	
+	<article id="copy_resource">
+		<h3> Copy Resource </h3>
+		<p>
+			Resources can be copied from one location to another within the Repository. The example below will copy the folder "/anchorsteam" to the new location "/ImageFolder/anchorsteam". By setting the last
+			argument to true, folders which do not exist will be created when copying the file.
+		</p>
 		<pre>
 		<code>
-
-            $c-&gt;repositoryService()-&gt;copyResource(&quot;/anchorsteam&quot;, &quot;/ImageFolder&quot;, true);		</code>
+			
+$c-&gt;repositoryService()-&gt;copyResource(&quot;/anchorsteam&quot;, &quot;/ImageFolder&quot;, true);		</code>
 		</pre>
-</article>
-
-<h2 id="role_service"> Role Service </h2>
-
-
-<article id="get_many_roles">
-    <h3> Get Many Roles </h3>
-    <p>
-        You can request all the roles of an organization, or of the server using this function. The example below will request all roles on the server. Optionally, you can
-        search based on specific criteria for roles.
-    </p>
+	</article>
+	
+		<h2 id="role_service"> Role Service </h2>
+	
+	
+	<article id="get_many_roles">
+		<h3> Get Many Roles </h3>
+		<p>
+			You can request all the roles of an organization, or of the server using this function. The example below will request all roles on the server. Optionally, you can
+            search based on specific criteria for roles.
+		</p>
 		<pre>
 		<code>
-
-            $server_roles = $c-&gt;roleService()-&gt;searchRoles();		</code>
+			
+$server_roles = $c-&gt;roleService()-&gt;searchRoles();		</code>
 		</pre>
-</article>
-
-<article id="get_role">
-    <h3> Get a Specific Role </h3>
-    <p>
-        If you know the name of the role, you can request it specifically using this function. The example below will request the ROLE_USER data.
-    </p>
+	</article>
+		
+	<article id="get_role">
+		<h3> Get a Specific Role </h3>
+		<p>
+			If you know the name of the role, you can request it specifically using this function. The example below will request the ROLE_USER data.
+		</p>
 		<pre>
 		<code>
-
-            $user_role = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_USER&quot;);		</code>
+			
+$user_role = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_USER&quot;);		</code>
 		</pre>
-</article>
-
-<article id="create_role">
-    <h3> Create Role </h3>
-    <p>
-        Creating a role requires you to describe the role with an object, then pass it to the server. The example below will create a new role for organization_1.
-    </p>
+	</article>
+	
+	<article id="create_role">
+		<h3> Create Role </h3>
+		<p>
+			Creating a role requires you to describe the role with an object, then pass it to the server. The example below will create a new role for organization_1.
+		</p>
 		<pre>
 		<code>
-
-            $robot_role = new Role(&quot;ROLE_ROBOT&quot;, &quot;organization_1&quot;);
-            $c-&gt;roleService()-&gt;createRole($robot_role);		</code>
+			
+$robot_role = new Role(&quot;ROLE_ROBOT&quot;, &quot;organization_1&quot;);
+$c-&gt;roleService()-&gt;createRole($robot_role);		</code>
 		</pre>
-</article>
+	</article>	
 
-<article id="update_role">
-    <h3> Update Role </h3>
-    <p>
-        Updating a role requires you to provide an updated model of the new role. If changing the name of the role, you must pass the old name of the role as the second argument.
-    </p>
+	<article id="update_role">
+		<h3> Update Role </h3>
+		<p>
+			Updating a role requires you to provide an updated model of the new role. If changing the name of the role, you must pass the old name of the role as the second argument.
+		</p>
 		<pre>
 		<code>
-
-            $robot_role = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_ROBOT&quot;, &quot;organization_1&quot;);
-            $old_name = $robot_role-&gt;roleName;
-            $robot_role-&gt;roleName = &quot;ROLE_HUMAN&quot;;
-            $c-&gt;roleService()-&gt;updateRole($robot_role, $old_name);
-        </code>
+			
+$robot_role = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_ROBOT&quot;, &quot;organization_1&quot;);
+$old_name = $robot_role-&gt;roleName;
+$robot_role-&gt;roleName = &quot;ROLE_HUMAN&quot;;
+$c-&gt;roleService()-&gt;updateRole($robot_role, $old_name);
+		</code>
 		</pre>
-</article>
+	</article>	
 
-<article id="delete_role">
-    <h3> Delete Role </h3>
-    <p>
-        Removing a role requires you to retrieve the role object representing the role you wish to remove, then pass it to the deleteRole function.
-    </p>
+	<article id="delete_role">
+		<h3> Delete Role </h3>
+		<p>
+			Removing a role requires you to retrieve the role object representing the role you wish to remove, then pass it to the deleteRole function.
+		</p>
 		<pre>
 		<code>
-
-            $role_human = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_HUMAN&quot;, &quot;organization_1&quot;);
-            $c-&gt;roleService()-&gt;deleteRole($role_human);		</code>
+			
+$role_human = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_HUMAN&quot;, &quot;organization_1&quot;);
+$c-&gt;roleService()-&gt;deleteRole($role_human);		</code>
 		</pre>
-</article>
+	</article>		
+	
+		<h2 id="user_service"> User Service </h2>
 
-<h2 id="user_service"> User Service </h2>
-
-<article id="search_user">
-    <h3> Search User </h3>
-    <p>
-        Using the searchUsers method you can search for several users based on various critera. This method will return an array of UserLookup objects that can be used with the getUserByLookup() function to retrieve their fully described User objects. The example below grabs all users containing 'j' in their username, and that are members of organization_1 and prints out the roles assigned to that user.
-    </p>
+	<article id="search_user">
+		<h3> Search User </h3>
+		<p>
+			Using the searchUsers method you can search for several users based on various critera. This method will return an array of UserLookup objects that can be used with the getUserByLookup() function to retrieve their fully described User objects. The example below grabs all users containing 'j' in their username, and that are members of organization_1 and prints out the roles assigned to that user. 
+		</p>
 		<pre>
 		<code>
+			
+$results = $c-&gt;userService()-&gt;searchUsers('j', 'organization_1');
 
-            $results = $c-&gt;userService()-&gt;searchUsers('j', 'organization_1');
-
-            foreach ($results as $userLookup) {
-            $user = $c-&gt;userService()-&gt;getUserByLookup($userLookup);
-            printf('&lt;br&gt;Found user: %s', $user-&gt;fullName);
-            foreach ($user-&gt;roles as $role)
-            printf('&lt;br&gt; %10s User has role: %s', '&amp;nbsp;', $role-&gt;roleName);
-            }		</code>
+foreach ($results as $userLookup) {
+    $user = $c-&gt;userService()-&gt;getUserByLookup($userLookup);
+    printf('&lt;br&gt;Found user: %s', $user-&gt;fullName);
+    foreach ($user-&gt;roles as $role)
+        printf('&lt;br&gt; %10s User has role: %s', '&amp;nbsp;', $role-&gt;roleName);
+}		</code>
 		</pre>
-</article>
-
-<article id="create_user">
-    <h3> Create User </h3>
-    <p>
-        To create a user, define a user object which fully describes the user. Then pass it to the server using the addUsers function.
-    </p>
+	</article>
+	
+	<article id="create_user">
+		<h3> Create User </h3>
+		<p>
+			To create a user, define a user object which fully describes the user. Then pass it to the server using the addUsers function.
+		</p>
 		<pre>
 		<code>
+			      
+$newUser = new User(
+    'BI_User',	
+    'superSTRENGTHpassw0rd',
+    'clever@email.com',	
+    'Business Intelligence User',
+    'organization_1',
+    'true'
+);	
 
-            $newUser = new User(
-            'BI_User',
-            'superSTRENGTHpassw0rd',
-            'clever@email.com',
-            'Business Intelligence User',
-            'organization_1',
-            'true'
-            );
+$role = new Role('ROLE_USER', null, 'false');
+$newUser-&gt;addRole($role);
 
-            $role = new Role('ROLE_USER', null, 'false');
-            $newUser-&gt;addRole($role);
-
-            try {
-            $c-&gt;userService()-&gt;addUsers($newUser);
-            } catch (Exception $e) {
-            printf('Could not add new user: %s', $e-&gt;getMessage());
-            }		</code>
+try {
+   $c-&gt;userService()-&gt;addUsers($newUser);
+} catch (Exception $e) {
+   printf('Could not add new user: %s', $e-&gt;getMessage());
+}		</code>
 		</pre>
-</article>
+	</article>	
 
-<article id="update_user">
-    <h3> Update User </h3>
-    <p>
-        To update a user, obtain the user's object from the server, modify it, then hand it back using the updateUser function (which is just an alias to addUsers)
-    </p>
+	<article id="update_user">
+		<h3> Update User </h3>
+		<p>
+			To update a user, obtain the user's object from the server, modify it, then hand it back using the updateUser function (which is just an alias to addUsers)
+		</p>
 		<pre>
 		<code>
+			
+$search = $c-&gt;userService()-&gt;searchUsers('californiaUser', 'organization_1');
+$californiaUser = $c-&gt;userService()-&gt;getUserByLookup($search[0]);
 
-            $search = $c-&gt;userService()-&gt;searchUsers('californiaUser', 'organization_1');
-            $californiaUser = $c-&gt;userService()-&gt;getUserByLookup($search[0]);
+$californiaUser-&gt;emailAddress('sanfrancisco-oakland@example.com');
+$californiaUser-&gt;password('SUPERstrongPASSWORD###!!!');
 
-            $californiaUser-&gt;emailAddress('sanfrancisco-oakland@example.com');
-            $californiaUser-&gt;password('SUPERstrongPASSWORD###!!!');
-
-            try {
-            $c-&gt;userService()-&gt;updateUser($californiaUser);
-            } catch (Exception $e) {
-            printf('Attempt to modify the user failed with error: %s', $e-&gt;getMessage());
-            }
-        </code>
+try {
+    $c-&gt;userService()-&gt;updateUser($californiaUser);
+} catch (Exception $e) {
+    printf('Attempt to modify the user failed with error: %s', $e-&gt;getMessage());
+}
+  		</code>
 		</pre>
-</article>
+	</article>
 
-<article id="delete_user">
-    <h3> Delete User </h3>
-    <p>
-        To delete a user, obtain its user object from the server, then pass it to the deleteUser function.
-    </p>
+	<article id="delete_user">
+		<h3> Delete User </h3>
+		<p>
+			To delete a user, obtain its user object from the server, then pass it to the deleteUser function.
+		</p>
 		<pre>
 		<code>
+			
+$user = $c-&gt;userService()-&gt;getUserByLookup(
+    $c-&gt;userService()-&gt;searchUsers('california', 'organization_1')[0]
+);
 
-            $user = $c-&gt;userService()-&gt;getUserByLookup(
-            $c-&gt;userService()-&gt;searchUsers('california', 'organization_1')[0]
-            );
-
-            $c-&gt;userService()-&gt;deleteUser($user);		</code>
+$c-&gt;userService()-&gt;deleteUser($user);		</code>
 		</pre>
-</article>
-
+	</article>		
+	
 <!-- END OF ARTICLE SECTION -->
-</section>
+    </section>
 
-<footer style="float: right;">
-    <a href="#intro">back to top</a>
-</footer>
+	<footer style="float: right;">
+		<a href="#intro">back to top</a>
+	</footer>
 
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="highlight/highlight.pack.js"></script>
-<script type="text/javascript">
-    hljs.tabReplace = '  ';
-    hljs.initHighlightingOnLoad();
-</script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('code').addClass("php")
-
-        toc = $('nav ul')
-
-        $('h2').each(function(i, v) {
-            toc.append('<li><a href="#'+$(v).attr('id')+'">'+$(v).text()+'</a></li>')
-            $(this).nextUntil('h2', 'h3').each(function() {
-                toc.append("<li>"+$(this).text()+"</li>")
-            });
-            /*		$(v).nextUntil('h2', 'h3').each(function(x, h) {
-             $(v).append('<li class="subitem"><a href="#'+$(h).attr('id')+'">'+$(h).text()+'</a></li>')
-             });
-             */
-
-        });
-
-    });
-</script>
-</body>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="highlight/highlight.pack.js"></script>
+  <script type="text/javascript">
+	hljs.tabReplace = '  ';
+	hljs.initHighlightingOnLoad();
+  </script>
+  <script type="text/javascript">
+	$(document).ready(function() {
+		$('code').addClass("php")
+	
+		toc = $('nav ul')
+	
+		$('h2').each(function(i, v) {
+			toc.append('<li><a href="#'+$(v).attr('id')+'">'+$(v).text()+'</a></li>')
+			$(this).nextUntil('h2', 'h3').each(function() {
+				toc.append("<li>"+$(this).text()+"</li>")
+			});
+	/*		$(v).nextUntil('h2', 'h3').each(function(x, h) {
+				$(v).append('<li class="subitem"><a href="#'+$(h).attr('id')+'">'+$(h).text()+'</a></li>')
+			});
+	*/
+				
+		});
+		
+	});
+  </script>
+  </body>
 
 </html>

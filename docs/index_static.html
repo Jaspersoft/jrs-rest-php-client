@@ -232,8 +232,8 @@ $metadata = $c-&gt;importExportService()-&gt;startImportTask($request, file_get_
 
 $continue = true;
 while($continue) {
-    $state = $c-&gt;importExportService()-&gt;getImportState($metadata['id']);
-    if ($state['phase'] == 'finished') {
+    $state = $c-&gt;importExportService()-&gt;getImportState($metadata-&gt;id);
+    if ($state-&gt;phase == 'finished') {
         $continue = false;
         echo &quot;&lt;br&gt;&lt;br&gt;Import complete!&quot;;
     } else {
@@ -266,8 +266,8 @@ $metadata = $c-&gt;importExportService()-&gt;startExportTask($request);
 
 $decline = true;
 while ($decline) {
-    $state = $c-&gt;importExportService()-&gt;getExportState($metadata['id']);
-    if ($state['phase'] == &quot;finished&quot;) {
+    $state = $c-&gt;importExportService()-&gt;getExportState($metadata-&gt;id);
+    if ($state-&gt;phase == &quot;finished&quot;) {
         $decline = false;
         echo &quot;&lt;br&gt;Export task complete, downloading....&quot;;
     } else {
@@ -279,7 +279,7 @@ while ($decline) {
 }
 
 $f = fopen('export.zip', 'w');
-$data = $c-&gt;importExportService()-&gt;fetchExport($metadata['id']);
+$data = $c-&gt;importExportService()-&gt;fetchExport($metadata-&gt;id);
 fwrite($f, $data);
 fclose($f);
 

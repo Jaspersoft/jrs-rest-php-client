@@ -350,8 +350,26 @@ class RESTRequest {
 		$this->verb = $verb;
 	}
 
+    public function handleError($statusCode, $expectedCodes, $responseBody)
+    {
+            if(!empty($responseBody)) {
+                $errorData = json_decode($responseBody);
+                $exception = new RESTRequestException(RESTRequestException::UNEXPECTED_CODE_MSG);
+                $exception->expectedStatusCodes = $expectedCodes;
+                $exception->statusCode = $statusCode;
+                $exception->jrsMessage = $errorData->message;
+                $exception->jrsErrorCode = $errorData->errorCode;
+                $exception->jrsParameters = $errorData->parameters;
 
-    /** Experimental replacement for prepAndSend **/
+                throw $exception;
+            } else {
+                $exception = new RESTRequestException(RESTRequestException::UNEXPECTED_CODE_MSG);
+                $exception->expectedStatusCodes = $expectedCodes;
+                $exception->statusCode = $statusCode;
+
+                throw $exception;
+            }
+    }
 
     public function makeRequest($url, $expectedCodes = array(200), $verb = null, $reqBody = null, $returnData = false,
                                    $contentType = 'application/json', $acceptType = 'application/json', $headers = array()) {
@@ -383,14 +401,9 @@ class RESTRequest {
 
         $headers = $this->response_headers;
 
-
         // An exception is thrown here if the expected code does not match the status code in the response
         if (!in_array($statusCode, $expectedCodes)) {
-            if(!empty($responseBody)) {
-                throw new RESTRequestException('Unexpected HTTP code returned: ' . $statusCode . ' Body of response: ' . strip_tags($responseBody));
-            } else {
-                throw new RESTRequestException('Unexpected HTTP code returned: ' . $statusCode);
-            }
+            $this->handleError($statusCode, $expectedCodes, $body);
         }
  
         return compact("body", "statusCode", "headers");
@@ -420,14 +433,10 @@ class RESTRequest {
         $responseBody = $this->getResponseBody();
         $statusCode = $statusCode['http_code'];
 
-        // An exception is thrown here if the expected code does not match the status code in the response
         if (!in_array($statusCode, $expectedCodes)) {
-            if(!empty($responseBody)) {
-                throw new RESTRequestException('Unexpected HTTP code returned: ' . $statusCode . ' Body of response: ' . strip_tags($responseBody));
-            } else {
-                throw new RESTRequestException('Unexpected HTTP code returned: ' . $statusCode);
-            }
+            $this->handleError($statusCode, $expectedCodes, $responseBody);
         }
+
         if($returnData == true) {
             return $this->getResponseBody();
         }
@@ -483,12 +492,9 @@ class RESTRequest {
         $statusCode = $statusCode['http_code'];
 
         if (!in_array($statusCode, $expectedCodes)) {
-            if(!empty($responseBody)) {
-                throw new RESTRequestException('Unexpected HTTP code returned: ' . $statusCode . ' Body of response: ' . strip_tags($responseBody));
-            } else {
-                throw new RESTRequestException('Unexpected HTTP code returned: ' . $statusCode);
-            }
+            $this->handleError($statusCode, $expectedCodes, $responseBody);
         }
+
         return $this->getResponseBody();
 
     }

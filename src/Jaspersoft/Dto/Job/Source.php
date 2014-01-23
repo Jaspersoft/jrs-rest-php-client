@@ -21,11 +21,11 @@ class Source {
 
     public function jsonSerialize() {
         $result = array();
-        if (isset($this->reportUnitURI)) {
+        if (!empty($this->reportUnitURI)) {
             $result["reportUnitURI"] = $this->reportUnitURI;
         }
 
-        if (isset($this->parameters)) {
+        if (!empty($this->parameters)) {
             $result["parameters"] = array("parameterValues" => $this->parameters);
         }
 
@@ -42,7 +42,7 @@ class Source {
     {
         $result = new self();
         foreach ($json_obj as $k => $v) {
-            if ($k == "parameters") {
+            if ($k == "parameters" && !empty($v->parameterValues)) {
                 $result->parameters = (array) $v->parameterValues;
             }
             else {

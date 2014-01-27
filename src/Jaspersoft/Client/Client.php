@@ -14,10 +14,11 @@ class Client
 	protected $password;
 	protected $orgId;
 	protected $baseUrl;
+	protected $protocol;
 	private $restReq;
 	private $restUrl2;
 	
-	public function __construct($hostname = 'localhost', $port = '8080', $username = null, $password = null, $baseUrl = "/jasperserver-pro", $orgId = null)
+	public function __construct($hostname = 'localhost', $port = '8080', $username = null, $password = null, $baseUrl = "/jasperserver-pro", $orgId = null, $protocol = 'http')
 	{
 		$this->hostname = $hostname;
 		$this->port = $port;
@@ -25,6 +26,7 @@ class Client
 		$this->password = $password;
 		$this->baseUrl = $baseUrl;
 		$this->orgId = $orgId;
+		$this->protocol = $protocol;
 
 		$this->restReq = new RESTRequest();
 		if (!empty($this->orgId)) {
@@ -33,7 +35,7 @@ class Client
 			$this->restReq->setUsername($this->username);
 		}
 		$this->restReq->setPassword($this->password);
-		$this->restUrl2 = "http://" . $this->hostname . ':' . $this->port . $this->baseUrl . BASE_REST2_URL;
+		$this->restUrl2 = $this->protocol . '://' . $this->hostname . ':' . $this->port . $this->baseUrl . BASE_REST2_URL;
 	}
 
     public function repositoryService() {

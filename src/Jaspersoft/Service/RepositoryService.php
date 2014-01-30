@@ -130,19 +130,18 @@ class RepositoryService
      * @throws \Exception
      * @return ResourceLookup object describing new resource
      */
-    public function createResource(Resource $resource, $parentFolder, $createFolders = true, $update = null)
+    public function createResource(Resource $resource, $parentFolder, $createFolders = true)
     {
         $url = self::make_url(null, $parentFolder);
         if (!empty($createFolders))
             $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
-        // $body = json_encode($resource);
         $body = $resource->toJSON();
         // Isolate the class name, lowercase it, and provide it as a filetype in the headers
         $type = explode('\\', get_class($resource));
         $file_type = 'application/repository.' . lcfirst(end($type)) . '+json';
-        $verb = ($update) ? 'PUT' : 'POST';
+        $verb = 'POST';
         $data = $this->service->prepAndSend($url, array(201, 200), $verb, $body, true, $file_type, 'application/json');
-        return Resource::createFromJSON(json_decode($data, true), get_class($resource));
+        return $resource::createFromJSON(json_decode($data, true), get_class($resource));
     }
 
     /** Update a resource using a resource descriptor
@@ -152,7 +151,14 @@ class RepositoryService
      */
     public function updateResource(Resource $resource)
     {
-        return $this->createResource($resource, $resource->uri, null, true);
+        $url = self::make_url(null, $resource->uri);
+        $body = $resource->toJSON();
+        // Isolate the class name, lowercase it, and provide it as a filetype in the headers
+        $type = explode('\\', get_class($resource));
+        $file_type = 'application/repository.' . lcfirst(end($type)) . '+json';
+        $verb = 'PUT';
+        $data = $this->service->prepAndSend($url, array(201, 200), $verb, $body, true, $file_type, 'application/json');
+        return $resource::createFromJSON(json_decode($data, true), get_class($resource));
     }
 
     /** Update a file on the server by supplying binary data

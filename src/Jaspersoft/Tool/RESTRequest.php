@@ -231,11 +231,10 @@ class RESTRequest {
 		$this->setCurlOpts($curlHandle);
         $response = curl_exec($curlHandle);
         $this->response_info = curl_getinfo($curlHandle);
-        // For 100-continue many chunks may be returned
-        // We'll ignore 100-continue responses and pop off n and n-1 for useful info (headers/response body)
-        $response_chunks = explode("\r\n\r\n", $response);
-        $this->response_body = array_pop($response_chunks);
-        $headerblock = array_pop($response_chunks);
+
+        //  100-continue chunks are returned on multipart communications
+        $headerblock = strstr($response, "\r\n\r\n", true);     // grab everything before first \r\n\r\n
+        $this->response_body = ltrim(strstr($response, "\r\n\r\n"));   // grab everything after first \r\n\r\n (exclusive)
 
         $this->response_headers = explode("\n", $headerblock);
 

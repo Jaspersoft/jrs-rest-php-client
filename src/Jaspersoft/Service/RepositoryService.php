@@ -125,16 +125,16 @@ class RepositoryService
      *
      * @param \Jaspersoft\Dto\Resource\Resource $resource Descriptive resource object representing object
      * @param string $parentFolder folder in which the resource should be created
-     * @param boolean $createFolders Create folders in the path that may not exist
-     * @param boolean $update Set to true if updating an existing resource
+     * @param bool $createFolders Create folders in the path that may not exist
+     * @param bool $overwrite if true, then resource with given URI will be overwritten even if it is of a different type
      * @throws \Exception
      * @return ResourceLookup object describing new resource
      */
-    public function createResource(Resource $resource, $parentFolder, $createFolders = true)
+    public function createResource(Resource $resource, $parentFolder, $createFolders = true, $overwrite = false)
     {
         $url = self::make_url(null, $parentFolder);
         if (!empty($createFolders))
-            $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
+            $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
         $body = $resource->toJSON();
         // Isolate the class name, lowercase it, and provide it as a filetype in the headers
         $type = explode('\\', get_class($resource));
@@ -156,8 +156,7 @@ class RepositoryService
         // Isolate the class name, lowercase it, and provide it as a filetype in the headers
         $type = explode('\\', get_class($resource));
         $file_type = 'application/repository.' . lcfirst(end($type)) . '+json';
-        $verb = 'PUT';
-        $data = $this->service->prepAndSend($url, array(201, 200), $verb, $body, true, $file_type, 'application/json');
+        $data = $this->service->prepAndSend($url, array(201, 200), 'PUT', $body, true, $file_type, 'application/json');
         return $resource::createFromJSON(json_decode($data, true), get_class($resource));
     }
 
@@ -169,7 +168,12 @@ class RepositoryService
      */
     public function updateFileResource(File $resource, $binaryData)
     {
-        return $this->createFileResource($resource, $binaryData, $resource->uri, true, true, $resource->type);
+        $url = self::make_url(null, $resource->uri);
+
+        $body = $binaryData;
+        $response = $this->service->sendBinary($url, array(201, 200), $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, 'PUT');
+        return File::createFromJSON(json_decode($response, true), get_class($resource));
+
     }
 
     /** Create a file on the server by supplying binary data
@@ -178,32 +182,30 @@ class RepositoryService
      * to the \Jaspersoft\Tool\MimeMapper mimeMap.
      *
      * @param File $resource
-     * @param $binaryData
-     * @param $parentFolder string The folder to place the file in
-     * @param $createFolders boolean
-     * @param $update boolean If updating a file resource, set true
+     * @param string $binaryData
+     * @param string $parentFolder string The folder to place the file in
+     * @param bool $createFolders
      * @return ResourceLookup
      */
-    public function createFileResource(File $resource, $binaryData, $parentFolder, $createFolders = true, $update = false)
+    public function createFileResource(File $resource, $binaryData, $parentFolder, $createFolders = true)
     {
         $url = self::make_url(null, $parentFolder);
         if (!empty($createFolders))
             $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
         $body = $binaryData;
-        $verb = ($update) ? "PUT" : "POST";
-        $response = $this->service->sendBinary($url, array(201, 200), $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, $verb);
+        $response = $this->service->sendBinary($url, array(201, 200), $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, 'POST');
         return File::createFromJSON(json_decode($response, true), get_class($resource));
     }
 
     /** Copy a resource from one location to another
      *
-     * @param $oldLocation
-     * @param $newLocation
-     * @param null $createFolders
-     * @param null $overwrite
+     * @param string $oldLocation
+     * @param string $newLocation
+     * @param bool $createFolders
+     * @param bool $overwrite
      * @return ResourceLookup
      */
-    public function copyResource($oldLocation, $newLocation, $createFolders = null, $overwrite = null)
+    public function copyResource($oldLocation, $newLocation, $createFolders = true, $overwrite = false)
     {
         $url = self::make_url(null, $newLocation);
         if (!empty($createFolders) || !empty($overwrite))
@@ -226,13 +228,13 @@ class RepositoryService
 
     /** Move a resource from one location to another location within the repository
      *
-     * @param $oldLocation
-     * @param $newLocation
-     * @param null $createFolders
-     * @param null $overwrite
+     * @param string $oldLocation
+     * @param string $newLocation
+     * @param bool $createFolders
+     * @param bool $overwrite
      * @return ResourceLookup
      */
-    public function moveResource($oldLocation, $newLocation, $createFolders = null, $overwrite = null)
+    public function moveResource($oldLocation, $newLocation, $createFolders = true, $overwrite = false)
     {
         $url = self::make_url(null, $newLocation);
         if (!empty($createFolders) || !empty($overwrite))
@@ -253,7 +255,7 @@ class RepositoryService
     }
 
     /** Remove a resource from the repository
-     * @param $uri
+     * @param string $uri
      */
     public function deleteResource($uri) {
         $url = self::make_url(null, $uri);
@@ -262,7 +264,7 @@ class RepositoryService
 
     /** Delete many resources from the repository simultaneously
      *
-     * @param $uriArray
+     * @param string $uriArray
      */
     public function deleteManyResources($uriArray) {
         $url = self::make_url() . '?' . Util::query_suffix(array("resourceUri" => $uriArray));

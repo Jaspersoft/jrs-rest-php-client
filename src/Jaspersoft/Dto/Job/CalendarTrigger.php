@@ -105,7 +105,7 @@ class CalendarTrigger extends Trigger {
                 $result[$k] = $v;
             }
         }
-        return $result;
+        return array($this->name() => $result);
     }
 
     /** This function takes a \stdClass decoded by json_decode representing a scheduled job

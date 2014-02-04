@@ -89,12 +89,6 @@ abstract class Trigger {
         return $type;
     }
 
-    public function toJSON()
-    {
-        $className = $this->name();
-        return json_encode(array($className => $this->jsonSerialize()));
-    }
-
     public function jsonSerialize()
     {
         $result = array();

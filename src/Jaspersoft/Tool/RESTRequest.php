@@ -232,10 +232,15 @@ class RESTRequest {
         $response = curl_exec($curlHandle);
         $this->response_info = curl_getinfo($curlHandle);
 
-        //  100-continue chunks are returned on multipart communications
-        $headerblock = strstr($response, "\r\n\r\n", true);     // grab everything before first \r\n\r\n
-        $this->response_body = ltrim(strstr($response, "\r\n\r\n"));   // grab everything after first \r\n\r\n (exclusive)
+        $response = preg_replace("/^(?:HTTP\/1.1 100 Continue.*?\\r\\n\\r\\n)+/ms", "", $response);
 
+        //  100-continue chunks are returned on multipart communications
+        $headerblock = strstr($response, "\r\n\r\n", true);
+
+        // strstr returns the matched characters and following characters, but we want to discard of "\r\n\r\n", so
+        // we delete the first 4 bytes of the returned string.
+        $this->response_body = substr(strstr($response, "\r\n\r\n"), 4);
+        // headers are always separated by \n until the end of the header block which is separated by \r\n\r\n.
         $this->response_headers = explode("\n", $headerblock);
 
 		curl_close($curlHandle);

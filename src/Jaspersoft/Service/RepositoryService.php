@@ -130,11 +130,11 @@ class RepositoryService
      * @throws \Exception
      * @return ResourceLookup object describing new resource
      */
-    public function createResource(Resource $resource, $parentFolder, $createFolders = true, $overwrite = false)
+    public function createResource(Resource $resource, $parentFolder, $createFolders = true)
     {
         $url = self::make_url(null, $parentFolder);
-        if (!empty($createFolders))
-            $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
+
+        $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
         $body = $resource->toJSON();
         // Isolate the class name, lowercase it, and provide it as a filetype in the headers
         $type = explode('\\', get_class($resource));
@@ -149,10 +149,12 @@ class RepositoryService
      * @param \Jaspersoft\Dto\Resource\Resource $resource Object describing new resource
      * @return \Jaspersoft\Dto\Resource\Resource
      */
-    public function updateResource(Resource $resource)
+    public function updateResource(Resource $resource, $overwrite = false)
     {
         $url = self::make_url(null, $resource->uri);
         $body = $resource->toJSON();
+
+        $url .= '?' . Util::query_suffix(array("overwrite" => $overwrite));
         // Isolate the class name, lowercase it, and provide it as a filetype in the headers
         $type = explode('\\', get_class($resource));
         $file_type = 'application/repository.' . lcfirst(end($type)) . '+json';
@@ -190,8 +192,8 @@ class RepositoryService
     public function createFileResource(File $resource, $binaryData, $parentFolder, $createFolders = true)
     {
         $url = self::make_url(null, $parentFolder);
-        if (!empty($createFolders))
-            $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
+
+        $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
         $body = $binaryData;
         $response = $this->service->sendBinary($url, array(201, 200), $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, 'POST');
         return File::createFromJSON(json_decode($response, true), get_class($resource));
@@ -208,8 +210,8 @@ class RepositoryService
     public function copyResource($oldLocation, $newLocation, $createFolders = true, $overwrite = false)
     {
         $url = self::make_url(null, $newLocation);
-        if (!empty($createFolders) || !empty($overwrite))
-            $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
+
+        $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
         $response = $this->service->makeRequest($url, array(200), 'POST', null, true, 'application/json', 'application/json', array("Content-Location: " . $oldLocation));
 
         $data = $response['body'];
@@ -237,8 +239,8 @@ class RepositoryService
     public function moveResource($oldLocation, $newLocation, $createFolders = true, $overwrite = false)
     {
         $url = self::make_url(null, $newLocation);
-        if (!empty($createFolders) || !empty($overwrite))
-            $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
+
+        $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
         $response = $this->service->makeRequest($url, array(200), 'PUT', null, true, 'application/json', 'application/json', array("Content-Location: " . $oldLocation));
 
         $data = $response['body'];

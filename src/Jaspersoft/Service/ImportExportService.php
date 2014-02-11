@@ -5,12 +5,13 @@ use Jaspersoft\Tool\RESTRequest;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\ImportExport\ExportTask;
 use Jaspersoft\Dto\ImportExport\ImportTask;
+use Jaspersoft\Dto\ImportExport\TaskState;
 
 class ImportExportService
-{	
+{
 	protected $service;
 	protected $restUrl2;
-	
+
 	public function __construct(RESTRequest $service, $baseUrl)
 	{
 		$this->service = $service;
@@ -21,25 +22,25 @@ class ImportExportService
      *
      *
      * @param $et - ExportTask object defining the exporting you want to do
-     * @return array metadata of export job
+     * @return \Jaspersoft\Dto\ImportExport\TaskState
      */
     public function startExportTask(ExportTask $et) {
         $url = $this->restUrl2 . '/export';
         $json_data = $et->toJSON();
         $data = $this->service->prepAndSend($url, array(200), 'POST', $json_data, true, 'application/json', 'application/json');
-        return json_decode($data, true);
+        return TaskState::createFromJSON(json_decode($data));
     }
 
     /** Retrieve the state of your export request
      *
      *
      * @param $id - the ID of your export request
-     * @return array - Associative array containing the status and message for your request
+     * @return \Jaspersoft\Dto\ImportExport\TaskState
      */
     public function getExportState($id) {
         $url = $this->restUrl2 . '/export' . '/' . $id . '/state';
         $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
-        return json_decode($data, true);
+        return TaskState::createFromJSON(json_decode($data));
     }
 
     /**
@@ -49,7 +50,7 @@ class ImportExportService
      *
      * @param $id
      * @param string $filename
-     * @return binary data
+     * @return string binary data
      */
     public function fetchExport($id, $filename = 'export.zip') {
         $url = $this->restUrl2 . '/export' . '/' . $id . '/' . $filename;
@@ -61,23 +62,23 @@ class ImportExportService
      *
      * @param $it ImportTask object defining the import to be done
      * @param $file_data - Binary contents of ZIP file you wish to upload. use file_get_contents() to produce from stored file
-     * @return string - ID of the import task that will be completed
+     * @return \Jaspersoft\Dto\ImportExport\TaskState
      */
    public function startImportTask(ImportTask $it, $file_data) {
        $url = $this->restUrl2 . '/import' . '?' . Util::query_suffix($it->queryData());
        $data = $this->service->prepAndSend($url, array(200, 201), 'POST', $file_data, true, 'application/zip', 'application/json');
-       return json_decode($data, true);
+       return TaskState::createFromJSON(json_decode($data));
    }
 
     /** Obtain the state of an ongoing import task
      *
      * @param $id
-     * @return mixed
+     * @return \Jaspersoft\Dto\ImportExport\TaskState
      */
     public function getImportState($id) {
        $url = $this->restUrl2 . '/import' . '/' . $id . '/state';
        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
-       return json_decode($data, true);
+       return TaskState::createFromJSON(json_decode($data));
    }
 	
 

@@ -6,8 +6,8 @@ $metadata = $c->importExportService()->startImportTask($request, file_get_conten
 
 $continue = true;
 while($continue) {
-    $state = $c->importExportService()->getImportState($metadata['id']);
-    if ($state['phase'] == 'finished') {
+    $state = $c->importExportService()->getImportState($metadata->id);
+    if ($state->phase == 'finished') {
         $continue = false;
         echo "<br><br>Import complete!";
     } else {

@@ -29,19 +29,20 @@ class ImportExportServiceTest extends BaseTest
         $task = new ExportTask();
 		$task->users[] = "jasperadmin|organization_1";
         $metadata = $this->ies->startExportTask($task);
-        $state = $this->ies->getExportState($metadata['id']);
+        $state = $this->ies->getExportState($metadata->id);
 		
         $running = true;
         while ($running) {
-            $state = $this->ies->getExportState($metadata['id']);
-            if ($state['phase'] == "inprogress")
+            $state = $this->ies->getExportState($metadata->id);
+            if ($state->phase == "inprogress")
                 sleep(5);
             else
                 $running = false;
         }
 
-        $this->assertEquals('finished', $state['phase']);        
-        $data = $this->ies->fetchExport($metadata['id']);
+        $this->assertEquals("Jaspersoft\\Dto\\ImportExport\\TaskState", get_class($state));
+        $this->assertEquals('finished', $state->phase);
+        $data = $this->ies->fetchExport($metadata->id);
 		$this->assertTrue(strlen($data) > 100);
         unset($data);
     }
@@ -51,21 +52,22 @@ class ImportExportServiceTest extends BaseTest
         $task = new ImportTask();
         $task->update = true;
         $metadata = $this->ies->startImportTask($task, $this->import_file);
-        $state = $this->ies->getImportState($metadata['id']);
+        $state = $this->ies->getImportState($metadata->id);
 
-        if (!$state == "finished")
-            $running = true;
-        else
+        if ($state == "finished")
             $running = false;
+        else
+            $running = true;
 
         while ($running) {
-            $state = $this->ies->getImportState($metadata['id']);
-            if ($state['phase'] == "inprogress")
+            $state = $this->ies->getImportState($metadata->id);
+            if ($state->phase == "inprogress")
                 sleep(5);
             else
                 $running = false;
         }
-        $this->assertEquals('finished', $state['phase']);
+        $this->assertEquals("Jaspersoft\\Dto\\ImportExport\\TaskState", get_class($state));
+        $this->assertEquals('finished', $state->phase);
         unset($this->import_file);
     }
 

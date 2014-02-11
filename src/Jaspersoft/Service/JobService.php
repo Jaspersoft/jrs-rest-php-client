@@ -4,6 +4,7 @@ namespace Jaspersoft\Service;
 use Jaspersoft\Tool\RESTRequest;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Job\Job;
+use Jaspersoft\Dto\Job\JobState;
 use Jaspersoft\Dto\Job\JobSummary;
 
 class JobService
@@ -136,12 +137,12 @@ class JobService
 	 * This function returns an array with state values
 	 *
 	 * @param int|string $id - can be retrieved using getId() on a JobSummary object
-	 * @return unknown
+	 * @return \Jaspersoft\Dto\Job\JobState
 	 */
 	public function getJobState($id) {
 		$url = $this->restUrl2 . '/jobs/' . $id . '/state';
 		$data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
-		return json_decode($data, true);
+		return JobState::createFromJSON(json_decode($data));
 	}
 	
 	/**

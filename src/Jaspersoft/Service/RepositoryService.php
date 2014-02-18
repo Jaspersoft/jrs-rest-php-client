@@ -10,7 +10,8 @@ use Jaspersoft\Tool\RESTRequest;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Tool\MimeMapper;
 
-define("RESOURCE_NAMESPACE", "Jaspersoft\\Dto\\Resource");
+if (!defined("RESOURCE_NAMESPACE"))
+    define("RESOURCE_NAMESPACE", "Jaspersoft\\Dto\\Resource");
 
 class RepositoryService
 {
@@ -50,7 +51,13 @@ class RepositoryService
 
         $headers = RESTRequest::splitHeaderArray($response['headers']);
 
-        return new SearchResourcesResult(json_decode($data), (int) $headers['Result-Count'], (int) $headers['Start-Index'], (int) $headers['Total-Count']);
+        // If forceTotalCount is not enabled, the server doesn't return totalCount when offset is specified
+        if(empty($headers['Total-Count']))
+            $totalCount = null;
+        else
+            $totalCount = $headers['Total-Count'];
+
+        return new SearchResourcesResult(json_decode($data), (int) $headers['Result-Count'], (int) $headers['Start-Index'], $totalCount);
     }
 
     /** Obtain an object that fully describes the resource by supplying its ResourceLookup object

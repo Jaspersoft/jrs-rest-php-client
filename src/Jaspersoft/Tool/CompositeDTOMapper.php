@@ -40,6 +40,7 @@ abstract class CompositeDTOMapper {
         "OlapUnit" => array("olapConnection"),
         "Query" => array("dataSource"),
         "ReportUnit" => array("dataSource", "jrxml", "query", "inputControls"),
+        "DomainTopic" => array("dataSource", "jrxml", "query", "inputControls"),
         "SecureMondrianConnection" => array("dataSource", "schema", "accessGrantSchemas"),
         "SemanticLayerDataSource" => array("schema", "dataSource", "securityFile")
     );

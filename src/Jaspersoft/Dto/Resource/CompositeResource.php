@@ -2,6 +2,10 @@
 namespace Jaspersoft\Dto\Resource;
 
 use Jaspersoft\Tool\CompositeDTOMapper;
+
+if (!defined("RESOURCE_NAMESPACE")) {
+    define("RESOURCE_NAMESPACE", "Jaspersoft\\Dto\\Resource");
+}
 abstract class CompositeResource extends Resource {
 
     /** resolveSubresource discerns composite resources as reference, object, or collection.

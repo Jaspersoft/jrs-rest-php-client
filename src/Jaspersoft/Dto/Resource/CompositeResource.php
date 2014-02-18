@@ -19,15 +19,29 @@ abstract class CompositeResource extends Resource {
             // Subresource is a reference to another resource
             return array(CompositeDTOMapper::referenceKey($field) => array("uri" =>  $value));
         } else if (is_object($value)) {
-            // Subresource is locally defined
+            if (is_a($value, RESOURCE_NAMESPACE . "\\File")) {
+                // File-based resources can represent several types of data
+                // We must find the proper field title, and use it instead of "file"
+                $resolveField = CompositeDTOMapper::fileResourceFieldReverse($field);
+                if ($resolveField !== null) {
+                    return array($resolveField => $value->jsonSerialize());
+                }
+            }
+            // Subresource is locally defined, and not a special file-based subresource
             return array($value->name() => $value->jsonSerialize());
         } else if (is_array($value)) {
-            // Subresource is a collection of other resources which may or may not be references/local definitions
-            $resourceCollection = array();
-            foreach ($value as $v) {
-                $resourceCollection[] = $this->resolveSubresource($field, $v);
+            // If we have an indexed array, this is a collection
+            if (array_key_exists(0, $value)) {
+                // Subresource is a collection of other resources which may or may not be references/local definitions
+                $resourceCollection = array();
+                foreach ($value as $v) {
+                    $resourceCollection[] = $this->resolveSubresource($field, $v);
+                }
+                return $resourceCollection;
+            } else {
+                // We have an associative array, and not a collection of items
+                return $this->resolveSubresource($field, array_pop($value));
             }
-            return $resourceCollection;
         } else {
             //TODO: Add appropriate exception
             return null;
@@ -52,8 +66,18 @@ abstract class CompositeResource extends Resource {
             // This value is an object (local definition) and should build a new object based on this data
             $element = array_keys($value);
             $className = RESOURCE_NAMESPACE . '\\' . ucfirst(end($element));
-
-            return $className::createFromJSON(end($value), $className);
+            if (class_exists($className)) {
+                return $className::createFromJSON(end($value), $className);
+            } else {
+                // This may be a File-based subresource (e.g: schema, accessGrantSchema...)
+                $fileType = CompositeDTOMapper::fileResourceField($field);
+                if ($fileType != null) {
+                    return array($fileType => File::createFromJSON(end($value), RESOURCE_NAMESPACE . "\\File"));
+                } else {
+                    //TODO: Unknown Data Exception
+                    return null;
+                }
+            }
         } else {
             // TODO: Throw Exception for unknown data
             return null;

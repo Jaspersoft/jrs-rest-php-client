@@ -52,7 +52,7 @@ class RepositoryService
         $headers = RESTRequest::splitHeaderArray($response['headers']);
 
         // If forceTotalCount is not enabled, the server doesn't return totalCount when offset is specified
-        if(empty($headers['Total-Count']))
+        if(!isset($headers['Total-Count']))
             $totalCount = null;
         else
             $totalCount = $headers['Total-Count'];

@@ -21,8 +21,12 @@ class SearchResourcesResult {
 
     public function createItemsFromData($itemData)
     {
-        foreach ($itemData->resourceLookup as $rl)
-            $this->items[] = ResourceLookup::createFromJSON($rl);
+        if ($itemData !== null) {
+            foreach ($itemData->resourceLookup as $rl)
+                $this->items[] = ResourceLookup::createFromJSON($rl);
+        } else {
+            $this->items = array();
+        }
     }
 
 }

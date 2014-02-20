@@ -46,9 +46,12 @@ class RepositoryService
         $url = self::make_url($criteria);
         $response = $this->service->makeRequest($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
 
-        $data = $response['body'];
-        if (empty($data)) return null;
+        if ($response['statusCode'] == 204 || $response['body'] == null) {
+            // A SearchResourceResult with 0 counts, and no items
+            return new SearchResourcesResult(null, 0, 0, 0);
+        }
 
+        $data = $response['body'];
         $headers = RESTRequest::splitHeaderArray($response['headers']);
 
         // If forceTotalCount is not enabled, the server doesn't return totalCount when offset is specified

@@ -19,7 +19,7 @@ abstract class MimeMapper {
         "ods" => "application/vnd.oasis.opendocument.spreadsheet",
         "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         "jrxml" => "application/jrxml",
-        "jar" => "application/zip",
+        "jar" => "application/jar",
         "prop" => "application/properties",
         "jrtx" => "application/jrtx",
         "xml" => "application/xml",

@@ -59,14 +59,6 @@ class JobSummary {
         );
     }
 
-	public function getId() { return $this->id; }
-	public function getLabel() { return $this->label; }
-	public function getReportUnitURI() { return $this->reportUnitURI; }
-	public function getState() { return $this->state['value']; }
-	public function getVersion() { return $this->version; }
-	public function getNextFireTime() { return $this->state['nextFireTime']; }
-	public function getPreviousFireTime() { return $this->state['previousFireTime']; }
-
 }
 
 ?>

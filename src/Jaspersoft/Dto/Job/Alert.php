@@ -10,6 +10,18 @@ namespace Jaspersoft\Dto\Job;
  */
 class Alert {
 
+    /** Read-only value of server-declared ID
+     *
+     * @var int
+     */
+    public $id;
+
+    /** Read-only value used for optimistic locking
+     *
+     * @var int
+     */
+    public $version;
+
     /** Specify who receives the alert
      *
      * Supported Values:

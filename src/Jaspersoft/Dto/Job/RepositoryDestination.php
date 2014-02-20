@@ -6,6 +6,18 @@ namespace Jaspersoft\Dto\Job;
 
 class RepositoryDestination {
 
+    /** Read-only value of server-declared ID
+     *
+     * @var int
+     */
+    public $id;
+
+    /** Read-only value used for optimistic locking
+     *
+     * @var int
+     */
+    public $version;
+
     /** Repository URI of the folder to store the output
      * @var string
      */

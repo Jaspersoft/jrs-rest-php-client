@@ -12,6 +12,18 @@ namespace Jaspersoft\Dto\Job;
  */
 abstract class Trigger {
 
+    /** Read-only value of server-declared ID
+     *
+     * @var int
+     */
+    public $id;
+
+    /** Read-only value used for optimistic locking
+     *
+     * @var int
+     */
+    public $version;
+
     /** Timezone of the job to trigger
      *
      * Example: "America/Los_Angeles"

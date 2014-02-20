@@ -76,7 +76,7 @@ class AttributeService
         if(!empty($data)) {
             $json = json_decode($data);
         } else {
-            return null;
+            return $result;
         }
 
         foreach($json->attribute as $element) {

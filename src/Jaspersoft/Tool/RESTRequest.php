@@ -241,7 +241,7 @@ class RESTRequest {
         // we delete the first 4 bytes of the returned string.
         $this->response_body = substr(strstr($response, "\r\n\r\n"), 4);
         // headers are always separated by \n until the end of the header block which is separated by \r\n\r\n.
-        $this->response_headers = explode("\n", $headerblock);
+        $this->response_headers = explode("\r\n", $headerblock);
 
 		curl_close($curlHandle);
 	}

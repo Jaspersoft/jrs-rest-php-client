@@ -58,7 +58,7 @@ class RepositoryService
         if(!isset($headers['Total-Count']))
             $totalCount = null;
         else
-            $totalCount = $headers['Total-Count'];
+            $totalCount = (int) $headers['Total-Count'];
 
         return new SearchResourcesResult(json_decode($data), (int) $headers['Result-Count'], (int) $headers['Start-Index'], $totalCount);
     }

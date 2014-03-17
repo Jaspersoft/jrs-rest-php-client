@@ -121,12 +121,12 @@ class PermissionService
      * Simply provide the permission object you wish to delete. (use searchRepositoryPermissions to fetch existing permissions).
      *
      * @param RepositoryPermission $perm - object correlating to permission to be deleted.
-     * @throws RESTRequestException
+     * @throws \Jaspersoft\Exception\RESTRequestException
      * @return bool - based on success of function
      */
 	public function deleteRepositoryPermission(RepositoryPermission $perm) {
 		$url = $this->restUrl2 . '/permissions' . $perm->uri . ';recipient=' . str_replace('/', '%2F', $perm->recipient);
-		$this->service->prepAndSend($url, array(200, 204), 'DELETE', null);
+		return $this->service->prepAndSend($url, array(200, 204), 'DELETE', null, false);
 	}		
 
 }

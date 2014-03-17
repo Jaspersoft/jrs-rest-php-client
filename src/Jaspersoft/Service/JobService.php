@@ -125,10 +125,7 @@ class JobService
 	 */
 	public function deleteJob($id) {
 		$url = $this->restUrl2 . '/jobs/' . $id;
-		$data = $this->service->prepAndSend($url, array(200, 204), 'DELETE');
-		if ($data)
-            return true;
-		return false;
+		return $this->service->prepAndSend($url, array(200, 204), 'DELETE', null, false);
 	}
 
 	/**
@@ -154,9 +151,7 @@ class JobService
 	public function pauseJob($jobsToStop = null) {
 		$url = $this->restUrl2 . '/jobs/pause';
         $body = json_encode(array("jobId" => (array) $jobsToStop));
-		$data = $this->service->prepAndSend($url, array(200), 'POST', $body, false, 'application/json', 'application/json');
-		if ($data) { return true; }
-		return false;
+		return $this->service->prepAndSend($url, array(200), 'POST', $body, false, 'application/json', 'application/json');
 	}
 	
 	/**
@@ -168,9 +163,7 @@ class JobService
 	public function resumeJob($jobsToResume = null) {
 		$url = $this->restUrl2 . '/jobs/resume';
         $body = json_encode(array("jobId" => (array) $jobsToResume));
-        $data = $this->service->prepAndSend($url, array(200), 'POST', $body, false, 'application/json', 'application/json');
-        if ($data) { return true; }
-        return false;
+        return $this->service->prepAndSend($url, array(200), 'POST', $body, false, 'application/json', 'application/json');
 	}
 	
 }

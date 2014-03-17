@@ -41,6 +41,7 @@ class RoleService
      * @param $limit int Limit the amount of results (pagination controls)
      * @param $offset int Begin search results at this offset (pagination controls)
      * @return array
+     * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function searchRoles($organization = null, $includeSubOrgs = null, $user = null, $hasAllUsers = false, $q = null, $limit = 0, $offset = 0) {
         $result = array();
@@ -59,6 +60,7 @@ class RoleService
      * @param $roleName
      * @param $organization - Name of organization role belongs to
      * @return Role
+     * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function getRole($roleName, $organization = null) {
         $url = self::make_url($organization, $roleName);
@@ -73,14 +75,11 @@ class RoleService
      * Provide a role object that represents the role you wish to add.
      *
      * @param Role $role - role to add (1 at a time)
-     * @return bool - based on success of function
-     * @throws Exception - if http request doesn't succeed
+     * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function createRole(Role $role) {
         $url = self::make_url($role->getTenantId(), $role->getRoleName());
-        if ($this->service->prepAndSend($url, array(201, 200), 'PUT', json_encode($role), false, 'application/json', 'application/json'))
-            return true;
-        return false;
+        $this->service->prepAndSend($url, array(201, 200), 'PUT', json_encode($role), false, 'application/json', 'application/json');
     }
 	
     /**
@@ -89,14 +88,12 @@ class RoleService
      * Provide the Role object of the role you wish to remove. Use getRole() to retrieve Roles.
      *
      * @param Role $role
-     * @internal param string $roleName - Name of the role to DELETE
-     * @return bool - based on success of function
+     * @throws \Jaspersoft\Exception\RESTRequestException
+     * @return bool based on success of function
      */
 	public function deleteRole(Role $role) {
         $url = self::make_url($role->getTenantId(), $role->getRoleName());
-        if ($this->service->prepAndSend($url, array(204, 200), 'DELETE'))
-            return true;
-        return false;
+        return $this->service->prepAndSend($url, array(204, 200), 'DELETE', null, false);
 	}
 	
     /**
@@ -108,14 +105,11 @@ class RoleService
      *
      * @param Role $role - Role object to be changed
      * @param string $oldName - previous name for the role
-     * @return bool
-     * @throws Exception - if http request does not succeed
+     * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function updateRole(Role $role, $oldName = null) {
         $url = self::make_url($role->getTenantId(), $oldName);
-        if ($this->service->prepAndSend($url, array(200, 201), 'PUT', json_encode($role), false, 'application/json', 'application/json'))
-            return true;
-        return false;
+        $this->service->prepAndSend($url, array(200, 201), 'PUT', json_encode($role), false, 'application/json', 'application/json');
     }
 	
 }

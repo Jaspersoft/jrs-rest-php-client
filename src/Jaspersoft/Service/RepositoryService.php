@@ -99,7 +99,7 @@ class RepositoryService
     /** Obtain the raw binary data of a file resource stored on the server (e.x: image)
      *
      * @param File $file
-     * @return bool|null
+     * @return string
      */
     public function getBinaryFileData(File $file)
     {
@@ -245,19 +245,21 @@ class RepositoryService
 
     /** Remove a resource from the repository
      * @param string $uri
+     * @return bool based on success of function
      */
     public function deleteResource($uri) {
         $url = self::make_url(null, $uri);
-        $this->service->prepAndSend($url, array(204, 200), 'DELETE');
+        return $this->service->prepAndSend($url, array(204, 200), 'DELETE', null, false);
     }
 
     /** Delete many resources from the repository simultaneously
      *
      * @param string $uriArray
+     * @return bool based on success of function
      */
     public function deleteManyResources($uriArray) {
         $url = self::make_url() . '?' . Util::query_suffix(array("resourceUri" => $uriArray));
-        $this->service->prepAndSend($url, array(204, 200), 'DELETE');
+        return $this->service->prepAndSend($url, array(204, 200), 'DELETE', null, false);
     }
 
 }

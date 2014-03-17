@@ -125,7 +125,7 @@ class UserService
      *
      *
      * @param User | array<User> $users - single User object or array of User objects to be created
-     * @return bool - based on success of function
+     * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function addUsers($users) {
         // Batch PUT is not available, recursively call this for each user provided in $users
@@ -135,18 +135,14 @@ class UserService
             }
         } else {
             $url = self::make_url($users->tenantId, $users->username);
-            $response = $this->service->prepAndSend($url, array(200, 201), 'PUT', json_encode($users),
+            $this->service->prepAndSend($url, array(200, 201), 'PUT', json_encode($users),
                 true, 'application/json', 'application/json');
-            if (empty($response)) {
-                return null;
-            }
         }
-        return true;
     }
 	
 	/**
 	 * This function is an alias to addUsers which will also update a user
-	 * NOTE: You cannot change a user's username with this functoin
+	 * NOTE: You cannot change a user's username with this function
 	 * 
 	 * @param $user User A user object that represents the updated user
 	 */
@@ -166,7 +162,7 @@ class UserService
 	 */
 	public function deleteUser(User $user) {
         $url = self::make_url($user->tenantId, $user->username);
-        $this->service->prepAndSend($url, array(204), 'DELETE', null, false, 'application/json', 'application/json');
+        return $this->service->prepAndSend($url, array(204), 'DELETE', null, false, 'application/json', 'application/json');
 	}
 	
 }

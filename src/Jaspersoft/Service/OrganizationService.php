@@ -78,46 +78,39 @@ class OrganizationService
      *
      * @param Organization $org
      * @param bool $createDefaultUsers
-     * @return bool
+     * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function createOrganization(Organization $org, $createDefaultUsers = true)
 	{
         $url = self::make_url(null, array('createDefaultUsers' => $createDefaultUsers));
         $data = json_encode($org);
-        if ($this->service->prepAndSend($url, array(201), 'POST', $data, false, 'application/json', 'application/json'))
-            return true;
-        return false;
+        $this->service->prepAndSend($url, array(201), 'POST', $data, false, 'application/json', 'application/json');
     }
 
 	/**
      * Delete an organization.
 	 *
 	 * @param Organization $org - organization object
-	 * @return bool - based on success of request
-	 * @throws Exception - if HTTP request doesn't succeed
+	 * @throws \Jaspersoft\Exception\RESTRequestException
+     *
+     * @return bool based on success of request
 	 */
 	public function deleteOrganization(Organization $org)
 	{
         $url = self::make_url($org->getId());
-		if($this->service->prepAndSend($url, array(200, 204), 'DELETE')) {
-			return true;
-		}
-		return false;
+		return $this->service->prepAndSend($url, array(200, 204), 'DELETE', null, false);
 	}
 	
     /**
      * This function updates an existing organization. Supply an organization object with the expected changes.
      *
      * @param Organization $org
-     * @return bool
      */
     public function updateOrganization(Organization $org)
 	{
         $url = self::make_url($org->getId());
         $data = json_encode($org);
-        if ($this->service->prepAndSend($url, array(201, 200), 'PUT', $data, false, 'application/json', 'application/json'))
-            return true;
-        return false;
+        $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, false, 'application/json', 'application/json');
     }
 	
 	/**

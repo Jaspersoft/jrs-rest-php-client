@@ -50,7 +50,7 @@ class RepositoryServiceTest extends BaseTest {
 	}
 
 	/** Coverage: createFileResource, RepositorySearchCriteria, searchResources
-			getResourceByLookup, getBinaryFileData **/
+			getResource, getBinaryFileData **/
 	public function testCreateImageResource()
 	{
 		$folder = u::createFolder();
@@ -61,7 +61,7 @@ class RepositoryServiceTest extends BaseTest {
 		$search = $this->rs->searchResources($criteria);
 		$this->assertTrue(sizeof($search->items) > 0);
 		
-		$file = $this->rs->getResourceByLookup($search->items[0]);
+		$file = $this->rs->getResource($search->items[0]->uri);
 		$file_data = $this->rs->getBinaryFileData($file);
 		$this->assertEquals(file_get_contents($this->image_location), $file_data);
 		
@@ -69,7 +69,7 @@ class RepositoryServiceTest extends BaseTest {
 		$this->rs->deleteResource($folder->uri);
 	}
 	
-	/** Coverage: createResource, searchResources, getResourceByLookup,
+	/** Coverage: createResource, searchResources, getResource,
 			deleteResource **/
 	public function testCreateResource()
 	{
@@ -80,7 +80,7 @@ class RepositoryServiceTest extends BaseTest {
 		$criteria->q = $folder->label;
 		$search = $this->rs->searchResources($criteria);
 		$this->assertTrue(sizeof($search->items) > 0);
-		$folder_info = $this->rs->getResourceByLookup($search->items[0]);
+		$folder_info = $this->rs->getResource($search->items[0]->uri);
 		$this->assertEquals($folder_info->label, $folder->label);
 		
 		$this->rs->deleteResource($folder->uri);
@@ -97,7 +97,7 @@ class RepositoryServiceTest extends BaseTest {
 		$search = $this->rs->searchResources($criteria);
 		$this->assertTrue(sizeof($search->items) > 0);
 		
-		$obj = $this->rs->getResourceByLookup($search->items[0]);
+		$obj = $this->rs->getResource($search->items[0]->uri);
 		$obj->label = "test_label";
 		$this->rs->updateResource($obj);
 		
@@ -108,7 +108,7 @@ class RepositoryServiceTest extends BaseTest {
 		$this->rs->deleteResource($obj->uri);		
 	}
 	
-    /** Coverage: createResource, moveResource, searchResources, getResourceByLookup
+    /** Coverage: createResource, moveResource, searchResources, getResource
 			deleteManyResources **/
     public function testMoveResource()
 	{
@@ -117,7 +117,7 @@ class RepositoryServiceTest extends BaseTest {
 		$this->rs->moveResource($folder->uri, $folder->uri . "_new", true);
 		
 		$search = $this->rs->searchResources(new RepositorySearchCriteria($folder->label));
-		$obj = $this->rs->getResourceByLookup($search->items[0]);
+		$obj = $this->rs->getResource($search->items[0]->uri);
 		
 		$this->assertEquals($obj->uri, $folder->uri . "_new" . $folder->uri);
 		

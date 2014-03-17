@@ -1,7 +1,6 @@
 <?php
 namespace Jaspersoft\Service;
 
-use Jaspersoft\Dto\Resource\ResourceLookup;
 use Jaspersoft\Dto\Resource\Resource;
 use Jaspersoft\Dto\Resource\File;
 use Jaspersoft\Service\Criteria\RepositorySearchCriteria;
@@ -63,28 +62,6 @@ class RepositoryService
         return new SearchResourcesResult(json_decode($data), (int) $headers['Result-Count'], (int) $headers['Start-Index'], $totalCount);
     }
 
-    /** Obtain an object that fully describes the resource by supplying its ResourceLookup object
-     *
-     * @param ResourceLookup $lookup
-     * @return Resource
-     */
-    public function getResourceByLookup(ResourceLookup $lookup)
-    {
-        $url = self::make_url(null, $lookup->uri);
-        if ($lookup->uri == "/")
-            $type = "application/repository.folder+json";
-        else
-            $type = "application/repository.file+json";
-        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', $type);
-
-        $class = RESOURCE_NAMESPACE . '\\' . ucfirst($lookup->resourceType);
-        if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
-            return $class::createFromJSON(json_decode($data, true), $class);
-        } else {
-            return Resource::createFromJSON(json_decode($data, true));
-        }
-    }
-
     /** Get resource by URI
      *
      * @param string $uri - The URI of the string
@@ -138,7 +115,7 @@ class RepositoryService
      * @param bool $createFolders Create folders in the path that may not exist
      * @param bool $overwrite if true, then resource with given URI will be overwritten even if it is of a different type
      * @throws \Exception
-     * @return ResourceLookup object describing new resource
+     * @return \Jaspersoft\Dto\Resource\Resource
      */
     public function createResource(Resource $resource, $parentFolder, $createFolders = true)
     {
@@ -197,7 +174,7 @@ class RepositoryService
      * @param string $binaryData
      * @param string $parentFolder string The folder to place the file in
      * @param bool $createFolders
-     * @return ResourceLookup
+     * @return \Jaspersoft\Dto\Resource\File
      */
     public function createFileResource(File $resource, $binaryData, $parentFolder, $createFolders = true)
     {
@@ -215,7 +192,7 @@ class RepositoryService
      * @param string $newLocation
      * @param bool $createFolders
      * @param bool $overwrite
-     * @return ResourceLookup
+     * @return \Jaspersoft\Dto\Resource\Resource
      */
     public function copyResource($oldLocation, $newLocation, $createFolders = true, $overwrite = false)
     {
@@ -244,7 +221,7 @@ class RepositoryService
      * @param string $newLocation
      * @param bool $createFolders
      * @param bool $overwrite
-     * @return ResourceLookup
+     * @return \Jaspersoft\Dto\Resource\Resource
      */
     public function moveResource($oldLocation, $newLocation, $createFolders = true, $overwrite = false)
     {

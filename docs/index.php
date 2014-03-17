@@ -621,7 +621,6 @@ end of skeleton -->
 		<p>
 			You are able to request specific details about existing resources in the server. Using the search resource function you can filter for specific files. The example below will show how you can request an image, and display it in inline HTML using base64 encoding.
             When a search is performed, a ResourceSearchResult object is returned. Within this objects are information about pagination (results returned, total results, index), the items array within this object contains
-            the lookup data about the resource which can be used with getResourceByLookup to request the full description of the resource.
 		</p>
 		<pre>
 		<code>

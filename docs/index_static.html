@@ -497,7 +497,23 @@ foreach ($find as $result)
     printf('&lt;br&gt;Organization Found: %s', $result-&gt;id);		</code>
 		</pre>
 	</article>
-	
+
+    <article id="get_organization">
+        <h3> Get Organization </h3>
+        <p>
+            Using the getOrganization function you can request the data about a specific organization for which you know
+            the ID of.
+        </p>
+            <pre>
+            <code>
+                
+$org_one = $c-&gt;organizationService()-&gt;getOrganization(&quot;organization_1&quot;);
+
+// Print the details of the $org_one Organization object
+var_dump($org_one);            </code>
+            </pre>
+    </article>
+
 	<article id="delete_organization">
 		<h3> Deleting Organizations </h3>
 		<p>
@@ -822,7 +838,6 @@ $c-&gt;repositoryService()-&gt;createFileResource(
 		<p>
 			You are able to request specific details about existing resources in the server. Using the search resource function you can filter for specific files. The example below will show how you can request an image, and display it in inline HTML using base64 encoding.
             When a search is performed, a ResourceSearchResult object is returned. Within this objects are information about pagination (results returned, total results, index), the items array within this object contains
-            the lookup data about the resource which can be used with getResourceByLookup to request the full description of the resource.
 		</p>
 		<pre>
 		<code>
@@ -831,7 +846,7 @@ $criteria = new RepositorySearchCriteria();
 $criteria-&gt;q = &quot;pitbull&quot;;
 
 $search = $c-&gt;repositoryService()-&gt;searchResources($criteria);
-$image = $c-&gt;repositoryService()-&gt;getResourceByLookup($search-&gt;items[0]);
+$image = $c-&gt;repositoryService()-&gt;getResource($search-&gt;items[0]-&gt;uri);
 $image_data = $c-&gt;repositoryService()-&gt;getBinaryFileData($image);
 
 echo &quot;&lt;h1&gt; Its a pitbull! &lt;/h1&gt;&lt;br&gt;&lt;img src=\&quot;data:image/jpeg;base64,&quot;.base64_encode($image_data).&quot;\&quot;&gt;&quot;;		</code>

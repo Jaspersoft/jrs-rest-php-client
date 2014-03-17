@@ -9,21 +9,17 @@ define("BASE_REST2_URL", "/rest_v2");
 class Client
 {
 	protected $hostname;
-	protected $port;
 	protected $username;
 	protected $password;
 	protected $orgId;
-	protected $baseUrl;
 	private $restReq;
 	private $restUrl2;
 	
-	public function __construct($hostname = 'localhost', $port = '8080', $username = null, $password = null, $baseUrl = "/jasperserver-pro", $orgId = null)
+	public function __construct($hostname = "http://localhost:8080/jasperserver-pro", $username = null, $password = null, $orgId = null)
 	{
 		$this->hostname = $hostname;
-		$this->port = $port;
 		$this->username = $username;
 		$this->password = $password;
-		$this->baseUrl = $baseUrl;
 		$this->orgId = $orgId;
 
 		$this->restReq = new RESTRequest();
@@ -33,7 +29,7 @@ class Client
 			$this->restReq->setUsername($this->username);
 		}
 		$this->restReq->setPassword($this->password);
-		$this->restUrl2 = "http://" . $this->hostname . ':' . $this->port . $this->baseUrl . BASE_REST2_URL;
+		$this->restUrl2 = $this->hostname . BASE_REST2_URL;
 	}
 
     public function repositoryService() {

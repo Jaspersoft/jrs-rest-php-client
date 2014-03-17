@@ -11,10 +11,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 		$this->bootstrap = parse_ini_file(dirname(__FILE__) . '/test.properties');
 		$this->jc = new c(
 				$this->bootstrap['hostname'],
-				$this->bootstrap['port'],
 				$this->bootstrap['admin_username'],
 				$this->bootstrap['admin_password'],
-				$this->bootstrap['base_url'],
 				$this->bootstrap['admin_org']
 		);
 	}
@@ -27,10 +25,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->jcSuper = new c(
 			$this->bootstrap['hostname'],
-			$this->bootstrap['port'],
 			$this->bootstrap['super_username'],
-			$this->bootstrap['super_password'],
-			$this->bootstrap['base_url']
+			$this->bootstrap['super_password']
 		);
 	}
 	

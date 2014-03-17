@@ -38,10 +38,8 @@ class PermissionServiceTest extends BaseTest {
 				
 		$this->jcSuper = new Client(
 				$this->bootstrap['hostname'],
-				$this->bootstrap['port'],
 				$this->bootstrap['super_username'],
-				$this->bootstrap['super_password'],
-				$this->bootstrap['base_url']
+				$this->bootstrap['super_password']
 				);
 				
 		$this->testFolder = u::createFolder();

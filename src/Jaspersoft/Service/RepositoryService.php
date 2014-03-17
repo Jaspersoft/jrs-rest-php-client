@@ -188,18 +188,18 @@ class RepositoryService
 
     /** Copy a resource from one location to another
      *
-     * @param string $oldLocation
-     * @param string $newLocation
-     * @param bool $createFolders
-     * @param bool $overwrite
+     * @param string $resourceUri URI of resource to be copied
+     * @param string $destinationFolderUri URI of folder the resource is to be copied to
+     * @param bool $createFolders Should folders be created if they do not already exist?
+     * @param bool $overwrite Should files be overwritten while performing this operation?
      * @return \Jaspersoft\Dto\Resource\Resource
      */
-    public function copyResource($oldLocation, $newLocation, $createFolders = true, $overwrite = false)
+    public function copyResource($resourceUri, $destinationFolderUri, $createFolders = true, $overwrite = false)
     {
-        $url = self::make_url(null, $newLocation);
+        $url = self::make_url(null, $destinationFolderUri);
 
         $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
-        $response = $this->service->makeRequest($url, array(200), 'POST', null, true, 'application/json', 'application/json', array("Content-Location: " . $oldLocation));
+        $response = $this->service->makeRequest($url, array(200), 'POST', null, true, 'application/json', 'application/json', array("Content-Location: " . $resourceUri));
 
         $data = $response['body'];
         $headers = $response['headers'];
@@ -217,18 +217,18 @@ class RepositoryService
 
     /** Move a resource from one location to another location within the repository
      *
-     * @param string $oldLocation
-     * @param string $newLocation
-     * @param bool $createFolders
-     * @param bool $overwrite
+     * @param string $resourceUri URI of resource to be copied
+     * @param string $destinationFolderUri URI of folder the resource is to be copied to
+     * @param bool $createFolders Should folders be created if they do not already exist?
+     * @param bool $overwrite Should files be overwritten while performing this operation?
      * @return \Jaspersoft\Dto\Resource\Resource
      */
-    public function moveResource($oldLocation, $newLocation, $createFolders = true, $overwrite = false)
+    public function moveResource($resourceUri, $destinationFolderUri, $createFolders = true, $overwrite = false)
     {
-        $url = self::make_url(null, $newLocation);
+        $url = self::make_url(null, $destinationFolderUri);
 
         $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
-        $response = $this->service->makeRequest($url, array(200), 'PUT', null, true, 'application/json', 'application/json', array("Content-Location: " . $oldLocation));
+        $response = $this->service->makeRequest($url, array(200), 'PUT', null, true, 'application/json', 'application/json', array("Content-Location: " . $resourceUri));
 
         $data = $response['body'];
         $headers = $response['headers'];

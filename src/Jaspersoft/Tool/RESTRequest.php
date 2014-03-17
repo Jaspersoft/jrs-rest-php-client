@@ -47,6 +47,7 @@ class RESTRequest {
      * @param $array array Indexed header array returned by makeRequest
      * @return array
      */
+    public $errorCode;
     public static function splitHeaderArray($array)
     {
         $result = array();
@@ -358,12 +359,17 @@ class RESTRequest {
     {
             if(!empty($responseBody)) {
                 $errorData = json_decode($responseBody);
-                $exception = new RESTRequestException(RESTRequestException::UNEXPECTED_CODE_MSG);
+                $exception = new RESTRequestException(
+                        (empty($errorData->message)) ? RESTRequestException::UNEXPECTED_CODE_MSG : $errorData->message
+                );
                 $exception->expectedStatusCodes = $expectedCodes;
                 $exception->statusCode = $statusCode;
-                $exception->jrsMessage = $errorData->message;
-                $exception->jrsErrorCode = $errorData->errorCode;
-                $exception->jrsParameters = $errorData->parameters;
+                if (!empty($errorData->errorCode)) {
+                    $exception->errorCode = $errorData->errorCode;
+                }
+                if (!empty($errorData->parameters)) {
+                    $exception->parameters = $errorData->parameters;
+                }
 
                 throw $exception;
             } else {

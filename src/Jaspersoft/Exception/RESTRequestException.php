@@ -33,13 +33,13 @@ class RESTRequestException extends \Exception {
      *
      * @var string
      */
-    public $jrsErrorCode;
+    public $errorCode;
 
     /** Parameters returned by JRS
      *
      * @var array
      */
-    public $jrsParameters;
+    public $parameters;
 
     public function __construct($message) {
         $this->message = $message;

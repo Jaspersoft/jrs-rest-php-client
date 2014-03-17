@@ -18,7 +18,7 @@ class AttributeService
 	}
 
 	
-	private function make_url($username, $tenantID = null, $attributeNames = null)
+	private function make_url($username, $tenantID = null, $attributeNames = null, $attrName = null)
 	{
         if (!empty($tenantID)) {
             $url = $this->restUrl2 . "/organizations/" . $tenantID . "/users/" . $username .
@@ -29,36 +29,12 @@ class AttributeService
         // Allow for parametrized attribute searches
         if (!empty($attributeNames)) {
             $url .= '?' . Util::query_suffix(array('name' => $attributeNames));
+        } else if (!empty($attrName)) {
+            $url .= '/' . $attrName;
         }
         return $url;
     }
 	
-	/**
-     * Combine two arrays of attribute objects. This function will replace attributes in $a with those in $b if the
-     * same key is found in each array. Otherwise, they will be combined.
-     *
-     * @param $a
-     * @param $b
-     * @return array
-     */
-    protected static function combineAttributeArrays($a, $b)
-	{
-        $one = array();
-        $two = array();
-        $result = array();
-        foreach ($a as $attr) {
-            $one[$attr->name] = $attr->value;
-        }
-        foreach ($b as $attr) {
-            $two[$attr->name] = $attr->value;
-        }
-        $combine = array_replace($one, $two);
-        foreach ($combine as $k => $v) {
-            $result[] = new Attribute($k, $v);
-        }
-        return $result;
-    }
-
 	/**
      * Retrieve attributes of a user.
      *
@@ -91,36 +67,30 @@ class AttributeService
 	/**
      * Replace all existing attributes for a user with those defined in the attributes array parameter
      *
+     * @param \Jaspersoft\Dto\User\User $user
+     * @param \Jaspersoft\Dto\Attribute\Attribute
+     */
+    public function setAttribute(User $user, $attribute)
+	{
+        $url = self::make_url($user->username, $user->tenantId, null, $attribute->name);
+        $data = json_encode($attribute);
+        return $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, false,
+            'application/json', 'application/json');
+    }
+
+    /**
+     * Replace all existing attributes for a user with those defined in the attributes array parameter
+     *
      * @param User $user
      * @param $attributes - An array of attribute objects (must be array)
      */
     public function updateAttributes(User $user, $attributes)
-	{
+    {
         $url = self::make_url($user->username, $user->tenantId);
         $data = json_encode(array('attribute' => $attributes));
         $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, 'application/json', 'application/json');
     }
 
-	/**
-     * Create new attributes, or replace existing attributes.
-     *
-     * This function will add attributes to a user in addition to those already in place. If an attribute with the same
-     * name already exists, it will be replaced by the new value supplied.
-     * @param $user - User object to modify
-     * @param $attributes - An array or single attribute object to add or update on a user
-     */
-    public function addAttributes(User $user, $attributes)
-	{
-        $url = self::make_url($user->username, $user->tenantId);
-        if (!is_array($attributes))
-            $attributes = array($attributes);
-        $existing_attributes = $this->getAttributes($user);
-        if (is_array($existing_attributes) && ($existing_attributes) > 0)
-            $attributes = $this::combineAttributeArrays($existing_attributes, $attributes);
-        $data = json_encode(array('attribute' => $attributes));
-        $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, false, 'application/json', 'application/json');
-    }
-	
 	/**
 	 * Remove all attributes, or specific attributes from a user.
 	 * 
@@ -135,7 +105,8 @@ class AttributeService
 		if (!empty($attributes)) {
 			$url .= '?' . Util::query_suffix(array('name' => $attributes));
 		}
-		return $this->service->prepAndSend($url, array(204, 200), 'DELETE', null, false, 'application/json', 'application/json');
+		return $this->service->prepAndSend($url, array(204, 200), 'DELETE', null, false,
+             'application/json', 'application/json');
 	}
 
 }

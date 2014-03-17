@@ -6,7 +6,7 @@ $californiaUser->emailAddress('sanfrancisco-oakland@example.com');
 $californiaUser->password('SUPERstrongPASSWORD###!!!');
 
 try {
-    $c->userService()->updateUser($californiaUser);
+    $c->userService()->addUser($californiaUser);
 } catch (Exception $e) {
     printf('Attempt to modify the user failed with error: %s', $e->getMessage());
 }

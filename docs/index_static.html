@@ -165,37 +165,19 @@ $californiaUser = $c-&gt;userService()-&gt;getUser(&quot;CaliforniaUser&quot;, &
 $attributes = $c-&gt;attributeService()-&gt;getAttributes($californiaUser);		</code>
 		</pre>
 	</article>
-	
-	<article id="update_attributes">
-		<h3> Update Attributes </h3>
-		<p>
-			To update a user's attributes, you must supply the User object, and an array of Attribute objects describing such attributes. This function will replace all the attributes of the user
-			with the ones supplied in the second argument. For convenience, the <a href="#add_attributes">addAttributes function</a> is provided to simply add attributes instead of replace them.
-		</p>
-		<pre>
-		<code>
-			
-$joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
 
-$age_attr = new Attribute(&quot;Age&quot;, &quot;22&quot;);
-$beer_attr = new Attribute(&quot;Beer of Choice&quot;, &quot;Anchor Steam&quot;);
-$c-&gt;attributeService()-&gt;updateAttributes($joeUser, array($age_attr, $beer_attr));		</code>
-		</pre>
-	</article>
-	
 	<article id="add_attributes">
 		<h3> Add Attributes </h3>
 		<p>
-			This function will add attributes to a user without removing the old ones. If a new attribute is added which has the same name as an old attribute, it will be replaced by the new value.
+			setAttribute can be used to create or update an attribute for a user.
 		</p>
 		<pre>
 		<code>
 			
 $joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
 
-$uni_attr = new Attribute(&quot;University&quot;, &quot;University of Oklahoma&quot;);
 $animal_attr = new Attribute(&quot;Favorite Animal&quot;, &quot;Bear&quot;);
-$c-&gt;attributeService()-&gt;addAttributes($joeUser, array($uni_attr, $animal_attr));		</code>
+$c-&gt;attributeService()-&gt;setAttribute($joeUser, $animal_attr);		</code>
 		</pre>
 	</article>
 	
@@ -988,7 +970,7 @@ foreach ($results as $userLookup) {
 	<article id="create_user">
 		<h3> Create User </h3>
 		<p>
-			To create a user, define a user object which fully describes the user. Then pass it to the server using the addUsers function.
+			To create a user, define a user object which fully describes the user, use it with the addUser function.
 		</p>
 		<pre>
 		<code>
@@ -1016,7 +998,7 @@ try {
 	<article id="update_user">
 		<h3> Update User </h3>
 		<p>
-			To update a user, obtain the user's object from the server, modify it, then hand it back using the updateUser function (which is just an alias to addUsers)
+			To update a user, you can also use the addUser function.
 		</p>
 		<pre>
 		<code>
@@ -1028,7 +1010,7 @@ $californiaUser-&gt;emailAddress('sanfrancisco-oakland@example.com');
 $californiaUser-&gt;password('SUPERstrongPASSWORD###!!!');
 
 try {
-    $c-&gt;userService()-&gt;updateUser($californiaUser);
+    $c-&gt;userService()-&gt;addUser($californiaUser);
 } catch (Exception $e) {
     printf('Attempt to modify the user failed with error: %s', $e-&gt;getMessage());
 }

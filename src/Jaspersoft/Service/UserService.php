@@ -118,38 +118,18 @@ class UserService
         return $result;
     }
 
-	
+
     /**
-     * This function adds NEW users. It will accept an array of User objects,
-     * or one User object to add to the database.
+     * This function can be used to both add and update a user.
      *
      *
-     * @param User | array<User> $users - single User object or array of User objects to be created
+     * @param \Jaspersoft\Dto\User\User
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
-    public function addUsers($users) {
-        // Batch PUT is not available, recursively call this for each user provided in $users
-        if (is_array($users)) {
-            foreach($users as $user) {
-                $this->addUsers($user);
-            }
-        } else {
-            $url = self::make_url($users->tenantId, $users->username);
-            $this->service->prepAndSend($url, array(200, 201), 'PUT', json_encode($users),
-                true, 'application/json', 'application/json');
-        }
+    public function addUser($user) {
+            $url = self::make_url($user->tenantId, $user->username);
+            $this->service->prepAndSend($url, array(200, 201), 'PUT', json_encode($user), true, 'application/json', 'application/json');
     }
-	
-	/**
-	 * This function is an alias to addUsers which will also update a user
-	 * NOTE: You cannot change a user's username with this function
-	 * 
-	 * @param $user User A user object that represents the updated user
-	 */
-	public function updateUser(User $user)
-	{
-		self::addUsers($user);
-	}
 
 	/**
 	 * This function will delete a user

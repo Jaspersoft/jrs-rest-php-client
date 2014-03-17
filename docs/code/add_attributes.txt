@@ -1,6 +1,5 @@
 
 $joeUser = $c->userService()->getUser("joeuser", "organization_1");
 
-$uni_attr = new Attribute("University", "University of Oklahoma");
 $animal_attr = new Attribute("Favorite Animal", "Bear");
-$c->attributeService()->addAttributes($joeUser, array($uni_attr, $animal_attr));
+$c->attributeService()->setAttribute($joeUser, $animal_attr);

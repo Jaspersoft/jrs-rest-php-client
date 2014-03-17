@@ -38,7 +38,7 @@ class UserServiceTest extends BaseTest {
 		parent::setUp();
 		$this->newUser = u::createUser();
 		$this->us = $this->jc->userService();
-		$this->us->addUsers($this->newUser);
+		$this->us->addUser($this->newUser);
 	}
 
 	public function tearDown()
@@ -56,7 +56,7 @@ class UserServiceTest extends BaseTest {
 	public function testUpdate_ChangesUser()
 	{
 		$this->newUser->setEmailAddress("test@test.test");
-		$this->us->updateUser($this->newUser);
+		$this->us->addUser($this->newUser);
 		
 		$actual = $this->us->getUser($this->newUser->username, $this->newUser->tenantId);
 		$this->assertEquals("test@test.test", $actual->emailAddress);

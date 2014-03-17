@@ -162,24 +162,11 @@ end of skeleton -->
 		</code>
 		</pre>
 	</article>
-	
-	<article id="update_attributes">
-		<h3> Update Attributes </h3>
-		<p>
-			To update a user's attributes, you must supply the User object, and an array of Attribute objects describing such attributes. This function will replace all the attributes of the user
-			with the ones supplied in the second argument. For convenience, the <a href="#add_attributes">addAttributes function</a> is provided to simply add attributes instead of replace them.
-		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/update_attributes.txt'); ?>
-		</code>
-		</pre>
-	</article>
-	
+
 	<article id="add_attributes">
 		<h3> Add Attributes </h3>
 		<p>
-			This function will add attributes to a user without removing the old ones. If a new attribute is added which has the same name as an old attribute, it will be replaced by the new value.
+			setAttribute can be used to create or update an attribute for a user.
 		</p>
 		<pre>
 		<code>
@@ -748,7 +735,7 @@ end of skeleton -->
 	<article id="create_user">
 		<h3> Create User </h3>
 		<p>
-			To create a user, define a user object which fully describes the user. Then pass it to the server using the addUsers function.
+			To create a user, define a user object which fully describes the user, use it with the addUser function.
 		</p>
 		<pre>
 		<code>
@@ -760,7 +747,7 @@ end of skeleton -->
 	<article id="update_user">
 		<h3> Update User </h3>
 		<p>
-			To update a user, obtain the user's object from the server, modify it, then hand it back using the updateUser function (which is just an alias to addUsers)
+			To update a user, you can also use the addUser function.
 		</p>
 		<pre>
 		<code>

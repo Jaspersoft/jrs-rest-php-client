@@ -10,7 +10,7 @@
 
   <style>
   .deprecated_notice { color: #f00; font-style: italic; }
-
+  #section_group { font-size: 32pt; }
   </style>
 
   </head>
@@ -18,10 +18,10 @@
 
       <header id='intro'>
         <h1 class='introduction'>
-			Sample Code for JasperReports PHP Client
+			Documentation for JasperReports Server PHP Client
         </h1>
         <p>
-			JasperSoft Corporation, &copy; 2013
+			Jaspersoft Corporation, &copy; 2014
 		  <br>
 		  <br>
 			Code highlighting for this page provided by <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>, written by Ivan Sagalaev (<a href="highlight/LICENSE">license</a>/<a href="highlight/AUTHORS.en.txt">authors</a>).
@@ -149,7 +149,94 @@ $js-&gt;getJobs(&quot;/reports/samples/AllAccounts&quot;);
 $c-&gt;jobService()-&gt;getJobs(&quot;/reports/samples/AllAccounts&quot;);		</code>
 		</pre>
 	</article>
+    <h1 id="section_group"> Administration Services </h1>
+<h2 id="user_service"> User Service </h2>
 
+<article id="search_user">
+    <h3> Search User </h3>
+    <p>
+        Using the searchUsers method you can search for several users based on various critera. This method will return an array of UserLookup objects that can be used with the getUserByLookup() function to retrieve their fully described User objects. The example below grabs all users containing 'j' in their username, and that are members of organization_1 and prints out the roles assigned to that user.
+    </p>
+		<pre>
+		<code>
+            
+$results = $c-&gt;userService()-&gt;searchUsers('j', 'organization_1');
+
+foreach ($results as $userLookup) {
+    $user = $c-&gt;userService()-&gt;getUserByLookup($userLookup);
+    printf('&lt;br&gt;Found user: %s', $user-&gt;fullName);
+    foreach ($user-&gt;roles as $role)
+        printf('&lt;br&gt; %10s User has role: %s', '&amp;nbsp;', $role-&gt;roleName);
+}        </code>
+		</pre>
+</article>
+
+<article id="create_user">
+    <h3> Create User </h3>
+    <p>
+        To create a user, define a user object which fully describes the user, use it with the addUser function.
+    </p>
+		<pre>
+		<code>
+                  
+$newUser = new User(
+    'BI_User',	
+    'superSTRENGTHpassw0rd',
+    'clever@email.com',	
+    'Business Intelligence User',
+    'organization_1',
+    'true'
+);	
+
+$role = new Role('ROLE_USER', null, 'false');
+$newUser-&gt;addRole($role);
+
+try {
+   $c-&gt;userService()-&gt;addUsers($newUser);
+} catch (Exception $e) {
+   printf('Could not add new user: %s', $e-&gt;getMessage());
+}        </code>
+		</pre>
+</article>
+
+<article id="update_user">
+    <h3> Update User </h3>
+    <p>
+        To update a user, you can also use the addUser function.
+    </p>
+		<pre>
+		<code>
+            
+$search = $c-&gt;userService()-&gt;searchUsers('californiaUser', 'organization_1');
+$californiaUser = $c-&gt;userService()-&gt;getUserByLookup($search[0]);
+
+$californiaUser-&gt;emailAddress('sanfrancisco-oakland@example.com');
+$californiaUser-&gt;password('SUPERstrongPASSWORD###!!!');
+
+try {
+    $c-&gt;userService()-&gt;addUser($californiaUser);
+} catch (Exception $e) {
+    printf('Attempt to modify the user failed with error: %s', $e-&gt;getMessage());
+}
+          </code>
+		</pre>
+</article>
+
+<article id="delete_user">
+    <h3> Delete User </h3>
+    <p>
+        To delete a user, obtain its user object from the server, then pass it to the deleteUser function.
+    </p>
+		<pre>
+		<code>
+            
+$user = $c-&gt;userService()-&gt;getUserByLookup(
+    $c-&gt;userService()-&gt;searchUsers('california', 'organization_1')[0]
+);
+
+$c-&gt;userService()-&gt;deleteUser($user);        </code>
+		</pre>
+</article>
 		<h2 id='attribute_service'> Attribute Service </h2>
 
 	<article id="attribute_functions">
@@ -193,81 +280,172 @@ $joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organizat
 $c-&gt;attributeService()-&gt;deleteAttributes($joeUser);		</code>
 		</pre>
 	</article>
+<h2 id="organization_service"> Organization Service </h2>
 
-		<h2 id="importExportService"> Import/Export Service </h2>
-	
-	<article id="import_service">
-		<h3> Import Service </h3>
-		<p>
-			The import service allows you to import data that was previously exported. There are various flags that can be set to alter what data is imported, see the REST API documentation for more specific examples of such flags. The example below will submit an import from the file "import_data.zip" assumed to be stored in the same folder as the PHP file.
-			It will repeat "Still importing..." and check the status every 10 seconds until it is complete. Then it will announce that the import has completed. 
-		</p>
+<article id="create_organization">
+    <h3> Create Organization </h3>
+    <p>
+        Creating a new organization requires constructing a new Organization object and sending it using the createOrganization function.
+    </p>
 		<pre>
 		<code>
-			
-$request = new ImportTask;
-$request-&gt;update = true;
+            
+$new_organization = new Organization(
+      'test_organization',	// alias
+      'test_organization',	// id
+      'organization_1',	// parent organization
+      'test_organization');	// tenantName
 
-$metadata = $c-&gt;importExportService()-&gt;startImportTask($request, file_get_contents('import_data.zip'));
-
-$continue = true;
-while($continue) {
-    $state = $c-&gt;importExportService()-&gt;getImportState($metadata-&gt;id);
-    if ($state-&gt;phase == 'finished') {
-        $continue = false;
-        echo &quot;&lt;br&gt;&lt;br&gt;Import complete!&quot;;
-    } else {
-        echo &quot;Still importing...&lt;br&gt;&quot;;
-        @ob_flush();
-        @flush();
-        sleep(10);
-    }
-}		</code>
+try {
+   $c-&gt;organizationService()-&gt;createOrganization($new_organization);
+} catch (Exception $e) {
+   printf('Creating organization failed: %s', $e-&gt;getMessage());
+}        </code>
 		</pre>
-	</article>
+</article>
 
-	<article id="export_service">
-		<h3> Export Service </h3>
-		<p>
-			Using this service you can export data from the server to store or import to another server. You must be authorized as the superuesr to use this service. data is compressed as a zip archive and sent as binary data. First construct an ExportTask object that defines what data is to be extracted, then pass it to the startExportTask function. Data can then be stored using PHP file I/O functions, or streamed to a browser by preparing the proper headers and echoing the binary data.
-			<br>
-			The example below will request an export, then refresh the status of the export every 10 seconds. When it is finished, it will download the data as a zip file, and then store it in a file (export.zip) and offer a link to download the file. 
-		</p>
+<article id="search_organization">
+    <h3> Searching Organizations </h3>
+    <p>
+        Using the searchOrganization function you can search for organizations by ID.
+    </p>
 		<pre>
 		<code>
-			
-header('Content-Type: text/html; charset=utf-8');
-// The export service can take longer than 60 seconds to execute, so it is necessary to change the server execution time limit
-set_time_limit(0);
-
-$request-&gt;users[] = &quot;jasperadmin&quot;;
-
-$metadata = $c-&gt;importExportService()-&gt;startExportTask($request);
-
-$decline = true;
-while ($decline) {
-    $state = $c-&gt;importExportService()-&gt;getExportState($metadata-&gt;id);
-    if ($state-&gt;phase == &quot;finished&quot;) {
-        $decline = false;
-        echo &quot;&lt;br&gt;Export task complete, downloading....&quot;;
-    } else {
-        echo &quot;Export not yet completed...&lt;br&gt;&quot;;
-        @flush();
-        @ob_flush();
-        sleep(10);
-    }
-}
-
-$f = fopen('export.zip', 'w');
-$data = $c-&gt;importExportService()-&gt;fetchExport($metadata-&gt;id);
-fwrite($f, $data);
-fclose($f);
-
-echo &quot;&lt;br&gt;&lt;br&gt;File available for download &lt;a href='export.zip'&gt;here&lt;/a&gt;&quot;;		</code>
+            
+$find = $c-&gt;organizationService()-&gt;searchOrganization('org');
+foreach ($find as $result)
+    printf('&lt;br&gt;Organization Found: %s', $result-&gt;id);        </code>
 		</pre>
-	</article>
-	
-		<h2 id="job_service"> Job Service </h2>
+</article>
+
+<article id="get_organization">
+    <h3> Get Organization </h3>
+    <p>
+        Using the getOrganization function you can request the data about a specific organization for which you know
+        the ID of.
+    </p>
+            <pre>
+            <code>
+                
+$org_one = $c-&gt;organizationService()-&gt;getOrganization(&quot;organization_1&quot;);
+
+// Print the details of the $org_one Organization object
+var_dump($org_one);            </code>
+            </pre>
+</article>
+
+<article id="delete_organization">
+    <h3> Deleting Organizations </h3>
+    <p>
+        An organization may be deleted by providing the Organization Object that correlates to the organization that is to be deleted. This can be retrieved as shown below by using the searchOrganizations() method.
+    </p>
+		<pre>
+		<code>
+            
+$search = $c-&gt;organizationService()-&gt;searchOrganizations('test_organization');
+$organization = $search[0];
+
+try {
+   $c-&gt;organizationService-&gt;deleteOrganization($organization);
+} catch (Exception $e) {
+   printf('Organization deletion failure: %s', $e-&gt;getMessage());
+}        </code>
+		</pre>
+</article>
+
+<article id="update_organization">
+    <h3> Updating Organizations </h3>
+    <p>
+        Modifying an organization is done in a similar fashion to modifying a user. The organization object needs to be obtained with the searchOrganization method and then modify it with the get/set methods, and return it back to the server, as shown below.
+    </p>
+		<pre>
+		<code>
+            
+$search = $c-&gt;organizationService()-&gt;searchOrganization('organization_wave');
+$organization = $search[0];
+$organization-&gt;tenantDesc = &quot;Do the wave&quot;;
+
+try {
+    $c-&gt;organizationService()-&gt;updateOrganization($organization);
+} catch (Exception $e) {
+    printf('Unable to modify organization: %s', $e-&gt;getMessage());
+}        </code>
+		</pre>
+</article>
+
+<h2 id="role_service"> Role Service </h2>
+
+
+<article id="get_many_roles">
+    <h3> Get Many Roles </h3>
+    <p>
+        You can request all the roles of an organization, or of the server using this function. The example below
+        will request all roles on the server. Optionally, you can search based on specific criteria for roles.
+    </p>
+		<pre>
+		<code>
+            
+$server_roles = $c-&gt;roleService()-&gt;searchRoles();        </code>
+		</pre>
+</article>
+
+<article id="get_role">
+    <h3> Get a Specific Role </h3>
+    <p>
+        If you know the name of the role, you can request it specifically using this function. The example below
+        will request the ROLE_USER data.
+    </p>
+		<pre>
+		<code>
+            
+$user_role = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_USER&quot;);        </code>
+		</pre>
+</article>
+
+<article id="create_role">
+    <h3> Create Role </h3>
+    <p>
+        Creating a role requires you to describe the role with an object, then pass it to the server. The example below will create a new role for organization_1.
+    </p>
+		<pre>
+		<code>
+            
+$robot_role = new Role(&quot;ROLE_ROBOT&quot;, &quot;organization_1&quot;);
+$c-&gt;roleService()-&gt;createRole($robot_role);        </code>
+		</pre>
+</article>
+
+<article id="update_role">
+    <h3> Update Role </h3>
+    <p>
+        Updating a role requires you to provide an updated model of the new role. If changing the name of the role, you must pass the old name of the role as the second argument.
+    </p>
+		<pre>
+		<code>
+            
+$robot_role = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_ROBOT&quot;, &quot;organization_1&quot;);
+$old_name = $robot_role-&gt;roleName;
+$robot_role-&gt;roleName = &quot;ROLE_HUMAN&quot;;
+$c-&gt;roleService()-&gt;updateRole($robot_role, $old_name);
+        </code>
+		</pre>
+</article>
+
+<article id="delete_role">
+    <h3> Delete Role </h3>
+    <p>
+        Removing a role requires you to retrieve the role object representing the role you wish to remove, then pass it to the deleteRole function.
+    </p>
+		<pre>
+		<code>
+            
+$role_human = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_HUMAN&quot;, &quot;organization_1&quot;);
+$c-&gt;roleService()-&gt;deleteRole($role_human);        </code>
+		</pre>
+</article>
+
+<h1 id="section_group"> Reporting Services </h1>
+<h2 id="job_service"> Job Service </h2>
 	
 	<article id="search_jobs">
 		<h3> Search Jobs </h3>
@@ -300,7 +478,8 @@ $first_job_details = $c-&gt;jobService()-&gt;getJob($allJobs[0]-&gt;id);		</code
 	<article id="create_job">
 		<h3> Create Job </h3>
 		<p>
-			Jobs can be created from scratch. However, the way these objects interact is different than the other objects in the package. The values of the Job class are varied, and organized through associative arrays. In the example below you can see how the values are set for the various flags of the Job object. If a section requires more than one element of the same type (i.e: adding multiple toAddresses to send an alert to) it must be added using the PHP array functions. See below how this is done 
+			Creating a job requires you to create a well-defined Job object. Job objects consist of subclasses that
+            define the behaviour of the scheduled job.
 		</p>
 		<pre>
 		<code>
@@ -439,173 +618,7 @@ try {
 }		</code>
 		</pre>
 	</article>
-	
-		<h2 id="organization_service"> Organization Service </h2>
-	
-	<article id="create_organization">
-		<h3> Create Organization </h3>
-		<p>
-			Creating a new organization requires constructing a new Organization object and sending it using the createOrganization function.
-		</p>
-		<pre>
-		<code>
-			
-$new_organization = new Organization(
-      'test_organization',	// alias
-      'test_organization',	// id
-      'organization_1',	// parent organization
-      'test_organization');	// tenantName
 
-try {
-   $c-&gt;organizationService()-&gt;createOrganization($new_organization);
-} catch (Exception $e) {
-   printf('Creating organization failed: %s', $e-&gt;getMessage());
-}		</code>
-		</pre>
-	</article>
-
-	<article id="search_organization">
-		<h3> Searching Organizations </h3>
-		<p>
-			Using the searchOrganization function you can search for organizations by ID.
-		</p>
-		<pre>
-		<code>
-			
-$find = $c-&gt;organizationService()-&gt;searchOrganization('org');
-foreach ($find as $result)
-    printf('&lt;br&gt;Organization Found: %s', $result-&gt;id);		</code>
-		</pre>
-	</article>
-
-    <article id="get_organization">
-        <h3> Get Organization </h3>
-        <p>
-            Using the getOrganization function you can request the data about a specific organization for which you know
-            the ID of.
-        </p>
-            <pre>
-            <code>
-                
-$org_one = $c-&gt;organizationService()-&gt;getOrganization(&quot;organization_1&quot;);
-
-// Print the details of the $org_one Organization object
-var_dump($org_one);            </code>
-            </pre>
-    </article>
-
-	<article id="delete_organization">
-		<h3> Deleting Organizations </h3>
-		<p>
-			An organization may be deleted by providing the Organization Object that correlates to the organization that is to be deleted. This can be retrieved as shown below by using the searchOrganizations() method.
-		</p>
-		<pre>
-		<code>
-			
-$search = $c-&gt;organizationService()-&gt;searchOrganizations('test_organization');
-$organization = $search[0];
-
-try {
-   $c-&gt;organizationService-&gt;deleteOrganization($organization);
-} catch (Exception $e) {
-   printf('Organization deletion failure: %s', $e-&gt;getMessage());
-}		</code>
-		</pre>
-	</article>
-	
-	<article id="update_organization">
-		<h3> Updating Organizations </h3>
-		<p>
-			Modifying an organization is done in a similar fashion to modifying a user. The organization object needs to be obtained with the searchOrganization method and then modify it with the get/set methods, and return it back to the server, as shown below. 
-		</p>
-		<pre>
-		<code>
-			
-$search = $c-&gt;organizationService()-&gt;searchOrganization('organization_wave');
-$organization = $search[0];
-$organization-&gt;tenantDesc = &quot;Do the wave&quot;;
-
-try {
-    $c-&gt;organizationService()-&gt;updateOrganization($organization);
-} catch (Exception $e) {
-    printf('Unable to modify organization: %s', $e-&gt;getMessage());
-}		</code>
-		</pre>
-	</article>
-	
-		<h2 id="permission_service"> Permission Service </h2>
-	
-	<article id="search_permissions">
-		<h3> Searching Permissions </h3>
-		<p>
-			You can search for user permissions in regards to a resource in the repository by using the searchRepositoryPermissions function. Provide the URI for the resource as the first argument. Other arguments are available to filter the results as needed. The example below will list all the set permission recipients for "/reports/samples/AllAccounts"
-		</p>
-		<pre>
-		<code>
-			
-$permissions = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
-foreach($permissions as $p)
-    echo $p-&gt;recipient . &quot;&lt;br&gt;&quot;;		</code>
-		</pre>
-	</article>
-	
-	<article id="update_permissions">
-		<h3> Updating Permissions </h3>
-		<p>
-			To update permissions, you must retrieve existing permissions, modify them, and then return them to the server. The example below will retrieve permissions for a report, alter the first one to have no access, and update it.
-		</p>
-		<pre>
-		<code>
-			
-$perms = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
-$perms[0]-&gt;mask = 0;
-
-$c-&gt;permissionService()-&gt;updateRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;, $perms);		</code>
-		</pre>
-	</article>
-
-    <article id="update_permission">
-        <h3> Updating a single Permission </h3>
-        <p>
-            You can update one permission at a time in using the following code. It is also possible to create a new permission object from
-            scratch and use it to update a single permission if desired.
-        </p>
-            <pre>
-            <code>
-                
-$perms = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
-$perms[0]-&gt;mask = 0;
-
-$c-&gt;permissionService()-&gt;updateRepositoryPermission($perms[0]);            </code>
-            </pre>
-    </article>
-
-
-<article id="create_permissions">
-		<h3> Creating Permissions </h3>
-		<p>
-			Permissions can be created by first describing the permissions in Permission objects, then passing them to the server. The example below will create a new permisison for joeuser in organization 1 to administer the AllAccounts report.
-		</p>
-		<pre>
-		<code>
-			
-$p = new RepositoryPermission(&quot;/reports/samples/AllAccounts&quot;, &quot;user:/organization_1/joeuser&quot;, 1);
-$c-&gt;permissionService()-&gt;createRepositoryPermissions(array($p));		</code>
-		</pre>
-	</article>	
-
-	<article id="delete_permissions">
-		<h3> Deleting Permissions </h3>
-		<p>
-			Removing permissions is possible by passing the permission to the deleteRepositoryPermissions function. The example below will delete the permission created in the previous example.
-		</p>
-		<pre>
-		<code>
-			
-$p = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllACcounts&quot;, null, null, &quot;user:/organization_1/joeuser&quot;);
-$c-&gt;permissionService()-&gt;deleteRepositoryPermission($p[0]);		</code>
-		</pre>
-	</article>	
 
 		<h2 id="query_service"> Query Executor Service </h2>
 	
@@ -708,15 +721,15 @@ foreach($input_controls as $ic) {
 }		</code>
 		</pre>
 	</article>
-	
+
+<h1 id="section_group"> Repository & Resource Services </h1>
 		<h2 id="repository_service"> Repository Service </h2>
 		
 	<article id="get_repository">
 		<h3> Obtain List of Repository Items </h3>
 		<p>
-			You can search the repository for items in it, and get an array of Resource items back. If you provide no filter criteria, all items in the repository will be returned.
-			There is a criteria object "\Jaspersoft\Service\Criteria\RepositorySearchCriteria" that can be used to filter for items. This is the only search function that uses a criteria object currently.
-			In the future, all search functions will have criteria objects used to filter results.
+            The repository can be searched for items, using a RepositorySearchCriteria object to define your search
+            parameters. If no criteria is provided, the entire repository will be returned.
 			<br>
 			The code below will populate a variable with an array of items that describe objects in the repository.
 		</p>
@@ -730,8 +743,9 @@ $repo = $c-&gt;repositoryService()-&gt;searchResources();		</code>
 	<article id="create_resource">
 		<h3> Create Resource </h3>
 		<p>
-			In addition to binary resources, you can also create other types of resources in the repository, such as Folders, Data Sources, and most all Resources available in the repository. The example below
-			will show how to create a new Folder on the server.
+			Many types of resources can be created. See the namespace \Jaspersoft\Dto\Resource to see the types you may
+            work with. Note: CompositeResource and Resource are abstract classes and are not expected to be insantisted
+            or used with any 'CRUD' operations.
 		</p>
 		<pre>
 		<code>
@@ -751,10 +765,11 @@ $c-&gt;repositoryService()-&gt;createResource($folder, &quot;/&quot;);
         <p>
             Some resources can reference or define subresources, these resources are known as composite resources. When dealing
             with such resources while using the PHP Client, you can decide to provide a reference to an existing resource,
-            or define the resource completely and locally.
+            or define the resource locally.
             <br><br>
-            For example, if you create a ReportUnit object, and wish to link to a datasource you can set the field "datasource"
-            to a string or a concrete DataSource object which will create a reference or a local definition respectively.
+            For example, if you create a ReportUnit object, and wish to link to a datasource you can set the fie
+            "datasource" to a string or a concrete DataSource object which will create a reference or a local definition
+            respectively.
             <br><br>
             In the example below, a ReportUnit is defined with a reference to a datasource, and query. <br><br>
             In addition, the Input Controls are set to an array of both referenced and locally defined input controls.
@@ -789,11 +804,14 @@ $report_shop-&gt;jrxml = &quot;/jrxml/allaccounts&quot;;
 	<article id="create_binary_resource">
 		<h3> Create Binary Resource </h3>
 		<p>
-			Using the repository service, you can create new resources in your repository. These can be both binary files, or descriptors such as folders, and data sources. This exmaple will
-			explain how you can upload an image to your repository. In the example below, we'll be uploading a JPEG image of a pitbull to the folder /ImageFolder created in the last example. You must first describe
-			the resource in a File object, and then supply it using the php builtin function file_get_contents() which will retrieve the binary content of a file on the local machine.
+            The repository service is capable of uploading binary files as well. These must be handled differently than
+            other types of resources.
 
-            Note: If your isntance of JRS employs custom file types, you must define the mapping of the server type to the proper MIME type in the Jaspersoft\Tool\MimeMapper object which contains an associative array of JRS file types mapped to their relevant MIME type.
+            This example will explain how you can upload an image to your repository.
+
+            Note: If your isntance of JRS employs custom file types, you must define the mapping of the server type to
+            the proper MIME type in the Jaspersoft\Tool\MimeMapper object which contains an associative array of JRS
+            file types mapped to their relevant MIME type.
 		</p>
 		<pre>
 		<code>
@@ -816,8 +834,11 @@ $c-&gt;repositoryService()-&gt;createFileResource(
 	<article id="search_resource">
 		<h3> Searching Resources and Requesting Binary Content </h3>
 		<p>
-			You are able to request specific details about existing resources in the server. Using the search resource function you can filter for specific files. The example below will show how you can request an image, and display it in inline HTML using base64 encoding.
-            When a search is performed, a ResourceSearchResult object is returned. Within this objects are information about pagination (results returned, total results, index), the items array within this object contains
+			You are able to request specific details about existing resources in the server. Using the search resource
+            function you can filter for specific files. The example below will show how you can request an image, and
+            display it in inline HTML using base64 encoding. When a search is performed, a ResourceSearchResult object
+            is returned. Within this objects are information about pagination (results returned, total results, index),
+            the items array within this object contains
 		</p>
 		<pre>
 		<code>
@@ -837,7 +858,8 @@ echo &quot;&lt;h1&gt; Its a pitbull! &lt;/h1&gt;&lt;br&gt;&lt;img src=\&quot;dat
 	<article id="delete_resource">
 		<h3> Delete Resource </h3>
 		<p>
-			You can remove resources from the repository, either one at a time, or several at a time. Using deleteResource or deleteManyResources.
+			You can remove resources from the repository, either one at a time, or several at a time. Using
+            deleteResource or deleteManyResources.
 		</p>
 		<pre>
 		<code>
@@ -854,7 +876,8 @@ $c-&gt;repositoryService()-&gt;deleteManyResources(array(&quot;/ImageFolder/pitb
 	<article id="move_resource">
 		<h3> Move Resource </h3>
 		<p>
-			Resources can be moved from one location to another within the Repository. The example below will move the folder "/ImageFolder/anchorsteam" to "/anchorsteam"
+			Resources can be moved from one location to another within the Repository. The example below will move the
+            folder "/ImageFolder/anchorsteam" to "/anchorsteam"
 		</p>
 		<pre>
 		<code>
@@ -866,8 +889,9 @@ $c-&gt;repositoryService()-&gt;moveResource(&quot;/ImageFolder/anchorsteam&quot;
 	<article id="copy_resource">
 		<h3> Copy Resource </h3>
 		<p>
-			Resources can be copied from one location to another within the Repository. The example below will copy the folder "/anchorsteam" to the new location "/ImageFolder/anchorsteam". By setting the last
-			argument to true, folders which do not exist will be created when copying the file.
+			Resources can be copied from one location to another within the Repository. The example below will copy the
+            folder "/anchorsteam" to the new location "/ImageFolder/anchorsteam". By setting the last argument to true,
+            folders which do not exist will be created when copying the file.
 		</p>
 		<pre>
 		<code>
@@ -875,165 +899,157 @@ $c-&gt;repositoryService()-&gt;moveResource(&quot;/ImageFolder/anchorsteam&quot;
 $c-&gt;repositoryService()-&gt;copyResource(&quot;/anchorsteam&quot;, &quot;/ImageFolder&quot;, true);		</code>
 		</pre>
 	</article>
-	
-		<h2 id="role_service"> Role Service </h2>
-	
-	
-	<article id="get_many_roles">
-		<h3> Get Many Roles </h3>
-		<p>
-			You can request all the roles of an organization, or of the server using this function. The example below will request all roles on the server. Optionally, you can
-            search based on specific criteria for roles.
-		</p>
+<h2 id="permission_service"> Permission Service </h2>
+
+<article id="search_permissions">
+    <h3> Searching Permissions </h3>
+    <p>
+        You can search for user permissions in regards to a resource in the repository by using the searchRepositoryPermissions function. Provide the URI for the resource as the first argument. Other arguments are available to filter the results as needed. The example below will list all the set permission recipients for "/reports/samples/AllAccounts"
+    </p>
 		<pre>
 		<code>
-			
-$server_roles = $c-&gt;roleService()-&gt;searchRoles();		</code>
+            
+$permissions = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
+foreach($permissions as $p)
+    echo $p-&gt;recipient . &quot;&lt;br&gt;&quot;;        </code>
 		</pre>
-	</article>
-		
-	<article id="get_role">
-		<h3> Get a Specific Role </h3>
-		<p>
-			If you know the name of the role, you can request it specifically using this function. The example below will request the ROLE_USER data.
-		</p>
+</article>
+
+<article id="update_permissions">
+    <h3> Updating Permissions </h3>
+    <p>
+        To update permissions, you must retrieve existing permissions, modify them, and then return them to the server. The example below will retrieve permissions for a report, alter the first one to have no access, and update it.
+    </p>
 		<pre>
 		<code>
-			
-$user_role = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_USER&quot;);		</code>
+            
+$perms = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
+$perms[0]-&gt;mask = 0;
+
+$c-&gt;permissionService()-&gt;updateRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;, $perms);        </code>
 		</pre>
-	</article>
-	
-	<article id="create_role">
-		<h3> Create Role </h3>
-		<p>
-			Creating a role requires you to describe the role with an object, then pass it to the server. The example below will create a new role for organization_1.
-		</p>
+</article>
+
+<article id="update_permission">
+    <h3> Updating a single Permission </h3>
+    <p>
+        You can update one permission at a time in using the following code. It is also possible to create a new permission object from
+        scratch and use it to update a single permission if desired.
+    </p>
+            <pre>
+            <code>
+                
+$perms = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllAccounts&quot;);
+$perms[0]-&gt;mask = 0;
+
+$c-&gt;permissionService()-&gt;updateRepositoryPermission($perms[0]);            </code>
+            </pre>
+</article>
+
+
+<article id="create_permissions">
+    <h3> Creating Permissions </h3>
+    <p>
+        Permissions can be created by first describing the permissions in Permission objects, then passing them to the server. The example below will create a new permisison for joeuser in organization 1 to administer the AllAccounts report.
+    </p>
 		<pre>
 		<code>
-			
-$robot_role = new Role(&quot;ROLE_ROBOT&quot;, &quot;organization_1&quot;);
-$c-&gt;roleService()-&gt;createRole($robot_role);		</code>
+            
+$p = new RepositoryPermission(&quot;/reports/samples/AllAccounts&quot;, &quot;user:/organization_1/joeuser&quot;, 1);
+$c-&gt;permissionService()-&gt;createRepositoryPermissions(array($p));        </code>
 		</pre>
-	</article>	
+</article>
 
-	<article id="update_role">
-		<h3> Update Role </h3>
-		<p>
-			Updating a role requires you to provide an updated model of the new role. If changing the name of the role, you must pass the old name of the role as the second argument.
-		</p>
+<article id="delete_permissions">
+    <h3> Deleting Permissions </h3>
+    <p>
+        Removing permissions is possible by passing the permission to the deleteRepositoryPermissions function. The example below will delete the permission created in the previous example.
+    </p>
 		<pre>
 		<code>
-			
-$robot_role = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_ROBOT&quot;, &quot;organization_1&quot;);
-$old_name = $robot_role-&gt;roleName;
-$robot_role-&gt;roleName = &quot;ROLE_HUMAN&quot;;
-$c-&gt;roleService()-&gt;updateRole($robot_role, $old_name);
-		</code>
+            
+$p = $c-&gt;permissionService()-&gt;searchRepositoryPermissions(&quot;/reports/samples/AllACcounts&quot;, null, null, &quot;user:/organization_1/joeuser&quot;);
+$c-&gt;permissionService()-&gt;deleteRepositoryPermission($p[0]);        </code>
 		</pre>
-	</article>	
+</article>
 
-	<article id="delete_role">
-		<h3> Delete Role </h3>
-		<p>
-			Removing a role requires you to retrieve the role object representing the role you wish to remove, then pass it to the deleteRole function.
-		</p>
+
+<h1 id="section_group"> Superuser Services </h1>
+<h2 id="importExportService"> Import/Export Service </h2>
+
+<article id="import_service">
+    <h3> Import Service </h3>
+    <p>
+        The import service allows you to import data that was previously exported. There are various flags that can be set to alter what data is imported, see the REST API documentation for more specific examples of such flags. The example below will submit an import from the file "import_data.zip" assumed to be stored in the same folder as the PHP file.
+        It will repeat "Still importing..." and check the status every 10 seconds until it is complete. Then it will announce that the import has completed.
+    </p>
 		<pre>
 		<code>
-			
-$role_human = $c-&gt;roleService()-&gt;getRole(&quot;ROLE_HUMAN&quot;, &quot;organization_1&quot;);
-$c-&gt;roleService()-&gt;deleteRole($role_human);		</code>
+            
+$request = new ImportTask;
+$request-&gt;update = true;
+
+$metadata = $c-&gt;importExportService()-&gt;startImportTask($request, file_get_contents('import_data.zip'));
+
+$continue = true;
+while($continue) {
+    $state = $c-&gt;importExportService()-&gt;getImportState($metadata-&gt;id);
+    if ($state-&gt;phase == 'finished') {
+        $continue = false;
+        echo &quot;&lt;br&gt;&lt;br&gt;Import complete!&quot;;
+    } else {
+        echo &quot;Still importing...&lt;br&gt;&quot;;
+        @ob_flush();
+        @flush();
+        sleep(10);
+    }
+}        </code>
 		</pre>
-	</article>		
-	
-		<h2 id="user_service"> User Service </h2>
+</article>
 
-	<article id="search_user">
-		<h3> Search User </h3>
-		<p>
-			Using the searchUsers method you can search for several users based on various critera. This method will return an array of UserLookup objects that can be used with the getUserByLookup() function to retrieve their fully described User objects. The example below grabs all users containing 'j' in their username, and that are members of organization_1 and prints out the roles assigned to that user. 
-		</p>
+<article id="export_service">
+    <h3> Export Service </h3>
+    <p>
+        Using this service you can export data from the server to store or import to another server. You must be authorized as the superuesr to use this service. data is compressed as a zip archive and sent as binary data. First construct an ExportTask object that defines what data is to be extracted, then pass it to the startExportTask function. Data can then be stored using PHP file I/O functions, or streamed to a browser by preparing the proper headers and echoing the binary data.
+        <br>
+        The example below will request an export, then refresh the status of the export every 10 seconds. When it is finished, it will download the data as a zip file, and then store it in a file (export.zip) and offer a link to download the file.
+    </p>
 		<pre>
 		<code>
-			
-$results = $c-&gt;userService()-&gt;searchUsers('j', 'organization_1');
+            
+header('Content-Type: text/html; charset=utf-8');
+// The export service can take longer than 60 seconds to execute, so it is necessary to change the server execution time limit
+set_time_limit(0);
 
-foreach ($results as $userLookup) {
-    $user = $c-&gt;userService()-&gt;getUserByLookup($userLookup);
-    printf('&lt;br&gt;Found user: %s', $user-&gt;fullName);
-    foreach ($user-&gt;roles as $role)
-        printf('&lt;br&gt; %10s User has role: %s', '&amp;nbsp;', $role-&gt;roleName);
-}		</code>
-		</pre>
-	</article>
-	
-	<article id="create_user">
-		<h3> Create User </h3>
-		<p>
-			To create a user, define a user object which fully describes the user, use it with the addUser function.
-		</p>
-		<pre>
-		<code>
-			      
-$newUser = new User(
-    'BI_User',	
-    'superSTRENGTHpassw0rd',
-    'clever@email.com',	
-    'Business Intelligence User',
-    'organization_1',
-    'true'
-);	
+$request-&gt;users[] = &quot;jasperadmin&quot;;
 
-$role = new Role('ROLE_USER', null, 'false');
-$newUser-&gt;addRole($role);
+$metadata = $c-&gt;importExportService()-&gt;startExportTask($request);
 
-try {
-   $c-&gt;userService()-&gt;addUsers($newUser);
-} catch (Exception $e) {
-   printf('Could not add new user: %s', $e-&gt;getMessage());
-}		</code>
-		</pre>
-	</article>	
-
-	<article id="update_user">
-		<h3> Update User </h3>
-		<p>
-			To update a user, you can also use the addUser function.
-		</p>
-		<pre>
-		<code>
-			
-$search = $c-&gt;userService()-&gt;searchUsers('californiaUser', 'organization_1');
-$californiaUser = $c-&gt;userService()-&gt;getUserByLookup($search[0]);
-
-$californiaUser-&gt;emailAddress('sanfrancisco-oakland@example.com');
-$californiaUser-&gt;password('SUPERstrongPASSWORD###!!!');
-
-try {
-    $c-&gt;userService()-&gt;addUser($californiaUser);
-} catch (Exception $e) {
-    printf('Attempt to modify the user failed with error: %s', $e-&gt;getMessage());
+$decline = true;
+while ($decline) {
+    $state = $c-&gt;importExportService()-&gt;getExportState($metadata-&gt;id);
+    if ($state-&gt;phase == &quot;finished&quot;) {
+        $decline = false;
+        echo &quot;&lt;br&gt;Export task complete, downloading....&quot;;
+    } else {
+        echo &quot;Export not yet completed...&lt;br&gt;&quot;;
+        @flush();
+        @ob_flush();
+        sleep(10);
+    }
 }
-  		</code>
-		</pre>
-	</article>
 
-	<article id="delete_user">
-		<h3> Delete User </h3>
-		<p>
-			To delete a user, obtain its user object from the server, then pass it to the deleteUser function.
-		</p>
-		<pre>
-		<code>
-			
-$user = $c-&gt;userService()-&gt;getUserByLookup(
-    $c-&gt;userService()-&gt;searchUsers('california', 'organization_1')[0]
-);
+$f = fopen('export.zip', 'w');
+$data = $c-&gt;importExportService()-&gt;fetchExport($metadata-&gt;id);
+fwrite($f, $data);
+fclose($f);
 
-$c-&gt;userService()-&gt;deleteUser($user);		</code>
+echo &quot;&lt;br&gt;&lt;br&gt;File available for download &lt;a href='export.zip'&gt;here&lt;/a&gt;&quot;;        </code>
 		</pre>
-	</article>		
-	
+</article>
+
+
+
 <!-- END OF ARTICLE SECTION -->
     </section>
 

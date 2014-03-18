@@ -15,7 +15,7 @@ class Client
 	private $restReq;
 	private $restUrl2;
 
-	public function __construct($serverUrl, $username, $password, $orgId = "organization_1")
+	public function __construct($serverUrl, $username, $password, $orgId = null)
 	{
 		$this->serverUrl = $serverUrl;
 		$this->username = $username;

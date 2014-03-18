@@ -14,10 +14,10 @@ class Client
 	protected $orgId;
 	private $restReq;
 	private $restUrl2;
-	
-	public function __construct($hostname = "http://localhost:8080/jasperserver-pro", $username = null, $password = null, $orgId = null)
+
+	public function __construct($serverUrl, $username, $password, $orgId = "organization_1")
 	{
-		$this->hostname = $hostname;
+		$this->serverUrl = $serverUrl;
 		$this->username = $username;
 		$this->password = $password;
 		$this->orgId = $orgId;
@@ -29,7 +29,7 @@ class Client
 			$this->restReq->setUsername($this->username);
 		}
 		$this->restReq->setPassword($this->password);
-		$this->restUrl2 = $this->hostname . BASE_REST2_URL;
+		$this->restUrl2 = $this->serverUrl . BASE_REST2_URL;
 	}
 
     public function repositoryService() {

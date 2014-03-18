@@ -60,7 +60,14 @@ class PermissionServiceTest extends BaseTest {
 		$this->jc->repositoryService()->deleteResource($this->testFolder->uri);
 		$this->jc->userService()->deleteUser($this->testUser);
 	}
-	
+
+    /** Coverage: createRepositoryPermission */
+    public function testCreateSinglePermission()
+    {
+        $perm = $this->ps->createRepositoryPermission($this->testPermission);
+        $this->assertEquals($this->testPermission, $perm);
+    }
+
 	/** Coverage: createRepositoryPermissions, searchRepositoryPermissions **/
 	public function testCreateAndGetPermissions()
 	{

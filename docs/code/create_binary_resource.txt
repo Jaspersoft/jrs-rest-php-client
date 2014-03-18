@@ -1,4 +1,3 @@
-
 $file = new File;
 
 $file->description = "Image of a Pitbull";

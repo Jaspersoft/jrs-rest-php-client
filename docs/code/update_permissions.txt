@@ -1,4 +1,3 @@
-
 $perms = $c->permissionService()->searchRepositoryPermissions("/reports/samples/AllAccounts");
 $perms[0]->mask = 0;
 

@@ -1,4 +1,3 @@
-
 $input_controls = $c->reportService()->getReportInputControls('/reports/samples/Cascading_multi_select_report');
 
 foreach($input_controls as $ic) {

@@ -1,4 +1,3 @@
-
 $results = $c->userService()->searchUsers('j', 'organization_1');
 
 foreach ($results as $userLookup) {

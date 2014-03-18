@@ -1,4 +1,3 @@
-
 header('Content-Type: text/html; charset=utf-8');
 // The export service can take longer than 60 seconds to execute, so it is necessary to change the server execution time limit
 set_time_limit(0);

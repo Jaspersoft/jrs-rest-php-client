@@ -1,4 +1,3 @@
-
 $criteria = new RepositorySearchCriteria();
 $criteria->q = "pitbull";
 

@@ -1,3 +1,2 @@
-
 // Let the client wait one whole minute before timing out
 $c->setRequestTimeout(60);

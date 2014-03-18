@@ -1,3 +1,2 @@
-
 $p = new RepositoryPermission("/reports/samples/AllAccounts", "user:/organization_1/joeuser", 1);
 $c->permissionService()->createRepositoryPermissions(array($p));

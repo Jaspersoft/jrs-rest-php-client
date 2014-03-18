@@ -1,3 +1,2 @@
-
 $p = $c->permissionService()->searchRepositoryPermissions("/reports/samples/AllACcounts", null, null, "user:/organization_1/joeuser");
 $c->permissionService()->deleteRepositoryPermission($p[0]);

@@ -1,4 +1,3 @@
-
 $search = $c->userService()->searchUsers('californiaUser', 'organization_1');
 $californiaUser = $c->userService()->getUserByLookup($search[0]);
 

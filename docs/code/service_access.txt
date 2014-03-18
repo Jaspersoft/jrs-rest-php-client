@@ -1,4 +1,3 @@
-
 // Store service for several calls
 $js = $c->jobService();
 $js->getJobs("/reports/samples/AllAccounts");

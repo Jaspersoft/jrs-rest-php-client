@@ -1,4 +1,3 @@
-
 $allJobs = $c->jobService()->searchJobs("/reports/samples/AllAccounts");
 $job = $c->jobService()->getJob($allJobs[0]->id);
 

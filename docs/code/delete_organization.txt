@@ -1,4 +1,3 @@
-
 $search = $c->organizationService()->searchOrganizations('test_organization');
 $organization = $search[0];
 

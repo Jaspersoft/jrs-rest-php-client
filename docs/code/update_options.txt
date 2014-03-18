@@ -1,4 +1,3 @@
-
 $success = $c->optionsService()->updateReportOptions(
     '/reports/samples/Cascading_multi_select_report',
     array('Country_multi_select' => array('Canada', 'USA'),	'Cascading_state_multi_select' => array('OR', 'WA', 'BC')),

@@ -1,4 +1,3 @@
-      
 $newUser = new User(
     'BI_User',	
     'superSTRENGTHpassw0rd',

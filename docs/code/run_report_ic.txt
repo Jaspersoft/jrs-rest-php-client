@@ -1,4 +1,3 @@
-
 $controls = array(
    'Country_multi_select' => array('USA', 'Mexico'),
    'Cascading_state_multi_select' => array('CA', 'OR')

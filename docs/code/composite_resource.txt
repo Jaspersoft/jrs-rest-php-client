@@ -1,4 +1,3 @@
-
 $report_shop = new \Jaspersoft\DTO\Resource\ReportUnit();
 $city_control = new \Jaspersoft\DTO\Resource\InputControl();
 

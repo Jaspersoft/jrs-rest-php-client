@@ -1,4 +1,3 @@
-
 $search = $c->organizationService()->searchOrganization('organization_wave');
 $organization = $search[0];
 $organization->tenantDesc = "Do the wave";

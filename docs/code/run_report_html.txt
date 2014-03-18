@@ -1,4 +1,3 @@
-
 $report = $c->reportService()->runReport('/reports/samples/AllAccounts', 'html');
 
 echo $report;

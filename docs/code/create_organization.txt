@@ -1,4 +1,3 @@
-
 $new_organization = new Organization(
       'test_organization',	// alias
       'test_organization',	// id

@@ -67,9 +67,7 @@
 		<p>
 
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample(''); ?>
+		<pre><code><?php inject_sample(''); ?>
 		</code>
 		</pre>
 	</article>
@@ -85,9 +83,7 @@ end of skeleton -->
 			In addition, please note that the examples below assume you are importing objects using the PHP 'use' keyword. If you are not, you must refer to the objects using the full qualified namespace.
 		</p>
 
-		<pre>
-		<code>
-			<?php inject_sample('code/client_invokation.txt'); ?>
+		<pre><code><?php inject_sample('code/client_invokation.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -99,9 +95,7 @@ end of skeleton -->
             before timing out. The default timeout is 30 seconds.
         </p>
 
-            <pre>
-            <code>
-                <?php inject_sample('code/client_timeout.txt'); ?>
+            <pre><code><?php inject_sample('code/client_timeout.txt'); ?>
             </code>
             </pre>
     </article>
@@ -113,9 +107,7 @@ end of skeleton -->
 			The client class can also return data about the sever it is connecting to. This data includes date formats, license information and other info about the server's configruation. It is returned in an associative array format.
 		</p>
 
-		<pre>
-		<code>
-			<?php inject_sample('code/server_info.txt'); ?>
+		<pre><code><?php inject_sample('code/server_info.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -141,9 +133,7 @@ end of skeleton -->
 			<li> userService </li>
 		</ul>
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/service_access.txt'); ?>
+		<pre><code><?php inject_sample('code/service_access.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -155,9 +145,7 @@ end of skeleton -->
     <p>
         Using the searchUsers method you can search for several users based on various critera. This method will return an array of UserLookup objects that can be used with the getUserByLookup() function to retrieve their fully described User objects. The example below grabs all users containing 'j' in their username, and that are members of organization_1 and prints out the roles assigned to that user.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/search_user.txt'); ?>
+		<pre><code><?php inject_sample('code/search_user.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -167,9 +155,7 @@ end of skeleton -->
     <p>
         To create a user, define a user object which fully describes the user, use it with the addUser function.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/create_user.txt'); ?>
+		<pre><code><?php inject_sample('code/create_user.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -179,9 +165,7 @@ end of skeleton -->
     <p>
         To update a user, you can also use the addUser function.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/update_user.txt'); ?>
+		<pre><code><?php inject_sample('code/update_user.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -191,9 +175,7 @@ end of skeleton -->
     <p>
         To delete a user, obtain its user object from the server, then pass it to the deleteUser function.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/delete_user.txt'); ?>
+		<pre><code><?php inject_sample('code/delete_user.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -205,9 +187,7 @@ end of skeleton -->
 			Using this function, you can request the attributes of a user. You are able to specifiy specific attributes that you wish to get, otherwise all attributes for user will be returned.
 			You must supply a User object representing the user you wish to find the attributes of.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/get_attributes.txt'); ?>
+		<pre><code><?php inject_sample('code/get_attributes.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -217,9 +197,7 @@ end of skeleton -->
 		<p>
 			setAttribute can be used to create or update an attribute for a user.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/add_attributes.txt'); ?>
+		<pre><code><?php inject_sample('code/add_attributes.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -229,9 +207,7 @@ end of skeleton -->
 		<p>
 			To remove attributes of a user, you must supply a User object of the user to remove from, and an array of the names of the attributes (Not attribute objects) If no attribute names are given, all attributes will be removed.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/delete_attributes.txt'); ?>
+		<pre><code><?php inject_sample('code/delete_attributes.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -242,9 +218,7 @@ end of skeleton -->
     <p>
         Creating a new organization requires constructing a new Organization object and sending it using the createOrganization function.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/create_organization.txt'); ?>
+		<pre><code><?php inject_sample('code/create_organization.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -254,9 +228,7 @@ end of skeleton -->
     <p>
         Using the searchOrganization function you can search for organizations by ID.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/search_organization.txt'); ?>
+		<pre><code><?php inject_sample('code/search_organization.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -267,9 +239,7 @@ end of skeleton -->
         Using the getOrganization function you can request the data about a specific organization for which you know
         the ID of.
     </p>
-            <pre>
-            <code>
-                <?php inject_sample('code/get_organization.txt'); ?>
+            <pre><code><?php inject_sample('code/get_organization.txt'); ?>
             </code>
             </pre>
 </article>
@@ -279,9 +249,7 @@ end of skeleton -->
     <p>
         An organization may be deleted by providing the Organization Object that correlates to the organization that is to be deleted. This can be retrieved as shown below by using the searchOrganizations() method.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/delete_organization.txt'); ?>
+		<pre><code><?php inject_sample('code/delete_organization.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -291,9 +259,7 @@ end of skeleton -->
     <p>
         Modifying an organization is done in a similar fashion to modifying a user. The organization object needs to be obtained with the searchOrganization method and then modify it with the get/set methods, and return it back to the server, as shown below.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/update_organization.txt'); ?>
+		<pre><code><?php inject_sample('code/update_organization.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -307,9 +273,7 @@ end of skeleton -->
         You can request all the roles of an organization, or of the server using this function. The example below
         will request all roles on the server. Optionally, you can search based on specific criteria for roles.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/get_many_roles.txt'); ?>
+		<pre><code><?php inject_sample('code/get_many_roles.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -320,9 +284,7 @@ end of skeleton -->
         If you know the name of the role, you can request it specifically using this function. The example below
         will request the ROLE_USER data.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/get_role.txt'); ?>
+		<pre><code><?php inject_sample('code/get_role.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -332,9 +294,7 @@ end of skeleton -->
     <p>
         Creating a role requires you to describe the role with an object, then pass it to the server. The example below will create a new role for organization_1.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/create_role.txt'); ?>
+		<pre><code><?php inject_sample('code/create_role.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -344,9 +304,7 @@ end of skeleton -->
     <p>
         Updating a role requires you to provide an updated model of the new role. If changing the name of the role, you must pass the old name of the role as the second argument.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/update_role.txt'); ?>
+		<pre><code><?php inject_sample('code/update_role.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -356,9 +314,7 @@ end of skeleton -->
     <p>
         Removing a role requires you to retrieve the role object representing the role you wish to remove, then pass it to the deleteRole function.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/delete_role.txt'); ?>
+		<pre><code><?php inject_sample('code/delete_role.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -372,9 +328,7 @@ end of skeleton -->
 			Using the searchJobs function, you can search for existing jobs. There are various options that can be set to filter your results. With no options set, you will recieve all existing jobs on the server.
 			The example below will search for all jobs schedule for the report at the URI "/reports/samples/AllAccounts"
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/search_jobs.txt'); ?>
+		<pre><code><?php inject_sample('code/search_jobs.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -385,9 +339,7 @@ end of skeleton -->
 			If you know the ID of a job, you can request the specific details of that job. All results for searchJobs are JobSummary objects which contain IDs. Also when you create a new job, the ID will be returned in the response data.
 			You can use these IDs with this function to request the details of the jobs.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/get_job.txt'); ?>
+		<pre><code><?php inject_sample('code/get_job.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -398,9 +350,7 @@ end of skeleton -->
 			Creating a job requires you to create a well-defined Job object. Job objects consist of subclasses that
             define the behaviour of the scheduled job.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/create_job.txt'); ?>
+		<pre><code><?php inject_sample('code/create_job.txt'); ?>
 		</code>
 		</pre>
 	</article>	
@@ -410,9 +360,7 @@ end of skeleton -->
 		<p>
 			To update a scheduled job, simply request the old job object from the server, modify it, and then use the updateJob() function to reupload it to the server to be updated. The Job class utilizes properties and arrays to manage its data, which is different from the other objects which use only properties. This means you will not use get/set methods to alter the data in a Job object, but rather set the properties as if they were variables. If a property refers to a nested element of the job class, use array functions to manipulate the arrays. 
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/update_job.txt'); ?>
+		<pre><code><?php inject_sample('code/update_job.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -422,9 +370,7 @@ end of skeleton -->
 		<p>
 			Jobs can be paused using the pauseJob function. The only argument for this function accepts either a single job ID as an integer, an array of job IDs; or, if no argument is provided all jobs will be paused. 
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/pause_job.txt'); ?>
+		<pre><code><?php inject_sample('code/pause_job.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -434,9 +380,7 @@ end of skeleton -->
 		<p>
 			To resume a job, pass the job's ID to the resumeJob function. For convenience you may also pass an array of job IDs. Similarly, all jobs will be resumed if no IDs are provided.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/resume_job.txt'); ?>
+		<pre><code><?php inject_sample('code/resume_job.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -446,9 +390,7 @@ end of skeleton -->
 		<p>
 			To delete a job, search for the job by name or URI, then hand its ID to the deleteJob function. The example below will delete all scheduled jobs on the server. 
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/delete_job.txt'); ?>
+		<pre><code><?php inject_sample('code/delete_job.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -460,9 +402,7 @@ end of skeleton -->
 		<p>
 			You can view the different stored options for your reports that have input controls using this function. Simply provide the URI of the report that has options, and an array of objects representing each report option will be returned. The example below shows you how to request all the ReportOptions objects, iterate through them and print the Labels of each of them.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/get_options.txt'); ?>
+		<pre><code><?php inject_sample('code/get_options.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -472,9 +412,7 @@ end of skeleton -->
 		<p>
 			The updateReportOptions function can be used both to create new, or update existing report options. The example below shows how to create a new report that makes selections for existing input controls.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/update_options.txt'); ?>
+		<pre><code><?php inject_sample('code/update_options.txt'); ?>
 		</code>
 		</pre>
 	</article>	
@@ -484,9 +422,7 @@ end of skeleton -->
 		<p>
 			To delete report options, you must retrieve the URI for the report containing the options, and provide the label for the option setting. If your report options has whitespace in the label, currently this function may not handle it well. Instead use the deleteResource() function to delete the Report Option. The example below will remove the report options created in the example above.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/delete_options.txt'); ?>
+		<pre><code><?php inject_sample('code/delete_options.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -499,9 +435,7 @@ end of skeleton -->
 		<p>
 			This service allows you to execute a query on a data source or domain. Pass the URI and a properly written query string as parameters. An associative array representing the names and values of the query passed will be returned to you.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/execute_query.txt'); ?>
+		<pre><code><?php inject_sample('code/execute_query.txt'); ?>
 		</code>
 		</pre>
 	</article>	
@@ -513,9 +447,7 @@ end of skeleton -->
 		<p>
 			The following code will request the AllAccounts sample report in HTML format. Since the data is HTML, we can simply echo it and the report will be presented in a webpage. You can do many things with the binary data, including offering the file to be downloaded or storing it to a file.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/run_report_html.txt'); ?>
+		<pre><code><?php inject_sample('code/run_report_html.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -525,9 +457,7 @@ end of skeleton -->
 		<p>
 			The following example displays how a report can be ran with various input controls set. 
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/run_report_ic.txt'); ?>
+		<pre><code><?php inject_sample('code/run_report_ic.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -537,9 +467,7 @@ end of skeleton -->
 		<p>
 			By offering the proper headers before anything else is sent by the script, we can serve binary data to a browser as a download. 
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/download_report.txt'); ?>
+		<pre><code><?php inject_sample('code/download_report.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -549,9 +477,7 @@ end of skeleton -->
 		<p>
 			You can retrieve the input controls defined for a report, their possible values, and other metadata about controls with the report service. The example below will list each control, and its corresponding values.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/get_input_controls.txt'); ?>
+		<pre><code><?php inject_sample('code/get_input_controls.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -567,9 +493,7 @@ end of skeleton -->
 			<br>
 			The code below will populate a variable with an array of items that describe objects in the repository.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/get_repository.txt'); ?>
+		<pre><code><?php inject_sample('code/get_repository.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -581,9 +505,7 @@ end of skeleton -->
             work with. Note: CompositeResource and Resource are abstract classes and are not expected to be insantisted
             or used with any 'CRUD' operations.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/create_resource.txt'); ?>
+		<pre><code><?php inject_sample('code/create_resource.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -604,9 +526,7 @@ end of skeleton -->
 
 
         </p>
-            <pre>
-            <code>
-                <?php inject_sample('code/composite_resource.txt'); ?>
+            <pre><code><?php inject_sample('code/composite_resource.txt'); ?>
             </code>
             </pre>
     </article>
@@ -624,9 +544,7 @@ end of skeleton -->
             the proper MIME type in the Jaspersoft\Tool\MimeMapper object which contains an associative array of JRS
             file types mapped to their relevant MIME type.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/create_binary_resource.txt'); ?>
+		<pre><code><?php inject_sample('code/create_binary_resource.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -640,9 +558,7 @@ end of skeleton -->
             is returned. Within this objects are information about pagination (results returned, total results, index),
             the items array within this object contains
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/search_resource.txt'); ?>
+		<pre><code><?php inject_sample('code/search_resource.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -654,9 +570,7 @@ end of skeleton -->
 			You can remove resources from the repository, either one at a time, or several at a time. Using
             deleteResource or deleteManyResources.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/delete_resource.txt'); ?>
+		<pre><code><?php inject_sample('code/delete_resource.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -667,9 +581,7 @@ end of skeleton -->
 			Resources can be moved from one location to another within the Repository. The example below will move the
             folder "/ImageFolder/anchorsteam" to "/anchorsteam"
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/move_resource.txt'); ?>
+		<pre><code><?php inject_sample('code/move_resource.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -681,9 +593,7 @@ end of skeleton -->
             folder "/anchorsteam" to the new location "/ImageFolder/anchorsteam". By setting the last argument to true,
             folders which do not exist will be created when copying the file.
 		</p>
-		<pre>
-		<code>
-			<?php inject_sample('code/copy_resource.txt'); ?>
+		<pre><code><?php inject_sample('code/copy_resource.txt'); ?>
 		</code>
 		</pre>
 	</article>
@@ -694,9 +604,7 @@ end of skeleton -->
     <p>
         You can search for user permissions in regards to a resource in the repository by using the searchRepositoryPermissions function. Provide the URI for the resource as the first argument. Other arguments are available to filter the results as needed. The example below will list all the set permission recipients for "/reports/samples/AllAccounts"
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/search_permissions.txt'); ?>
+		<pre><code><?php inject_sample('code/search_permissions.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -706,9 +614,7 @@ end of skeleton -->
     <p>
         To update permissions, you must retrieve existing permissions, modify them, and then return them to the server. The example below will retrieve permissions for a report, alter the first one to have no access, and update it.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/update_permissions.txt'); ?>
+		<pre><code><?php inject_sample('code/update_permissions.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -719,9 +625,7 @@ end of skeleton -->
         You can update one permission at a time in using the following code. It is also possible to create a new permission object from
         scratch and use it to update a single permission if desired.
     </p>
-            <pre>
-            <code>
-                <?php inject_sample('code/update_permission.txt'); ?>
+            <pre><code><?php inject_sample('code/update_permission.txt'); ?>
             </code>
             </pre>
 </article>
@@ -732,9 +636,7 @@ end of skeleton -->
     <p>
         Permissions can be created by first describing the permissions in Permission objects, then passing them to the server. The example below will create a new permisison for joeuser in organization 1 to administer the AllAccounts report.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/create_permissions.txt'); ?>
+		<pre><code><?php inject_sample('code/create_permissions.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -744,9 +646,7 @@ end of skeleton -->
     <p>
         Removing permissions is possible by passing the permission to the deleteRepositoryPermissions function. The example below will delete the permission created in the previous example.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/delete_permissions.txt'); ?>
+		<pre><code><?php inject_sample('code/delete_permissions.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -761,9 +661,7 @@ end of skeleton -->
         The import service allows you to import data that was previously exported. There are various flags that can be set to alter what data is imported, see the REST API documentation for more specific examples of such flags. The example below will submit an import from the file "import_data.zip" assumed to be stored in the same folder as the PHP file.
         It will repeat "Still importing..." and check the status every 10 seconds until it is complete. Then it will announce that the import has completed.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/import_service.txt'); ?>
+		<pre><code><?php inject_sample('code/import_service.txt'); ?>
         </code>
 		</pre>
 </article>
@@ -775,9 +673,7 @@ end of skeleton -->
         <br>
         The example below will request an export, then refresh the status of the export every 10 seconds. When it is finished, it will download the data as a zip file, and then store it in a file (export.zip) and offer a link to download the file.
     </p>
-		<pre>
-		<code>
-            <?php inject_sample('code/export_service.txt'); ?>
+		<pre><code><?php inject_sample('code/export_service.txt'); ?>
         </code>
 		</pre>
 </article>

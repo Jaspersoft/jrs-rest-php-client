@@ -1,4 +1,3 @@
-
 // SimpleTrigger
 $trigger = new SimpleTrigger();
 $trigger->timezone = "America/Los_Angeles";

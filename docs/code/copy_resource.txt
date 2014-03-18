@@ -1,2 +1,1 @@
-
 $c->repositoryService()->copyResource("/anchorsteam", "/ImageFolder", true);

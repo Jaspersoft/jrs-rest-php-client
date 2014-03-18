@@ -61,11 +61,10 @@ class OptionsService
 	 * @param string $uri
 	 * @param string $optionsLabel
      * @throws \Jaspersoft\Exception\RESTRequestException
-     * @return bool based on success of function
 	 */
 	public function deleteReportOptions($uri, $optionsLabel) {
 		$url = $this->restUrl2 . '/reports' . $uri . '/options/' . $optionsLabel;
-		return $this->service->prepAndSend($url, array(200), 'DELETE', null, false);
+		$this->service->prepAndSend($url, array(200), 'DELETE', null, false);
 	}
 
 }

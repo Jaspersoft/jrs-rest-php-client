@@ -122,11 +122,10 @@ class PermissionService
      *
      * @param RepositoryPermission $perm - object correlating to permission to be deleted.
      * @throws \Jaspersoft\Exception\RESTRequestException
-     * @return bool - based on success of function
      */
 	public function deleteRepositoryPermission(RepositoryPermission $perm) {
 		$url = $this->restUrl2 . '/permissions' . $perm->uri . ';recipient=' . str_replace('/', '%2F', $perm->recipient);
-		return $this->service->prepAndSend($url, array(200, 204), 'DELETE', null, false);
+		$this->service->prepAndSend($url, array(204), 'DELETE', null, false);
 	}		
 
 }

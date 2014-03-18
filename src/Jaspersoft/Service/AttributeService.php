@@ -96,8 +96,6 @@ class AttributeService
 	 * 
 	 * @param $user \Jaspersoft\Dto\User\User object to delete attributes from
 	 * @param $attributes array of attribute names that are to be removed
-     *
-     * @return bool based on success of request
 	 */
 	public function deleteAttributes(User $user, $attributes = null)
 	{
@@ -105,7 +103,7 @@ class AttributeService
 		if (!empty($attributes)) {
 			$url .= '?' . Util::query_suffix(array('name' => $attributes));
 		}
-		return $this->service->prepAndSend($url, array(204, 200), 'DELETE', null, false,
+		$this->service->prepAndSend($url, array(204), 'DELETE', null, false,
              'application/json', 'application/json');
 	}
 

@@ -121,11 +121,12 @@ class JobService
      * You must supply the Job's ID to this function to delete it.
 	 *
 	 * @param int|string $id - can be retrieved from JobSummary properties
-     * @return bool - based on success of function
+     * @return string ID of deleted job
 	 */
 	public function deleteJob($id) {
 		$url = $this->restUrl2 . '/jobs/' . $id;
-		return $this->service->prepAndSend($url, array(200, 204), 'DELETE', null, false);
+		$data = $this->service->prepAndSend($url, array(200), 'DELETE', null, true);
+        return $data;
 	}
 
 	/**

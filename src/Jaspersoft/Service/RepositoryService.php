@@ -245,21 +245,19 @@ class RepositoryService
 
     /** Remove a resource from the repository
      * @param string $uri
-     * @return bool based on success of function
      */
     public function deleteResource($uri) {
         $url = self::make_url(null, $uri);
-        return $this->service->prepAndSend($url, array(204, 200), 'DELETE', null, false);
+        $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
     }
 
     /** Delete many resources from the repository simultaneously
      *
      * @param string $uriArray
-     * @return bool based on success of function
      */
     public function deleteManyResources($uriArray) {
         $url = self::make_url() . '?' . Util::query_suffix(array("resourceUri" => $uriArray));
-        return $this->service->prepAndSend($url, array(204, 200), 'DELETE', null, false);
+        $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
     }
 
 }

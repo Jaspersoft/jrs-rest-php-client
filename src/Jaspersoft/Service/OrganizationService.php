@@ -92,13 +92,11 @@ class OrganizationService
 	 *
 	 * @param Organization $org - organization object
 	 * @throws \Jaspersoft\Exception\RESTRequestException
-     *
-     * @return bool based on success of request
 	 */
 	public function deleteOrganization(Organization $org)
 	{
         $url = self::make_url($org->getId());
-		return $this->service->prepAndSend($url, array(200, 204), 'DELETE', null, false);
+		$this->service->prepAndSend($url, array(204), 'DELETE', null, false);
 	}
 	
     /**

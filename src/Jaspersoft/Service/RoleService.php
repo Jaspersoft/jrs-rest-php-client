@@ -89,11 +89,10 @@ class RoleService
      *
      * @param Role $role
      * @throws \Jaspersoft\Exception\RESTRequestException
-     * @return bool based on success of function
      */
 	public function deleteRole(Role $role) {
         $url = self::make_url($role->getTenantId(), $role->getRoleName());
-        return $this->service->prepAndSend($url, array(204, 200), 'DELETE', null, false);
+        $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
 	}
 	
     /**

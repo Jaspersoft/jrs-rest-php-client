@@ -138,11 +138,10 @@ class UserService
 	 * as the parameter for this function.
 	 *
 	 * @param User $user - user to delete
-	 * @return bool - based on success of function
 	 */
 	public function deleteUser(User $user) {
         $url = self::make_url($user->tenantId, $user->username);
-        return $this->service->prepAndSend($url, array(204), 'DELETE', null, false, 'application/json', 'application/json');
+        $this->service->prepAndSend($url, array(204), 'DELETE', null, false, 'application/json', 'application/json');
 	}
 	
 }

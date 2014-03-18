@@ -10,7 +10,11 @@ class ExportTask {
 
     public function __construct($parameters = null)
 	{
-        $this->parameters[] = $parameters;
+
+        /** Parameters to be set for the export task
+         * @var array
+         */
+        $this->parameters = $parameters;
     }
 
     public function jsonSerialize()

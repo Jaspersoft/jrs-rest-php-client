@@ -20,10 +20,10 @@ class InputControl {
 		$data_array = json_decode($json, true);
 		$result = array();
 		foreach($data_array['inputControlState'] as $k) {
-			$temp = new self($k['uri'], $k['id'], $k['value'], $k['error']);
+			$temp = @new self($k['uri'], $k['id'], $k['value'], $k['error']);
 			if (!empty($k['options'])) {
 				foreach ($k['options'] as $o) {
-					$temp->addOption($o['label'], $o['value'], $o['selected']);
+					@$temp->addOption($o['label'], $o['value'], $o['selected']);
 				}
 			}
 			$result[] = $temp;

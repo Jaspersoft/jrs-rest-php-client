@@ -1,8 +1,5 @@
 <?php
-
-
 namespace Jaspersoft\Tool;
-
 
 abstract class CompositeDTOMapper {
 
@@ -43,48 +40,84 @@ abstract class CompositeDTOMapper {
         "OlapUnit" => array("olapConnection"),
         "Query" => array("dataSource"),
         "ReportUnit" => array("dataSource", "jrxml", "query", "inputControls"),
+        "DomainTopic" => array("dataSource", "jrxml", "query", "inputControls"),
         "SecureMondrianConnection" => array("dataSource", "schema", "accessGrantSchemas"),
         "SemanticLayerDataSource" => array("schema", "dataSource", "securityFile")
     );
 
-    /** referenceKey returns the key needed for a reference of the $field's type.
+    /** A collection of mappings of field names for file-based resources that appear as
+     * sub resources in various DTOs
      *
-     * @param $field
-     * @return null
+     * @var array
      */
-    public static function referenceKey($field)
-    {
-        if (array_key_exists($field, static::$referenceMap)) {
-            return static::$referenceMap[$field];
+    private static $fileResourceMap = array(
+        "schema" => "schema",
+        "accessGrantSchemas" => "accessGrantSchema",
+        "jrxml" => "jrxmlFile",
+        "securityFile" => "securityFile"
+    );
+
+    /** Return a value from a map given the key
+     *
+     * @param $field Field to be resolved
+     * @param $map Map to use for resolution
+     * @return string|null
+     */
+    private static function forwardResolve($field, $map) {
+        if (array_key_exists($field, $map)) {
+            return $map[$field];
         } else {
-            //TODO: Add appropriate exception
+            // TODO: Appropriate Exception
             return null;
         }
     }
 
-    public static function dereferenceKey($field)
-    {
-        $backwardMap = array_reverse(static::$referenceMap);
+    /** Return the key of a map given the value
+     * This method assumes the data map has a one-to-one relationship
+     *
+     * @param $field Field to be resolved
+     * @param $map Map to use for resolution
+     * @return string|null
+     */
+    private static function reverseResolve($field, $map) {
+        $backwardMap = array_reverse($map);
         if (array_key_exists($field, $backwardMap)) {
             return $backwardMap[$field];
         } else {
-            // TODO: Add appropriate exception
+            // TODO: Appropriate Exception
             return null;
         }
+    }
+
+    /** referenceKey returns the key needed for a reference of the $field's type.
+     *
+     * @param $field Reference Field Name
+     * @return string|null
+     */
+    public static function referenceKey($field)
+    {
+        return self::forwardResolve($field, static::$referenceMap);
+    }
+
+    public static function dereferenceKey($field)
+    {
+        return self::reverseResolve($field, static::$referenceMap);
     }
 
     public static function compositeFields($class)
     {
         $className = explode('\\', $class);
-        // Strict standards require end to only take variables, not functions.
         $className = end($className);
 
-        if (array_key_exists($className, static::$compositeFieldMap)) {
-            return static::$compositeFieldMap[$className];
-        } else {
-            //TODO: Add appropriate exception
-            return null;
-        }
+        return self::forwardResolve($className, static::$compositeFieldMap);
+    }
+
+    public static function fileResourceField($field) {
+        return self::forwardResolve($field, static::$fileResourceMap);
+    }
+
+    public static function fileResourceFieldReverse($field) {
+        return self::reverseResolve($field, static::$fileResourceMap);
     }
 
 }

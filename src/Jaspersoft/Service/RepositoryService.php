@@ -8,6 +8,7 @@ use Jaspersoft\Service\Result\SearchResourcesResult;
 use Jaspersoft\Tool\RESTRequest;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Tool\MimeMapper;
+use Jaspersoft\Exception\ResourceServiceException;
 
 if (!defined("RESOURCE_NAMESPACE"))
     define("RESOURCE_NAMESPACE", "Jaspersoft\\Dto\\Resource");
@@ -110,30 +111,41 @@ class RepositoryService
 
     /** Create a resource using a resource descriptor
      *
-     * @param \Jaspersoft\Dto\Resource\Resource $resource Descriptive resource object representing object
+     * Note: Resources can be placed at arbitrary locations, or in a folder. Thus, you must set EITHER $parentFolder
+     * OR the uri parameter of the Resource used in the first argument.
+     *
+     * @param \Jaspersoft\Dto\Resource\Resource $resource Resource object fully describing new resource
      * @param string $parentFolder folder in which the resource should be created
-     * @param bool $createFolders Create folders in the path that may not exist
-     * @param bool $overwrite if true, then resource with given URI will be overwritten even if it is of a different type
+     * @param bool $createFolders Create folders in the path that may not exist?
      * @throws \Exception
      * @return \Jaspersoft\Dto\Resource\Resource
      */
-    public function createResource(Resource $resource, $parentFolder, $createFolders = true)
+    public function createResource(Resource $resource, $parentFolder = null, $createFolders = true)
     {
-        $url = self::make_url(null, $parentFolder);
+        if ($parentFolder == null) {
+            if (isset($resource->uri)) {
+                $verb = "PUT";
+                $url = self::make_url(null, $resource->uri);
+            } else {
+                throw new ResourceServiceException("CreateResource: You must set either the parentFolder parameter or ".
+                                                    "set a URI for the provided resource.");
+            }
+        } else {
+            $verb = "POST";
+            $url = self::make_url(null, $parentFolder);
+        }
 
         $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
         $body = $resource->toJSON();
-        // Isolate the class name, lowercase it, and provide it as a filetype in the headers
-        $type = explode('\\', get_class($resource));
-        $file_type = 'application/repository.' . lcfirst(end($type)) . '+json';
-        $verb = 'POST';
-        $data = $this->service->prepAndSend($url, array(201, 200), $verb, $body, true, $file_type, 'application/json');
+        $data = $this->service->prepAndSend($url, array(201, 200), $verb, $body, true, $resource->contentType(), 'application/json');
+
         return $resource::createFromJSON(json_decode($data, true), get_class($resource));
     }
 
     /** Update a resource using a resource descriptor
      *
-     * @param \Jaspersoft\Dto\Resource\Resource $resource Object describing new resource
+     * @param \Jaspersoft\Dto\Resource\Resource $resource Resource object fully describing updated resource
+     * @param bool $overwrite Replace existing resource even if type differs?
      * @return \Jaspersoft\Dto\Resource\Resource
      */
     public function updateResource(Resource $resource, $overwrite = false)

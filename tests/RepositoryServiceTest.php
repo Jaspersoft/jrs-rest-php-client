@@ -22,12 +22,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =========================================================================== */
 require_once "BaseTest.php";
+use Jaspersoft\Dto\Resource\JdbcDataSource;
 use Jaspersoft\Tool\TestUtils as u;
 use Jaspersoft\Dto\Resource\Folder;
 use Jaspersoft\Dto\Resource\ResourceLookup;
 use Jaspersoft\Dto\Resource\Resource;
 use Jaspersoft\Service\Criteria\RepositorySearchCriteria;
 use Jaspersoft\Dto\Resource\File;
+use Jaspersoft\Exception\ResourceServiceException;
+use Jaspersoft\Tool\TestUtils;
 
 class RepositoryServiceTest extends BaseTest {
 
@@ -71,7 +74,7 @@ class RepositoryServiceTest extends BaseTest {
 	
 	/** Coverage: createResource, searchResources, getResource,
 			deleteResource **/
-	public function testCreateResource()
+	public function testCreateResource_inFolder()
 	{
 		$folder = u::createFolder();
 		$this->rs->createResource($folder, "/", true);
@@ -85,6 +88,19 @@ class RepositoryServiceTest extends BaseTest {
 		
 		$this->rs->deleteResource($folder->uri);
 	}
+
+    public function testCreateResource_withArbitraryID()
+    {
+        $folder = u::createFolder();
+        $this->rs->createResource($folder, null, true);
+
+        $actual = $this->rs->getResource($folder->uri);
+
+        $this->assertEquals($folder->uri, $actual->uri);
+        $this->assertEquals($folder->label, $actual->label);
+
+        $this->rs->deleteResource($actual->uri);
+    }
 	
 	/** Coverage: updateResource, createResource, searchResources, searchResourcesCriteria, deleteResource **/
 	public function testUpdateResource()
@@ -123,7 +139,24 @@ class RepositoryServiceTest extends BaseTest {
 		
 		$this->rs->deleteManyResources(array($obj->uri, $folder->uri."_new"));
 	}
-	
+
+    /**
+     * @expectedException \Jaspersoft\Exception\ResourceServiceException
+     * @expectedExceptionMessage CreateResource: You must set either the parentFolder parameter or set a URI for the provided resource.
+     */
+    public function testExceptionThrown_withoutValidURI_createResource()
+    {
+        $resource = new JdbcDataSource();
+        $resource->driverClass = "org.postgresql.Driver";
+        $resource->label = u::makeID();
+        $resource->description = "TestDS " . $resource->label;
+        $resource->password = "None";
+        $resource->username = "None";
+        $resource->connectionUrl = "jdbc:postgresql://localhost:5432/foodmart";
+
+        $this->rs->createResource($resource, null);
+
+    }
 }
 
 ?>

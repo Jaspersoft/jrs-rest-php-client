@@ -1,8 +1,0 @@
-$criteria = new RepositorySearchCriteria();
-$criteria->q = "pitbull";
-
-$search = $c->repositoryService()->searchResources($criteria);
-$image = $c->repositoryService()->getResource($search->items[0]->uri);
-$image_data = $c->repositoryService()->getBinaryFileData($image);
-
-echo "<h1> Its a pitbull! </h1><br><img src=\"data:image/jpeg;base64,".base64_encode($image_data)."\">";

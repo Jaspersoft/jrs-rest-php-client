@@ -486,12 +486,13 @@ end of skeleton -->
 		<h2 id="repository_service"> Repository Service </h2>
 		
 	<article id="get_repository">
-		<h3> Obtain List of Repository Items </h3>
+		<h3> Searching the Repository </h3>
 		<p>
             The repository can be searched for items, using a RepositorySearchCriteria object to define your search
             parameters. If no criteria is provided, the entire repository will be returned.
 			<br>
-			The code below will populate a variable with an array of items that describe objects in the repository.
+			Results are returned as a SearchResourcesResult object. Each result is contained in the items element of the
+            result object.
 		</p>
 		<pre><code><?php inject_sample('code/get_repository.txt'); ?>
 		</code>
@@ -549,16 +550,13 @@ end of skeleton -->
 		</pre>
 	</article>
 	
-	<article id="search_resource">
-		<h3> Searching Resources and Requesting Binary Content </h3>
+	<article id="binary_resource">
+		<h3> Requesting Binary Content </h3>
 		<p>
-			You are able to request specific details about existing resources in the server. Using the search resource
-            function you can filter for specific files. The example below will show how you can request an image, and
-            display it in inline HTML using base64 encoding. When a search is performed, a ResourceSearchResult object
-            is returned. Within this objects are information about pagination (results returned, total results, index),
-            the items array within this object contains
+			The example below will show how you can request an image, and display it in inline HTML using base64
+            encoding.
 		</p>
-		<pre><code><?php inject_sample('code/search_resource.txt'); ?>
+		<pre><code><?php inject_sample('code/binary_resource.txt'); ?>
 		</code>
 		</pre>
 	</article>

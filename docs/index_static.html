@@ -616,14 +616,26 @@ foreach($input_controls as $ic) {
 		<h2 id="repository_service"> Repository Service </h2>
 		
 	<article id="get_repository">
-		<h3> Obtain List of Repository Items </h3>
+		<h3> Searching the Repository </h3>
 		<p>
             The repository can be searched for items, using a RepositorySearchCriteria object to define your search
             parameters. If no criteria is provided, the entire repository will be returned.
 			<br>
-			The code below will populate a variable with an array of items that describe objects in the repository.
+			Results are returned as a SearchResourcesResult object. Each result is contained in the items element of the
+            result object.
 		</p>
-		<pre><code>$repo = $c-&gt;repositoryService()-&gt;searchResources();		</code>
+		<pre><code>// Returns entire repository
+$repo = $c-&gt;repositoryService()-&gt;searchResources();
+
+// Search for specific items in repository
+$criteria = new RepositorySearchCriteria();
+$criteria-&gt;q = &quot;pitbull&quot;;
+
+$results = $c-&gt;repositoryService()-&gt;searchResources($criteria);
+
+foreach ($results-&gt;items as $res) {
+    echo $res-&gt;label . &quot;&lt;br&gt;&quot;;
+}		</code>
 		</pre>
 	</article>
 	
@@ -709,20 +721,13 @@ $c-&gt;repositoryService()-&gt;createFileResource(
 		</pre>
 	</article>
 	
-	<article id="search_resource">
-		<h3> Searching Resources and Requesting Binary Content </h3>
+	<article id="binary_resource">
+		<h3> Requesting Binary Content </h3>
 		<p>
-			You are able to request specific details about existing resources in the server. Using the search resource
-            function you can filter for specific files. The example below will show how you can request an image, and
-            display it in inline HTML using base64 encoding. When a search is performed, a ResourceSearchResult object
-            is returned. Within this objects are information about pagination (results returned, total results, index),
-            the items array within this object contains
+			The example below will show how you can request an image, and display it in inline HTML using base64
+            encoding.
 		</p>
-		<pre><code>$criteria = new RepositorySearchCriteria();
-$criteria-&gt;q = &quot;pitbull&quot;;
-
-$search = $c-&gt;repositoryService()-&gt;searchResources($criteria);
-$image = $c-&gt;repositoryService()-&gt;getResource($search-&gt;items[0]-&gt;uri);
+		<pre><code>$image = $c-&gt;repositoryService()-&gt;getResource(&quot;/ImageFolder/pitbull&quot;);
 $image_data = $c-&gt;repositoryService()-&gt;getBinaryFileData($image);
 
 echo &quot;&lt;h1&gt; Its a pitbull! &lt;/h1&gt;&lt;br&gt;&lt;img src=\&quot;data:image/jpeg;base64,&quot;.base64_encode($image_data).&quot;\&quot;&gt;&quot;;		</code>
@@ -810,7 +815,12 @@ $c-&gt;permissionService()-&gt;updateRepositoryPermission($perms[0]);           
         Permissions can be created by first describing the permissions in Permission objects, then passing them to the server. The example below will create a new permisison for joeuser in organization 1 to administer the AllAccounts report.
     </p>
 		<pre><code>$p = new RepositoryPermission(&quot;/reports/samples/AllAccounts&quot;, &quot;user:/organization_1/joeuser&quot;, 1);
-$c-&gt;permissionService()-&gt;createRepositoryPermissions(array($p));        </code>
+$p2 = new RepositoryPermission(&quot;/reports/samples/AllAccounts&quot;, &quot;user:/organization_1/otheruser&quot;, 32);
+$c-&gt;permissionService()-&gt;createRepositoryPermissions(array($p, $p2));
+
+// Likewise, you can create a single permission using the non-plural version
+
+$c-&gt;permissionService()-&gt;createRepositoryPermission($p);        </code>
 		</pre>
 </article>
 

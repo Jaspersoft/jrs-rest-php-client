@@ -1,1 +1,12 @@
+// Returns entire repository
 $repo = $c->repositoryService()->searchResources();
+
+// Search for specific items in repository
+$criteria = new RepositorySearchCriteria();
+$criteria->q = "pitbull";
+
+$results = $c->repositoryService()->searchResources($criteria);
+
+foreach ($results->items as $res) {
+    echo $res->label . "<br>";
+}

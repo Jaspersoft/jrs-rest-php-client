@@ -1,0 +1,4 @@
+$image = $c->repositoryService()->getResource("/ImageFolder/pitbull");
+$image_data = $c->repositoryService()->getBinaryFileData($image);
+
+echo "<h1> Its a pitbull! </h1><br><img src=\"data:image/jpeg;base64,".base64_encode($image_data)."\">";

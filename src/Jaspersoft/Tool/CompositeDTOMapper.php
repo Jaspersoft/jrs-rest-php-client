@@ -8,21 +8,34 @@ abstract class CompositeDTOMapper {
      * reference key names. This map is necessary because some of these keys cannot be
      * discerned simply by looking at the field name.
      *
+     * semanticLayerDataSource is defined separately because it utilizes the schema field but refers to schema
+     * references using "schemaFileReference" instead of ""schemaReference" as utilized by mondrianConnection and
+     * secureMondrianConnection.
+     *
+     *
      * @var array
      */
     private static $referenceMap = array(
-        "dataSource" => "dataSourceReference",
-        "inputControls" => "inputControlReference",
-        "jrxml" => "jrxmlFileReference",
-        "file" => "fileReference",
-        "olapConnection" => "olapConnectionReference",
-        "query" => "queryReference",
-        "dataType" => "dataTypeReference",
-        "listOfValues" => "listOfValuesReference",
-        "schema" => "schemaReference",
-        "accessGrantSchema" => "accessGrantSchemaReference",
-        "mondrianConnection" => "mondrianConnectionReference",
-        "securityFile" => "securityFileReference"
+        "default" => array(
+            "dataSource" => "dataSourceReference",
+            "inputControls" => "inputControlReference",
+            "jrxml" => "jrxmlFileReference",
+            "file" => "fileReference",
+            "olapConnection" => "olapConnectionReference",
+            "query" => "queryReference",
+            "dataType" => "dataTypeReference",
+            "listOfValues" => "listOfValuesReference",
+            "schema" => "schemaReference",
+            "accessGrantSchemas" => "accessGrantSchemaReference",
+            "mondrianConnection" => "mondrianConnectionReference",
+            "securityFile" => "securityFileReference"
+        ),
+        "semanticLayerDataSource" => array(
+            "schema" => "schemaFileReference",
+            "securityFile" => "securityFileReference",
+            "dataSource" => "dataSourceReference",
+            "file" => "fileReference"
+        )
     );
 
     /**
@@ -39,10 +52,10 @@ abstract class CompositeDTOMapper {
         "MondrianXmlaDefinition" => array("mondrianConnection"),
         "OlapUnit" => array("olapConnection"),
         "Query" => array("dataSource"),
-        "ReportUnit" => array("dataSource", "jrxml", "query", "inputControls"),
-        "DomainTopic" => array("dataSource", "jrxml", "query", "inputControls"),
+        "ReportUnit" => array("dataSource", "jrxml", "query", "inputControls", "resources"),
+        "DomainTopic" => array("dataSource", "jrxml", "query", "inputControls", "resources"),
         "SecureMondrianConnection" => array("dataSource", "schema", "accessGrantSchemas"),
-        "SemanticLayerDataSource" => array("schema", "dataSource", "securityFile")
+        "SemanticLayerDataSource" => array("schema", "dataSource", "securityFile", "bundles")
     );
 
     /** A collection of mappings of field names for file-based resources that appear as
@@ -54,7 +67,8 @@ abstract class CompositeDTOMapper {
         "schema" => "schema",
         "accessGrantSchemas" => "accessGrantSchema",
         "jrxml" => "jrxmlFile",
-        "securityFile" => "securityFile"
+        "securityFile" => "securityFile",
+        "file" => "fileResource"
     );
 
     /** Return a value from a map given the key
@@ -91,17 +105,40 @@ abstract class CompositeDTOMapper {
 
     /** referenceKey returns the key needed for a reference of the $field's type.
      *
+     * The class parameter should only be needed so far in one special case, where the schema reference must be
+     * distinguished by its class name:
+     *
+     *      secureMondrianConnection/mondrianConnection: schema -> schemaReference
+     *      semanticLayerDataSource: schema -> schemaFileReference
+     *
      * @param $field Reference Field Name
+     * @param $class string Name of the class to obtain reference for
      * @return string|null
      */
-    public static function referenceKey($field)
+    public static function referenceKey($field, $class = null)
     {
-        return self::forwardResolve($field, static::$referenceMap);
+        if (!empty($class) and array_key_exists($class, static::$referenceMap)) {
+            return self::forwardResolve($field, static::$referenceMap[$class]);
+        } else {
+            return self::forwardResolve($field, static::$referenceMap["default"]);
+        }
     }
 
-    public static function dereferenceKey($field)
+    public static function dereferenceKey($field, $class = null)
     {
-        return self::reverseResolve($field, static::$referenceMap);
+        if (!empty($class) and array_key_exists($class, static::$referenceMap)) {
+            return self::reverseResolve($field, static::$referenceMap[$class]);
+        } else {
+            return self::reverseResolve($field, static::$referenceMap["default"]);
+        }
+    }
+
+    /** Returns a boolean value stating whether the field is recognized as a reference key or not.
+     *
+     * @param $field resource field name
+     */
+    public static function isReferenceKey($field) {
+        return array_key_exists($field, static::$referenceMap["default"]);
     }
 
     public static function compositeFields($class)

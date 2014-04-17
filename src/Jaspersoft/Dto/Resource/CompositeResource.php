@@ -12,16 +12,17 @@ abstract class CompositeResource extends Resource {
      * It creates the appropriate underlying structure of the JSON data representation to be given to
      * the json encoder. Recursive calls are used to build collections of resources.
      *
-     * @param $field
-     * @param $value
+     * @param $field Key for field
+     * @param $value Value of field
+     * @param $className string The name of the class
      * @return array|null
      */
-    protected function resolveSubresource($field, $value)
+    protected function resolveSubresource($field, $value, $class)
     {
         if (is_string($value))
         {
             // Subresource is a reference to another resource
-            return array(CompositeDTOMapper::referenceKey($field) => array("uri" =>  $value));
+            return array(CompositeDTOMapper::referenceKey($field, $class) => array("uri" =>  $value));
         } else if (is_object($value)) {
             if (is_a($value, RESOURCE_NAMESPACE . "\\File")) {
                 // File-based resources can represent several types of data
@@ -34,17 +35,25 @@ abstract class CompositeResource extends Resource {
             // Subresource is locally defined, and not a special file-based subresource
             return array($value->name() => $value->jsonSerialize());
         } else if (is_array($value)) {
-            // If we have an indexed array, this is a collection
+            // We never expect a key derived from the response to be 0 unless it is the result of a numerically indexed array
             if (array_key_exists(0, $value)) {
                 // Subresource is a collection of other resources which may or may not be references/local definitions
                 $resourceCollection = array();
                 foreach ($value as $v) {
-                    $resourceCollection[] = $this->resolveSubresource($field, $v);
+                    $resourceCollection[] = $this->resolveSubresource($field, $v, $class);
                 }
                 return $resourceCollection;
             } else {
                 // We have an associative array, and not a collection of items
-                return $this->resolveSubresource($field, array_pop($value));
+                $item = array();
+                foreach ($value as $k => $v) {
+                    if (CompositeDTOMapper::isReferenceKey($k)) {
+                        $item[$k] = $this->resolveSubresource($k, $v, $class);
+                    } else {
+                        $item[$k] = $v;
+                    }
+                }
+                return $item;
             }
         } else {
             //TODO: Add appropriate exception
@@ -52,9 +61,9 @@ abstract class CompositeResource extends Resource {
         }
     }
 
-    protected static function synthesizeSubresource($field, $value)
+    protected static function synthesizeSubresource($field, $value, $class)
     {
-        $expectedReferenceKey = CompositeDTOMapper::referenceKey($field);
+        $expectedReferenceKey = CompositeDTOMapper::referenceKey($field, $class);
 
         if(array_key_exists($expectedReferenceKey, $value)) {
             // This value is a reference and should return a string
@@ -63,7 +72,7 @@ abstract class CompositeResource extends Resource {
             // This value is an array and should return an array of elements
             $subElements = array();
             foreach ($value as $item) {
-                $subElements[] = self::synthesizeSubresource($field, $item);
+                $subElements[] = self::synthesizeSubresource($field, $item, $class);
             }
             return $subElements;
         } else if (sizeof($value) == 1) {
@@ -76,14 +85,28 @@ abstract class CompositeResource extends Resource {
                 // This may be a File-based subresource (e.g: schema, accessGrantSchema...)
                 $fileType = CompositeDTOMapper::fileResourceField($field);
                 if ($fileType != null) {
-                    return array($fileType => File::createFromJSON(end($value), RESOURCE_NAMESPACE . "\\File"));
+                    return File::createFromJSON(end($value), RESOURCE_NAMESPACE . "\\File");
                 } else {
                     //TODO: Unknown Data Exception
                     return null;
                 }
             }
+        } else if (sizeof($value) > 1) {
+            // If we have an array with more than one value, and the key 0 does not exist
+            // we can assume this is an associative array derived from a definition with more than one field
+
+            // This only happens in a few cases of subresources (bundles, resources, ...)
+            $item = array();
+            foreach ($value as $k => $v) {
+                if (CompositeDTOMapper::isReferenceKey($k)) {
+                    $item[$k] = self::synthesizeSubresource($k, $v, $class);
+                } else {
+                    $item[$k] = $v;
+                }
+            }
+            return $item;
         } else {
-            // TODO: Throw Exception for unknown data
+            // TODO: Unknown Data Exception
             return null;
         }
     }
@@ -99,7 +122,7 @@ abstract class CompositeResource extends Resource {
         $compositeFields = CompositeDTOMapper::compositeFields(get_class($this));
         foreach ($compositeFields as $key) {
             if (isset($this->$key)) {
-                $allFields[$key] = $this->resolveSubresource($key, $this->$key);
+                $allFields[$key] = $this->resolveSubresource($key, $this->$key, $this->name());
             }
         }
         return $allFields;
@@ -115,11 +138,14 @@ abstract class CompositeResource extends Resource {
      */
     public static function createFromJSON($json_data, $type = null)
     {
+        $className = explode('\\', $type);
+        $className = lcfirst(end($className));
+
         $allFields = parent::createFromJSON($json_data, $type);
         $compositeFields = CompositeDTOMapper::compositeFields(get_class($allFields));
         foreach ($compositeFields as $key) {
             if (isset($allFields->$key)) {
-                $allFields->$key = self::synthesizeSubresource($key, $json_data[$key]);
+                $allFields->$key = self::synthesizeSubresource($key, $json_data[$key], $className);
             }
         }
         return $allFields;

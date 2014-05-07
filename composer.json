@@ -1,7 +1,7 @@
 {
     "name": "jaspersoft/rest-client",
     "description": "A client for the JasperReports Server REST API",
-    "license": "AGPL-3.0",
+    "license": "LGPL-3.0",
     "authors": [
         {
             "name": "Jaspersoft",

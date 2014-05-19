@@ -9,7 +9,7 @@ abstract class CompositeDTOMapper {
      * discerned simply by looking at the field name.
      *
      * semanticLayerDataSource is defined separately because it utilizes the schema field but refers to schema
-     * references using "schemaFileReference" instead of ""schemaReference" as utilized by mondrianConnection and
+     * references using "schemaFileReference" instead of "schemaReference" as utilized by mondrianConnection and
      * secureMondrianConnection.
      *
      *
@@ -64,11 +64,18 @@ abstract class CompositeDTOMapper {
      * @var array
      */
     private static $fileResourceMap = array(
-        "schema" => "schema",
-        "accessGrantSchemas" => "accessGrantSchema",
-        "jrxml" => "jrxmlFile",
-        "securityFile" => "securityFile",
-        "file" => "fileResource"
+        "default" => array(
+            "schema" => "schema",
+            "accessGrantSchemas" => "accessGrantSchema",
+            "jrxml" => "jrxmlFile",
+            "securityFile" => "securityFile",
+            "file" => "fileResource"
+        ),
+        "semanticLayerDataSource" => array(
+            "schema" => "schemaFile",
+            "securityFile" => "securityFile",
+            "file" => "file"
+        )
     );
 
     /** Return a value from a map given the key
@@ -149,12 +156,20 @@ abstract class CompositeDTOMapper {
         return self::forwardResolve($className, static::$compositeFieldMap);
     }
 
-    public static function fileResourceField($field) {
-        return self::forwardResolve($field, static::$fileResourceMap);
+    public static function fileResourceField($field, $class = null) {
+        if (!empty($class) and array_key_exists($class, static::$fileResourceMap)) {
+            return self::forwardResolve($field, static::$fileResourceMap[$class]);
+        } else {
+            return self::forwardResolve($field, static::$fileResourceMap["default"]);
+        }
     }
 
-    public static function fileResourceFieldReverse($field) {
-        return self::reverseResolve($field, static::$fileResourceMap);
+    public static function fileResourceFieldReverse($field, $class = null) {
+        if (!empty($class) and array_key_exists($class, static::$fileResourceMap)) {
+            return self::reverseResolve($field, static::$fileResourceMap[$class]);
+        } else {
+            return self::reverseResolve($field, static::$fileResourceMap["default"]);
+        }
     }
 
 }

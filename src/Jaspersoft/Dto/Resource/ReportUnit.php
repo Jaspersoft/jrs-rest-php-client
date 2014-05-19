@@ -12,7 +12,6 @@ class ReportUnit extends CompositeResource {
     public $query;
     public $jrxml;
     public $inputControls;
-    public $files;
     public $resources;
 
     public static function createFromJSON($json_data, $type = null) {

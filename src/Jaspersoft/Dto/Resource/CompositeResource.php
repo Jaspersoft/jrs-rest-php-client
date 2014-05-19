@@ -27,7 +27,7 @@ abstract class CompositeResource extends Resource {
             if (is_a($value, RESOURCE_NAMESPACE . "\\File")) {
                 // File-based resources can represent several types of data
                 // We must find the proper field title, and use it instead of "file"
-                $resolveField = CompositeDTOMapper::fileResourceFieldReverse($field);
+                $resolveField = CompositeDTOMapper::fileResourceFieldReverse($field, $class);
                 if ($resolveField !== null) {
                     return array($resolveField => $value->jsonSerialize());
                 }
@@ -83,7 +83,7 @@ abstract class CompositeResource extends Resource {
                 return $className::createFromJSON(end($value), $className);
             } else {
                 // This may be a File-based subresource (e.g: schema, accessGrantSchema...)
-                $fileType = CompositeDTOMapper::fileResourceField($field);
+                $fileType = CompositeDTOMapper::fileResourceField($field, $class);
                 if ($fileType != null) {
                     return File::createFromJSON(end($value), RESOURCE_NAMESPACE . "\\File");
                 } else {

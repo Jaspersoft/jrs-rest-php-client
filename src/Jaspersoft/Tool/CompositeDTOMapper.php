@@ -1,7 +1,9 @@
 <?php
 namespace Jaspersoft\Tool;
 
-abstract class CompositeDTOMapper {
+use Jaspersoft\Exception\ResourceServiceException;
+
+abstract class CompositeDTOMapper extends DTOMapper {
 
     /**
      * The Reference Map contains a mapping of field keys to their respective
@@ -78,6 +80,7 @@ abstract class CompositeDTOMapper {
         )
     );
 
+
     /** Return a value from a map given the key
      *
      * @param $field Field to be resolved
@@ -143,6 +146,7 @@ abstract class CompositeDTOMapper {
     /** Returns a boolean value stating whether the field is recognized as a reference key or not.
      *
      * @param $field resource field name
+     * @return boolean
      */
     public static function isReferenceKey($field) {
         return array_key_exists($field, static::$referenceMap["default"]);

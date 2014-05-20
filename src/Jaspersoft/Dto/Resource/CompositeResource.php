@@ -14,7 +14,7 @@ abstract class CompositeResource extends Resource {
      *
      * @param $field Key for field
      * @param $value Value of field
-     * @param $className string The name of the class
+     * @param $class string The name of the class
      * @return array|null
      */
     protected function resolveSubresource($field, $value, $class)
@@ -35,12 +35,12 @@ abstract class CompositeResource extends Resource {
             // Subresource is locally defined, and not a special file-based subresource
             return array($value->name() => $value->jsonSerialize());
         } else if (is_array($value)) {
-            // We never expect a key derived from the response to be 0 unless it is the result of a numerically indexed array
-            if (array_key_exists(0, $value)) {
+           if (CompositeDTOMapper::isCollectionField($field, $class)) {
                 // Subresource is a collection of other resources which may or may not be references/local definitions
                 $resourceCollection = array();
-                foreach ($value as $v) {
-                    $resourceCollection[] = $this->resolveSubresource($field, $v, $class);
+                $unique = CompositeDTOMapper::collectionKey($class, $field);
+                foreach ($value as $k => $v) {
+                    $resourceCollection[] = $this->resolveSubresource($k, $v, $class) + array($unique => $k);
                 }
                 return $resourceCollection;
             } else {
@@ -61,6 +61,19 @@ abstract class CompositeResource extends Resource {
         }
     }
 
+    protected static function indexedToAssoc($indexed, $field, $class)
+    {
+        $assoc = array();
+        $unique = CompositeDTOMapper::collectionKey($class, $field);
+
+        foreach ($indexed as $item) {
+            $key = $item[$unique];
+            unset($item[$unique]);
+            $assoc[$key] = $item;
+        }
+        return $assoc;
+    }
+
     protected static function synthesizeSubresource($field, $value, $class)
     {
         $expectedReferenceKey = CompositeDTOMapper::referenceKey($field, $class);
@@ -74,7 +87,7 @@ abstract class CompositeResource extends Resource {
             foreach ($value as $item) {
                 $subElements[] = self::synthesizeSubresource($field, $item, $class);
             }
-            return $subElements;
+            return self::indexedToAssoc($subElements, $field, $class);
         } else if (sizeof($value) == 1) {
             // This value is an object (local definition) and should build a new object based on this data
             $element = array_keys($value);

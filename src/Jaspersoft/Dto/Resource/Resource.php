@@ -46,6 +46,13 @@ class Resource
         return $type;
     }
 
+    public static function className()
+    {
+        $type = explode('\\', get_called_class());
+        $type = lcfirst(end($type));
+        return $type;
+    }
+
     public function contentType()
     {
         return "application/repository.".$this->name()."+json";

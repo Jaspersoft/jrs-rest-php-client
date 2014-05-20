@@ -2,7 +2,10 @@
 namespace Jaspersoft\Dto\Resource;
 
 
-class VirtualDataSource extends Resource
+use Jaspersoft\Tool\DTOMapper;
+
+class VirtualDataSource extends CollectiveResource
 {
     public $subDataSources;
+
 }

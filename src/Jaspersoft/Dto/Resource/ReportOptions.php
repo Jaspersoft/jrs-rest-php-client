@@ -2,7 +2,7 @@
 namespace Jaspersoft\Dto\Resource;
 
 
-class ReportOptions extends Resource
+class ReportOptions extends CollectiveResource
 {
     public $reportUri;
     public $reportParameters;

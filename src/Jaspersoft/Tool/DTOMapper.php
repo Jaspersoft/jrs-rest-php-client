@@ -18,8 +18,8 @@ abstract class DTOMapper {
         "virtualDataSource" => array("subDataSources" => array("id", "uri")),
         "customDataSource" => array("properties" => array("key", "value")),
         "semanticLayerDataSource" => array("bundles" => array("locale", "file")),
-        "reportUnit" => array("resources" => array("name", "value")),
-        "domainTopic" => array("resources" => array("name", "value")),
+        "reportUnit" => array("resources" => array("name", "file")),
+        "domainTopic" => array("resources" => array("name", "file")),
         "reportOptions" => array("reportParameters" => array("name", "value"))
     );
 
@@ -43,7 +43,7 @@ abstract class DTOMapper {
 
     public static function isCollectionField($field, $class)
     {
-        return array_key_exists($field, static::$collectionKeyValue[$class]);
+        return (isset(static::$collectionKeyValue[$class])) and array_key_exists($field, static::$collectionKeyValue[$class]);
     }
 
     public static function collectionFields($class)

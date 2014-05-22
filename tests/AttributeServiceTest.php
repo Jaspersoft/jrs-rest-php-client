@@ -42,7 +42,7 @@ class JasperAttributeServiceTest extends BaseTest {
 
 		$this->as = $this->jc->attributeService();
 		$this->us = $this->jc->userService();
-		$this->us->addUser($this->newUser);
+		$this->us->addOrUpdateUser($this->newUser);
 		
 	}
 
@@ -54,21 +54,21 @@ class JasperAttributeServiceTest extends BaseTest {
 	/* Tests below */
 
     /**
-     * Checks if user's attribute is saved correctly when setAttribute() is called with Attribute parameter, that is
+     * Checks if user's attribute is saved correctly when addOrUpdateAttribute() is called with Attribute parameter, that is
      * single Attribute.
      */
     public function testPostAttributes_addsOneAttributeData() {
-        $this->as->setAttribute($this->newUser, $this->attr);
+        $this->as->addOrUpdateAttribute($this->newUser, $this->attr);
 		$tempAttr = $this->as->getAttributes($this->newUser);
-		$tempValue = $tempAttr[0]->getValue();
-		$tempName = $tempAttr[0]->getName();
+		$tempValue = $tempAttr[0]->value;
+		$tempName = $tempAttr[0]->name;
 
         $this->assertEquals('Robot', $tempValue);
 		$this->assertEquals('Gender', $tempName);
 	}
 
-    public function testUpdateAttributes() {
-        $this->as->updateAttributes($this->newUser, array($this->attr, $this->attr2));
+    public function testreplaceAttributes() {
+        $this->as->replaceAttributes($this->newUser, array($this->attr, $this->attr2));
         $attrs = $this->as->getAttributes($this->newUser);
 
         $this->assertEquals(count($attrs), 2);
@@ -78,7 +78,7 @@ class JasperAttributeServiceTest extends BaseTest {
 	 * Deleting attributes
 	 */
 	 public function testDeleteAttribute() {
-		$this->as->setAttribute($this->newUser, $this->attr);
+		$this->as->addOrUpdateAttribute($this->newUser, $this->attr);
 		$count = count($this->as->getAttributes($this->newUser));
 		$this->as->deleteAttributes($this->newUser);
 		$newcount = count($this->as->getAttributes($this->newUser));

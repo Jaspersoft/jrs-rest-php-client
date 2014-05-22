@@ -71,14 +71,14 @@ class TestUtils {
 		$role = new Role('ROLE_USER', null, 'false');
 
 		$result = new User();
-		$result->setUsername('test_' . $timecode);
-		$result->setPassword($timecode);
-		$result->setEmailAddress('test@'.$timecode.'.com');
-		$result->setFullname('User ' . $timecode);
-		$result->setTenantId('organization_1');
-		$result->setEnabled('true');
-		$result->setExternallyDefined('false');
-		$result->addRole($role);
+		$result->username = 'test_' . $timecode;
+		$result->password = $timecode;
+		$result->emailAddress = 'test@'.$timecode.'.com';
+		$result->fullName = 'User ' . $timecode;
+		$result->tenantId = 'organization_1';
+		$result->enabled = 'true';
+		$result->externallyDefined = 'false';
+		$result->roles[] = $role;
 		return $result;
 	}
 	

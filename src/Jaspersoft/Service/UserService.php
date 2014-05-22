@@ -126,7 +126,7 @@ class UserService
      * @param \Jaspersoft\Dto\User\User
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
-    public function addUser($user) {
+    public function addOrUpdateUser($user) {
             $url = self::make_url($user->tenantId, $user->username);
             $this->service->prepAndSend($url, array(200, 201), 'PUT', json_encode($user), true, 'application/json', 'application/json');
     }

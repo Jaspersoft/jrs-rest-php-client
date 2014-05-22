@@ -157,7 +157,7 @@ foreach ($results as $userLookup) {
 <article id="create_user">
     <h3> Create User </h3>
     <p>
-        To create a user, define a user object which fully describes the user, use it with the addUser function.
+        To create a user, define a user object which fully describes the user, use it with the addOrUpdateUser function.
     </p>
 		<pre><code>$newUser = new User(
     'BI_User',	
@@ -172,7 +172,7 @@ $role = new Role('ROLE_USER', null, 'false');
 $newUser-&gt;addRole($role);
 
 try {
-   $c-&gt;userService()-&gt;addUsers($newUser);
+   $c-&gt;userService()-&gt;addOrUpdateUser($newUser);
 } catch (Exception $e) {
    printf('Could not add new user: %s', $e-&gt;getMessage());
 }        </code>
@@ -182,7 +182,7 @@ try {
 <article id="update_user">
     <h3> Update User </h3>
     <p>
-        To update a user, you can also use the addUser function.
+        To update a user, you can also use the addOrUpdateUser function.
     </p>
 		<pre><code>$search = $c-&gt;userService()-&gt;searchUsers('californiaUser', 'organization_1');
 $californiaUser = $c-&gt;userService()-&gt;getUserByLookup($search[0]);
@@ -191,7 +191,7 @@ $californiaUser-&gt;emailAddress('sanfrancisco-oakland@example.com');
 $californiaUser-&gt;password('SUPERstrongPASSWORD###!!!');
 
 try {
-    $c-&gt;userService()-&gt;addUser($californiaUser);
+    $c-&gt;userService()-&gt;addOrUpdateUser($californiaUser);
 } catch (Exception $e) {
     printf('Attempt to modify the user failed with error: %s', $e-&gt;getMessage());
 }
@@ -227,12 +227,12 @@ $attributes = $c-&gt;attributeService()-&gt;getAttributes($californiaUser);		</c
 	<article id="add_attributes">
 		<h3> Add Attributes </h3>
 		<p>
-			setAttribute can be used to create or update an attribute for a user.
+			addOrUpdateAttribute can be used to create or update an attribute for a user.
 		</p>
 		<pre><code>$joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
 
 $animal_attr = new Attribute(&quot;Favorite Animal&quot;, &quot;Bear&quot;);
-$c-&gt;attributeService()-&gt;setAttribute($joeUser, $animal_attr);		</code>
+$c-&gt;attributeService()-&gt;addOrUpdateAttribute($joeUser, $animal_attr);		</code>
 		</pre>
 	</article>
 	

@@ -45,7 +45,7 @@ class PermissionServiceTest extends BaseTest {
 		$this->testFolder = u::createFolder();
 		$this->testUser = u::createUser();
 		$this->jc->repositoryService()->createResource($this->testFolder, "/", true);
-		$this->jc->userService()->addUser($this->testUser);
+		$this->jc->userService()->addOrUpdateUser($this->testUser);
 		
 		$this->ps = $this->jc->permissionService();
 		$this->us = $this->jc->userService();

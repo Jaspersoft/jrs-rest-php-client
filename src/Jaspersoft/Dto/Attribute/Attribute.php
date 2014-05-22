@@ -48,22 +48,6 @@ class Attribute  {
         $this->value = $value;
     }
 
-    public function getName() { return $this->name; }
-    public function getValue() { return $this->value; }
-
-    public function setName($name) { $this->name = $name; }
-    public function setValue($value) { $this->value = $value; }
-
-    public function jsonSerialize() {
-        return array('name' => $this->name, 'value' => $this->value);
-    }
-
-    /** Used for debugging
-     *  returns a html-printable string of the JSON representation of this object
-     * */
-    public function __toString() {
-        return json_encode($this);
-    }
 }
 
 ?>

@@ -11,7 +11,7 @@ $role = new Role('ROLE_USER', null, 'false');
 $newUser->addRole($role);
 
 try {
-   $c->userService()->addUsers($newUser);
+   $c->userService()->addOrUpdateUser($newUser);
 } catch (Exception $e) {
    printf('Could not add new user: %s', $e->getMessage());
 }

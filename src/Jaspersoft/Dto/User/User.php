@@ -80,22 +80,6 @@ class User  {
         return $data;
     }
 
-	/* Get/Set
-	 *
-	 */
-	public function getEnabled() { return $this->enabled; }
-	public function getExternallyDefined() { return $this->externallyDefined; }
-	public function getFullName() { return $this->fullName; }
-	public function getPassword() { return $this->password; }
-	public function getPreviousPasswordChangeTime() { return $this->previousPasswordChangeTime; }
-	public function getRoles() { return $this->roles; }
-	public function getTenantId() { return $this->tenantId; }
-	public function getUsername() { return $this->username; }
-	public function getEmailAddress() { return $this->emailAddress; }
-
-	public function setEnabled($enabled) { $this->enabled = $enabled; }
-	public function setExternallyDefined($externallyDefined) { $this->externallyDefined = $externallyDefined; }
-	public function setFullname($fullName) { $this->fullName = $fullName; }
 
 	public function addRole(Role $role) {
 		$this->roles[] = $role;
@@ -114,19 +98,6 @@ class User  {
 		if($data_changed) { return true; }
 		return false;
 	}
-
-	/* setPassword automatically sets the previousPasswordChangeTime value
-	 * when setting a new password
-	 */
-	public function setPassword($password) {
-		$now = new \DateTime();
-		$this->password = $password;
-		$this->previousPasswordChangeTime = $now->format('Y-m-d\TH:i:sP');
-	}
-
-	public function setTenantId($tenantId) { $this->tenantId = $tenantId; }
-	public function setUsername($username) { $this->username = $username; }
-	public function setEmailAddress($emailAddress) { $this->emailAddress = $emailAddress; }
 
 }
 ?>

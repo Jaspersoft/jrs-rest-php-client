@@ -65,14 +65,13 @@ class AttributeService
     }
 
     /**
-     * Change an existing attribute, or create a new attribute without removing existing attributes. This will overwrite
-     * any existing attribute data that matches the provided attribute.
+     * Create a non-existent attribute, or update an existing attribute
      *
      * @param \Jaspersoft\Dto\User\User $user
      * @param \Jaspersoft\Dto\Attribute\Attribute $attribute
      * @return bool|null
      */
-    public function setAttribute(User $user, $attribute)
+    public function addOrUpdateAttribute(User $user, $attribute)
 	{
         $url = self::make_url($user->username, $user->tenantId, null, $attribute->name);
         $data = json_encode($attribute);
@@ -81,16 +80,16 @@ class AttributeService
     }
 
     /**
-     * Replace all existing attributes for a user with those defined in the attributes array parameter
+     * Replace all existing attributes with the provided set
      *
      * @param User $user
      * @param $attributes - An array of attribute objects (must be array)
      */
-    public function updateAttributes(User $user, $attributes)
+    public function replaceAttributes(User $user, array $attributes)
     {
         $url = self::make_url($user->username, $user->tenantId);
         $data = json_encode(array('attribute' => $attributes));
-        $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, 'application/json', 'application/json');
+        $this->service->prepAndSend($url, array(200), 'PUT', $data, 'application/json', 'application/json');
     }
 
 	/**

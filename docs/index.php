@@ -153,7 +153,7 @@ end of skeleton -->
 <article id="create_user">
     <h3> Create User </h3>
     <p>
-        To create a user, define a user object which fully describes the user, use it with the addUser function.
+        To create a user, define a user object which fully describes the user, use it with the addOrUpdateUser function.
     </p>
 		<pre><code><?php inject_sample('code/create_user.txt'); ?>
         </code>
@@ -163,7 +163,7 @@ end of skeleton -->
 <article id="update_user">
     <h3> Update User </h3>
     <p>
-        To update a user, you can also use the addUser function.
+        To update a user, you can also use the addOrUpdateUser function.
     </p>
 		<pre><code><?php inject_sample('code/update_user.txt'); ?>
         </code>
@@ -195,7 +195,7 @@ end of skeleton -->
 	<article id="add_attributes">
 		<h3> Add Attributes </h3>
 		<p>
-			setAttribute can be used to create or update an attribute for a user.
+			addOrUpdateAttribute can be used to create or update an attribute for a user.
 		</p>
 		<pre><code><?php inject_sample('code/add_attributes.txt'); ?>
 		</code>

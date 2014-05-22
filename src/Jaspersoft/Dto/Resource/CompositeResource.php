@@ -51,15 +51,22 @@ abstract class CompositeResource extends Resource {
                 return $resourceCollection;
             } else {
                 // We have an associative array, and not a collection of items
-                $item = array();
+                $items = array();
                 foreach ($value as $k => $v) {
                     if (CompositeDTOMapper::isReferenceKey($k)) {
-                        $item[$k] = $this->resolveSubresource($k, $v, $class);
+                        $items[$k] = $this->resolveSubresource($k, $v, $class);
+                    } else if (CompositeDTOMapper::isCollectionField($field, $class)) {
+                        $fileField = CompositeDTOMapper::collectionKeyValuePair($class, $field)[1];
+                        $items[$k] = $this->resolveSubresource($fileField, $v, $class);
                     } else {
-                        $item[$k] = $v;
+                        $items[$k] = $v;
                     }
                 }
-                return $item;
+                if (CompositeDTOMapper::isCollectionField($field, $class)) {
+                    return CompositeDTOMapper::unmapCollection($items, $class, $field);
+                } else {
+                    return $items;
+                }
             }
         } else {
             //TODO: Add appropriate exception
@@ -80,7 +87,13 @@ abstract class CompositeResource extends Resource {
             foreach ($value as $item) {
                 $subElements[] = self::synthesizeSubresource($field, $item, $class);
             }
-            return $subElements;
+
+            if (CompositeDTOMapper::isCollectionField($field, $class)) {
+                return CompositeDTOMapper::mapCollection($subElements, $class, $field);
+            }
+            else {
+                return $subElements;
+            }
         } else if (sizeof($value) == 1) {
             // This value is an object (local definition) and should build a new object based on this data
             $element = array_keys($value);
@@ -101,16 +114,15 @@ abstract class CompositeResource extends Resource {
             // If we have an array with more than one value, and the key 0 does not exist
             // we can assume this is an associative array derived from a definition with more than one field
 
-            // This only happens in a few cases of subresources (bundles, resources, ...)
-            $item = array();
+            $items = array();
             foreach ($value as $k => $v) {
                 if (CompositeDTOMapper::isReferenceKey($k)) {
-                    $item[$k] = self::synthesizeSubresource($k, $v, $class);
+                    $items[$k] = self::synthesizeSubresource($k, $v, $class);
                 } else {
-                    $item[$k] = $v;
+                    $items[$k] = $v;
                 }
             }
-            return $item;
+            return $items;
         } else {
             // TODO: Unknown Data Exception
             return null;

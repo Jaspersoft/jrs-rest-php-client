@@ -1,7 +1,7 @@
 <?php
 namespace Jaspersoft\Service;
 
-use Jaspersoft\Tool\RESTRequest;
+use Jaspersoft\Client\Client;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\ImportExport\ExportTask;
 use Jaspersoft\Dto\ImportExport\ImportTask;
@@ -12,11 +12,11 @@ class ImportExportService
 	protected $service;
 	protected $restUrl2;
 
-	public function __construct(RESTRequest $service, $baseUrl)
-	{
-		$this->service = $service;
-		$this->restUrl2 = $baseUrl;
-	}
+    public function __construct(Client &$client)
+    {
+        $this->service = $client->getService();
+        $this->restUrl2 = $client->getURL();
+    }
 
     /** This function begins an export task on the server. You must be authorized as a superuser to use these services
      *

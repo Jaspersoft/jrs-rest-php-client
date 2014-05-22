@@ -15,6 +15,18 @@ class Client
 	private $restReq;
 	private $restUrl2;
 
+    protected $repositoryService;
+    protected $attributeService;
+    protected $userService;
+    protected $organizationService;
+    protected $roleService;
+    protected $jobService;
+    protected $permissionService;
+    protected $optionsService;
+    protected $reportService;
+    protected $importExportService;
+    protected $queryService;
+
 	public function __construct($serverUrl, $username, $password, $orgId = null)
 	{
 		$this->serverUrl = $serverUrl;
@@ -33,48 +45,81 @@ class Client
 	}
 
     public function repositoryService() {
-        return new service\RepositoryService($this->restReq, $this->restUrl2);
+        if (!isset($this->repositoryService)) {
+            $this->repositoryService = new service\RepositoryService($this);
+        }
+        return $this->repositoryService;
     }
 	
 	public function attributeService() {
-		return new service\AttributeService($this->restReq, $this->restUrl2);
+        if (!isset($this->attributeService)) {
+            $this->attributeService = new service\AttributeService($this);
+        }
+        return $this->attributeService;
 	}
 
 	public function userService() {
-		return new service\UserService($this->restReq, $this->restUrl2);
+        if (!isset($this->userService)) {
+            $this->userService = new service\UserService($this);
+        }
+        return $this->userService;
 	}
 	
 	public function organizationService() {
-		return new service\OrganizationService($this->restReq, $this->restUrl2);
+        if (!isset($this->organizationService)) {
+            $this->organizationService = new service\OrganizationService($this);
+        }
+        return $this->organizationService;
 	}
 	
 	public function roleService() {
-		return new service\RoleService($this->restReq, $this->restUrl2);
+        if (!isset($this->roleService)) {
+            $this->roleService = new service\RoleService($this);
+        }
+        return $this->roleService;
 	}
 	
 	public function jobService() {
-		return new service\JobService($this->restReq, $this->restUrl2);
+        if (!isset($this->jobService)) {
+            $this->jobService = new service\JobService($this);
+        }
+        return $this->jobService;
 	}
 	
 	public function permissionService() {
-		return new service\PermissionService($this->restReq, $this->restUrl2);
+        if (!isset($this->permissionService)) {
+            $this->permissionService = new service\PermissionService($this);
+        }
+        return $this->permissionService;
 	}
 	
 	public function optionsService() {
-		return new service\OptionsService($this->restReq, $this->restUrl2);
+        if (!isset($this->optionsService)) {
+            $this->optionsService = new service\OptionsService($this);
+        }
+        return $this->optionsService;
 	}
 	
 	public function reportService() {
-		return new service\ReportService($this->restReq, $this->restUrl2);
+        if (!isset($this->reportService)) {
+            $this->reportService = new service\ReportService($this);
+        }
+        return $this->reportService;
 	}
 	
 	public function importExportService() {
-		return new service\ImportExportService($this->restReq, $this->restUrl2);
-	}
+        if (!isset($this->importExportService)) {
+            $this->importExportService = new service\ImportExportService($this);
+        }
+        return $this->importExportService;
+    }
 	
 	public function queryService() {
-		return new service\QueryService($this->restReq, $this->restUrl2);
-	}
+        if (!isset($this->queryService)) {
+            $this->queryService = new service\QueryService($this);
+        }
+        return $this->queryService;
+    }
 
     /** setRequestTimeout
      *
@@ -104,5 +149,7 @@ class Client
         return json_decode($data, true);
     }
 
+    public function getURL() { return $this->restUrl2; }
+    public function getService() { return $this->restReq; }
 
 }

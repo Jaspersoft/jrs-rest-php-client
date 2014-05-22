@@ -3,18 +3,18 @@ namespace Jaspersoft\Service;
 
 use Jaspersoft\Dto\Organization\Organization;
 use Jaspersoft\Tool\Util;
-use Jaspersoft\Tool\RESTRequest;
+use Jaspersoft\Client\Client;
 
 class OrganizationService
 {
 	protected $service;
 	protected $restUrl2;
-	
-	public function __construct(RESTRequest $service, $baseUrl)
-	{
-		$this->service = $service;
-		$this->restUrl2 = $baseUrl;
-	}
+
+    public function __construct(Client &$client)
+    {
+        $this->service = $client->getService();
+        $this->restUrl2 = $client->getURL();
+    }
 	
 	private function make_url($organization = null, $params = null)
 	{

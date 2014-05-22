@@ -2,19 +2,19 @@
 namespace Jaspersoft\Service;
 
 use Jaspersoft\Tool\Util;
-use Jaspersoft\Tool\RESTRequest;
+use Jaspersoft\Client\Client;
 
 
 class QueryService
 {
 	protected $service;
 	protected $restUrl2;
-	
-	public function __construct(RESTRequest $service, $baseUrl)
-	{
-		$this->service = $service;
-		$this->restUrl2 = $baseUrl;
-	}
+
+    public function __construct(Client &$client)
+    {
+        $this->service = $client->getService();
+        $this->restUrl2 = $client->getURL();
+    }
 	
     /** This function will execute a query on a data source or domain, and return the results of such query
      *

@@ -1,7 +1,7 @@
 <?php
 namespace Jaspersoft\Service;
 
-use Jaspersoft\Tool\RESTRequest;
+use Jaspersoft\Client\Client;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Job\Job;
 use Jaspersoft\Dto\Job\JobState;
@@ -11,12 +11,12 @@ class JobService
 {
 	protected $service;
 	protected $restUrl2;
-	
-	public function __construct(RESTRequest $service, $baseUrl)
-	{
-		$this->service = $service;
-		$this->restUrl2 = $baseUrl;
-	}
+
+    public function __construct(Client &$client)
+    {
+        $this->service = $client->getService();
+        $this->restUrl2 = $client->getURL();
+    }
 		
     private function make_url($params = null) {
         $url = $this->restUrl2 . '/jobs';

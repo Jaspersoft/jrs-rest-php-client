@@ -2,7 +2,7 @@
 namespace Jaspersoft\Service;
 
 use Jaspersoft\Tool\Util;
-use Jaspersoft\Tool\RESTRequest;
+use Jaspersoft\Client\Client;
 use Jaspersoft\Dto\Attribute\Attribute;
 use Jaspersoft\Dto\User\User;
 
@@ -10,12 +10,12 @@ class AttributeService
 {
 	protected $service;
 	protected $restUrl2;
-	
-	public function __construct(RESTRequest $service, $baseUrl)
-	{
-		$this->service = $service;
-		$this->restUrl2 = $baseUrl;
-	}
+
+    public function __construct(Client &$client)
+    {
+        $this->service = $client->getService();
+        $this->restUrl2 = $client->getURL();
+    }
 
 	
 	private function make_url($username, $tenantID = null, $attributeNames = null, $attrName = null)

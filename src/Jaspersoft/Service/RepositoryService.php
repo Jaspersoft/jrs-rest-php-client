@@ -6,6 +6,7 @@ use Jaspersoft\Dto\Resource\File;
 use Jaspersoft\Service\Criteria\RepositorySearchCriteria;
 use Jaspersoft\Service\Result\SearchResourcesResult;
 use Jaspersoft\Tool\RESTRequest;
+use Jaspersoft\Client\Client;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Tool\MimeMapper;
 use Jaspersoft\Exception\ResourceServiceException;
@@ -18,10 +19,10 @@ class RepositoryService
     private $service;
     private $base_url;
 
-    public function __construct(RESTRequest $rest_service, $url)
+    public function __construct(Client &$client)
     {
-        $this->service = $rest_service;
-        $this->base_url = $url;
+        $this->service = $client->getService();
+        $this->base_url = $client->getURL();
     }
 
     private function make_url(RepositorySearchCriteria $criteria = null, $uri = null, $expanded = null)

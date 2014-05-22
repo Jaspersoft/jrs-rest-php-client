@@ -5,17 +5,17 @@ use Jaspersoft\Dto\User\User;
 use Jaspersoft\Dto\Role\Role;
 use Jaspersoft\Dto\User\UserLookup;
 use Jaspersoft\Tool\Util;
-use Jaspersoft\Tool\RESTRequest;
+use Jaspersoft\Client\Client;
 
 class UserService
 {
 	protected $service;
 	protected $restUrl2;
 	
-	public function __construct(RESTRequest $service, $baseUrl)
+	public function __construct(Client &$client)
 	{
-		$this->service = $service;
-		$this->restUrl2 = $baseUrl;
+		$this->service = $client->getService();
+		$this->restUrl2 = $client->getURL();
 	}
 	
 	private function make_url($organization, $username = null, $params = null)

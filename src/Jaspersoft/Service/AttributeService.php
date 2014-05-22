@@ -30,7 +30,7 @@ class AttributeService
         if (!empty($attributeNames)) {
             $url .= '?' . Util::query_suffix(array('name' => $attributeNames));
         } else if (!empty($attrName)) {
-            $url .= '/' . $attrName;
+            $url .= '/' . str_replace(' ', '%20', $attrName); // replace spaces with %20 url encoding
         }
         return $url;
     }
@@ -63,12 +63,14 @@ class AttributeService
         }
         return $result;
     }
-	
-	/**
-     * Replace all existing attributes for a user with those defined in the attributes array parameter
+
+    /**
+     * Change an existing attribute, or create a new attribute without removing existing attributes. This will overwrite
+     * any existing attribute data that matches the provided attribute.
      *
      * @param \Jaspersoft\Dto\User\User $user
-     * @param \Jaspersoft\Dto\Attribute\Attribute
+     * @param \Jaspersoft\Dto\Attribute\Attribute $attribute
+     * @return bool|null
      */
     public function setAttribute(User $user, $attribute)
 	{

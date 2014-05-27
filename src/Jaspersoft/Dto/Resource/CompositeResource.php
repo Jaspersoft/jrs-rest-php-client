@@ -6,7 +6,9 @@ use Jaspersoft\Tool\CompositeDTOMapper;
 if (!defined("RESOURCE_NAMESPACE")) {
     define("RESOURCE_NAMESPACE", "Jaspersoft\\Dto\\Resource");
 }
-abstract class CompositeResource extends Resource {
+
+abstract class CompositeResource extends Resource
+{
 
     /** resolveSubresource discerns composite resources as reference, object, or collection.
      * It creates the appropriate underlying structure of the JSON data representation to be given to
@@ -169,5 +171,4 @@ abstract class CompositeResource extends Resource {
         return $allFields;
 
     }
-
 }

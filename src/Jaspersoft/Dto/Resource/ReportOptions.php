@@ -1,7 +1,6 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
-
 class ReportOptions extends CollectiveResource
 {
     public $reportUri;
@@ -15,5 +14,4 @@ class ReportOptions extends CollectiveResource
     public function addParameter($name, $value) {
         $this->reportParameters[] = array("name" => $name, "value" => $value);
     }
-
 }

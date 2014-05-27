@@ -8,13 +8,12 @@ define("BASE_REST2_URL", "/rest_v2");
 
 class Client
 {
+    private $restReq;
+    private $restUrl2;
 	protected $hostname;
 	protected $username;
 	protected $password;
 	protected $orgId;
-	private $restReq;
-	private $restUrl2;
-
     protected $repositoryService;
     protected $userService;
     protected $organizationService;
@@ -43,70 +42,80 @@ class Client
 		$this->restUrl2 = $this->serverUrl . BASE_REST2_URL;
 	}
 
-    public function repositoryService() {
+    public function repositoryService()
+    {
         if (!isset($this->repositoryService)) {
             $this->repositoryService = new service\RepositoryService($this);
         }
         return $this->repositoryService;
     }
 
-	public function userService() {
+	public function userService()
+    {
         if (!isset($this->userService)) {
             $this->userService = new service\UserService($this);
         }
         return $this->userService;
 	}
 	
-	public function organizationService() {
+	public function organizationService()
+    {
         if (!isset($this->organizationService)) {
             $this->organizationService = new service\OrganizationService($this);
         }
         return $this->organizationService;
 	}
 	
-	public function roleService() {
+	public function roleService()
+    {
         if (!isset($this->roleService)) {
             $this->roleService = new service\RoleService($this);
         }
         return $this->roleService;
 	}
 	
-	public function jobService() {
+	public function jobService()
+    {
         if (!isset($this->jobService)) {
             $this->jobService = new service\JobService($this);
         }
         return $this->jobService;
 	}
 	
-	public function permissionService() {
+	public function permissionService()
+    {
         if (!isset($this->permissionService)) {
             $this->permissionService = new service\PermissionService($this);
         }
         return $this->permissionService;
 	}
 	
-	public function optionsService() {
+	public function optionsService()
+    {
         if (!isset($this->optionsService)) {
             $this->optionsService = new service\OptionsService($this);
         }
         return $this->optionsService;
 	}
 	
-	public function reportService() {
+	public function reportService()
+    {
         if (!isset($this->reportService)) {
             $this->reportService = new service\ReportService($this);
         }
         return $this->reportService;
 	}
 	
-	public function importExportService() {
+	public function importExportService()
+    {
         if (!isset($this->importExportService)) {
             $this->importExportService = new service\ImportExportService($this);
         }
         return $this->importExportService;
     }
 	
-	public function queryService() {
+	public function queryService()
+    {
         if (!isset($this->queryService)) {
             $this->queryService = new service\QueryService($this);
         }
@@ -119,7 +128,8 @@ class Client
      *
      * @param $seconds int Time in seconds
      */
-    public function setRequestTimeout($seconds) {
+    public function setRequestTimeout($seconds)
+    {
         $this->restReq->defineTimeout($seconds);
     }
 	
@@ -135,7 +145,8 @@ class Client
      *
      * @return array
      */
-    public function serverInfo() {
+    public function serverInfo()
+    {
         $url = $this->restUrl2 . '/serverInfo';
         $data = $this->restReq->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
         return json_decode($data, true);

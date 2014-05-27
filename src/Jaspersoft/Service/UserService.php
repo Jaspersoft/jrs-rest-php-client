@@ -73,7 +73,8 @@ class UserService
      * @return array
      */
     public function searchUsers($searchTerm = null, $organization = null,
-                                $requiredRoles = null, $hasAllRequiredRoles = null, $includeSubOrgs = true, $limit = 0, $offset = 0) {
+                                $requiredRoles = null, $hasAllRequiredRoles = null, $includeSubOrgs = true, $limit = 0, $offset = 0)
+    {
         $result = array();
         $url = self::makeUserUrl($organization, null,
             array('q' => $searchTerm,
@@ -103,7 +104,8 @@ class UserService
      * @param UserLookup $userLookup
      * @return User
      */
-    public function getUserByLookup(UserLookup $userLookup) {
+    public function getUserByLookup(UserLookup $userLookup)
+    {
         return $this->getUser($userLookup->username, $userLookup->tenantId);
     }
 
@@ -130,7 +132,8 @@ class UserService
             $userData->previousPasswordChangeTime
         );
         foreach ($userData->roles as $role) {
-            $result->addRole(@new Role($role->name, $role->tenantId, $role->externallyDefined));
+            $newRole = @new Role($role->name, $role->tenantId, $role->externallyDefined);
+            $result->roles[] = $newRole;
         }
         return $result;
     }
@@ -143,7 +146,8 @@ class UserService
      * @param \Jaspersoft\Dto\User\User
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
-    public function addOrUpdateUser($user) {
+    public function addOrUpdateUser($user)
+    {
             $url = self::makeUserUrl($user->tenantId, $user->username);
             $this->service->prepAndSend($url, array(200, 201), 'PUT', json_encode($user), true, 'application/json', 'application/json');
     }
@@ -156,7 +160,8 @@ class UserService
 	 *
 	 * @param User $user - user to delete
 	 */
-	public function deleteUser(User $user) {
+	public function deleteUser(User $user)
+    {
         $url = self::makeUserUrl($user->tenantId, $user->username);
         $this->service->prepAndSend($url, array(204), 'DELETE', null, false, 'application/json', 'application/json');
 	}
@@ -236,6 +241,3 @@ class UserService
     }
 
 }
-
-
-?>

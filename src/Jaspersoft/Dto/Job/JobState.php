@@ -1,10 +1,8 @@
 <?php
-
-
 namespace Jaspersoft\Dto\Job;
 
-
-class JobState {
+class JobState
+{
 
     /** A timestamp of the last time the job was ran
      *

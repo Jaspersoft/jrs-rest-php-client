@@ -1,10 +1,6 @@
 <?php
-
 namespace Jaspersoft\Dto\Resource;
 
-
-class DomainTopic extends ReportUnit {
-
-
-
+class DomainTopic extends ReportUnit
+{
 }

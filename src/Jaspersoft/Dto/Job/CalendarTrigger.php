@@ -1,9 +1,8 @@
 <?php
-
 namespace Jaspersoft\Dto\Job;
 
-
-class CalendarTrigger extends Trigger {
+class CalendarTrigger extends Trigger
+{
 
     /** Pattern that determines minute part of trigger fire times
      *
@@ -88,7 +87,8 @@ class CalendarTrigger extends Trigger {
      *
      * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $result = array();
         foreach (get_object_vars($this) as $k => $v) {
             // $v is not checked for null like other jsonSerialize functions, all values should be defined here

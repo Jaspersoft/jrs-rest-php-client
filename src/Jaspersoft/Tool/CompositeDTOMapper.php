@@ -1,9 +1,8 @@
 <?php
 namespace Jaspersoft\Tool;
 
-use Jaspersoft\Exception\ResourceServiceException;
-
-abstract class CompositeDTOMapper extends DTOMapper {
+abstract class CompositeDTOMapper extends DTOMapper
+{
 
     /**
      * The Reference Map contains a mapping of field keys to their respective
@@ -87,7 +86,8 @@ abstract class CompositeDTOMapper extends DTOMapper {
      * @param $map Map to use for resolution
      * @return string|null
      */
-    private static function forwardResolve($field, $map) {
+    private static function forwardResolve($field, $map)
+    {
         if (array_key_exists($field, $map)) {
             return $map[$field];
         } else {
@@ -103,7 +103,8 @@ abstract class CompositeDTOMapper extends DTOMapper {
      * @param $map Map to use for resolution
      * @return string|null
      */
-    private static function reverseResolve($field, $map) {
+    private static function reverseResolve($field, $map)
+    {
         $backwardMap = array_reverse($map);
         if (array_key_exists($field, $backwardMap)) {
             return $backwardMap[$field];
@@ -148,7 +149,8 @@ abstract class CompositeDTOMapper extends DTOMapper {
      * @param $field resource field name
      * @return boolean
      */
-    public static function isReferenceKey($field) {
+    public static function isReferenceKey($field)
+    {
         return array_key_exists($field, static::$referenceMap["default"]);
     }
 
@@ -160,7 +162,8 @@ abstract class CompositeDTOMapper extends DTOMapper {
         return self::forwardResolve($className, static::$compositeFieldMap);
     }
 
-    public static function fileResourceField($field, $class = null) {
+    public static function fileResourceField($field, $class = null)
+    {
         if (!empty($class) and array_key_exists($class, static::$fileResourceMap)) {
             return self::forwardResolve($field, static::$fileResourceMap[$class]);
         } else {
@@ -168,7 +171,8 @@ abstract class CompositeDTOMapper extends DTOMapper {
         }
     }
 
-    public static function fileResourceFieldReverse($field, $class = null) {
+    public static function fileResourceFieldReverse($field, $class = null)
+    {
         if (!empty($class) and array_key_exists($class, static::$fileResourceMap)) {
             return self::reverseResolve($field, static::$fileResourceMap[$class]);
         } else {

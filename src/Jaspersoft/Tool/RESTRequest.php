@@ -1,8 +1,10 @@
 <?php
 namespace Jaspersoft\Tool;
+
 use Jaspersoft\Exception\RESTRequestException;
 
-class RESTRequest {
+class RESTRequest
+{
 
 	protected $url;
 	protected $verb;
@@ -382,7 +384,8 @@ class RESTRequest {
     }
 
     public function makeRequest($url, $expectedCodes = array(200), $verb = null, $reqBody = null, $returnData = false,
-                                   $contentType = 'application/json', $acceptType = 'application/json', $headers = array()) {
+                                   $contentType = 'application/json', $acceptType = 'application/json', $headers = array())
+    {
 
         $result = array();                                       
 
@@ -420,7 +423,8 @@ class RESTRequest {
     }
 
     public function prepAndSend($url, $expectedCodes = array(200), $verb = null, $reqBody = null, $returnData = false,
-                                   $contentType = 'application/json', $acceptType = 'application/json', $headers = array()) {
+                                   $contentType = 'application/json', $acceptType = 'application/json', $headers = array())
+    {
         $this->flush();
         $this->setUrl($url);
         if ($verb !== null) {
@@ -466,7 +470,8 @@ class RESTRequest {
      * @return array - Returns an array with the response info and the response body, since the server sends a 100 request, it is hard to validate the success of the request
      */
     public function multipartRequestSend($url, $expectedCode = 200, $verb = 'PUT_MP', $reqBody = null, $file = null,
-                                            $returnData = false) {
+                                            $returnData = false)
+    {
         $expectedCode = (integer) $expectedCode;
         $this->flush();
         $this->setUrl($url);
@@ -504,8 +509,6 @@ class RESTRequest {
         if (!in_array($statusCode, $expectedCodes)) {
             $this->handleError($statusCode, $expectedCodes, $responseBody);
         }
-
         return $this->getResponseBody();
-
     }
 }

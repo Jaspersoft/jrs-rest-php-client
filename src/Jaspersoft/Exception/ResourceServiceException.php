@@ -1,10 +1,8 @@
 <?php
-
-
 namespace Jaspersoft\Exception;
 
-
-class ResourceServiceException extends \Exception {
+class ResourceServiceException extends \Exception
+{
 
     /** Internal message describing exception
      * @var string

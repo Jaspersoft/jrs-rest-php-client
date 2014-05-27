@@ -1,21 +1,13 @@
 <?php
 namespace Jaspersoft\Dto\ImportExport;
 
-class ExportTask {
+class ExportTask
+{
 
     public $users = array();
     public $uris = array();
     public $roles = array();
     public $parameters = array();
-
-    public function __construct($parameters = null)
-	{
-
-        /** Parameters to be set for the export task
-         * @var array
-         */
-        $this->parameters = $parameters;
-    }
 
     public function jsonSerialize()
 	{

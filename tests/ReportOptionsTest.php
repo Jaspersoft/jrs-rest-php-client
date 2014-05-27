@@ -30,7 +30,7 @@ class ReportOptionsTest extends BaseTest {
 		$this->os->updateReportOptions($this->report_uri, $controlOptions, $label, 'true');
 		$options = $this->os->getReportOptions($this->report_uri);
 		foreach($options as $o) {
-			if ($o->getLabel() == $label) {
+			if ($o->label == $label) {
 				$this->testSuccess = true;
 			}
 		}

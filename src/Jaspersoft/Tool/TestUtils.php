@@ -5,16 +5,13 @@ use Jaspersoft\Dto\Role\Role;
 use Jaspersoft\Dto\User\User;
 use Jaspersoft\Dto\Resource\Folder;
 use Jaspersoft\Dto\Resource\File;
-use Jaspersoft\Dto\Resource\Resource;
 use Jaspersoft\Dto\Job\Job;
-use Jaspersoft\Dto\Job\Alert;
-use Jaspersoft\Dto\Job\MailNotification;
 use Jaspersoft\Dto\Job\SimpleTrigger;
-use Jaspersoft\Dto\Job\OutputFTPInfo;
 use Jaspersoft\Dto\Job\RepositoryDestination;
 use Jaspersoft\Dto\Job\Source;
 
-class TestUtils {
+class TestUtils
+{
 
 	/*
 	 * These utilities are used to create objects to work with so that they can be used across the test suite.
@@ -94,5 +91,3 @@ class TestUtils {
 	}
 
 }
-
-?>

@@ -18,7 +18,8 @@ class JobService
         $this->restUrl2 = $client->getURL();
     }
 		
-    private function makeUrl($params = null) {
+    private function makeUrl($params = null)
+    {
         $url = $this->restUrl2 . '/jobs';
         if (!empty($params))
             $url .= '?' . Util::query_suffix($params);
@@ -77,12 +78,11 @@ class JobService
 	/**
      * Request a job object from server by JobID.
 	 *
-     * JobID can be found using getId() from an array of jobs returned by the getJobs function.
-	 *
 	 * @param int|string $id - the ID of the job you wish to know more about
 	 * @return Job object
 	 */
-	public function getJob($id) {
+	public function getJob($id)
+    {
 		$url = $this->restUrl2 . '/jobs/' . $id;
 		$data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/job+json', 'application/job+json');
         return Job::createFromJSON(json_decode($data));
@@ -123,7 +123,8 @@ class JobService
 	 * @param int|string $id - can be retrieved from JobSummary properties
      * @return string ID of deleted job
 	 */
-	public function deleteJob($id) {
+	public function deleteJob($id)
+    {
 		$url = $this->restUrl2 . '/jobs/' . $id;
 		$data = $this->service->prepAndSend($url, array(200), 'DELETE', null, true);
         return $data;
@@ -134,10 +135,11 @@ class JobService
      *
 	 * This function returns an array with state values
 	 *
-	 * @param int|string $id - can be retrieved using getId() on a JobSummary object
+	 * @param int|string $id - can be retrieved from a JobSummary object
 	 * @return \Jaspersoft\Dto\Job\JobState
 	 */
-	public function getJobState($id) {
+	public function getJobState($id)
+    {
 		$url = $this->restUrl2 . '/jobs/' . $id . '/state';
 		$data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
 		return JobState::createFromJSON(json_decode($data));
@@ -149,7 +151,8 @@ class JobService
 	 * @param string|array|int|null $jobsToStop - int|string for one job (i.e: '40393'), or an array of jobIds, leave null for all jobs.
 	 * @return bool - based on success of function
 	 */
-	public function pauseJob($jobsToStop = null) {
+	public function pauseJob($jobsToStop = null)
+    {
 		$url = $this->restUrl2 . '/jobs/pause';
         $body = json_encode(array("jobId" => (array) $jobsToStop));
 		return $this->service->prepAndSend($url, array(200), 'POST', $body, false, 'application/json', 'application/json');
@@ -161,12 +164,11 @@ class JobService
 	 * @param string|array|int|null $jobsToResume - int|string for one job (i.e: '40393'), or an array of jobIds, leave null for all jobs
 	 * @return bool - based on success of function
 	 */
-	public function resumeJob($jobsToResume = null) {
+	public function resumeJob($jobsToResume = null)
+    {
 		$url = $this->restUrl2 . '/jobs/resume';
         $body = json_encode(array("jobId" => (array) $jobsToResume));
         return $this->service->prepAndSend($url, array(200), 'POST', $body, false, 'application/json', 'application/json');
 	}
 	
 }
-
-?>

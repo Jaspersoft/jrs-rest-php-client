@@ -5,7 +5,6 @@ use Jaspersoft\Client\Client;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Report\InputControl;
 
-
 class ReportService
 {
 	protected $service;
@@ -34,7 +33,8 @@ class ReportService
      * @return string Binary data of report
      */
 	public function runReport($uri, $format = 'pdf', $pages = null, $attachmentsPrefix = null, $inputControls = null,
-                                $interactive = true, $onePagePerSheet = false, $freshData = true, $saveDataSnapshot = false, $transformerKey = null) {
+                                $interactive = true, $onePagePerSheet = false, $freshData = true, $saveDataSnapshot = false, $transformerKey = null)
+    {
 		$url = $this->restUrl2 . '/reports' . $uri . '.' . $format;
         if (empty($inputControls))
             $url .= '?' . Util::query_suffix(compact("pages", "attachmentsPrefix", "interactive", "onePagePerSheet", "freshData", "saveDataSnapshot", "transformerKey"));
@@ -50,12 +50,11 @@ class ReportService
 	 * @param string $uri
 	 * @return Array<InputOptions>
 	 */
-	public function getReportInputControls($uri) {
+	public function getReportInputControls($uri)
+    {
 		$url = $this->restUrl2 . '/reports' . $uri . '/inputControls/values';
 		$data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
 		return InputControl::createFromJSON($data);
 	}
 
 }
-
-?>

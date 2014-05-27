@@ -1,7 +1,8 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
-class ResourceLookup  {
+class ResourceLookup
+{
 
     public $uri;
     public $label;
@@ -12,11 +13,13 @@ class ResourceLookup  {
     public $creationDate;
     public $updateDate;
 
-    public function __construct() {
+    public function __construct()
+    {
 
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $data = array();
         foreach (get_object_vars($this) as $k => $v) {
             if (!empty($v))
@@ -25,7 +28,8 @@ class ResourceLookup  {
         return $data;
     }
 
-    public static function createFromJSON($json_data) {
+    public static function createFromJSON($json_data)
+    {
         $temp = new self;
         foreach ($json_data as $k => $v)
             $temp->$k = $v;
@@ -33,5 +37,3 @@ class ResourceLookup  {
     }
 
 }
-
-?>

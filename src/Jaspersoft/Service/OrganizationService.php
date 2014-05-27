@@ -95,7 +95,7 @@ class OrganizationService
 	 */
 	public function deleteOrganization(Organization $org)
 	{
-        $url = self::makeUrl($org->getId());
+        $url = self::makeUrl($org->id);
 		$this->service->prepAndSend($url, array(204), 'DELETE', null, false);
 	}
 	
@@ -106,7 +106,7 @@ class OrganizationService
      */
     public function updateOrganization(Organization $org)
 	{
-        $url = self::makeUrl($org->getId());
+        $url = self::makeUrl($org->id);
         $data = json_encode($org);
         $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, false, 'application/json', 'application/json');
     }

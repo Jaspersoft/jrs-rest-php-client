@@ -1,9 +1,8 @@
 <?php
-
 namespace Jaspersoft\Dto\Job;
 
-
-class SimpleTrigger extends Trigger {
+class SimpleTrigger extends Trigger
+{
 
     /** How many times trigger will fire
      * @var int

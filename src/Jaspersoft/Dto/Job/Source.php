@@ -1,9 +1,8 @@
 <?php
-
 namespace Jaspersoft\Dto\Job;
 
-
-class Source {
+class Source
+{
 
     /** URI of the report unit or report options to schedule
      * @var string
@@ -19,7 +18,8 @@ class Source {
      */
     public $parameters = array();
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $result = array();
         if (!empty($this->reportUnitURI)) {
             $result["reportUnitURI"] = $this->reportUnitURI;

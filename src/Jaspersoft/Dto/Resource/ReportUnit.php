@@ -1,7 +1,8 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
-class ReportUnit extends CompositeResource {
+class ReportUnit extends CompositeResource
+{
 
     public $alwaysPromptControls;
     public $controlsLayout;
@@ -14,7 +15,8 @@ class ReportUnit extends CompositeResource {
     public $inputControls;
     public $resources;
 
-    public static function createFromJSON($json_data, $type = null) {
+    public static function createFromJSON($json_data, $type = null)
+    {
         // Handle resources here as a special case
         if (!empty($json_data['resources']['resource'])) {
             $json_data['resources'] = $json_data['resources']['resource'];
@@ -24,7 +26,8 @@ class ReportUnit extends CompositeResource {
         }
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         if (!empty($this->resources)) {
             $parent = parent::jsonSerialize();
             $parent_resources = $parent['resources'];
@@ -35,5 +38,4 @@ class ReportUnit extends CompositeResource {
             return parent::jsonSerialize();
         }
     }
-
 }

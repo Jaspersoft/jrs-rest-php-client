@@ -1,7 +1,5 @@
 <?php
-
 namespace Jaspersoft\Dto\Job;
-
 
 /**
  * Class Trigger
@@ -10,7 +8,8 @@ namespace Jaspersoft\Dto\Job;
  *
  * @package Jaspersoft\Dto\Job
  */
-abstract class Trigger {
+abstract class Trigger
+{
 
     /** Read-only value of server-declared ID
      *
@@ -95,7 +94,8 @@ abstract class Trigger {
      */
     public $misfireInstruction;
 
-    public function name() {
+    public function name()
+    {
         $type = explode('\\', get_class($this));
         $type = lcfirst(end($type));
         return $type;
@@ -129,6 +129,5 @@ abstract class Trigger {
             return null;
         }
     }
-
 
 } 

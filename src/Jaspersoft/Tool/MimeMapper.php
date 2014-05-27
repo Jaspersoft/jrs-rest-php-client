@@ -1,9 +1,8 @@
 <?php
-
 namespace Jaspersoft\Tool;
 
-
-abstract class MimeMapper {
+abstract class MimeMapper
+{
 
     private static $mimeMap = array(
         "img" => "image/*",

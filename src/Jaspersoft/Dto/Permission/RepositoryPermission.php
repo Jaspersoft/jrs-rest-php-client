@@ -1,19 +1,22 @@
 <?php
 namespace Jaspersoft\Dto\Permission;
 
-class RepositoryPermission  {
+class RepositoryPermission
+{
 
 	public $uri;
 	public $recipient;
 	public $mask;
 
-	public function __construct($uri, $recipient, $mask) {
+	public function __construct($uri, $recipient, $mask)
+    {
 		$this->uri = $uri;
 		$this->recipient = $recipient;
 		$this->mask = $mask;
 	}
 	
-	public function jsonSerialize() {
+	public function jsonSerialize()
+    {
 		$data = array();
         foreach (get_object_vars($this) as $k => $v) {
             if (isset($v)) {
@@ -23,10 +26,9 @@ class RepositoryPermission  {
         return $data;
 	}
 
-    public static function createFromJSON($json_data) {
+    public static function createFromJSON($json_data)
+    {
         $perm = json_decode($json_data);
         return new self($perm->uri, $perm->recipient, $perm->mask);
     }
 }
-
-?>

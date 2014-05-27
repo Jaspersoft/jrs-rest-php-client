@@ -43,7 +43,8 @@ class PermissionService
      * @param bool $resolveAll Resolve for all matched recipients?
      * @return array A resultant set of RepositoryPermission
      */
-    public function searchRepositoryPermissions($uri, $effectivePermissions = null, $recipientType = null, $recipientId = null, $resolveAll = null) {
+    public function searchRepositoryPermissions($uri, $effectivePermissions = null, $recipientType = null, $recipientId = null, $resolveAll = null)
+    {
 		$url = $this->restUrl2 . '/permissions' . $uri;
 		$url .= '?' . Util::query_suffix(array(
 								"effectivePermissions" => $effectivePermissions,
@@ -93,7 +94,8 @@ class PermissionService
 	 * @param array $permissions Set of updated RepositoryPermission objects
      * @return array Set of RepositoryPermissions that were updated
      */
-	public function updateRepositoryPermissions($uri, $permissions) {
+	public function updateRepositoryPermissions($uri, $permissions)
+    {
 		$url = $this->restUrl2 . '/permissions' . $uri;
 		$body = json_encode(array('permission' => $permissions));
 		$permissions = $this->service->prepAndSend($url, array(200), 'PUT', $body, true, 'application/collection+json', 'application/json');
@@ -106,7 +108,8 @@ class PermissionService
      * @param array $permissions A set of RepositoryPermission objects to create
      * @return array A set of RepositoryPermission items that were created
      */
-	public function createRepositoryPermissions($permissions) {
+	public function createRepositoryPermissions($permissions)
+    {
 		$url = $this->restUrl2 . '/permissions';
 		$body = json_encode(array('permission' => $permissions));
 		$permissions = $this->service->prepAndSend($url, array(201), 'POST', $body, true, 'application/collection+json', 'application/json');
@@ -119,7 +122,8 @@ class PermissionService
      * @param \Jaspersoft\Dto\Permission\RepositoryPermission $permission
      * @return \Jaspersoft\Dto\Permission\RepositoryPermission
      */
-    public function createRepositoryPermission(RepositoryPermission $permission) {
+    public function createRepositoryPermission(RepositoryPermission $permission)
+    {
         $url = $this->restUrl2 . '/permissions';
         $body = json_encode($permission);
         $response = $this->service->prepAndSend($url, array(201), 'POST', $body, true);
@@ -132,10 +136,10 @@ class PermissionService
      * @param \Jaspersoft\Dto\Permission\RepositoryPermission $permission deletion target
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
-	public function deleteRepositoryPermission(RepositoryPermission $permission) {
+	public function deleteRepositoryPermission(RepositoryPermission $permission)
+    {
 		$url = $this->restUrl2 . '/permissions' . $permission->uri . ';recipient=' . str_replace('/', '%2F', $permission->recipient);
 		$this->service->prepAndSend($url, array(204), 'DELETE', null, false);
 	}		
 
 }
-?>

@@ -3,7 +3,8 @@ namespace Jaspersoft\Tool;
 
 use Jaspersoft\Exception\ResourceServiceException;
 
-abstract class DTOMapper {
+abstract class DTOMapper
+{
 
     /** Some DTOs provide a collection of elements. This array identifies the unique key for these sets, so that the
      * array can be converted between an indexed or associative array.

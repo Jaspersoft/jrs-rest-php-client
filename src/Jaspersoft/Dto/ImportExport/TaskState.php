@@ -4,7 +4,8 @@
 namespace Jaspersoft\Dto\ImportExport;
 
 
-class TaskState {
+class TaskState
+{
 
     /** The ID for the Task (read-only)
      *

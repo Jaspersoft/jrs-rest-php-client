@@ -1,10 +1,10 @@
 <?php
-
 namespace Jaspersoft\Service\Result;
+
 use Jaspersoft\Dto\Resource\ResourceLookup;
 
-
-class SearchResourcesResult {
+class SearchResourcesResult
+{
 
     public $items;
     public $resultCount;

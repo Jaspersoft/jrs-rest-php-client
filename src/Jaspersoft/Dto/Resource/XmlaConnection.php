@@ -1,7 +1,6 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
-
 class XmlaConnection extends Resource
 {
     public $url;
@@ -9,5 +8,4 @@ class XmlaConnection extends Resource
     public $catalog;
     public $username;
     public $password;
-
 }

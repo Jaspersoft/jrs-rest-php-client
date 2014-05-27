@@ -1,10 +1,8 @@
 <?php
-
-
 namespace Jaspersoft\Dto\Job;
 
-
-class RepositoryDestination {
+class RepositoryDestination
+{
 
     /** Read-only value of server-declared ID
      *
@@ -92,7 +90,8 @@ class RepositoryDestination {
      *
      * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $result = array();
         foreach (get_object_vars($this) as $k => $v) {
             if (isset($v)) {

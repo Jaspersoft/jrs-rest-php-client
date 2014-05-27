@@ -1,14 +1,12 @@
 <?php
-
-
 namespace Jaspersoft\Dto\Job;
-
 
 /**
  * Class MailNotification
  * @package Jaspersoft\Dto\Job
  */
-class MailNotification {
+class MailNotification
+{
 
     /** Read-only value of server-declared ID
      *
@@ -97,7 +95,8 @@ class MailNotification {
      *
      * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $result = array();
         foreach (get_object_vars($this) as $k => $v) {
             if (isset($v)) {

@@ -22,7 +22,8 @@ class OptionsService
 	 * @param string $uri
 	 * @return Array<\Jasper\ReportOptions>
 	 */
-	public function getReportOptions($uri) {
+	public function getReportOptions($uri)
+    {
 		$url = $this->restUrl2 . '/reports' . $uri . '/options';
 		$data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
 		return ReportOptions::createFromJSON($data);
@@ -44,7 +45,8 @@ class OptionsService
 	 * @throws \Jaspersoft\Exception\RESTRequestException
      * @return \Jaspersoft\Dto\Options\ReportOptions
 	 */
-	public function updateReportOptions($uri, $controlOptions, $label, $overwrite) {
+	public function updateReportOptions($uri, $controlOptions, $label, $overwrite)
+    {
 		$url = $this->restUrl2 . '/reports' . $uri . '/options';
         $url .= '?' . Util::query_suffix(array('label' => utf8_encode($label), 'overwrite' => $overwrite));
 		$body = json_encode($controlOptions);
@@ -62,10 +64,9 @@ class OptionsService
 	 * @param string $optionsLabel
      * @throws \Jaspersoft\Exception\RESTRequestException
 	 */
-	public function deleteReportOptions($uri, $optionsLabel) {
+	public function deleteReportOptions($uri, $optionsLabel)
+    {
 		$url = $this->restUrl2 . '/reports' . $uri . '/options/' . $optionsLabel;
 		$this->service->prepAndSend($url, array(200), 'DELETE', null, false);
 	}
-
 }
-?>

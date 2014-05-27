@@ -57,9 +57,4 @@ class Resource
     {
         return "application/repository.".$this->name()."+json";
     }
-
-
-
 }
-
-?>

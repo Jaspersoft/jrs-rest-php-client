@@ -1,14 +1,12 @@
 <?php
-
-
 namespace Jaspersoft\Dto\Job;
-
 
 /**
  * Class Alert
  * @package Jaspersoft\Dto\Job
  */
-class Alert {
+class Alert
+{
 
     /** Read-only value of server-declared ID
      *
@@ -78,7 +76,8 @@ class Alert {
      */
     public $includingReportJobInfo;
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $result = array();
         foreach (get_object_vars($this) as $k => $v) {
             if (isset($v)) {
@@ -101,7 +100,8 @@ class Alert {
      * @param \stdClass $json_obj
      * @return Alert
      */
-    public static function createFromJSON($json_obj) {
+    public static function createFromJSON($json_obj)
+    {
         $result = new self();
         if (isset($json_obj->toAddresses)) {
             $result->toAddresses = (array) $json_obj->toAddresses->address;

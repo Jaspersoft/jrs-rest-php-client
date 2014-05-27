@@ -1,7 +1,6 @@
 <?php
 namespace Jaspersoft\Service\Criteria;
 
-
 class RepositorySearchCriteria extends Criterion
 {
 
@@ -15,7 +14,8 @@ class RepositorySearchCriteria extends Criterion
     public $sortBy;
     public $type;
 
-    public function __construct($q = null) {
+    public function __construct($q = null)
+    {
 		$this->q = $q;
     }
 

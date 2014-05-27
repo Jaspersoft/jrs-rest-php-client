@@ -1,6 +1,4 @@
 <?php
-
-
 namespace Jaspersoft\Dto\Job;
 
 /**
@@ -10,7 +8,8 @@ namespace Jaspersoft\Dto\Job;
  *
  * @package Jaspersoft\Dto\Job
  */
-class OutputFTPInfo {
+class OutputFTPInfo
+{
 
     /** FTP Server Username
      * @var string

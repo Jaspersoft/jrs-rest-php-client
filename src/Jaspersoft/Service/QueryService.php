@@ -4,7 +4,6 @@ namespace Jaspersoft\Service;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Client\Client;
 
-
 class QueryService
 {
 	protected $service;
@@ -30,5 +29,3 @@ class QueryService
     }
 
 }
-
-?>

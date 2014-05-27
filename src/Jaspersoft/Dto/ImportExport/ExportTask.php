@@ -43,10 +43,10 @@ class ExportTask
 
     public function jsonSerialize()
 	{
-        $data = array();
+        $data = new \stdClass();
         foreach (get_object_vars($this) as $k => $v) {
             if (!empty($v))
-                $data[$k] = $v;
+                $data->$k = $v;
         }
         return $data;
     }

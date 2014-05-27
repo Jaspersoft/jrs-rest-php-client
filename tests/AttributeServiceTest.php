@@ -24,8 +24,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 require_once "BaseTest.php";
 use Jaspersoft\Tool\TestUtils as u;
 use Jaspersoft\Dto\Attribute\Attribute;
-use Jaspersoft\Dto\User\User;
-use Jaspersoft\Dto\Role\Role;
 
 class JasperAttributeServiceTest extends BaseTest {
 
@@ -40,7 +38,6 @@ class JasperAttributeServiceTest extends BaseTest {
 		$this->attr = new Attribute('Gender', 'Robot');
 		$this->attr2 = new Attribute('Favorite Beer', 'Anchor Steam');
 
-		$this->as = $this->jc->attributeService();
 		$this->us = $this->jc->userService();
 		$this->us->addOrUpdateUser($this->newUser);
 		
@@ -58,8 +55,8 @@ class JasperAttributeServiceTest extends BaseTest {
      * single Attribute.
      */
     public function testPostAttributes_addsOneAttributeData() {
-        $this->as->addOrUpdateAttribute($this->newUser, $this->attr);
-		$tempAttr = $this->as->getAttributes($this->newUser);
+        $this->us->addOrUpdateAttribute($this->newUser, $this->attr);
+		$tempAttr = $this->us->getAttributes($this->newUser);
 		$tempValue = $tempAttr[0]->value;
 		$tempName = $tempAttr[0]->name;
 
@@ -68,8 +65,8 @@ class JasperAttributeServiceTest extends BaseTest {
 	}
 
     public function testreplaceAttributes() {
-        $this->as->replaceAttributes($this->newUser, array($this->attr, $this->attr2));
-        $attrs = $this->as->getAttributes($this->newUser);
+        $this->us->replaceAttributes($this->newUser, array($this->attr, $this->attr2));
+        $attrs = $this->us->getAttributes($this->newUser);
 
         $this->assertEquals(count($attrs), 2);
     }
@@ -78,10 +75,10 @@ class JasperAttributeServiceTest extends BaseTest {
 	 * Deleting attributes
 	 */
 	 public function testDeleteAttribute() {
-		$this->as->addOrUpdateAttribute($this->newUser, $this->attr);
-		$count = count($this->as->getAttributes($this->newUser));
-		$this->as->deleteAttributes($this->newUser);
-		$newcount = count($this->as->getAttributes($this->newUser));
+		$this->us->addOrUpdateAttribute($this->newUser, $this->attr);
+		$count = count($this->us->getAttributes($this->newUser));
+		$this->us->deleteAttributes($this->newUser);
+		$newcount = count($this->us->getAttributes($this->newUser));
 		$this->assertEquals(1, $count);
 		$this->assertEquals($newcount, 0);
 	}

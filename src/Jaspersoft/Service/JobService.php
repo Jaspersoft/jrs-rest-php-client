@@ -18,7 +18,7 @@ class JobService
         $this->restUrl2 = $client->getURL();
     }
 		
-    private function make_url($params = null) {
+    private function makeUrl($params = null) {
         $url = $this->restUrl2 . '/jobs';
         if (!empty($params))
             $url .= '?' . Util::query_suffix($params);
@@ -44,7 +44,7 @@ class JobService
         $rows = null, $sortType = null, $ascending = null)
     {
         $result = array();
-        $url = self::make_url(array(
+        $url = self::makeUrl(array(
             'reportUnitURI' => $reportUnitURI,
             'owner' => $owner,
             'label' => $label,

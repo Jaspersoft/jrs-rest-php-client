@@ -6,6 +6,7 @@ use Jaspersoft\Dto\Role\Role;
 use Jaspersoft\Dto\User\UserLookup;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Client\Client;
+use Jaspersoft\Dto\Attribute\Attribute;
 
 class UserService
 {
@@ -18,7 +19,7 @@ class UserService
 		$this->restUrl2 = $client->getURL();
 	}
 	
-	private function make_url($organization, $username = null, $params = null)
+	private function makeUserUrl($organization, $username = null, $params = null)
 	{
         if(!empty($organization)) {
             $url = $this->restUrl2 . "/organizations/" . $organization . "/users";
@@ -36,6 +37,22 @@ class UserService
         return $url;
     }
 
+    private function makeAttributeUrl($username, $tenantID = null, $attributeNames = null, $attrName = null)
+    {
+        if (!empty($tenantID)) {
+            $url = $this->restUrl2 . "/organizations/" . $tenantID . "/users/" . $username .
+                "/attributes";
+        } else {
+            $url = $this->restUrl2 . "/users" . $username . "/attributes";
+        }
+        // Allow for parametrized attribute searches
+        if (!empty($attributeNames)) {
+            $url .= '?' . Util::query_suffix(array('name' => $attributeNames));
+        } else if (!empty($attrName)) {
+            $url .= '/' . str_replace(' ', '%20', $attrName); // replace spaces with %20 url encoding
+        }
+        return $url;
+    }
 
     /**
      * Search for users based on the searchTerm provided.
@@ -58,7 +75,7 @@ class UserService
     public function searchUsers($searchTerm = null, $organization = null,
                                 $requiredRoles = null, $hasAllRequiredRoles = null, $includeSubOrgs = true, $limit = 0, $offset = 0) {
         $result = array();
-        $url = self::make_url($organization, null,
+        $url = self::makeUserUrl($organization, null,
             array('q' => $searchTerm,
                   'requiredRole' => $requiredRoles,
                   'hasAllRequiredRoles' => $hasAllRequiredRoles,
@@ -99,7 +116,7 @@ class UserService
      */
     public function getUser($username, $organization = null)
 	{
-        $url = self::make_url($organization, $username);
+        $url = self::makeUserUrl($organization, $username);
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
         $userData = json_decode($data);
         $result = @new User(
@@ -127,7 +144,7 @@ class UserService
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function addOrUpdateUser($user) {
-            $url = self::make_url($user->tenantId, $user->username);
+            $url = self::makeUserUrl($user->tenantId, $user->username);
             $this->service->prepAndSend($url, array(200, 201), 'PUT', json_encode($user), true, 'application/json', 'application/json');
     }
 
@@ -140,10 +157,84 @@ class UserService
 	 * @param User $user - user to delete
 	 */
 	public function deleteUser(User $user) {
-        $url = self::make_url($user->tenantId, $user->username);
+        $url = self::makeUserUrl($user->tenantId, $user->username);
         $this->service->prepAndSend($url, array(204), 'DELETE', null, false, 'application/json', 'application/json');
 	}
-	
+
+
+    /**
+     * Retrieve attributes of a user.
+     *
+     * @param User $user - user object of the user you wish to retrieve data about
+     * @param $attributeNames - An array of specific attribute names you seek
+     * @return null|array<Attribute> - an array of attribute objects
+     * @throws Exception - if HTTP fails
+     */
+    public function getAttributes(User $user, $attributeNames = null)
+    {
+        $result = array();
+        $url = self::makeAttributeUrl($user->username, $user->tenantId, $attributeNames);
+        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
+
+        if(!empty($data)) {
+            $json = json_decode($data);
+        } else {
+            return $result;
+        }
+
+        foreach($json->attribute as $element) {
+            $tempAttribute = new Attribute(
+                $element->name,
+                $element->value);
+            $result[] = $tempAttribute;
+        }
+        return $result;
+    }
+
+    /**
+     * Create a non-existent attribute, or update an existing attribute
+     *
+     * @param \Jaspersoft\Dto\User\User $user
+     * @param \Jaspersoft\Dto\Attribute\Attribute $attribute
+     * @return bool|null
+     */
+    public function addOrUpdateAttribute(User $user, $attribute)
+    {
+        $url = self::makeAttributeUrl($user->username, $user->tenantId, null, $attribute->name);
+        $data = json_encode($attribute);
+        return $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, false,
+            'application/json', 'application/json');
+    }
+
+    /**
+     * Replace all existing attributes with the provided set
+     *
+     * @param User $user
+     * @param $attributes - An array of attribute objects (must be array)
+     */
+    public function replaceAttributes(User $user, array $attributes)
+    {
+        $url = self::makeAttributeUrl($user->username, $user->tenantId);
+        $data = json_encode(array('attribute' => $attributes));
+        $this->service->prepAndSend($url, array(200), 'PUT', $data, 'application/json', 'application/json');
+    }
+
+    /**
+     * Remove all attributes, or specific attributes from a user.
+     *
+     * @param $user \Jaspersoft\Dto\User\User object to delete attributes from
+     * @param $attributes array of attribute names that are to be removed
+     */
+    public function deleteAttributes(User $user, $attributes = null)
+    {
+        $url = self::makeAttributeUrl($user->username, $user->tenantId);
+        if (!empty($attributes)) {
+            $url .= '?' . Util::query_suffix(array('name' => $attributes));
+        }
+        $this->service->prepAndSend($url, array(204), 'DELETE', null, false,
+            'application/json', 'application/json');
+    }
+
 }
 
 

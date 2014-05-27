@@ -25,7 +25,7 @@ class RepositoryService
         $this->base_url = $client->getURL();
     }
 
-    private function make_url(RepositorySearchCriteria $criteria = null, $uri = null, $expanded = null)
+    private function makeUrl(RepositorySearchCriteria $criteria = null, $uri = null, $expanded = null)
     {
         $result = $this->base_url . '/resources';
         if (!empty($criteria))
@@ -44,7 +44,7 @@ class RepositoryService
      */
     public function searchResources(RepositorySearchCriteria $criteria = null)
     {
-        $url = self::make_url($criteria);
+        $url = self::makeUrl($criteria);
         $response = $this->service->makeRequest($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
 
         if ($response['statusCode'] == 204 || $response['body'] == null) {
@@ -73,9 +73,9 @@ class RepositoryService
     public function getResource($uri, $expanded = false)
     {
         if (!$expanded)
-            $url = self::make_url(null, $uri);
+            $url = self::makeUrl(null, $uri);
         else
-            $url = self::make_url(null, $uri, true);
+            $url = self::makeUrl(null, $uri, true);
 
         // If getting the root folder, we must use repository.folder+json
         if ($uri == "/")
@@ -105,7 +105,7 @@ class RepositoryService
      */
     public function getBinaryFileData(File $file)
     {
-        $url = self::make_url(null, $file->uri);
+        $url = self::makeUrl(null, $file->uri);
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/' . $file->type);
         return $data;
     }
@@ -126,14 +126,14 @@ class RepositoryService
         if ($parentFolder == null) {
             if (isset($resource->uri)) {
                 $verb = "PUT";
-                $url = self::make_url(null, $resource->uri);
+                $url = self::makeUrl(null, $resource->uri);
             } else {
                 throw new ResourceServiceException("CreateResource: You must set either the parentFolder parameter or ".
                                                     "set a URI for the provided resource.");
             }
         } else {
             $verb = "POST";
-            $url = self::make_url(null, $parentFolder);
+            $url = self::makeUrl(null, $parentFolder);
         }
 
         $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
@@ -151,7 +151,7 @@ class RepositoryService
      */
     public function updateResource(Resource $resource, $overwrite = false)
     {
-        $url = self::make_url(null, $resource->uri);
+        $url = self::makeUrl(null, $resource->uri);
         $body = $resource->toJSON();
 
         $url .= '?' . Util::query_suffix(array("overwrite" => $overwrite));
@@ -170,7 +170,7 @@ class RepositoryService
      */
     public function updateFileResource(File $resource, $binaryData)
     {
-        $url = self::make_url(null, $resource->uri);
+        $url = self::makeUrl(null, $resource->uri);
 
         $body = $binaryData;
         $response = $this->service->sendBinary($url, array(201, 200), $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, 'PUT');
@@ -191,7 +191,7 @@ class RepositoryService
      */
     public function createFileResource(File $resource, $binaryData, $parentFolder, $createFolders = true)
     {
-        $url = self::make_url(null, $parentFolder);
+        $url = self::makeUrl(null, $parentFolder);
 
         $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
         $body = $binaryData;
@@ -209,7 +209,7 @@ class RepositoryService
      */
     public function copyResource($resourceUri, $destinationFolderUri, $createFolders = true, $overwrite = false)
     {
-        $url = self::make_url(null, $destinationFolderUri);
+        $url = self::makeUrl(null, $destinationFolderUri);
 
         $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
         $response = $this->service->makeRequest($url, array(200), 'POST', null, true, 'application/json', 'application/json', array("Content-Location: " . $resourceUri));
@@ -238,7 +238,7 @@ class RepositoryService
      */
     public function moveResource($resourceUri, $destinationFolderUri, $createFolders = true, $overwrite = false)
     {
-        $url = self::make_url(null, $destinationFolderUri);
+        $url = self::makeUrl(null, $destinationFolderUri);
 
         $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
         $response = $this->service->makeRequest($url, array(200), 'PUT', null, true, 'application/json', 'application/json', array("Content-Location: " . $resourceUri));
@@ -262,9 +262,9 @@ class RepositoryService
      */
     public function deleteResources() {
         if (func_num_args() > 1) {
-            $url = self::make_url() . '?' . Util::query_suffix(array("resourceUri" => func_get_args()));
+            $url = self::makeUrl() . '?' . Util::query_suffix(array("resourceUri" => func_get_args()));
         } else {
-            $url = self::make_url(null, func_get_arg(0));
+            $url = self::makeUrl(null, func_get_arg(0));
         }
         $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
     }

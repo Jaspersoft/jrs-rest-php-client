@@ -114,7 +114,6 @@ print_r($info);    		</code>
 		There are many services exposed through the client. Each can be requested as an object or accessed through the client itself each time.
 		
 		<ul>
-			<li> attributeService </li>
 			<li> importExportService </li>
 			<li> jobService </li>
 			<li> optionsService </li>
@@ -211,7 +210,6 @@ try {
 $c-&gt;userService()-&gt;deleteUser($user);        </code>
 		</pre>
 </article>
-		<h2 id='attribute_service'> Attribute Service </h2>
 
 	<article id="attribute_functions">
 		<h3> Get Attributes </h3>
@@ -220,7 +218,7 @@ $c-&gt;userService()-&gt;deleteUser($user);        </code>
 			You must supply a User object representing the user you wish to find the attributes of.
 		</p>
 		<pre><code>$californiaUser = $c-&gt;userService()-&gt;getUser(&quot;CaliforniaUser&quot;, &quot;organization_1&quot;);
-$attributes = $c-&gt;attributeService()-&gt;getAttributes($californiaUser);		</code>
+$attributes = $c-&gt;userService()-&gt;getAttributes($californiaUser);		</code>
 		</pre>
 	</article>
 
@@ -232,7 +230,7 @@ $attributes = $c-&gt;attributeService()-&gt;getAttributes($californiaUser);		</c
 		<pre><code>$joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
 
 $animal_attr = new Attribute(&quot;Favorite Animal&quot;, &quot;Bear&quot;);
-$c-&gt;attributeService()-&gt;addOrUpdateAttribute($joeUser, $animal_attr);		</code>
+$c-&gt;userService()-&gt;addOrUpdateAttribute($joeUser, $animal_attr);		</code>
 		</pre>
 	</article>
 	
@@ -242,7 +240,7 @@ $c-&gt;attributeService()-&gt;addOrUpdateAttribute($joeUser, $animal_attr);		</c
 			To remove attributes of a user, you must supply a User object of the user to remove from, and an array of the names of the attributes (Not attribute objects) If no attribute names are given, all attributes will be removed.
 		</p>
 		<pre><code>$joeUser = $c-&gt;userService()-&gt;getUser(&quot;joeuser&quot;, &quot;organization_1&quot;);
-$c-&gt;attributeService()-&gt;deleteAttributes($joeUser);		</code>
+$c-&gt;userService()-&gt;deleteAttributes($joeUser);		</code>
 		</pre>
 	</article>
 <h2 id="organization_service"> Organization Service </h2>

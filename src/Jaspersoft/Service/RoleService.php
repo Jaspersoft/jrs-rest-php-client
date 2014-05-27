@@ -16,7 +16,7 @@ class RoleService
         $this->restUrl2 = $client->getURL();
     }
 	
-	private function make_url($organization = null, $roleName = null, $params = null) {
+	private function makeUrl($organization = null, $roleName = null, $params = null) {
         if(!empty($organization))
             $url = $this->restUrl2 . '/organizations/' . $organization . '/roles';
         else
@@ -45,7 +45,7 @@ class RoleService
      */
     public function searchRoles($organization = null, $includeSubOrgs = null, $user = null, $hasAllUsers = false, $q = null, $limit = 0, $offset = 0) {
         $result = array();
-        $url = self::make_url($organization, null, compact('includeSubOrgs', 'user', 'hasAllUsers', 'q', 'limit', 'offset'));
+        $url = self::makeUrl($organization, null, compact('includeSubOrgs', 'user', 'hasAllUsers', 'q', 'limit', 'offset'));
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
         $data = (!empty($data)) ? json_decode($data, true) : null;
         if ($data === null)
@@ -63,7 +63,7 @@ class RoleService
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function getRole($roleName, $organization = null) {
-        $url = self::make_url($organization, $roleName);
+        $url = self::makeUrl($organization, $roleName);
         $resp = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');	
 		$data = json_decode($resp);
         return @new Role($data->name, $data->tenantId, $data->externallyDefined);
@@ -78,7 +78,7 @@ class RoleService
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function createRole(Role $role) {
-        $url = self::make_url($role->getTenantId(), $role->getRoleName());
+        $url = self::makeUrl($role->getTenantId(), $role->getRoleName());
         $this->service->prepAndSend($url, array(201, 200), 'PUT', json_encode($role), false, 'application/json', 'application/json');
     }
 	
@@ -91,7 +91,7 @@ class RoleService
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
 	public function deleteRole(Role $role) {
-        $url = self::make_url($role->getTenantId(), $role->getRoleName());
+        $url = self::makeUrl($role->getTenantId(), $role->getRoleName());
         $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
 	}
 	
@@ -107,7 +107,7 @@ class RoleService
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function updateRole(Role $role, $oldName = null) {
-        $url = self::make_url($role->getTenantId(), $oldName);
+        $url = self::makeUrl($role->getTenantId(), $oldName);
         $this->service->prepAndSend($url, array(200, 201), 'PUT', json_encode($role), false, 'application/json', 'application/json');
     }
 	

@@ -1,2 +1,2 @@
 $californiaUser = $c->userService()->getUser("CaliforniaUser", "organization_1");
-$attributes = $c->attributeService()->getAttributes($californiaUser);
+$attributes = $c->userService()->getAttributes($californiaUser);

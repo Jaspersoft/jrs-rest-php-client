@@ -120,7 +120,6 @@ end of skeleton -->
 		There are many services exposed through the client. Each can be requested as an object or accessed through the client itself each time.
 		
 		<ul>
-			<li> attributeService </li>
 			<li> importExportService </li>
 			<li> jobService </li>
 			<li> optionsService </li>
@@ -179,7 +178,6 @@ end of skeleton -->
         </code>
 		</pre>
 </article>
-		<h2 id='attribute_service'> Attribute Service </h2>
 
 	<article id="attribute_functions">
 		<h3> Get Attributes </h3>

@@ -16,7 +16,6 @@ class Client
 	private $restUrl2;
 
     protected $repositoryService;
-    protected $attributeService;
     protected $userService;
     protected $organizationService;
     protected $roleService;
@@ -50,13 +49,6 @@ class Client
         }
         return $this->repositoryService;
     }
-	
-	public function attributeService() {
-        if (!isset($this->attributeService)) {
-            $this->attributeService = new service\AttributeService($this);
-        }
-        return $this->attributeService;
-	}
 
 	public function userService() {
         if (!isset($this->userService)) {

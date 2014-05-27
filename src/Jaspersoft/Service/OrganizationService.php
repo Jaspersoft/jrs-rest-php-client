@@ -16,7 +16,7 @@ class OrganizationService
         $this->restUrl2 = $client->getURL();
     }
 	
-	private function make_url($organization = null, $params = null)
+	private function makeUrl($organization = null, $params = null)
 	{
         $url = $this->restUrl2 . '/organizations';
         if (!empty($organization)) {
@@ -47,7 +47,7 @@ class OrganizationService
                                        $limit = null, $offset = null)
 	{
         $result = array();
-        $url = self::make_url(null, array(
+        $url = self::makeUrl(null, array(
             'q' => $query,
             'rootTenantId' => $rootTenantId,
             'maxDepth' => $maxDepth,
@@ -82,7 +82,7 @@ class OrganizationService
      */
     public function createOrganization(Organization $org, $createDefaultUsers = true)
 	{
-        $url = self::make_url(null, array('createDefaultUsers' => $createDefaultUsers));
+        $url = self::makeUrl(null, array('createDefaultUsers' => $createDefaultUsers));
         $data = json_encode($org);
         $this->service->prepAndSend($url, array(201), 'POST', $data, false, 'application/json', 'application/json');
     }
@@ -95,7 +95,7 @@ class OrganizationService
 	 */
 	public function deleteOrganization(Organization $org)
 	{
-        $url = self::make_url($org->getId());
+        $url = self::makeUrl($org->getId());
 		$this->service->prepAndSend($url, array(204), 'DELETE', null, false);
 	}
 	
@@ -106,7 +106,7 @@ class OrganizationService
      */
     public function updateOrganization(Organization $org)
 	{
-        $url = self::make_url($org->getId());
+        $url = self::makeUrl($org->getId());
         $data = json_encode($org);
         $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, false, 'application/json', 'application/json');
     }
@@ -119,7 +119,7 @@ class OrganizationService
 	 */
 	public function getOrganization($id)
 	{
-		$url = self::make_url($id);
+		$url = self::makeUrl($id);
 		$data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
 		$org = json_decode($data);
 		return @new Organization(

@@ -258,13 +258,13 @@ class RepositoryService
 
     /** Remove resource(s) from the repository
      *
-     * @param string $uri,... URI(s) of resources to remove
+     * @param string|array $uris URI(s) of resources to remove
      */
-    public function deleteResources() {
-        if (func_num_args() > 1) {
-            $url = self::makeUrl() . '?' . Util::query_suffix(array("resourceUri" => func_get_args()));
+    public function deleteResources($uris) {
+        if (is_array($uris)) {
+            $url = self::makeUrl() . '?' . Util::query_suffix(array("resourceUri" => $uris));
         } else {
-            $url = self::makeUrl(null, func_get_arg(0));
+            $url = self::makeUrl(null, $uris);
         }
         $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
     }

@@ -115,7 +115,7 @@ class RepositoryServiceTest extends BaseTest {
 		
 		$this->assertEquals($obj->uri, $folder->uri . "_new" . $folder->uri);
 		
-		$this->rs->deleteResources($obj->uri, $folder->uri."_new");
+		$this->rs->deleteResources(array($obj->uri, $folder->uri."_new"));
 	}
 
     /**

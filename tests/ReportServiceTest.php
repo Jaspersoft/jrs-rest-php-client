@@ -121,7 +121,7 @@ class ReportServiceTest extends BaseTest {
         try {
             $this->ros->deleteReportOptions('/reports/samples/SalesByMonth', 'SalesByMonthTestOptions');
         } catch (Exception $e) {
-            $this->res->deleteResource('/reports/samples/SalesByMonthTestOptions');
+            $this->res->deleteResources('/reports/samples/SalesByMonthTestOptions');
         }
 
         $this->assertEquals(1234, (int)($savedOptions[4]->value));

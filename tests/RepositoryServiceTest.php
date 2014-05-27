@@ -68,12 +68,12 @@ class RepositoryServiceTest extends BaseTest {
 		$file_data = $this->rs->getBinaryFileData($file);
 		$this->assertEquals(file_get_contents($this->image_location), $file_data);
 		
-		$this->rs->deleteResource($fileInfo->uri);
-		$this->rs->deleteResource($folder->uri);
+		$this->rs->deleteResources($fileInfo->uri);
+		$this->rs->deleteResources($folder->uri);
 	}
 	
 	/** Coverage: createResource, searchResources, getResource,
-			deleteResource **/
+			deleteResources **/
 	public function testCreateResource_inFolder()
 	{
 		$folder = u::createFolder();
@@ -86,7 +86,7 @@ class RepositoryServiceTest extends BaseTest {
 		$folder_info = $this->rs->getResource($search->items[0]->uri);
 		$this->assertEquals($folder_info->label, $folder->label);
 		
-		$this->rs->deleteResource($folder->uri);
+		$this->rs->deleteResources($folder->uri);
 	}
 
     public function testCreateResource_withArbitraryID()
@@ -99,10 +99,10 @@ class RepositoryServiceTest extends BaseTest {
         $this->assertEquals($folder->uri, $actual->uri);
         $this->assertEquals($folder->label, $actual->label);
 
-        $this->rs->deleteResource($actual->uri);
+        $this->rs->deleteResources($actual->uri);
     }
 	
-	/** Coverage: updateResource, createResource, searchResources, searchResourcesCriteria, deleteResource **/
+	/** Coverage: updateResource, createResource, searchResources, searchResourcesCriteria, deleteResources **/
 	public function testUpdateResource()
 	{
 		$folder = u::createFolder();
@@ -121,11 +121,11 @@ class RepositoryServiceTest extends BaseTest {
 		$search = $this->rs->searchResources($criteria);
 		$this->assertTrue(sizeof($search->items) > 0);
 		$this->assertEquals($search->items[0]->label, $obj->label);
-		$this->rs->deleteResource($obj->uri);		
+		$this->rs->deleteResources($obj->uri);
 	}
 	
     /** Coverage: createResource, moveResource, searchResources, getResource
-			deleteManyResources **/
+			deleteResources **/
     public function testMoveResource()
 	{
 		$folder = u::createFolder();
@@ -137,7 +137,7 @@ class RepositoryServiceTest extends BaseTest {
 		
 		$this->assertEquals($obj->uri, $folder->uri . "_new" . $folder->uri);
 		
-		$this->rs->deleteManyResources(array($obj->uri, $folder->uri."_new"));
+		$this->rs->deleteResources($obj->uri, $folder->uri."_new");
 	}
 
     /**

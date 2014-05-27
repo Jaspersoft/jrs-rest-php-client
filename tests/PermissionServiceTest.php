@@ -57,7 +57,7 @@ class PermissionServiceTest extends BaseTest {
 	public function tearDown()
 	{
 		parent::tearDown();
-		$this->jc->repositoryService()->deleteResource($this->testFolder->uri);
+		$this->jc->repositoryService()->deleteResources($this->testFolder->uri);
 		$this->jc->userService()->deleteUser($this->testUser);
 	}
 

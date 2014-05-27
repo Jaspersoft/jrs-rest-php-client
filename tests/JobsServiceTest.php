@@ -35,7 +35,7 @@ class JobServiceTest extends BaseTest {
 	{
 		parent::tearDown();
 		$this->js->deleteJob($this->testJob->id);
-		$this->rs->deleteResource($this->testFolder->uri);
+		$this->rs->deleteResources($this->testFolder->uri);
 	}
 
     /** Coverage: createFromJSON, toJSON

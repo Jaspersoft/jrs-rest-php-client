@@ -256,20 +256,16 @@ class RepositoryService
         }
     }
 
-    /** Remove a resource from the repository
-     * @param string $uri
-     */
-    public function deleteResource($uri) {
-        $url = self::make_url(null, $uri);
-        $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
-    }
-
-    /** Delete many resources from the repository simultaneously
+    /** Remove resource(s) from the repository
      *
-     * @param string $uriArray
+     * @param string $uri,... URI(s) of resources to remove
      */
-    public function deleteManyResources($uriArray) {
-        $url = self::make_url() . '?' . Util::query_suffix(array("resourceUri" => $uriArray));
+    public function deleteResources() {
+        if (func_num_args() > 1) {
+            $url = self::make_url() . '?' . Util::query_suffix(array("resourceUri" => func_get_args()));
+        } else {
+            $url = self::make_url(null, func_get_arg(0));
+        }
         $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
     }
 

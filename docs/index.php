@@ -420,7 +420,7 @@ end of skeleton -->
 	<article id="delete_options">
 		<h3> Delete Report Options </h3>
 		<p>
-			To delete report options, you must retrieve the URI for the report containing the options, and provide the label for the option setting. If your report options has whitespace in the label, currently this function may not handle it well. Instead use the deleteResource() function to delete the Report Option. The example below will remove the report options created in the example above.
+			To delete report options, you must retrieve the URI for the report containing the options, and provide the label for the option setting. If your report options has whitespace in the label, currently this function may not handle it well. Instead use the deleteResources() function to delete the Report Option. The example below will remove the report options created in the example above.
 		</p>
 		<pre><code><?php inject_sample('code/delete_options.txt'); ?>
 		</code>
@@ -566,7 +566,7 @@ end of skeleton -->
 		<h3> Delete Resource </h3>
 		<p>
 			You can remove resources from the repository, either one at a time, or several at a time. Using
-            deleteResource or deleteManyResources.
+            deleteResources.
 		</p>
 		<pre><code><?php inject_sample('code/delete_resource.txt'); ?>
 		</code>

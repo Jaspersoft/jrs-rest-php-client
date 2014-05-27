@@ -56,7 +56,7 @@ class OptionsService
 	/**
 	 * Remove a pre-existing report options. Provide the URI and Label of the report options you wish to remove.
 	 * this function is limited in its ability to accept labels with whitespace. If you must delete a report option with whitespace
-  	 * in the label name, use the deleteResource function instead. Using the URL to the report option.
+  	 * in the label name, use the deleteResources function instead. Using the URL to the report option.
      *
 	 * @param string $uri
 	 * @param string $optionsLabel

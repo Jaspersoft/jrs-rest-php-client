@@ -514,7 +514,7 @@ if ($success) {
 	<article id="delete_options">
 		<h3> Delete Report Options </h3>
 		<p>
-			To delete report options, you must retrieve the URI for the report containing the options, and provide the label for the option setting. If your report options has whitespace in the label, currently this function may not handle it well. Instead use the deleteResource() function to delete the Report Option. The example below will remove the report options created in the example above.
+			To delete report options, you must retrieve the URI for the report containing the options, and provide the label for the option setting. If your report options has whitespace in the label, currently this function may not handle it well. Instead use the deleteResources() function to delete the Report Option. The example below will remove the report options created in the example above.
 		</p>
 		<pre><code>try {
   $c-&gt;optionsService()-&gt;deleteReportOptions('/reports/samples/Cascading_multi_select_report', 'CanadaUSA');
@@ -675,8 +675,12 @@ $c-&gt;repositoryService()-&gt;createResource($folder, &quot;/&quot;);
             <pre><code>$report_shop = new \Jaspersoft\DTO\Resource\ReportUnit();
 $city_control = new \Jaspersoft\DTO\Resource\InputControl();
 
-$city_control-&gt;listOfValues = &quot;/listValues/cities&quot;;
 $city_control-&gt;query = &quot;/queries/cityQuery&quot;;
+$city_control-&gt;label = &quot;city&quot;;
+$city_control-&gt;type = 7;
+$city_control-&gt;visible = true;
+$city_control-&gt;visibleColumns = [&quot;city&quot;, &quot;country&quot;, &quot;zipcode&quot;];
+$city_control-&gt;valueColumn = &quot;city&quot;;
 
 $report_shop-&gt;label = &quot;All Accounts Report of Shops&quot;;
 $report_shop-&gt;description = &quot;AllAccounts style report derived from the shops JDBC datasource&quot;;
@@ -739,13 +743,13 @@ echo &quot;&lt;h1&gt; Its a pitbull! &lt;/h1&gt;&lt;br&gt;&lt;img src=\&quot;dat
 		<h3> Delete Resource </h3>
 		<p>
 			You can remove resources from the repository, either one at a time, or several at a time. Using
-            deleteResource or deleteManyResources.
+            deleteResources.
 		</p>
-		<pre><code>$c-&gt;repositoryService()-&gt;deleteResource(&quot;/ImageFolder/pitbull&quot;);
+		<pre><code>$c-&gt;repositoryService()-&gt;deleteResources(&quot;/ImageFolder/pitbull&quot;);
 
 // OR!
 
-$c-&gt;repositoryService()-&gt;deleteManyResources(array(&quot;/ImageFolder/pitbull&quot;, &quot;/ImageFolder&quot;));
+$c-&gt;repositoryService()-&gt;deleteResources(&quot;/ImageFolder/pitbull&quot;, &quot;/ImageFolder&quot;);
 		</code>
 		</pre>
 	</article>

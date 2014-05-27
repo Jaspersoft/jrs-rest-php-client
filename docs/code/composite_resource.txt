@@ -1,8 +1,12 @@
 $report_shop = new \Jaspersoft\DTO\Resource\ReportUnit();
 $city_control = new \Jaspersoft\DTO\Resource\InputControl();
 
-$city_control->listOfValues = "/listValues/cities";
 $city_control->query = "/queries/cityQuery";
+$city_control->label = "city";
+$city_control->type = 7;
+$city_control->visible = true;
+$city_control->visibleColumns = ["city", "country", "zipcode"];
+$city_control->valueColumn = "city";
 
 $report_shop->label = "All Accounts Report of Shops";
 $report_shop->description = "AllAccounts style report derived from the shops JDBC datasource";

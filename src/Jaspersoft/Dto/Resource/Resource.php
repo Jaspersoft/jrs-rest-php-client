@@ -1,9 +1,12 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
+/**
+ * Class Resource
+ * @package Jaspersoft\Dto\Resource
+ */
 class Resource
 {
-
     public $uri;
     public $label;
     public $description;

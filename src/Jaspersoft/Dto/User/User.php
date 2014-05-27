@@ -1,32 +1,49 @@
 <?php
 namespace Jaspersoft\Dto\User;
 
-use Jaspersoft\Dto\Role\Role;
-
-/* Jasper\User class
- * this class represents Users from the JasperServer and contains data that is
- * accessible via the user service in the REST API.
- *
+/**
+ * Class User
+ * @package Jaspersoft\Dto\User
  */
 class User
 {
+    /**
+     * @var string
+     */
+    public $username;
+    /**
+     * @var string
+     */
+    public $password;
+    /**
+     * @var string
+     */
+    public $emailAddress;
+    /**
+     * @var string
+     */
+    public $fullName;
+    /**
+     * @var string
+     */
+    public $tenantId;
+    /**
+     * @var array
+     */
+    public $roles = array();
+    /**
+     * @var boolean
+     */
+    public $enabled;
+    /**
+     * @var boolean
+     */
+    public $externallyDefined;
+    /**
+     * @var string
+     */
+    public $previousPasswordChangeTime;
 
-	public $username;
-	public $password;
-	public $emailAddress;
-	public $fullName;
-	public $tenantId;
-	public $roles = array();
-	public $enabled;
-	public $externallyDefined;
-	public $previousPasswordChangeTime;
-
-	/**
-     * Constructor
-	 *
-	 * This constructor can be used to populate a User object from scratch
-	 * any settings not set at construction can be configured using the SET methods below
-	 */
 	public function __construct($username = null, $password = null, $emailAddress = null, $fullName = null,
                                 $tenantId = null, $enabled = null, $externallyDefined = null, $previousPasswordChangeTime = null)
 	{

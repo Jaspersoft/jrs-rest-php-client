@@ -1,24 +1,50 @@
 <?php
 namespace Jaspersoft\Dto\Organization;
 
-/* Jasper\Organization class
- * this class represents Organizations from the JasperServer and contains data that is
- * accessible via the user service in the REST API.
- *
- * author: gbacon
- * date: 06/07/2012
+/**
+ * Class Organization
+ * @package Jaspersoft\Dto\Organization
  */
 class Organization
 {
-	public $alias;
-	public $id;
-	public $parentId;
-	public $tenantName;
-	public $theme;
-	public $tenantDesc;
-	public $tenantFolderUri;
-	public $tenantNote;
-	public $tenantUri;
+    /**
+     * @var string
+     */
+    public $alias;
+    /**
+     * Read-only internal ID of organization
+     * @var string
+     */
+    public $id;
+    /**
+     * Read-only internal ID of parent organization
+     * @var string
+     */
+    public $parentId;
+    /**
+     * @var string
+     */
+    public $tenantName;
+    /**
+     * @var string
+     */
+    public $theme;
+    /**
+     * @var string
+     */
+    public $tenantDesc;
+    /**
+     * @var string
+     */
+    public $tenantFolderUri;
+    /**
+     * @var string
+     */
+    public $tenantNote;
+    /**
+     * @var string
+     */
+    public $tenantUri;
 
 	public function __construct(
 		$alias = null,

@@ -5,6 +5,10 @@ use Jaspersoft\Client\Client;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Role\Role;
 
+/**
+ * Class RoleService
+ * @package Jaspersoft\Service
+ */
 class RoleService
 {
 	protected $service;
@@ -34,13 +38,13 @@ class RoleService
      * Search for many or all roles on the server.
      * You can search by organization as well.
      *
-     * @param $organization string the organizations to search for roles within
-     * @param $includeSubOrgs boolean return roles of suborganizations
-     * @param $user array retrieves the roles of specific user(s) in the array, users must be defined as username|organization if multitenancy is enabled (pro)
-     * @param $hasAllUsers boolean return the intersection of roles defined on all users in $user
-     * @param $q string A query string to filter results by
-     * @param $limit int Limit the amount of results (pagination controls)
-     * @param $offset int Begin search results at this offset (pagination controls)
+     * @param string $organization
+     * @param boolean $includeSubOrgs Return roles from suborganizations?
+     * @param array $user retrieves the roles of specific user(s) in the array, users must be defined as username|organization if multitenancy is enabled (pro)
+     * @param boolean $hasAllUsers Return the intersection of roles defined on all users in $user?
+     * @param string $q A query string
+     * @param int $limit Limit number of results for pagination
+     * @param int $offset Begin search results from this point
      * @return array
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
@@ -57,11 +61,12 @@ class RoleService
         return $result;
     }
 	
-    /** Get a Role by its name
+    /**
+     * Get a Role by its name
      *
-     * @param $roleName
-     * @param $organization - Name of organization role belongs to
-     * @return Role
+     * @param string $roleName
+     * @param string $organization
+     * @return \Jaspersoft\Dto\Role\Role
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function getRole($roleName, $organization = null)
@@ -77,7 +82,7 @@ class RoleService
      *
      * Provide a role object that represents the role you wish to add.
      *
-     * @param Role $role - role to add (1 at a time)
+     * @param \Jaspersoft\Dto\Role\Role $role
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function createRole(Role $role)
@@ -91,7 +96,7 @@ class RoleService
      *
      * Provide the Role object of the role you wish to remove. Use getRole() to retrieve Roles.
      *
-     * @param Role $role
+     * @param \Jaspersoft\Dto\Role\Role $role
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
 	public function deleteRole(Role $role)
@@ -107,8 +112,8 @@ class RoleService
      * you wish to give the role. You can optionally provide a new tenantId if you wish to change
      * that as well.
      *
-     * @param Role $role - Role object to be changed
-     * @param string $oldName - previous name for the role
+     * @param \Jaspersoft\Dto\Role\Role $role
+     * @param string $oldName Previous name of role
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function updateRole(Role $role, $oldName = null)

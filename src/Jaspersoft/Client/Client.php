@@ -6,6 +6,13 @@ use Jaspersoft\Tool\RESTRequest;
 
 define("BASE_REST2_URL", "/rest_v2");
 
+/**
+ * Class Client
+ *
+ * Defines the JasperReports server information, and provides services to be used for various tasks.
+ *
+ * @package Jaspersoft\Client
+ */
 class Client
 {
     private $restReq;
@@ -152,7 +159,16 @@ class Client
         return json_decode($data, true);
     }
 
+    /**
+     * Provides the constructed RESTv2 URL for the defined JasperReports Server
+     * @return string
+     */
     public function getURL() { return $this->restUrl2; }
+
+    /**
+     * Provides the RESTRequest object to be reused by the services that require it
+     * @return RESTRequest
+     */
     public function getService() { return $this->restReq; }
 
 }

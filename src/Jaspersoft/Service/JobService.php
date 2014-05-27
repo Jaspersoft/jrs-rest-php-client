@@ -7,6 +7,10 @@ use Jaspersoft\Dto\Job\Job;
 use Jaspersoft\Dto\Job\JobState;
 use Jaspersoft\Dto\Job\JobSummary;
 
+/**
+ * Class JobService
+ * @package Jaspersoft\Service
+ */
 class JobService
 {
 	protected $service;
@@ -29,17 +33,17 @@ class JobService
     /**
      * Search for scheduled jobs.
      *
-     * @param null $reportUnitURI - URI of the report (optional)
-     * @param null $owner - Search by user who created job
-     * @param null $label - Search by job label title
-     * @param null $example - Search by any field of Job description in JSON format (i.e: {"outputFormats" : ["RTF", "PDF" ]} )
-     * @param null $startIndex - Start at this number (pagination)
-     * @param null $rows - Number of rows in a block (pagination)
-     * @param null $sortType - How to sort by column, must be any of the following:
-     * NONE, SORTBY_JOBID, SORTBY_JOBNAME, SORTBY_REPORTURI, SORTBY_REPORTNAME, SORTBY_REPORTFOLDER,
-     * SORTBY_OWNER, SORTBY_STATUS, SORTBY_LASTRUN, SORTBY_NEXTRUN
-     * @param bool $ascending - Sorting direction, ascending if true, descending if false
-     * @return array|NULL
+     * @param string $reportUnitURI URI of the report (optional)
+     * @param string $owner Search by user who created job
+     * @param string $label Search by job label title
+     * @param string $example Search by any field of Job description in JSON format (i.e: {"outputFormats" : ["RTF", "PDF" ]} )
+     * @param int $startIndex Start at this number (pagination)
+     * @param int $rows Number of rows in a block (pagination)
+     * @param string $sortType How to sort by column, must be any of the following:
+     *        NONE, SORTBY_JOBID, SORTBY_JOBNAME, SORTBY_REPORTURI, SORTBY_REPORTNAME, SORTBY_REPORTFOLDER,
+     *        SORTBY_OWNER, SORTBY_STATUS, SORTBY_LASTRUN, SORTBY_NEXTRUN
+     * @param boolean $ascending
+     * @return array
      */
     public function searchJobs($reportUnitURI = null, $owner = null, $label = null, $example = null, $startIndex = null,
         $rows = null, $sortType = null, $ascending = null)
@@ -76,10 +80,10 @@ class JobService
     }
 	
 	/**
-     * Request a job object from server by JobID.
+     * Get job descriptor
 	 *
-	 * @param int|string $id - the ID of the job you wish to know more about
-	 * @return Job object
+	 * @param int|string $id
+	 * @return \Jaspersoft\Dto\Job\Job
 	 */
 	public function getJob($id)
     {
@@ -89,10 +93,10 @@ class JobService
 	}
 	
 	/**
-	 * This function creates a new job on the server
+	 * Create a new job
 	 * 
-	 * @param Job $job object describing new job
-	 * @return Job the server returned job with assigned ID
+	 * @param \Jaspersoft\Dto\Job\Job $job object describing new job
+	 * @return \Jaspersoft\Dto\Job\Job the server returned job with assigned ID
 	 */
 	public function createJob(Job $job)
 	{
@@ -102,10 +106,10 @@ class JobService
 	}
 
 	/**
-	 * This function updates a new job on the server
+	 * Update a job
 	 * 
-	 * @param Job $job object describing new data for the job
-	 * @return Job the server returned job as it is now stored
+	 * @param \Jaspersoft\Dto\Job\Job $job object describing new data for the job
+	 * @return \Jaspersoft\Dto\Job\Job the server returned job as it is now stored
 	 */
 	public function updateJob($job)
 	{
@@ -115,13 +119,13 @@ class JobService
 	}
 	
 	/**
-     * Delete a scheduled task.
+     * Delete a job
 	 *
      * This function will delete a job that is scheduled.
      * You must supply the Job's ID to this function to delete it.
 	 *
-	 * @param int|string $id - can be retrieved from JobSummary properties
-     * @return string ID of deleted job
+	 * @param int|string $id
+     * @return string
 	 */
 	public function deleteJob($id)
     {
@@ -131,11 +135,9 @@ class JobService
 	}
 
 	/**
-     * Get the State of a Job.
-     *
-	 * This function returns an array with state values
+     * Get the State of a Job
 	 *
-	 * @param int|string $id - can be retrieved from a JobSummary object
+	 * @param int|string $id
 	 * @return \Jaspersoft\Dto\Job\JobState
 	 */
 	public function getJobState($id)
@@ -148,8 +150,8 @@ class JobService
 	/**
      * Pause a job, all jobs, or multiple jobs.
 	 *
-	 * @param string|array|int|null $jobsToStop - int|string for one job (i.e: '40393'), or an array of jobIds, leave null for all jobs.
-	 * @return bool - based on success of function
+	 * @param string|array|int|null $jobsToStop Setting this value to null implies 'all jobs'
+	 * @return boolean
 	 */
 	public function pauseJob($jobsToStop = null)
     {
@@ -160,9 +162,9 @@ class JobService
 	
 	/**
      * Resume a job, all jobs, or multiple jobs.
-	 *
-	 * @param string|array|int|null $jobsToResume - int|string for one job (i.e: '40393'), or an array of jobIds, leave null for all jobs
-	 * @return bool - based on success of function
+     *
+	 * @param string|array|int|null $jobsToResume Setting this value to null implies 'all jobs'
+	 * @return boolean
 	 */
 	public function resumeJob($jobsToResume = null)
     {

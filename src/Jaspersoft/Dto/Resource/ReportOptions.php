@@ -1,6 +1,10 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
+/**
+ * Class ReportOptions
+ * @package Jaspersoft\Dto\Resource
+ */
 class ReportOptions extends CollectiveResource
 {
     public $reportUri;

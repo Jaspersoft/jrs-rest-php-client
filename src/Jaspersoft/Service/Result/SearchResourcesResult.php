@@ -3,12 +3,30 @@ namespace Jaspersoft\Service\Result;
 
 use Jaspersoft\Dto\Resource\ResourceLookup;
 
+/**
+ * Class SearchResourcesResult
+ * @package Jaspersoft\Service\Result
+ */
 class SearchResourcesResult
 {
 
+    /**
+     * Items found by search
+     *
+     * @var array
+     */
     public $items;
+    /**
+     * @var int
+     */
     public $resultCount;
+    /**
+     * @var int
+     */
     public $startIndex;
+    /**
+     * @var int
+     */
     public $totalCount;
 
     public function __construct($itemData, $resultCount = null, $startIndex = null, $totalCount = null)

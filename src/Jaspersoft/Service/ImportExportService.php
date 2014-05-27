@@ -7,6 +7,10 @@ use Jaspersoft\Dto\ImportExport\ExportTask;
 use Jaspersoft\Dto\ImportExport\ImportTask;
 use Jaspersoft\Dto\ImportExport\TaskState;
 
+/**
+ * Class ImportExportService
+ * @package Jaspersoft\Service
+ */
 class ImportExportService
 {
     protected $service;
@@ -18,10 +22,10 @@ class ImportExportService
         $this->restUrl2 = $client->getURL();
     }
 
-    /** This function begins an export task on the server. You must be authorized as a superuser to use these services
+    /**
+     * Begin an export task
      *
-     *
-     * @param $et - ExportTask object defining the exporting you want to do
+     * @param \Jaspersoft\Dto\ImportExport\ExportTask $et
      * @return \Jaspersoft\Dto\ImportExport\TaskState
      */
     public function startExportTask(ExportTask $et)
@@ -32,10 +36,10 @@ class ImportExportService
         return TaskState::createFromJSON(json_decode($data));
     }
 
-    /** Retrieve the state of your export request
+    /**
+     * Retrieve the state of your export request
      *
-     *
-     * @param $id - the ID of your export request
+     * @param int|string $id task ID
      * @return \Jaspersoft\Dto\ImportExport\TaskState
      */
     public function getExportState($id)
@@ -50,9 +54,9 @@ class ImportExportService
      *
      * The filename parameter determines the headers sent by the server describing the file.
      *
-     * @param $id
+     * @param int|string $id
      * @param string $filename
-     * @return string binary data
+     * @return string Raw binary data
      */
     public function fetchExport($id, $filename = 'export.zip')
     {
@@ -61,10 +65,11 @@ class ImportExportService
         return $data;
     }
 
-    /** Begin an import task
+    /**
+     * Begin an import task
      *
-     * @param $it ImportTask object defining the import to be done
-     * @param $file_data - Binary contents of ZIP file you wish to upload. use file_get_contents() to produce from stored file
+     * @param \Jaspersoft\Dto\Importexport\ImportTask $it
+     * @param string $file_data Raw binary data of import zip
      * @return \Jaspersoft\Dto\ImportExport\TaskState
      */
     public function startImportTask(ImportTask $it, $file_data)
@@ -74,9 +79,10 @@ class ImportExportService
         return TaskState::createFromJSON(json_decode($data));
     }
 
-    /** Obtain the state of an ongoing import task
+    /**
+     * Obtain the state of an ongoing import task
      *
-     * @param $id
+     * @param int|string $id
      * @return \Jaspersoft\Dto\ImportExport\TaskState
      */
     public function getImportState($id)
@@ -85,6 +91,4 @@ class ImportExportService
         $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
         return TaskState::createFromJSON(json_decode($data));
     }
-
-
 }

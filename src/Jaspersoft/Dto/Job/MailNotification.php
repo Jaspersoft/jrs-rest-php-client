@@ -8,44 +8,52 @@ namespace Jaspersoft\Dto\Job;
 class MailNotification
 {
 
-    /** Read-only value of server-declared ID
+    /**
+     * Read-only value of server-declared ID
      *
      * @var int
      */
     public $id;
 
-    /** Read-only value used for optimistic locking
+    /**
+     * Read-only value used for optimistic locking
      *
      * @var int
      */
     public $version;
 
-    /** To recipients
+    /**
+     * To recipients
      * @var array
      */
     public $toAddresses;
 
-    /** Carbon Copy recipients
+    /**
+     * Carbon Copy recipients
      * @var array
      */
     public $ccAddresses;
 
-    /** Blind Carbon Copy recipients
+    /**
+     * Blind Carbon Copy recipients
      * @var array
      */
     public $bccAddresses;
 
-    /** Email Subject Text
+    /**
+     * Email Subject Text
      * @var string
      */
     public $subject;
 
-    /** Email Body Text
+    /**
+     * Email Body Text
      * @var string
      */
     public $messageText;
 
-    /** Determines whether notification includes job as attachments, or links
+    /**
+     * Determines whether notification includes job as attachments, or links
      *
      * Supported Values:
      *   "SEND" - Notification contains links to job output generated in repository
@@ -61,7 +69,8 @@ class MailNotification
      */
     public $resultSendType;
 
-    /** Should email notifications be skipped for jobs that produce empty reports?
+    /**
+     * Should email notifications be skipped for jobs that produce empty reports?
      *
      * Default: false
      *
@@ -69,13 +78,15 @@ class MailNotification
      */
     public $skipEmptyReports;
 
-    /** The text of the Email Body for when a job fails
+    /**
+     * The text of the Email Body for when a job fails
      *
      * @var string
      */
     public $messageTextWhenJobFails;
 
-    /** Should the notification include a stack trace of an exception?
+    /**
+     * Should the notification include a stack trace of an exception?
      *
      * Default: false
      *
@@ -83,7 +94,8 @@ class MailNotification
      */
     public $includingStackTraceWhenJobFails;
 
-    /** Should the notification be skipped when a job fails?
+    /**
+     * Should the notification be skipped when a job fails?
      *
      * Default: false
      *
@@ -91,7 +103,8 @@ class MailNotification
      */
     public $skipNotificationWhenJobFails;
 
-    /** Create an associative array of the data which is set to a non-null value
+    /**
+     * Create an associative array of the data which is set to a non-null value
      *
      * @return array
      */
@@ -119,7 +132,8 @@ class MailNotification
         return $result;
     }
 
-    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
+    /**
+     * This function takes a \stdClass decoded by json_decode representing a scheduled job
      * and casts it as a MailNotification Object
      *
      * @param \stdClass $json_obj

@@ -1,6 +1,10 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
+/**
+ * Class ResourceLookup
+ * @package Jaspersoft\Dto\Resource
+ */
 class ResourceLookup
 {
 

@@ -1,6 +1,13 @@
 <?php
 namespace Jaspersoft\Dto\ReportExecution;
 
+/**
+ * ** NOT IN USE **
+ * This class is NOT currently being utilized, but is in place for future implementation of ReportExecutions service.
+ *
+ * Class Execution
+ * @package Jaspersoft\Dto\ReportExecution
+ */
 class Execution
 {
 

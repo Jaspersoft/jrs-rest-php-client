@@ -8,6 +8,10 @@ use Jaspersoft\Tool\Util;
 use Jaspersoft\Client\Client;
 use Jaspersoft\Dto\Attribute\Attribute;
 
+/**
+ * Class UserService
+ * @package Jaspersoft\Service
+ */
 class UserService
 {
 	protected $service;
@@ -101,8 +105,8 @@ class UserService
 	/**
      * Return the user object represented by the provided UserLookup object
      *
-     * @param UserLookup $userLookup
-     * @return User
+     * @param \Jaspersoft\Dto\User\UserLookup $userLookup
+     * @return \Jaspersoft\Dto\User\User
      */
     public function getUserByLookup(UserLookup $userLookup)
     {
@@ -112,9 +116,9 @@ class UserService
     /**
      * Request the User object for $username within $organization
      *
-     * @param $username
-     * @param $organization
-     * @return User
+     * @param string $username
+     * @param string $organization
+     * @return \Jaspersoft\Dto\User\User
      */
     public function getUser($username, $organization = null)
 	{
@@ -140,8 +144,7 @@ class UserService
 
 
     /**
-     * This function can be used to both add and update a user.
-     *
+     * Add or Update a user
      *
      * @param \Jaspersoft\Dto\User\User
      * @throws \Jaspersoft\Exception\RESTRequestException
@@ -158,7 +161,7 @@ class UserService
 	 * First get the user using getUsers(), then provide the user you wish to delete
 	 * as the parameter for this function.
 	 *
-	 * @param User $user - user to delete
+	 * @param \Jaspersoft\Dto\User\User $user
 	 */
 	public function deleteUser(User $user)
     {
@@ -170,10 +173,10 @@ class UserService
     /**
      * Retrieve attributes of a user.
      *
-     * @param User $user - user object of the user you wish to retrieve data about
-     * @param $attributeNames - An array of specific attribute names you seek
-     * @return null|array<Attribute> - an array of attribute objects
-     * @throws Exception - if HTTP fails
+     * @param \Jaspersoft\Dto\User\User $user
+     * @param array $attributeNames
+     * @return null|array
+     * @throws \Exception
      */
     public function getAttributes(User $user, $attributeNames = null)
     {
@@ -215,7 +218,7 @@ class UserService
      * Replace all existing attributes with the provided set
      *
      * @param User $user
-     * @param $attributes - An array of attribute objects (must be array)
+     * @param array $attributes
      */
     public function replaceAttributes(User $user, array $attributes)
     {
@@ -227,8 +230,8 @@ class UserService
     /**
      * Remove all attributes, or specific attributes from a user.
      *
-     * @param $user \Jaspersoft\Dto\User\User object to delete attributes from
-     * @param $attributes array of attribute names that are to be removed
+     * @param \Jaspersoft\Dto\User\User $user
+     * @param array $attributes
      */
     public function deleteAttributes(User $user, $attributes = null)
     {

@@ -11,7 +11,8 @@ namespace Jaspersoft\Dto\Job;
 class OutputFTPInfo
 {
 
-    /** FTP Server Username
+    /**
+     * FTP Server Username
      * @var string
      */
     public $userName;
@@ -21,32 +22,38 @@ class OutputFTPInfo
      */
     public $password;
 
-    /** Path to remote folder where output resources will be stored
+    /**
+     * Path to remote folder where output resources will be stored
      * @var string
      */
     public $folderPath;
 
-    /** FTP Server Hostname
+    /**
+     * FTP Server Hostname
      * @var string
      */
     public $serverName;
 
-    /** FTP type (supported values: "ftp", "ftps")
+    /**
+     * FTP type (supported values: "ftp", "ftps")
      * @var string
      */
     public $type;
 
-    /** FTP Server Protocol (e.g: SSL or TLS)
+    /**
+     * FTP Server Protocol (e.g: SSL or TLS)
      * @var string
      */
     public $protocol;
 
-    /** FTP Server Port
+    /**
+     * FTP Server Port
      * @var int
      */
     public $port;
 
-    /** Specifies security mode for FTPS (true: implicit, false: explicit)
+    /**
+     * Specifies security mode for FTPS (true: implicit, false: explicit)
      *
      * Default: true
      *
@@ -54,7 +61,8 @@ class OutputFTPInfo
      */
     public $implicit;
 
-    /** Return PROT command
+    /**
+     * Return PROT command
      *          (supported values: "C", "S", "E", "P")
      *          "C": Clear
      *          "S": Safe (SSL Only)
@@ -65,7 +73,8 @@ class OutputFTPInfo
      */
     public $prot;
 
-    /** Specifies protection buffer size
+    /**
+     * Specifies protection buffer size
      * @var int
      */
     public $pbsz;
@@ -80,12 +89,6 @@ class OutputFTPInfo
         return $result;
     }
 
-    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
-     * and casts it as a OutputFTPInfo Object
-     *
-     * @param \stdClass $json_obj
-     * @return OutputFTPInfo
-     */
     public static function createFromJSON($json_obj)
     {
         $result = new self();

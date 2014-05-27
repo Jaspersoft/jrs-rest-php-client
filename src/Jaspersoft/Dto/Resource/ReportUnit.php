@@ -1,6 +1,10 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
+/**
+ * Class ReportUnit
+ * @package Jaspersoft\Dto\Resource
+ */
 class ReportUnit extends CompositeResource
 {
 

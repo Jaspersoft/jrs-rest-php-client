@@ -3,24 +3,28 @@ namespace Jaspersoft\Dto\Job;
 
 /**
  * Class Alert
+ * Defines an Alert object used by Job
+ *
  * @package Jaspersoft\Dto\Job
  */
 class Alert
 {
-
-    /** Read-only value of server-declared ID
+    /**
+     * Read-only value of server-declared ID
      *
      * @var int
      */
     public $id;
 
-    /** Read-only value used for optimistic locking
+    /**
+     * Read-only value used for optimistic locking
      *
      * @var int
      */
     public $version;
 
-    /** Specify who receives the alert
+    /**
+     * Specify who receives the alert
      *
      * Supported Values:
      *   "NONE", "OWNER", "ADMIN", "OWNER_AND_ADMIN"
@@ -31,13 +35,15 @@ class Alert
      */
     public $recipient;
 
-    /** Array of email addresses
+    /**
+     * Array of email addresses
      *
      * @var array
      */
     public $toAddresses;
 
-    /** Specify when the notification is sent
+    /**
+     * Specify when the notification is sent
      *
      * Supported Values:
      *   "NONE", "ALL", "FAIL_ONLY", "SUCCESS_ONLY"
@@ -48,29 +54,34 @@ class Alert
      */
     public $jobState;
 
-    /** Email message body
+    /**
+     * Email message body
      *
      * @var string
      */
     public $messageText;
 
-    /** Email message body on failure
+    /**
+     * Email message body on failure
      * @var string
      */
     public $messageTextWhenJobFails;
 
-    /** Email subject
+    /**
+     * Email subject
      * @var string
      */
     public $subject;
 
-    /** Should the stack trace be included in the alert?
+    /**
+     * Should the stack trace be included in the alert?
      *
      * @var boolean
      */
     public $includingStackTrace;
 
-    /** Should the alert include report job info?
+    /**
+     * Should the alert include report job info?
      *
      * @var boolean
      */
@@ -95,7 +106,7 @@ class Alert
     }
 
     /** This function takes a \stdClass decoded by json_decode representing a scheduled job
-     * and casts it as a Alert Object
+     * and casts it as an Alert Object
      *
      * @param \stdClass $json_obj
      * @return Alert

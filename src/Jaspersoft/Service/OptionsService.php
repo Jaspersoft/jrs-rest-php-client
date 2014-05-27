@@ -5,6 +5,10 @@ use Jaspersoft\Client\Client;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Options\ReportOptions;
 
+/**
+ * Class OptionsService
+ * @package Jaspersoft\Service
+ */
 class OptionsService
 {
 	protected $service;
@@ -17,10 +21,10 @@ class OptionsService
     }
 	
 	/**
-	 * Using this function you can request the report options for a report.
+	 * Get report options
 	 *
 	 * @param string $uri
-	 * @return Array<\Jasper\ReportOptions>
+	 * @return array
 	 */
 	public function getReportOptions($uri)
     {
@@ -39,9 +43,9 @@ class OptionsService
 	 * Note that even when there is only one value, it must be encapsulated within an array.
 	 *
 	 * @param string $uri
-	 * @param array<string> $controlOptions
+	 * @param array $controlOptions
 	 * @param string $label
-	 * @param bool $overwrite
+	 * @param boolean $overwrite
 	 * @throws \Jaspersoft\Exception\RESTRequestException
      * @return \Jaspersoft\Dto\Options\ReportOptions
 	 */

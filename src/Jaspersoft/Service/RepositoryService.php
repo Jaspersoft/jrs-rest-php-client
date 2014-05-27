@@ -14,6 +14,10 @@ use Jaspersoft\Exception\ResourceServiceException;
 if (!defined("RESOURCE_NAMESPACE"))
     define("RESOURCE_NAMESPACE", "Jaspersoft\\Dto\\Resource");
 
+/**
+ * Class RepositoryService
+ * @package Jaspersoft\Service
+ */
 class RepositoryService
 {
     private $service;
@@ -37,9 +41,10 @@ class RepositoryService
         return $result;
     }
 
-    /** Search repository for objects based on a defined criteria
+    /**
+     * Search repository by criteria
      *
-     * @param RepositorySearchCriteria $criteria
+     * @param \Jaspersoft\Service\Criteria\RepositorySearchCriteria $criteria
      * @return \Jaspersoft\Service\Result\SearchResourcesResult
      */
     public function searchResources(RepositorySearchCriteria $criteria = null)
@@ -64,11 +69,12 @@ class RepositoryService
         return new SearchResourcesResult(json_decode($data), (int) $headers['Result-Count'], (int) $headers['Start-Index'], $totalCount);
     }
 
-    /** Get resource by URI
+    /**
+     * Get resource by URI
      *
-     * @param string $uri - The URI of the string
-     * @param bool $expanded - Returns subresources with resource object
-     * @return Resource
+     * @param string $uri
+     * @param bool $expanded Return subresources as definitions and not references?
+     * @return \Jaspersoft\Dto\Resource\Resource
      */
     public function getResource($uri, $expanded = false)
     {
@@ -98,9 +104,10 @@ class RepositoryService
         }
     }
 
-    /** Obtain the raw binary data of a file resource stored on the server (e.x: image)
+    /**
+     * Obtain the raw binary data of a file resource stored on the server (e.x: image)
      *
-     * @param File $file
+     * @param \Jaspersoft\Dto\Resource\File $file
      * @return string
      */
     public function getBinaryFileData(File $file)
@@ -110,7 +117,8 @@ class RepositoryService
         return $data;
     }
 
-    /** Create a resource using a resource descriptor
+    /**
+     * Create a resource
      *
      * Note: Resources can be placed at arbitrary locations, or in a folder. Thus, you must set EITHER $parentFolder
      * OR the uri parameter of the Resource used in the first argument.
@@ -143,10 +151,11 @@ class RepositoryService
         return $resource::createFromJSON(json_decode($data, true), get_class($resource));
     }
 
-    /** Update a resource using a resource descriptor
+    /**
+     * Update a resource
      *
      * @param \Jaspersoft\Dto\Resource\Resource $resource Resource object fully describing updated resource
-     * @param bool $overwrite Replace existing resource even if type differs?
+     * @param boolean $overwrite Replace existing resource even if type differs?
      * @return \Jaspersoft\Dto\Resource\Resource
      */
     public function updateResource(Resource $resource, $overwrite = false)
@@ -162,9 +171,10 @@ class RepositoryService
         return $resource::createFromJSON(json_decode($data, true), get_class($resource));
     }
 
-    /** Update a file on the server by supplying binary data
+    /**
+     * Update a file on the server by supplying binary data
      *
-     * @param File $resource A resource descriptor for the File
+     * @param \Jaspersoft\Dto\Resource\File $resource A resource descriptor for the File
      * @param string $binaryData The binary data of the file to update
      * @return \Jaspersoft\Dto\Resource\Resource
      */
@@ -178,15 +188,16 @@ class RepositoryService
 
     }
 
-    /** Create a file on the server by supplying binary data
+    /**
+     * Create a file on the server by supplying binary data
      *
      * If you are using a custom MIME type, you must add the type => mimeType mapping
      * to the \Jaspersoft\Tool\MimeMapper mimeMap.
      *
-     * @param File $resource
+     * @param \Jaspersoft\Dto\Resource\File $resource
      * @param string $binaryData
      * @param string $parentFolder string The folder to place the file in
-     * @param bool $createFolders
+     * @param boolean $createFolders
      * @return \Jaspersoft\Dto\Resource\File
      */
     public function createFileResource(File $resource, $binaryData, $parentFolder, $createFolders = true)
@@ -199,12 +210,13 @@ class RepositoryService
         return File::createFromJSON(json_decode($response, true), get_class($resource));
     }
 
-    /** Copy a resource from one location to another
+    /**
+     * Copy a resource from one location to another
      *
      * @param string $resourceUri URI of resource to be copied
      * @param string $destinationFolderUri URI of folder the resource is to be copied to
-     * @param bool $createFolders Should folders be created if they do not already exist?
-     * @param bool $overwrite Should files be overwritten while performing this operation?
+     * @param boolean $createFolders Should folders be created if they do not already exist?
+     * @param boolean $overwrite Should files be overwritten while performing this operation?
      * @return \Jaspersoft\Dto\Resource\Resource
      */
     public function copyResource($resourceUri, $destinationFolderUri, $createFolders = true, $overwrite = false)
@@ -228,12 +240,13 @@ class RepositoryService
 
     }
 
-    /** Move a resource from one location to another location within the repository
+    /**
+     * Move a resource from one location to another location within the repository
      *
      * @param string $resourceUri URI of resource to be copied
      * @param string $destinationFolderUri URI of folder the resource is to be copied to
-     * @param bool $createFolders Should folders be created if they do not already exist?
-     * @param bool $overwrite Should files be overwritten while performing this operation?
+     * @param boolean $createFolders Should folders be created if they do not already exist?
+     * @param boolean $overwrite Should files be overwritten while performing this operation?
      * @return \Jaspersoft\Dto\Resource\Resource
      */
     public function moveResource($resourceUri, $destinationFolderUri, $createFolders = true, $overwrite = false)
@@ -256,7 +269,8 @@ class RepositoryService
         }
     }
 
-    /** Remove resource(s) from the repository
+    /**
+     * Remove resource(s) from the repository
      *
      * @param string|array $uris URI(s) of resources to remove
      */

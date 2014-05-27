@@ -5,6 +5,10 @@ use Jaspersoft\Dto\Organization\Organization;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Client\Client;
 
+/**
+ * Class OrganizationService
+ * @package Jaspersoft\Service
+ */
 class OrganizationService
 {
 	protected $service;
@@ -29,18 +33,18 @@ class OrganizationService
     }
 	
 	/**
-     * Use this function to search for organizations.
+     * Search for organizations
      *
      * Unlike the searchUsers function, full Organization objects are returned with this function.
      * You will receive an array with zero or more elements which are Organization objects that can be manipulated
      * or used with other functions requiring Organization objects.
      *
-     * @param null $query
-     * @param null $rootTenantId
-     * @param null $maxDepth
-     * @param null $includeParents
-     * @param null $limit
-     * @param null $offset
+     * @param string $query
+     * @param string $rootTenantId
+     * @param int $maxDepth
+     * @param boolean $includeParents
+     * @param int $limit
+     * @param int $offset
      * @return array
      */
     public function searchOrganizations($query = null, $rootTenantId = null, $maxDepth = null, $includeParents = null,
@@ -73,11 +77,10 @@ class OrganizationService
     }
 	
     /**
-     * This function creates a new organization. If you do not wish for default users to be created
-     * supply false as the second parameter.
+     * Create a new organization
      *
-     * @param Organization $org
-     * @param bool $createDefaultUsers
+     * @param \Jaspersoft\Dto\Organization\Organization $org
+     * @param boolean $createDefaultUsers
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
     public function createOrganization(Organization $org, $createDefaultUsers = true)
@@ -88,9 +91,9 @@ class OrganizationService
     }
 
 	/**
-     * Delete an organization.
+     * Delete an organization
 	 *
-	 * @param Organization $org - organization object
+	 * @param \Jaspersoft\Dto\Organization\Organization $org
 	 * @throws \Jaspersoft\Exception\RESTRequestException
 	 */
 	public function deleteOrganization(Organization $org)
@@ -100,9 +103,9 @@ class OrganizationService
 	}
 	
     /**
-     * This function updates an existing organization. Supply an organization object with the expected changes.
+     * Update an organization
      *
-     * @param Organization $org
+     * @param \Jaspersoft\Dto\Organization\Organization $org
      */
     public function updateOrganization(Organization $org)
 	{
@@ -112,10 +115,10 @@ class OrganizationService
     }
 	
 	/**
-	 * This function requests the single entity of one organization when supplied with the ID
+	 * Get an organization by ID
 	 *
-	 * @param string id The ID of the organization
-	 * @return Organization
+	 * @param int|string id The ID of the organization
+	 * @return \Jaspersoft\Dto\Organization\Organization
 	 */
 	public function getOrganization($id)
 	{

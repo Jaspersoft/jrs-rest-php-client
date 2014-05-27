@@ -1,20 +1,24 @@
 <?php
-
-
 namespace Jaspersoft\Dto\ImportExport;
 
-
+/**
+ * Class TaskState
+ * Describes the state of an import or export task that has been executed
+ *
+ * @package Jaspersoft\Dto\ImportExport
+ */
 class TaskState
 {
 
-    /** The ID for the Task (read-only)
+    /**
+     * ID for the task (read-only)
      *
      * @var int
      */
     public $id;
 
-    /** Current phase of the task (read-only)
-     *     Possible Values:
+    /**
+     * Current phase of the task (read-only)
      *          'inprogress' - The task is currently being executed
      *          'finished' - The task has completed.
      *          'failed' - The task has failed to complete
@@ -23,7 +27,8 @@ class TaskState
      */
     public $phase;
 
-    /** A message returned by the server in regard to the task, especially useful in the event of failure.
+    /**
+     * A message returned by the server in regard to the task, especially useful in the event of failure.
      *
      * @var string
      */

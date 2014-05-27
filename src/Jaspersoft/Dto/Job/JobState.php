@@ -4,19 +4,22 @@ namespace Jaspersoft\Dto\Job;
 class JobState
 {
 
-    /** A timestamp of the last time the job was ran
+    /**
+     * A timestamp of the last time the job was ran
      *
      * @var string
      */
     public $previousFireTime;
 
-    /** A timestamp of the next time the job is expected to run
+    /**
+     * A timestamp of the next time the job is expected to run
      *
      * @var string
      */
     public $nextFireTime;
 
-    /** The status of the job
+    /**
+     * The status of the job
      *
      *     Possible Values:
      *          "NORMAL" - The job is running as expected

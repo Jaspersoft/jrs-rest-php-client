@@ -11,48 +11,57 @@ namespace Jaspersoft\Dto\Job;
 class Job
 {
 
-    /** Job execution alert settings
+    /**
+     * Job execution alert settings
      *
      * @var Alert
      */
     public $alert;
 
-    /** File name for report job output
+    /**
+     * File name for report job output
      * @var string
      */
     public $baseOutputFilename;
 
-    /** Job Execution Output Destination Settings
+    /**
+     * Job Execution Output Destination Settings
      * @var RepositoryDestination
      */
     public $repositoryDestination;
 
-    /** The date when the job has been created (read-only)
+    /**
+     * The date when the job has been created (read-only)
      * @var string
      */
     public $creationDate;
 
-    /** The job description
+    /**
+     * The job description
      * @var string
      */
     public $description;
 
-    /** ID of the Job (read-only)
+    /**
+     * ID of the Job (read-only)
      * @var int
      */
     public $id;
 
-    /** The job label
+    /**
+     * The job label
      * @var string
      */
     public $label;
 
-    /** Mail notification settings
+    /**
+     * Mail notification settings
      * @var MailNotification
      */
     public $mailNotification;
 
-    /** Set of output formats to produce
+    /**
+     * Set of output formats to produce
      *
      * Supported Values:
      *   "PDF", "HTML", "XLS", "RTF", "CSV", "ODT", "TXT", "DOCX", "ODS", "XLSX", "XLS_NOPAG",
@@ -67,24 +76,28 @@ class Job
      */
     public $outputFormats;
 
-    /** Locale for report execution output
+    /**
+     * Locale for report execution output
      *
      * Example: "en"
      * @var string
      */
     public $outputLocale;
 
-    /** Job Source Settings (contains report URI and input control parameters)
+    /**
+     * Job Source Settings (contains report URI and input control parameters)
      * @var Source
      */
     public $source;
 
-    /** Job Trigger Settings
+    /**
+     * Job Trigger Settings
      * @var SimpleTrigger|CalendarTrigger
      */
     public $trigger;
 
-    /** Name and Organization of user who created job (read-only)
+    /**
+     * Name and Organization of user who created job (read-only)
      *
      * Example: "jasperadmin|organization_1"
      *
@@ -92,13 +105,15 @@ class Job
      */
     public $username;
 
-    /** Job object version value. Used for optimistic locking of job object
+    /**
+     * Job object version value. Used for optimistic locking of job object
      *
      * @var int
      */
     public $version;
 
-    /** Output Time Zone
+    /**
+     * Output Time Zone
      *
      * @var string */
     public $outputTimeZone;
@@ -114,12 +129,6 @@ class Job
         $this->repositoryDestination = $repositoryDestination;
 	}
 
-    /**
-     * This function will combine all simple and complex attributes of a Job DTO and return an associative
-     * array formatted for json_encode that results in the proper JSON format for server requests.
-     *
-     * @return array
-     */
     public function jsonSerialize()
     {
         $result = array();
@@ -143,12 +152,6 @@ class Job
         return json_encode($this->jsonSerialize());
     }
 
-    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
-     * and casts it as a Job Object
-     *
-     * @param \stdClass $json_obj
-     * @return Job
-     */
     public static function createFromJSON($json_obj)
     {
         $result = new self();        

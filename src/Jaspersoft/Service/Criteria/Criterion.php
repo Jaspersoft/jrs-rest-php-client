@@ -3,9 +3,12 @@ namespace Jaspersoft\Service\Criteria;
 
 use Jaspersoft\Tool\Util;
 
+/**
+ * Class Criterion
+ * @package Jaspersoft\Service\Criteria
+ */
 class Criterion
 {
-
     public function toArray()
     {
         return get_object_vars($this);
@@ -15,5 +18,4 @@ class Criterion
     {
         return Util::query_suffix($this->toArray());
     }
-
 }

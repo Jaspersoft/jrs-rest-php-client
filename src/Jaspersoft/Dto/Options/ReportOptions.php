@@ -1,11 +1,24 @@
 <?php
 namespace Jaspersoft\Dto\Options;
 
+/**
+ * Class ReportOptions
+ * @package Jaspersoft\Dto\Options
+ */
 class ReportOptions
 {
-	public $uri;
-	public $id;
-	public $label;
+    /**
+     * @var string
+     */
+    public $uri;
+    /**
+     * @var string
+     */
+    public $id;
+    /**
+     * @var string
+     */
+    public $label;
 
 	public function __construct($uri = null, $id = null, $label = null)
     {

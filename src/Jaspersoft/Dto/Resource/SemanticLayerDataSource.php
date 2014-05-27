@@ -1,6 +1,10 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
+/**
+ * Class SemanticLayerDataSource
+ * @package Jaspersoft\Dto\Resource
+ */
 class SemanticLayerDataSource extends CompositeResource
 {
 

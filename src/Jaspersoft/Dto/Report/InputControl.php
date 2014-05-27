@@ -1,14 +1,32 @@
 <?php
 namespace Jaspersoft\Dto\Report;
 
+/**
+ * Class InputControl
+ * @package Jaspersoft\Dto\Report
+ */
 class InputControl
 {
-
-	public $uri;
-	public $id;
-	public $value;
-	public $error;
-	public $options = array();
+    /**
+     * @var string
+     */
+    public $uri;
+    /**
+     * @var string
+     */
+    public $id;
+    /**
+     * @var string
+     */
+    public $value;
+    /**
+     * @var string
+     */
+    public $error;
+    /**
+     * @var array
+     */
+    public $options = array();
 
 	public function __construct($uri = null, $id = null, $value = null, $error = null)
     {

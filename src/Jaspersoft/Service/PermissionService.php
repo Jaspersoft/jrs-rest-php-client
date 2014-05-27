@@ -5,6 +5,10 @@ use Jaspersoft\Client\Client;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Permission\RepositoryPermission;
 
+/**
+ * Class PermissionService
+ * @package Jaspersoft\Service
+ */
 class PermissionService
 {
 	protected $service;
@@ -16,13 +20,6 @@ class PermissionService
         $this->restUrl2 = $client->getURL();
     }
 
-    /**
-     * Return an array of ReportPermission objects from the JSON data representing the
-     * batch collection of one or more Permissions.
-     *
-     * @param string $json_data json data representing a batch of permissions
-     * @return array A set of RepositoryPermission items described by the JSON data
-     */
     private function batchDataToArray($json_data)
     {
         $result = array();
@@ -36,11 +33,11 @@ class PermissionService
     /**
      * Obtain the permissions of a resource on the server
      *
-     * @param string $uri resource URI
-     * @param bool $effectivePermissions Show all permissions affected by URI?
+     * @param string $uri
+     * @param boolean $effectivePermissions Show all permissions affected by URI?
      * @param string $recipientType Type of permission (e.g: user/role)
      * @param string $recipientId the id of the recipient (requires recipientType)
-     * @param bool $resolveAll Resolve for all matched recipients?
+     * @param boolean $resolveAll Resolve for all matched recipients?
      * @return array A resultant set of RepositoryPermission
      */
     public function searchRepositoryPermissions($uri, $effectivePermissions = null, $recipientType = null, $recipientId = null, $resolveAll = null)
@@ -57,7 +54,8 @@ class PermissionService
 	}
 
 
-    /** Get a single permission
+    /**
+     * Get a single permission
      *
      * @param string $uri URI of the resource within the repository
      * @param string $recipientUri URI of recipient needed
@@ -72,7 +70,7 @@ class PermissionService
     }
 
     /**
-     * Update a single RepositoryPermission.
+     * Update a single RepositoryPermission
      *
      * Note: only the mask of a RepositoryPermission can be updated
      *
@@ -88,9 +86,9 @@ class PermissionService
     }
 
 	/**
-	 * Update a set of permissions on the server.
+	 * Update a set of RepositoryPermission
 	 *
-	 * @param string $uri resource URI
+	 * @param string $uri
 	 * @param array $permissions Set of updated RepositoryPermission objects
      * @return array Set of RepositoryPermissions that were updated
      */
@@ -103,10 +101,10 @@ class PermissionService
 	}
 
     /**
-     * Create multiple permissions
+     * Create multiple RepositoryPermission
      *
-     * @param array $permissions A set of RepositoryPermission objects to create
-     * @return array A set of RepositoryPermission items that were created
+     * @param array $permissions A set of \Jaspersoft\Dto\Permission\RepositoryPermission
+     * @return array A set of RepositoryPermission that were created
      */
 	public function createRepositoryPermissions($permissions)
     {
@@ -117,7 +115,7 @@ class PermissionService
 	}
 
     /**
-     * Create a single permission
+     * Create a single RepositoryPermission
      *
      * @param \Jaspersoft\Dto\Permission\RepositoryPermission $permission
      * @return \Jaspersoft\Dto\Permission\RepositoryPermission
@@ -130,10 +128,10 @@ class PermissionService
         return RepositoryPermission::createFromJSON($response);
     }
 
-	 /**
-     * Remove an already existing permission.
+	/**
+     * Delete a RepositoryPermission
      *
-     * @param \Jaspersoft\Dto\Permission\RepositoryPermission $permission deletion target
+     * @param \Jaspersoft\Dto\Permission\RepositoryPermission $permission
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
 	public function deleteRepositoryPermission(RepositoryPermission $permission)

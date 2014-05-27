@@ -1,6 +1,10 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
+/**
+ * Class XmlaConnection
+ * @package Jaspersoft\Dto\Resource
+ */
 class XmlaConnection extends Resource
 {
     public $url;

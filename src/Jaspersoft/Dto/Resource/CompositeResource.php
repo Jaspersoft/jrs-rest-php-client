@@ -7,18 +7,12 @@ if (!defined("RESOURCE_NAMESPACE")) {
     define("RESOURCE_NAMESPACE", "Jaspersoft\\Dto\\Resource");
 }
 
+/**
+ * Class CompositeResource
+ * @package Jaspersoft\Dto\Resource
+ */
 abstract class CompositeResource extends Resource
 {
-
-    /** resolveSubresource discerns composite resources as reference, object, or collection.
-     * It creates the appropriate underlying structure of the JSON data representation to be given to
-     * the json encoder. Recursive calls are used to build collections of resources.
-     *
-     * @param $field Key for field
-     * @param $value Value of field
-     * @param $class string The name of the class
-     * @return array|null
-     */
     protected function resolveSubresource($field, $value, $class)
     {
         if (is_string($value))

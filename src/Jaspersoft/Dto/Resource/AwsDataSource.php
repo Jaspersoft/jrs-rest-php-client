@@ -1,6 +1,10 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
 
+/**
+ * Class AwsDataSource
+ * @package Jaspersoft\Dto\Resource
+ */
 class AwsDataSource extends Resource
 {
     public $driverClass;

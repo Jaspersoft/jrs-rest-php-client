@@ -4,7 +4,8 @@ namespace Jaspersoft\Dto\Job;
 class CalendarTrigger extends Trigger
 {
 
-    /** Pattern that determines minute part of trigger fire times
+    /**
+     * Pattern that determines minute part of trigger fire times
      *
      * Pattern can consist of following tokens:
      *   + single minute value between 0 and 59 these can be separated by commas to create a set
@@ -17,7 +18,8 @@ class CalendarTrigger extends Trigger
      */
     public $minutes;
 
-    /** Pattern that determines the hour portion of trigger firing
+    /**
+     * Pattern that determines the hour portion of trigger firing
      *
      * Pattern can consist of following tokens:
      *   + single hour value between 0 and 23 these can be separated by commas to create a set
@@ -31,7 +33,8 @@ class CalendarTrigger extends Trigger
      */
     public $hours;
 
-    /** Pattern that determines the month portion of trigger firing
+    /**
+     * Pattern that determines the month portion of trigger firing
      *
      * This should be an array of zero-indexed month indices (e.g: 0 = January, 11 = December)
      *
@@ -42,7 +45,8 @@ class CalendarTrigger extends Trigger
      */
     public $months;
 
-    /** Type of days on which the trigger should fire
+    /**
+     * Type of days on which the trigger should fire
      *
      * Supported Values:
      *   "ALL", "WEEK", "MONTH"
@@ -51,7 +55,8 @@ class CalendarTrigger extends Trigger
      */
     public $daysType;
 
-    /** The week days on which a trigger should fire. Use 1-indexed week days (e.g: 1 = Sunday, 7 = Saturday)
+    /**
+     * The week days on which a trigger should fire. Use 1-indexed week days (e.g: 1 = Sunday, 7 = Saturday)
      *
      * Example: array("1", "7")
      * This would run a trigger on Sundays and Saturdays
@@ -60,7 +65,8 @@ class CalendarTrigger extends Trigger
      */
     public $weekDays;
 
-    /** Pattern that describes the month days in which the trigger should fire.
+    /**
+     * Pattern that describes the month days in which the trigger should fire.
      *
      * Pattern can consist of following tokens:
      *   + single day value between 1 and 31 these can be separated by commas to create a set
@@ -83,7 +89,8 @@ class CalendarTrigger extends Trigger
         $this->monthDays = $monthDays;
     }
 
-    /** Overrides Trigger to provide proper JSON hierarchy as described by JRS
+    /**
+     * Overrides Trigger to provide proper JSON hierarchy as described by JRS
      *
      * @return array
      */
@@ -108,7 +115,8 @@ class CalendarTrigger extends Trigger
         return array($this->name() => $result);
     }
 
-    /** This function takes a \stdClass decoded by json_decode representing a scheduled job
+    /**
+     * This function takes a \stdClass decoded by json_decode representing a scheduled job
      * and casts it as a CalendarTrigger Object
      *
      * @param \stdClass $json_obj

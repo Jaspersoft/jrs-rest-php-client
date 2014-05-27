@@ -1,12 +1,27 @@
 <?php
 namespace Jaspersoft\Dto\Permission;
 
+/**
+ * Class RepositoryPermission
+ * @package Jaspersoft\Dto\Permission
+ */
 class RepositoryPermission
 {
-
-	public $uri;
-	public $recipient;
-	public $mask;
+    /**
+     * URI of resource the permission is related to
+     * @var string
+     */
+    public $uri;
+    /**
+     * Descriptor of user or role for which permission belongs
+     * @var string
+     */
+    public $recipient;
+    /**
+     * A numerical descriptor of the permissions granted
+     * @var int
+     */
+    public $mask;
 
 	public function __construct($uri, $recipient, $mask)
     {

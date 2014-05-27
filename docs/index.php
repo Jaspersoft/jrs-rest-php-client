@@ -255,7 +255,7 @@ end of skeleton -->
 <article id="update_organization">
     <h3> Updating Organizations </h3>
     <p>
-        Modifying an organization is done in a similar fashion to modifying a user. The organization object needs to be obtained with the searchOrganization method and then modify it with the get/set methods, and return it back to the server, as shown below.
+        Modifying an organization is done in a similar fashion to modifying a user. The organization object needs to be obtained with the searchOrganization method, modified, and then return it back to the server as shown below.
     </p>
 		<pre><code><?php inject_sample('code/update_organization.txt'); ?>
         </code>

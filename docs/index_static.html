@@ -307,11 +307,11 @@ try {
 <article id="update_organization">
     <h3> Updating Organizations </h3>
     <p>
-        Modifying an organization is done in a similar fashion to modifying a user. The organization object needs to be obtained with the searchOrganization method and then modify it with the get/set methods, and return it back to the server, as shown below.
+        Modifying an organization is done in a similar fashion to modifying a user. The organization object needs to be obtained with the searchOrganization method, modified, and then return it back to the server as shown below.
     </p>
 		<pre><code>$search = $c-&gt;organizationService()-&gt;searchOrganization('organization_wave');
 $organization = $search[0];
-$organization-&gt;tenantDesc = &quot;Do the wave&quot;;
+$organization-&gt;tenantDesc = &quot;Wave producing organization&quot;;
 
 try {
     $c-&gt;organizationService()-&gt;updateOrganization($organization);

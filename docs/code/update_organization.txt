@@ -1,6 +1,6 @@
-$search = $c->organizationService()->searchOrganization('organization_wave');
+$search = $c->organizationService()->searchOrganization('test_organization');
 $organization = $search[0];
-$organization->tenantDesc = "Wave producing organization";
+$organization->tenantDesc = "My test organization";
 
 try {
     $c->organizationService()->updateOrganization($organization);

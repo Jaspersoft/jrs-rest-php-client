@@ -3,7 +3,7 @@ $repo = $c->repositoryService()->searchResources();
 
 // Search for specific items in repository
 $criteria = new RepositorySearchCriteria();
-$criteria->q = "pitbull";
+$criteria->q = "logo";
 
 $results = $c->repositoryService()->searchResources($criteria);
 

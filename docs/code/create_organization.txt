@@ -1,8 +1,8 @@
 $new_organization = new Organization(
       'test_organization',	// alias
       'test_organization',	// id
-      'organization_1',	// parent organization
-      'test_organization');	// tenantName
+      'organization_1',	    // parent organization
+      'Test Organization');	// organization name
 
 try {
    $c->organizationService()->createOrganization($new_organization);

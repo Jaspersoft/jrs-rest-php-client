@@ -10,7 +10,7 @@ while($continue) {
         $continue = false;
         echo "<br><br>Import complete!";
     } else {
-        echo "Still importing...<br>";
+        echo "Import in progress...<br>";
         @ob_flush();
         @flush();
         sleep(10);

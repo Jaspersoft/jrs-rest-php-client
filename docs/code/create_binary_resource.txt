@@ -1,11 +1,11 @@
 $file = new File;
 
-$file->description = "Image of a Pitbull";
-$file->label = "pitbull";
+$file->description = "JPG of company logo";
+$file->label = "logo";
 
 $c->repositoryService()->createFileResource(
 		$file,
-		file_get_contents("/home/grant/pitbull.jpg"),
+		file_get_contents("/home/user/logo.jpg"),
 		"/ImageFolder",
 		);
 

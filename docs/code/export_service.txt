@@ -13,7 +13,7 @@ while ($decline) {
         $decline = false;
         echo "<br>Export task complete, downloading....";
     } else {
-        echo "Export not yet completed...<br>";
+        echo "Export in progress...<br>";
         @flush();
         @ob_flush();
         sleep(10);
@@ -25,4 +25,4 @@ $data = $c->importExportService()->fetchExport($metadata->id);
 fwrite($f, $data);
 fclose($f);
 
-echo "<br><br>File available for download <a href='export.zip'>here</a>";
+echo "<br><br>Export catalog available for download <a href='export.zip'>here</a>.";

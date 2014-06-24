@@ -1,5 +1,5 @@
 $p = new RepositoryPermission("/reports/samples/AllAccounts", "user:/organization_1/joeuser", 1);
-$p2 = new RepositoryPermission("/reports/samples/AllAccounts", "user:/organization_1/otheruser", 32);
+$p2 = new RepositoryPermission("/reports/samples/AllAccounts", "user:/organization_1/janeuser", 32);
 $c->permissionService()->createRepositoryPermissions(array($p, $p2));
 
 // Likewise, you can create a single permission using the non-plural version

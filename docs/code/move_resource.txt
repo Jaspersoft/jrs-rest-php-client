@@ -1,1 +1,1 @@
-$c->repositoryService()->moveResource("/ImageFolder/anchorsteam", "/");
+$c->repositoryService()->moveResource("/ImageFolder", "/MyReports");

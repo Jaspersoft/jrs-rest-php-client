@@ -1,5 +1,6 @@
-$c->repositoryService()->deleteResources("/ImageFolder/pitbull");
+$c->repositoryService()->deleteResources("/ImageFolder/logo");
+$c->repositoryService()->deleteResources("/ImageFolder/logo2");
 
-// OR!
+// or
 
-$c->repositoryService()->deleteResources(array("/ImageFolder/pitbull", "/ImageFolder"));
+$c->repositoryService()->deleteResources(array("/ImageFolder/logo", "/ImageFolder/logo2"));

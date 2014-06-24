@@ -1,2 +1,2 @@
-$allJobs = $c->jobService()->searchJobs("/reports/samples/AllAccounts");
-print_r($allJobs);
+$allAccountsJobs = $c->jobService()->searchJobs("/reports/samples/AllAccounts");
+print_r($allAccountsJobs);

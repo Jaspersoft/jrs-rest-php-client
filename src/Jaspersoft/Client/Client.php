@@ -171,4 +171,13 @@ class Client
      */
     public function getService() { return $this->restReq; }
 
+    /**
+     * Destroy your session on the server and locally forget related cookies
+     *
+     */
+    public function logoutSession() {
+        $url = $this->serverUrl . "/logout.html";
+        $this->restReq->prepAndSend($url, array(302), 'GET');     // Kill server session
+        $this->restReq->closeCurlHandle(true);                    // cleanup client resources
+    }
 }

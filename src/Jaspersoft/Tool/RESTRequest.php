@@ -19,6 +19,7 @@ class RESTRequest
 	protected $file_to_upload = array();
     protected $headers;
     protected $curl_timeout;
+    protected $curl_handle;
 
 	public function __construct ($url = null, $verb = 'GET', $request_body = null)
 	{
@@ -33,13 +34,22 @@ class RESTRequest
 		$this->response_body	= null;
 		$this->response_info	= null;
 		$this->file_to_upload	= array();
-        $this->curl_timeout = 30;
+        $this->curl_timeout     = 30;
+        $this->curl_handle      = curl_init();
+        $this->curl_cookiejar   = null;
 
-		if ($this->request_body !== null)
+        if ($this->request_body !== null)
 		{
 			$this->buildPostBody();
 		}
+
+
 	}
+
+    public function __destruct() {
+        // Clean up curl resources and delete cookie file remnants
+        $this->closeCurlHandle(true);
+    }
 
     /** This function will convert an indexed array of headers into an associative array where the key matches
      * the key of the headers, and the value matches the value of the header.
@@ -75,44 +85,49 @@ class RESTRequest
 		$this->accept_type 		= 'application/json';
 		$this->file_to_upload	= null;
         $this->headers          = null;
+        if (!is_resource($this->curl_handle)) {
+            $this->curl_handle = curl_init();
+        }
 	}
 
 	public function execute ()
 	{
-		$ch = curl_init();
-		$this->setAuth($ch);
-        $this->setTimeout($ch);
+		if (!is_resource($this->curl_handle)) {
+            $this->curl_handle = curl_init();
+        }
+		$this->setAuth($this->curl_handle);
+        $this->setTimeout($this->curl_handle);
 		try
 		{
 			switch (strtoupper($this->verb))
 			{
 				case 'GET':
-					$this->executeGet($ch);
+					$this->executeGet($this->curl_handle);
 					break;
 				case 'POST':
-					$this->executePost($ch);
+					$this->executePost($this->curl_handle);
 					break;
 				case 'PUT':
-					$this->executePut($ch);
+					$this->executePut($this->curl_handle);
 					break;
 				case 'DELETE':
-					$this->executeDelete($ch);
+					$this->executeDelete($this->curl_handle);
 					break;
 				case 'PUT_MP':
 					$this->verb = 'PUT';
-					$this->executePutMultipart($ch);
+					$this->executePutMultipart($this->curl_handle);
 					break;
                 case 'POST_MP':
                     $this->verb = 'POST';
-                    $this->executePostMultipart($ch);
+                    $this->executePostMultipart($this->curl_handle);
                     break;
                 case 'POST_BIN':
                     $this->verb = 'POST';
-                    $this->executeBinarySend($ch);
+                    $this->executeBinarySend($this->curl_handle);
                     break;
                 case 'PUT_BIN':
                     $this->verb = 'PUT';
-                    $this->executeBinarySend($ch);
+                    $this->executeBinarySend($this->curl_handle);
                     break;
 				default:
 					throw new \InvalidArgumentException('Current verb (' . $this->verb . ') is an invalid REST verb.');
@@ -120,12 +135,12 @@ class RESTRequest
 		}
 		catch (\InvalidArgumentException $e)
 		{
-			curl_close($ch);
+			$this->closeCurlHandle();
 			throw $e;
 		}
 		catch (\Exception $e)
 		{
-			curl_close($ch);
+            $this->closeCurlHandle();
 			throw $e;
 		}
 
@@ -148,11 +163,6 @@ class RESTRequest
 		{
 			$this->buildPostBody();
 		}
-/*
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-		'Content-Type: .' . $this->content_type
-		));
-*/
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->request_body);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
 
@@ -172,7 +182,7 @@ class RESTRequest
         $this->response_body = curl_exec($ch);
         $this->response_info = curl_getinfo($ch);
 
-        curl_close($ch);
+        $this->closeCurlHandle();
 
     }
 
@@ -189,7 +199,7 @@ class RESTRequest
 		$this->response_body = curl_exec($ch);
 		$this->response_info = curl_getinfo($ch);
 
-		curl_close($ch);
+        $this->closeCurlHandle();
 
 	}
 	// Set verb to POST_MP to use this function
@@ -205,7 +215,7 @@ class RESTRequest
 		$this->response_body = curl_exec($ch);
 		$this->response_info	= curl_getinfo($ch);
 
-		curl_close($ch);
+        $this->closeCurlHandle();
 
 	}
 	protected function executePut ($ch)
@@ -246,14 +256,13 @@ class RESTRequest
         // headers are always separated by \n until the end of the header block which is separated by \r\n\r\n.
         $this->response_headers = explode("\r\n", $headerblock);
 
-		curl_close($curlHandle);
+        $this->closeCurlHandle();
 	}
 
 	protected function setCurlOpts (&$curlHandle)
 	{
 		curl_setopt($curlHandle, CURLOPT_URL, $this->url);
 		curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($curlHandle, CURLOPT_COOKIEFILE, '/dev/null');
         curl_setopt($curlHandle, CURLOPT_HEADER, true);
 
         if (!empty($this->content_type))
@@ -268,8 +277,14 @@ class RESTRequest
 	{
 		if ($this->username !== null && $this->password !== null)
 		{
+            if (empty($this->curl_cookiejar)) {
+                $this->curl_cookiejar = tempnam(sys_get_temp_dir(), "jrscookies_");
+            }
 			curl_setopt($curlHandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 			curl_setopt($curlHandle, CURLOPT_USERPWD, $this->username . ':' . $this->password);
+            curl_setopt($curlHandle, CURLOPT_COOKIESESSION, false);
+            curl_setopt($curlHandle, CURLOPT_COOKIEJAR, $this->curl_cookiejar);   // we can keep cookies in temp dir
+            curl_setopt($curlHandle, CURLOPT_COOKIEFILE, $this->curl_cookiejar); // until curl_close is called by logout.
 		}
 	}
 
@@ -277,12 +292,10 @@ class RESTRequest
     {
         curl_setopt($curlHandle, CURLOPT_TIMEOUT, $this->curl_timeout);
     }
-
     public function defineTimeout($seconds)
     {
         $this->curl_timeout = $seconds;
     }
-
 	public function getFileToUpload()
 	{
 		return $this->file_to_upload;
@@ -311,51 +324,53 @@ class RESTRequest
 	{
 		return $this->password;
 	}
-
 	public function setPassword ($password)
 	{
 		$this->password = $password;
 	}
-
 	public function getResponseBody ()
 	{
 		return $this->response_body;
 	}
-
 	public function getResponseInfo ()
 	{
 		return $this->response_info;
 	}
-
 	public function getUrl ()
 	{
 		return $this->url;
 	}
-
 	public function setUrl ($url)
 	{
 		$this->url = $url;
 	}
-
 	public function getUsername ()
 	{
 		return $this->username;
 	}
-
 	public function setUsername ($username)
 	{
 		$this->username = $username;
 	}
-
 	public function getVerb ()
 	{
 		return $this->verb;
 	}
-
 	public function setVerb ($verb)
 	{
 		$this->verb = $verb;
 	}
+
+    public function closeCurlHandle($close_cookies = false) {
+        if (is_resource($this->curl_handle)) {
+            curl_close($this->curl_handle);
+        }
+
+        if ($close_cookies && is_string($this->curl_cookiejar)) {
+            unlink($this->curl_cookiejar);
+            $this->curl_cookiejar = null;
+        }
+    }
 
     public function handleError($statusCode, $expectedCodes, $responseBody)
     {
@@ -386,9 +401,6 @@ class RESTRequest
     public function makeRequest($url, $expectedCodes = array(200), $verb = null, $reqBody = null, $returnData = false,
                                    $contentType = 'application/json', $acceptType = 'application/json', $headers = array())
     {
-
-        $result = array();                                       
-
         $this->flush();
         $this->setUrl($url);
         if ($verb !== null) {

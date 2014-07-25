@@ -1,11 +1,12 @@
 <?php
 namespace Jaspersoft\Dto\User;
+use Jaspersoft\Dto\DTOObject;
 
 /**
  * Class User
  * @package Jaspersoft\Dto\User
  */
-class User
+class User extends DTOObject
 {
     /**
      * @var string

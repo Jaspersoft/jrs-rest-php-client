@@ -1,5 +1,6 @@
 <?php
 namespace Jaspersoft\Dto\Job;
+use Jaspersoft\Dto\DTOObject;
 
 /**
  * Class Job
@@ -8,7 +9,7 @@ namespace Jaspersoft\Dto\Job;
  *
  * @package Jaspersoft\Dto\Job
  */
-class Job
+class Job extends DTOObject
 {
 
     /**
@@ -145,11 +146,6 @@ class Job
             }
         }
         return $result;
-    }
-
-    public function toJSON()
-    {
-        return json_encode($this->jsonSerialize());
     }
 
     public static function createFromJSON($json_obj)

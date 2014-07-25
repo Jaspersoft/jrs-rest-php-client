@@ -1,11 +1,12 @@
 <?php
 namespace Jaspersoft\Dto\Role;
+use Jaspersoft\Dto\DTOObject;
 
 /**
  * Class Role
  * @package Jaspersoft\Dto\Role
  */
-class Role
+class Role extends DTOObject
 {
     /**
      * Role name

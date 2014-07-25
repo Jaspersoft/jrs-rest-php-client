@@ -74,7 +74,7 @@ class RESTRequest
         return $result;
     }
 
-	public function flush ()
+	protected function flush ()
 	{
 		$this->request_body		= null;
 		$this->request_length	= 0;
@@ -90,7 +90,7 @@ class RESTRequest
         }
 	}
 
-	public function execute ()
+	protected function execute ()
 	{
 		if (!is_resource($this->curl_handle)) {
             $this->curl_handle = curl_init();
@@ -146,7 +146,7 @@ class RESTRequest
 
 	}
 
-	public function buildPostBody ($data = null)
+	protected function buildPostBody ($data = null)
 	{
 		$data = ($data !== null) ? $data : $this->request_body;
 		$this->request_body = $data;
@@ -295,6 +295,7 @@ class RESTRequest
     public function defineTimeout($seconds)
     {
         $this->curl_timeout = $seconds;
+
     }
 	public function getFileToUpload()
 	{
@@ -372,7 +373,7 @@ class RESTRequest
         }
     }
 
-    public function handleError($statusCode, $expectedCodes, $responseBody)
+    protected function handleError($statusCode, $expectedCodes, $responseBody)
     {
             if(!empty($responseBody)) {
                 $errorData = json_decode($responseBody);

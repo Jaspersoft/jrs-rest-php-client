@@ -1,5 +1,6 @@
 <?php
 namespace Jaspersoft\Dto\ImportExport;
+use Jaspersoft\Dto\DTOObject;
 
 /**
  * Class TaskState
@@ -7,7 +8,7 @@ namespace Jaspersoft\Dto\ImportExport;
  *
  * @package Jaspersoft\Dto\ImportExport
  */
-class TaskState
+class TaskState extends DTOObject
 {
 
     /**

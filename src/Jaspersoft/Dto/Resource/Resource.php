@@ -1,11 +1,12 @@
 <?php
 namespace Jaspersoft\Dto\Resource;
+use Jaspersoft\Dto\DTOObject;
 
 /**
  * Class Resource
  * @package Jaspersoft\Dto\Resource
  */
-class Resource
+class Resource extends DTOObject
 {
     public $uri;
     public $label;
@@ -23,16 +24,11 @@ class Resource
         return $result;
     }
 
-    public function toJSON()
-    {
-        return json_encode($this->jsonSerialize());
-    }
-
     public function jsonSerialize()
     {
         $result = array();
         foreach (get_object_vars($this) as $k => $v)
-            if (isset($v))
+            if (isset($v))  // version errors with !empty
                 $result[$k] = $v;
         return $result;
     }

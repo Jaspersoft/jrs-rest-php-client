@@ -1,11 +1,12 @@
 <?php
 namespace Jaspersoft\Dto\Permission;
+use Jaspersoft\Dto\DTOObject;
 
 /**
  * Class RepositoryPermission
  * @package Jaspersoft\Dto\Permission
  */
-class RepositoryPermission
+class RepositoryPermission extends DTOObject
 {
     /**
      * URI of resource the permission is related to
@@ -28,17 +29,6 @@ class RepositoryPermission
 		$this->uri = $uri;
 		$this->recipient = $recipient;
 		$this->mask = $mask;
-	}
-	
-	public function jsonSerialize()
-    {
-		$data = array();
-        foreach (get_object_vars($this) as $k => $v) {
-            if (isset($v)) {
-                $data[$k] = $v;
-            }
-        }
-        return $data;
 	}
 
     public static function createFromJSON($json_data)

@@ -1,11 +1,12 @@
 <?php
 namespace Jaspersoft\Dto\Options;
+use Jaspersoft\Dto\DTOObject;
 
 /**
  * Class ReportOptions
  * @package Jaspersoft\Dto\Options
  */
-class ReportOptions
+class ReportOptions extends DTOObject
 {
     /**
      * @var string

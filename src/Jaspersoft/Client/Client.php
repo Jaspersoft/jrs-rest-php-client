@@ -112,6 +112,13 @@ class Client
         }
         return $this->reportService;
 	}
+
+    public function reportExecutionService() {
+        if (!isset($this->reportExecutionService)) {
+            $this->reportExecutionService = new service\ReportExecutionService($this);
+        }
+        return $this->reportExecutionService;
+    }
 	
 	public function importExportService()
     {
@@ -129,8 +136,7 @@ class Client
         return $this->queryService;
     }
 
-    /** setRequestTimeout
-     *
+    /**
      * Set the amount of time cURL is permitted to wait for a response to a request before timing out.
      *
      * @param $seconds int Time in seconds
@@ -140,8 +146,8 @@ class Client
         $this->restReq->defineTimeout($seconds);
     }
 	
-    /** This function returns information about the server in an associative array.
-     * Information provided is:
+    /**
+     * Obtain information about the server
      *
      * - Date/Time Formatting Patterns
      * - Edition

@@ -1,11 +1,12 @@
 <?php
 namespace Jaspersoft\Dto\Report;
+use Jaspersoft\Dto\DTOObject;
 
 /**
  * Class InputControl
  * @package Jaspersoft\Dto\Report
  */
-class InputControl
+class InputControl extends DTOObject
 {
     /**
      * @var string

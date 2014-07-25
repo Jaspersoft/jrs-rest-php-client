@@ -1,5 +1,6 @@
 <?php
 namespace Jaspersoft\Dto\Job;
+use Jaspersoft\Dto\DTOObject;
 
 /**
  * Class Trigger
@@ -8,7 +9,7 @@ namespace Jaspersoft\Dto\Job;
  *
  * @package Jaspersoft\Dto\Job
  */
-abstract class Trigger
+abstract class Trigger extends DTOObject
 {
 
     /**
@@ -111,11 +112,7 @@ abstract class Trigger
 
     public function jsonSerialize()
     {
-        $result = array();
-        foreach (get_object_vars($this) as $k => $v)
-            if (isset($v))
-                $result[$k] = $v;
-        return array($this->name() => $result);
+        return array($this->name() => parent::jsonSerialize());
     }
 
     public static function createFromJSON($json_obj)

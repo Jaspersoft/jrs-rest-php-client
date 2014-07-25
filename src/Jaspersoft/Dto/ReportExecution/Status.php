@@ -15,14 +15,14 @@ class Status extends DTOObject {
      *
      * @var string
      */
-    private $value;
+    public $value;
 
     /**
      * A description of an error which occurred during execution
      *
      * @var Object
      */
-    private $errorDescriptor;
+    public $errorDescriptor;
 
 
     public static function createFromJSON($json_obj)
@@ -30,13 +30,12 @@ class Status extends DTOObject {
         $result = new self();
 
         foreach ($json_obj as $k => $v) {
-            if ($k = ErrorDescriptor::name()) {
+            if ($k == ErrorDescriptor::jsonField()) {
                 $result->errorDescriptor = ErrorDescriptor::createFromJSON($v);
             }
             $result->$k = $v;
         }
         return $result;
-
     }
 
 } 

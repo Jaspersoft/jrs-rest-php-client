@@ -31,11 +31,16 @@ abstract class DTOObject {
         return json_encode($this->jsonSerialize());
     }
 
-    public function name()
+    /**
+     * Get the name of this class if it were a key field in a JSON representation
+     *
+     * @return string
+     */
+    public static function jsonField($plural = false)
     {
-        $type = explode('\\', get_class($this));
-        $type = lcfirst(end($type));
-        return $type;
+        $field = explode('\\', get_called_class());
+        $field = lcfirst(end($field));
+        return ($plural) ? $field : $field . "s";
     }
 
 } 

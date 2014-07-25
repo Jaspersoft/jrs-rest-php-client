@@ -58,12 +58,18 @@ class ReportExecution extends DTOObject
      */
     public $exports;
 
-    public static function createFromJSON($json_data)
+    public static function createFromJSON($json_obj)
     {
-        $data = json_decode($json_data, true);
         $result = new self();
-        foreach ($data as $k => $v)
-            $result->$k = $v;
+        foreach ($json_obj as $k => $v) {
+            if (is_array($v)) {
+                if ($k == Export::jsonField(true)) {
+                    $result->$k = Export::createFromJSON($v);
+                }
+            } else if (!empty($v)) {
+                $result->$k = $v;
+            }
+        }
         return $result;
     }
 

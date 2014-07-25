@@ -11,41 +11,49 @@ class Export extends DTOObject {
      *
      * @var string
      */
-    private $id;
+    public $id;
 
     /**
      * Collection of export option parameters
      *
      * @var array
      */
-    private $options;
+    public $options;
 
     /**
      * Status of export
      *
      * @var string
      */
-    private $status;
+    public $status;
 
     /**
      * Description of error which may have occured
      *
      * @var string
      */
-    private $errorDescriptor;
+    public $errorDescriptor;
 
     /**
      * Metadata about the type of output of the resource
      *
      * @var Object
      */
-    private $outputResource;
+    public $outputResource;
 
     /**
      *
      *
      * @var array
      */
-    private $attachments;
+    public $attachments;
+
+    public static function createFromJSON($json_data) {
+        $result = new self();
+        foreach ($json_data as $k => $v) {
+            $result->$k = $v;
+        }
+        return $result;
+    }
 
 } 

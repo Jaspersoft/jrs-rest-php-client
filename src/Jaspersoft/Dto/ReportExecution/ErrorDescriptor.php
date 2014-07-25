@@ -1,7 +1,4 @@
 <?php
-/**
- * @author Grant Bacon (gbacon@jaspersoft.com)
- */
 
 namespace Jaspersoft\Dto\ReportExecution;
 
@@ -12,23 +9,28 @@ class ErrorDescriptor extends DTOObject {
     /**
      * @var string
      */
-    private $message;
+    public $message;
 
     /**
      * @var string
      */
-    private $errorCode;
+    public $errorCode;
 
     /**
+     * An array of strings describing the error
+     *
      * @var array
      */
-    private $parameters;
+    public $parameters;
 
     public static function createFromJSON($json_obj)
     {
         $result = new self();
-        foreach ($json_obj as $k => $v)
-            $result->$k = $v;
+        foreach ($json_obj as $k => $v) {
+            if (!empty($v)) {
+                $result->$k = $v;
+            }
+        }
         return $result;
     }
 

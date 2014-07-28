@@ -23,15 +23,5 @@ class ErrorDescriptor extends DTOObject {
      */
     public $parameters;
 
-    public static function createFromJSON($json_obj)
-    {
-        $result = new self();
-        foreach ($json_obj as $k => $v) {
-            if (!empty($v)) {
-                $result->$k = $v;
-            }
-        }
-        return $result;
-    }
 
 } 

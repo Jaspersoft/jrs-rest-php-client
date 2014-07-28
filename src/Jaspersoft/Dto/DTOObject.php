@@ -34,13 +34,35 @@ abstract class DTOObject {
     /**
      * Get the name of this class if it were a key field in a JSON representation
      *
+     * @param boolean $plural Suffix response with an s?
      * @return string
      */
     public static function jsonField($plural = false)
     {
         $field = explode('\\', get_called_class());
         $field = lcfirst(end($field));
-        return ($plural) ? $field : $field . "s";
+        return $plural ? $field . "s" : $field;
     }
 
-} 
+    /**
+     * If an object is composed of only properties, this will handle setting those properties as they match their field
+     * names. If a class expects to have subcomponents or arrays, it should be overridden.
+     *
+     *
+     * @param \stdClass $json_obj A decoded JSON response
+     * @return mixed Some type of \Jaspersoft\Dto\* object
+     */
+    public static function createFromJSON($json_obj)
+    {
+        $source_class = get_called_class();
+        $result = new $source_class();
+
+        foreach ($json_obj as $k => $v) {
+            if (!empty($v)) {
+                $result->$k = $v;
+            }
+        }
+        return $result;
+    }
+
+}

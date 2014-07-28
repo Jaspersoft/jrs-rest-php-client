@@ -1,7 +1,4 @@
 <?php
-/**
- * @author Grant Bacon (gbacon@jaspersoft.com)
- */
 
 namespace Jaspersoft\Dto\ReportExecution;
 
@@ -23,5 +20,7 @@ class Attachment extends DTOObject {
      * @var string
      */
     public $fileName;
+
+
 
 } 

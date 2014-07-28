@@ -64,7 +64,11 @@ class ReportExecution extends DTOObject
         foreach ($json_obj as $k => $v) {
             if (is_array($v)) {
                 if ($k == Export::jsonField(true)) {
-                    $result->$k = Export::createFromJSON($v);
+                    $exports = array();
+                    foreach ($v as $export) {
+                        $exports[] = Export::createFromJSON($export);
+                    }
+                    $result->$k = $exports;
                 }
             } else if (!empty($v)) {
                 $result->$k = $v;
@@ -72,6 +76,5 @@ class ReportExecution extends DTOObject
         }
         return $result;
     }
-
 
 }

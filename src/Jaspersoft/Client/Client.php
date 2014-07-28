@@ -113,7 +113,8 @@ class Client
         return $this->reportService;
 	}
 
-    public function reportExecutionService() {
+    public function reportExecutionService()
+    {
         if (!isset($this->reportExecutionService)) {
             $this->reportExecutionService = new service\ReportExecutionService($this);
         }
@@ -181,7 +182,8 @@ class Client
      * Destroy your session on the server and locally forget related cookies
      *
      */
-    public function logoutSession() {
+    public function logoutSession()
+    {
         $url = $this->serverUrl . "/logout.html";
         $this->restReq->prepAndSend($url, array(302), 'GET');     // Kill server session
         $this->restReq->closeCurlHandle(true);                    // cleanup client resources

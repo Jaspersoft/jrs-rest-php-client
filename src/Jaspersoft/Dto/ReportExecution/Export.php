@@ -28,7 +28,7 @@ class Export extends DTOObject {
     public $status;
 
     /**
-     * Description of error which may have occured
+     * Description of error which may have occurred
      *
      * @var string
      */
@@ -42,7 +42,7 @@ class Export extends DTOObject {
     public $outputResource;
 
     /**
-     *
+     * Collection of attachments in this export (images, etc.)
      *
      * @var array
      */
@@ -51,7 +51,24 @@ class Export extends DTOObject {
     public static function createFromJSON($json_data) {
         $result = new self();
         foreach ($json_data as $k => $v) {
-            $result->$k = $v;
+            if (!empty ($v)) {
+                if (is_array($v)) {
+                    if ($k == Attachment::jsonField(true)) {
+                        $attachments = array();
+                        foreach ($v as $attachment) {
+                            $attachments[] = Attachment::createFromJSON($attachment);
+                        }
+                        $result->$k = $attachments;
+                    }
+                } elseif (is_object($v)) {
+                    if ($k == OutputResource::jsonField())
+                        $result->$k = OutputResource::createFromJSON($v);
+                    if ($k == Options::jsonField())
+                        $result->$k = Options::createFromJSON($v);
+                } else {
+                    $result->$k = $v;
+                }
+            }
         }
         return $result;
     }

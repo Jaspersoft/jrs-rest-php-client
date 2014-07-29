@@ -7,6 +7,7 @@ class ReportExecutionException extends \Exception {
 
     const REPORT_COMPLETE_OR_NOT_FOUND = "The report execution was not found, or has already been completed.";
     const SEARCH_NO_RESULTS = "The search yielded no results";
+
     public $message;
     public $parentException;
 

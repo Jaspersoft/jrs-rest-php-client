@@ -3,13 +3,15 @@
 namespace Jaspersoft\Service;
 
 use Jaspersoft\Client\Client;
+use Jaspersoft\Dto\ReportExecution\Parameter;
 use Jaspersoft\Dto\ReportExecution\Request;
 use Jaspersoft\Dto\ReportExecution\ReportExecution;
 use Jaspersoft\Dto\ReportExecution\Status;
+use Jaspersoft\Exception\DtoException;
 use Jaspersoft\Exception\ReportExecutionException;
 use Jaspersoft\Exception\RESTRequestException;
 use Jaspersoft\Service\Criteria\ReportExecutionSearchCriteria;
-use Jaspersoft\Service\Result\SearchReportExecutionResults;
+use Jaspersoft\Tool\Util;
 
 /**
  * This service allows developers to get report execution metadata (execution status, total pages, errors, names of
@@ -30,7 +32,7 @@ class ReportExecutionService
         $this->base_url = $client->getURL();
     }
 
-    private function makeUrl($id = null, $status = false)
+    private function makeUrl($id = null, $status = false, $parameters = false)
     {
         $result = $this->base_url . '/reportExecutions';
         if (!empty($id)) {
@@ -38,6 +40,8 @@ class ReportExecutionService
         }
         if ($status) {
             $result .= '/status';
+        } else if ($parameters) {
+            $result .= '/parameters';
         }
         return $result;
     }
@@ -110,10 +114,19 @@ class ReportExecutionService
         return ReportExecution::createFromJSON(json_decode($response));
     }
 
+    /**
+     * Search report executions by URI, or Job details (id, label, user, etc.)
+     *
+     * @see ReportExecutionSearchCriteria
+     * @param ReportExecutionSearchCriteria $criteria
+     * @return array
+     * @throws \Exception
+     * @throws \Jaspersoft\Exception\RESTRequestException
+     * @throws \Jaspersoft\Exception\ReportExecutionException
+     */
     public function searchReportExecutions(ReportExecutionSearchCriteria $criteria)
     {
         $url = $this->makeUrl() . '?' . $criteria->toQueryParams();
-        echo $url;
         try {
             $response = $this->service->prepAndSend($url, array(200), 'GET', null, true);
         } catch (RESTRequestException $e) {
@@ -123,9 +136,40 @@ class ReportExecutionService
                 throw $e;
             }
         }
-        return SearchReportExecutionResults::createFromJSON($response);
+        $result = array();
+        $executions = json_decode($response);
+        foreach ($executions->reportExecution as $reportExecution) {
+            $result[] = ReportExecution::createFromJSON($reportExecution);
+        }
+        return $result;
     }
 
+    /**
+     * Re-run the report using new report parameters
+     *
+     * @see Jaspersoft\Dto\ReportExecution\Request->paramemters
+     * @param ReportExecution $reportExecution
+     * @param array<Jaspersoft\Dto\ReportExecution\Parameter> $newParameters An array of new reportParameters
+     * @param bool $freshData Should fresh data be fetched? (Default: true)
+     * @throws ReportExecutionException
+     */
+    public function updateReportExecutionParameters(ReportExecution $reportExecution, array $newParameters, $freshData = true)
+    {
+        $url = $this->makeUrl($reportExecution->requestId, false, true);
+        if (is_bool($freshData)) {
+            $url .= Util::query_suffix(array("freshData" => $freshData));
+        }
+        $parameters = array();
+        foreach($newParameters as $p) {
+            if ($p instanceof Parameter) {
+                $parameters[] = $p->jsonSerialize();
+            } else {
+                throw new ReportExecutionException(get_called_class() . ": The parameter field must contain
+                        only Jaspersoft\\DTO\\ReportExecution\\Parameter item(s)");
+            }
+        }
+        $this->service->prepAndSend($url, array(204), 'POST', json_encode($parameters), true);
+    }
 
 
 }

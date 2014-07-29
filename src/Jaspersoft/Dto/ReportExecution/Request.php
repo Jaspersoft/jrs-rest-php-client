@@ -1,6 +1,8 @@
 <?php
 namespace Jaspersoft\Dto\ReportExecution;
 use Jaspersoft\Dto\DTOObject;
+use Jaspersoft\Exception\DtoException;
+use Jaspersoft\Exception\ReportExecutionException;
 
 /**
  * Describes a request for a Report Execution
@@ -94,9 +96,9 @@ class Request extends DTOObject
     public $attachmentsPrefix;
 
     /**
-     * List of report parameters (input control values)
+     * Settings of the report's input controls (parameters)
      *
-     * @var array
+     * @var array<Jaspersoft\Dto\ReportExecution\Parameter>
      */
     public $parameters;
 
@@ -106,4 +108,33 @@ class Request extends DTOObject
      * @var string
      */
     public $baseUrl;
+
+    public function jsonSerialize()
+    {
+        $basic = parent::jsonSerialize();
+        // Handle special wrapping case for parameters
+            $params = null;
+            if (is_array($this->parameters)) {
+                $paramSet = array();
+                foreach($this->parameters as $p) {
+                    if ($p instanceof Parameter) {
+                        $paramSet[] = $p->jsonSerialize();
+                    } else {
+                        throw new DtoException(get_called_class() . ": The parameter field must contain
+                        only Jaspersoft\\DTO\\ReportExecution\\Parameter item(s)");
+                    }
+                }
+                $params = $paramSet;
+            } else {
+                if ($this->parameters instanceof Parameter) {
+                    $params = $this->parameters->jsonSerialize();
+                } else {
+                    throw new DtoException(get_called_class() . ": The parameter field must contain
+                        only Jaspersoft\\DTO\\ReportExecution\\Parameter item(s)");
+                }
+            }
+        $basic["parameters"] = array("reportParameter" => $params);
+        return $basic;
+    }
+
 }

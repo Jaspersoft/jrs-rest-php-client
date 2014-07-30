@@ -89,7 +89,7 @@ class Request extends DTOObject
      * This string can contain some variables which will be replaced by server at runtime:
      *   {contextPath} : the webapp directory (e.g: /jasperserver-pro)
      *   {reportExecutionId} : the ID related to this reportExecution
-     *   {exportExecutionId} : the ID of the export ??? // FIXME: get clarification on this variables purpose
+     *   {exportExecutionId} : the ID of the export
      *
      * @var string
      */
@@ -113,6 +113,7 @@ class Request extends DTOObject
     {
         $basic = parent::jsonSerialize();
         // Handle special wrapping case for parameters
+        if (isset($this->parameters)) {
             $params = null;
             if (is_array($this->parameters)) {
                 $paramSet = array();
@@ -127,14 +128,14 @@ class Request extends DTOObject
                 $params = $paramSet;
             } else {
                 if ($this->parameters instanceof Parameter) {
-                    $params = $this->parameters->jsonSerialize();
+                    $params = array($this->parameters->jsonSerialize()); // Server expects array even for 1 element
                 } else {
                     throw new DtoException(get_called_class() . ": The parameter field must contain
                         only Jaspersoft\\DTO\\ReportExecution\\Parameter item(s)");
                 }
             }
-        $basic["parameters"] = array("reportParameter" => $params);
+            $basic["parameters"] = array("reportParameter" => $params);
+        }
         return $basic;
     }
-
 }

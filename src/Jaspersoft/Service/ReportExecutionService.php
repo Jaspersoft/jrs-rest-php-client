@@ -75,10 +75,13 @@ class ReportExecutionService
     }
 
     /**
-     * If a report execution is already running, you can cancel the execution using this method
+     * If a report execution is already running, you can cancel the execution using this method.
+     *
+     * A boolean value of false will be returned in the event that the requested report has either already completed
+     * or was unable to be found.
      *
      * @param ReportExecution $reportExecution
-     * @return Status
+     * @return Status|bool
      * @throws \Exception
      * @throws \Jaspersoft\Exception\RESTRequestException
      * @throws \Jaspersoft\Exception\ReportExecutionException
@@ -91,7 +94,7 @@ class ReportExecutionService
             $response = $this->service->prepAndSend($url, array(200), 'PUT', json_encode(array("value" => "cancelled")), true);
         } catch (RESTRequestException $e) {
             if ($e->statusCode == 204) {
-                throw new ReportExecutionException(ReportExecutionException::REPORT_COMPLETE_OR_NOT_FOUND, $e);
+                return false;
             } else {
                 throw $e;
             }
@@ -122,7 +125,6 @@ class ReportExecutionService
      * @return array
      * @throws \Exception
      * @throws \Jaspersoft\Exception\RESTRequestException
-     * @throws \Jaspersoft\Exception\ReportExecutionException
      */
     public function searchReportExecutions(ReportExecutionSearchCriteria $criteria)
     {
@@ -131,7 +133,7 @@ class ReportExecutionService
             $response = $this->service->prepAndSend($url, array(200), 'GET', null, true);
         } catch (RESTRequestException $e) {
             if ($e->statusCode == 204) {
-                throw new ReportExecutionException(ReportExecutionException::SEARCH_NO_RESULTS, $e);
+                return array();
             } else {
                 throw $e;
             }
@@ -151,20 +153,20 @@ class ReportExecutionService
      * @param ReportExecution $reportExecution
      * @param array<Jaspersoft\Dto\ReportExecution\Parameter> $newParameters An array of new reportParameters
      * @param bool $freshData Should fresh data be fetched? (Default: true)
-     * @throws ReportExecutionException
+     * @throws DtoException
      */
     public function updateReportExecutionParameters(ReportExecution $reportExecution, array $newParameters, $freshData = true)
     {
         $url = $this->makeUrl($reportExecution->requestId, false, true);
         if (is_bool($freshData)) {
-            $url .= Util::query_suffix(array("freshData" => $freshData));
+            $url .= '?' . Util::query_suffix(array("freshData" => $freshData));
         }
         $parameters = array();
         foreach($newParameters as $p) {
             if ($p instanceof Parameter) {
                 $parameters[] = $p->jsonSerialize();
             } else {
-                throw new ReportExecutionException(get_called_class() . ": The parameter field must contain
+                throw new DtoException(get_called_class() . ": The parameter field must contain
                         only Jaspersoft\\DTO\\ReportExecution\\Parameter item(s)");
             }
         }

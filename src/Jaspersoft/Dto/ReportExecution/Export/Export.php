@@ -1,6 +1,6 @@
 <?php
 
-namespace Jaspersoft\Dto\ReportExecution;
+namespace Jaspersoft\Dto\ReportExecution\Export;
 
 use Jaspersoft\Dto\DTOObject;
 

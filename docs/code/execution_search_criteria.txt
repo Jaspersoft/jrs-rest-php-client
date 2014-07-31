@@ -1,0 +1,3 @@
+
+$criteria = new \Jaspersoft\Service\Criteria\ReportExecutionSearchCriteria();
+$criteria->jobLabel = "Weekly Report";

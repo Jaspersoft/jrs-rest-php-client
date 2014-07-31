@@ -1,0 +1,10 @@
+
+$newParamA = new \Jaspersoft\Dto\ReportExecution\Parameter();
+$newParamA->name = "Country";
+$newParamA->value = "Mexico";
+
+$newParamB = new \Jaspersoft\Dto\ReportExecution\Parameter();
+$newParamB->name = "City";
+$newParamB->value = array("D.F.", "Puebla", "Oaxaca", "Acapulco");
+
+$c->reportExecutionService()->updateReportExecutionParameters($executionData, array($newParamA, $newParamB), true);

@@ -83,12 +83,12 @@ class ReportExecutionService
     /**
      * Obtain the status of a report execution
      *
-     * @param ReportExecution $reportExecution
+     * @param string $executionId
      * @return Status
      */
-    public function getReportExecutionStatus(ReportExecution $reportExecution)
+    public function getReportExecutionStatus($executionId)
     {
-        $url = $this->makeUrl($reportExecution->requestId, true);
+        $url = $this->makeUrl($executionId, true);
         $response = $this->service->prepAndSend($url, array(200), 'GET', null, true, "application/json", "application/status+json");
 
         return Status::createFromJSON(json_decode($response));
@@ -100,14 +100,14 @@ class ReportExecutionService
      * A boolean value of false will be returned in the event that the requested report has either already completed
      * or was unable to be found.
      *
-     * @param ReportExecution $reportExecution
+     * @param string $executionId
      * @return Status|bool
      * @throws \Jaspersoft\Exception\RESTRequestException
      * @throws \Jaspersoft\Exception\ReportExecutionException
      */
-    public function cancelReportExecution(ReportExecution $reportExecution)
+    public function cancelReportExecution($executionId)
     {
-        $url = $this->makeUrl($reportExecution->requestId, true);
+        $url = $this->makeUrl($executionId, true);
 
         try {
             $response = $this->service->prepAndSend($url, array(200), 'PUT', json_encode(array("value" => "cancelled")), true);

@@ -1,0 +1,10 @@
+
+$p1 = new \Jaspersoft\Dto\ReportExecution\Parameter();
+$p1->name = "ProductFamily";
+$p1->value = array("Food", "Drink");
+
+$p2 = new \Jaspersoft\Dto\ReportExecution\Parameter();
+$p2->name = "City";
+$p2->vaule = "D.F.";
+
+$request->parameters = array($p1, $p2);

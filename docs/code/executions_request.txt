@@ -1,0 +1,6 @@
+
+$request = new \Jaspersoft\Dto\ReportExecution\Request();
+$request->reportUnitUri = "/public/Samples/Reports/AllAccounts";
+$request->async = true;
+$request->outputFormat = "pdf";
+$request->attachmentsPrefix = "{contextPath}/rest_v2/reportExecutions/{reportExecutionId}/exports/{exportExecutionId}/attachments/";

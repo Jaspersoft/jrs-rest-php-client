@@ -108,7 +108,7 @@ end of skeleton -->
 		</p>
 	</article>
 
-    <article>
+    <article id="client_timeout">
         <h3> Altering the Request Timeout </h3>
         <p>
             If you are having issues with requests timing out, you can alter the amount of time the client waits for a response
@@ -120,17 +120,28 @@ end of skeleton -->
             </pre>
     </article>
 
-	<article>
+	<article id="server_info">
 		<h3> Server Information </h3>
 		<p>
 			The client class can also return data about the sever it is connecting to. This data includes date formats, license
-			information and other info about the server's configruation. It is returned in an associative array format.
+			information and other info about the server's configuration. It is returned in an associative array format.
 		</p>
 
 		<pre><code><?php inject_sample('code/server_info.txt'); ?>
 		</code>
 		</pre>
 	</article>
+
+    <article id="destroy_session">
+        <h3> Destroy Session </h3>
+        <p>
+            When you no longer require the Client object, call the logoutSession() to free up resources by destroying the server
+            session, as well as releasing locally held resources.
+        </p>
+            <pre><code><?php inject_sample('code/destroy_session.txt'); ?>
+                </code>
+            </pre>
+    </article>
 
 <h1 id="section_group"> Repository and Resource Services </h1>
 
@@ -391,6 +402,140 @@ end of skeleton -->
 		</code>
 		</pre>
 	</article>
+
+    <h2 id="executions_service"> reportExecutionsService() </h2>
+
+    <article id="execution_request">
+        <h3> Creating a Report Execution Request </h3>
+        <p>
+            To run a Report Execution, you must first craft a Request object defining your desired report execution. At the bare minimum you must
+            describe the URI to the report, and the output format you wish to export to.
+            <br>
+            Create an object of the type <code>Jaspersoft\Dto\ReportExecution\Request</code> and set the properties as desired.
+            The example below will export a report at the URI <code>/public/Samples/Reports/AllAccounts</code> and run the report asynchronously, then exporting it as a PDF.
+            <br><br>
+            The "attachmentsPrefix" parameter of the Request object allows the declaration of three variables which are replaced at runtime by the server. These include:
+            <ul>
+                <li><code>{contextPath}</code> - Resolves to the application server's context path (for example: "/jasperserver-pro")</li>
+                <li><code>{reportExecutionId}</code> - The long unique ID that references this report execution</li>
+                <li><code>{exportExecutionId}</code> - The long unique ID that references an export of this report execution</li>
+            </ul>
+        </p>
+            <pre><code><?php inject_sample('code/executions_request.txt'); ?>
+                </code>
+            </pre>
+    </article>
+
+    <article id="execution_parameter">
+        <h3> Describing Parameters for Report Execution </h3>
+        <p>
+            When running a report, you can describe the state of your parameters (or, input controls) which affect the output of your report. To do this you must
+            create <code>Jaspersoft\Dto\ReportExecution\Parameter</code> objects that describe the name and values of these items. These can be used both with a <code><a href="#execution_run">runReportExecution</a></code> request, or with
+            the <code><a href="#execution_update">updateReportExecutionParameters</a></code> method.
+
+            <br>
+            The building of these Parameter objects allow you to set their values to either a string, or an array of strings.
+        </p>
+            <pre><code><?php inject_sample('code/execution_parameter.txt'); ?>
+                </code>
+            </pre>
+    </article>
+
+    <article id="execution_run">
+        <h3> Running a Report Execution </h3>
+        <p>
+            Once you have created your <code>Jaspersoft\Dto\ReportExecution\Request</code> object, you can then use it as
+            an argument for the runReportExecution method, this method returns an object of the type <code>Jaspersoft\Dto\ReportExecution\ReportExecution</code>
+            and describes the metadata about the execution.
+            <br>
+            The returned object describes the unique ID of the execution, its status, as well as the information about the exports it will be creating. Keep this object to request additional data
+            about the execution as it is being executed (if ran asynchronously). You can use both the <code><a href="#execution_details">getReportExecutionDetails</a></code> method or the <code><a href="#execution_status">getReportExecutionStatus</a></code>
+            method to see the details and status, respectively, of the execution you initiated.
+        </p>
+                <pre><code><?php inject_sample('code/execution_run.txt'); ?>
+                    </code>
+                </pre>
+    </article>
+
+    <article id="execution_details">
+        <h3> Obtain Details of a Report Execution </h3>
+        <p>
+            Using the RequestID of a Report Execution, you can obtain the details of this execution. After an execution is finished, either in a "ready" or "failed" state, additional details
+            will be available to you and accessible by this method, such as what attachments are exported.
+            <br><br>
+            It may be necessary to allow some time to pass before calling this method as your report is executing. You can use the <code><a href="#execution_status">getReportExecutionStatus</a></code> method to poll for only the status
+            of the report to reduce data transferred before calling this method.
+        </p>
+            <pre><code><?php inject_sample('code/execution_details.txt'); ?>
+                </code>
+            </pre>
+    </article>
+
+
+    <article id="execution_status">
+        <h3> Status of a Report Execution </h3>
+        <p>
+            Using the response object generated by runReportExecution, you can request the Status of a Report Execution. This status will tell you what state your execution is in. If you report failed, this status object
+            returned by this method will provide an errorDescriptor field that describes what error occurred resulting in the failure of the execution.
+        </p>
+                <pre><code><?php inject_sample('code/execution_status.txt'); ?>
+                    </code>
+                </pre>
+    </article>
+
+    <article id="execution_update">
+        <h3> Update Parameters of a Report Execution </h3>
+        <p>
+            Once an execution has completed, you can re-execute it by providing new parameters to an existing execution request. The report will then be re-ran using these parameters, and a new export will be generated.
+            See the <a href="#execution_parameter">section on creating Parameter objects</a> to understand how to create the parameter objects to be supplied to this method.
+            <br><br>
+            The last parameter for the method describes if new data should be fetched from the data source, or if the previously fetched data will be sufficient.
+            <br><br>
+            No data is returned by this method, the report is ran again, and the ID's remain the same. The new export will reflect the newly selected parameters.
+        </p>
+                    <pre><code><?php inject_sample('code/execution_update.txt'); ?>
+                        </code>
+                    </pre>
+    </article>
+
+    <article id="execution_search_criteria">
+        <h3> Search Criteria for Report Execution Service </h3>
+        <p>
+            In order to search for existing Report Executions, you must describe some criteria to search by. There are six parameters you can search for executions by.
+            <ul>
+                <li><code>reportURI</code> - Search by URI of report unit</li>
+                <li><code>jobID</code> - Search by scheduled job ID number</li>
+                <li><code>jobLabel</code> - Search by scheduled job label</li>
+                <li><code>userName</code> - Search for all scheduled jobs executed by this username </li>
+                <li><code>fireTimeFrom</code> - Search by when a scheduled report is to be executed</li>
+                <li><code>fireTimeTo</code> - Search by the time a scheduled report will stop being executed</li>
+            </ul>
+        </p>
+                    <pre><code><?php inject_sample('code/execution_search_criteria.txt'); ?>
+                        </code>
+                    </pre>
+    </article>
+
+    <article id="execution_search">
+        <h3> Search for Report Executions </h3>
+        <p>
+            Using the criteria you described, you can then execute the search and obtain a set of results. If no results are found, an empty array is returned.
+        </p>
+                        <pre><code><?php inject_sample('code/execution_search.txt'); ?>
+                            </code>
+                        </pre>
+    </article>
+
+    <article id="execution_cancel">
+        <h3> Cancel a Report Execution </h3>
+        <p>
+            If you must cancel a report that is currently being executed, you can supply the Execution ID to the <code>cancelReportExecution</code> method to cancel it. If a cancellation is successful, a Status object
+            will be returned describing the status as cancelled. If it is unsuccessful, either because the Report Execution was not found, or because it had already completed execution, the false value will be returned.
+        </p>
+                            <pre><code><?php inject_sample('code/execution_cancel.txt'); ?>
+                                </code>
+                            </pre>
+    </article>
 
 	<h2 id="options_service"> optionsService() </h2>
 	

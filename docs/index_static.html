@@ -638,7 +638,7 @@ $newParamB = new \Jaspersoft\Dto\ReportExecution\Parameter();
 $newParamB-&gt;name = &quot;City&quot;;
 $newParamB-&gt;value = array(&quot;D.F.&quot;, &quot;Puebla&quot;, &quot;Oaxaca&quot;, &quot;Acapulco&quot;);
 
-$c-&gt;reportExecutionService()-&gt;updateReportExecutionParameters($executionData, array($newParamA, $newParamB), true);                        </code>
+$c-&gt;reportExecutionService()-&gt;updateReportExecutionParameters($executionData-&gt;requestId, array($newParamA, $newParamB), true);                        </code>
                     </pre>
     </article>
 
@@ -683,6 +683,66 @@ if ($success instanceof Status) {
     echo &quot;Execution cancelled successfully&quot;;
 }                                </code>
                             </pre>
+    </article>
+
+    <article id="export_execution">
+        <h3> Run an Export Execution </h3>
+        <p>
+            The <code>runExportExecution</code> method can be used to get the report output in a specific format without re-running the report execution. This can be helpful if the report was executed in one format
+            but now you require a different format. It uses its own Request object, <code>Jaspersoft\Dto\ReportExecution\Export\Request</code>.
+            <br><br>
+            You must also supply a ReportExecution object of a previous report execution you wish to re-run to this method.
+        </p>
+                                <pre><code>
+$exportRequest = new \Jaspersoft\Dto\ReportExecution\Export\Request();
+$exportRequest-&gt;outputFormat = &quot;html&quot;;
+$exportRequest-&gt;pages = &quot;5-15&quot;;
+$exportRequest-&gt;allowInlineScripts = true;
+
+$exportData = $c-&gt;reportExecutionService()-&gt;runExportExecution($executionData-&gt;requestId, $exportRequest);                                    </code>
+                                </pre>
+    </article>
+
+    <article id="export_execution_status">
+        <h3> Obtain the Status of an Export Execution </h3>
+        <p>
+            Similar to a Report Execution, you can request the status of an Export Execution as well. You must provide both the ReportExecution object you obtained when running your report execution, and the
+            Export object obtained when running the new Export Execution. A status object will be created in response to this request. This status object will describe the state of the export execution at the time of
+            the call.
+        </p>
+                                    <pre><code>
+$c-&gt;reportExecutionService()-&gt;getExportExecutionStatus($executionData-&gt;requestId, $exportData-&gt;id);                                        </code>
+                                    </pre>
+    </article>
+
+    <article id="export_execution_resource">
+        <h3> Get an Output Resource from an Export </h3>
+        <p>
+            After a Report Execution has completed, and an Export has completed within that execution, you can obtain the binary data of the Export Resource. This is the binary data of the report in its requested format.
+        </p>
+                                        <pre><code>
+$output = $c-&gt;reportExecutionService()-&gt;getExportOutputResource($executionData-&gt;requestId, $exportData-&gt;id);
+
+// Serve the binary resource to client
+header('Content-Type: ' . $output-&gt;contentType);
+header('Content-Length: ' . strlen($output-&gt;binaryContent));
+echo $output-&gt;binaryContent;                                            </code>
+                                        </pre>
+    </article>
+
+    <article id="export_execution_attachment">
+        <h3> Obtain an Attachment from an Export Execution </h3>
+        <p>
+            Some reports contain elements that are considered attachments, such as images. These can also be obtained via the Report Execution service. The attachment filename and content type can be found from the
+            export details of a completed report.
+        </p>
+                                            <pre><code>
+$attachmentData = $c-&gt;reportExecutionService()-&gt;getExportOutputResourceAttachment($executionData-&gt;requestId, $exportData-&gt;id, &quot;img_0_0_0&quot;);
+
+header('Content-Type: image/png');
+header('Content-Length: ' . strlen($attachmentData));
+echo $attachmentData;                                                </code>
+                                            </pre>
     </article>
 
 	<h2 id="options_service"> optionsService() </h2>

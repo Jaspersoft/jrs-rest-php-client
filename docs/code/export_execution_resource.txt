@@ -1,0 +1,7 @@
+
+$output = $c->reportExecutionService()->getExportOutputResource($executionData->requestId, $exportData->id);
+
+// Serve the binary resource to client
+header('Content-Type: ' . $output->contentType);
+header('Content-Length: ' . strlen($output->binaryContent));
+echo $output->binaryContent;

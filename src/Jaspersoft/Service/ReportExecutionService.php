@@ -4,8 +4,8 @@ namespace Jaspersoft\Service;
 
 use Jaspersoft\Client\Client;
 use Jaspersoft\Dto\ReportExecution\Attachment;
+use Jaspersoft\Dto\ReportExecution\BinaryOutputResource;
 use Jaspersoft\Dto\ReportExecution\Export\Export;
-use Jaspersoft\Dto\ReportExecution\OutputResource;
 use Jaspersoft\Dto\ReportExecution\Parameter;
 use Jaspersoft\Dto\ReportExecution\Request;
 use Jaspersoft\Dto\ReportExecution\ReportExecution;
@@ -168,15 +168,14 @@ class ReportExecutionService
     /**
      * Re-run the report using new report parameters
      *
-     * @see Jaspersoft\Dto\ReportExecution\Request->paramemters
-     * @param ReportExecution $reportExecution
+     * @param string $executionId
      * @param array<Jaspersoft\Dto\ReportExecution\Parameter> $newParameters An array of new reportParameters
      * @param bool $freshData Should fresh data be fetched? (Default: true)
      * @throws DtoException
      */
-    public function updateReportExecutionParameters(ReportExecution $reportExecution, array $newParameters, $freshData = true)
+    public function updateReportExecutionParameters($executionId, array $newParameters, $freshData = true)
     {
-        $url = $this->makeUrl($reportExecution->requestId, false, true);
+        $url = $this->makeUrl($executionId, false, true);
         if (is_bool($freshData)) {
             $url .= '?' . Util::query_suffix(array("freshData" => $freshData));
         }
@@ -195,13 +194,13 @@ class ReportExecutionService
     /**
      * Re-run an execution using new export values
      *
-     * @param ReportExecution $execution
+     * @param string $executionId
      * @param \Jaspersoft\Dto\ReportExecution\Export\Request $request
      * @return Export
      */
-    public function runExportExecution(ReportExecution $execution, \Jaspersoft\Dto\ReportExecution\Export\Request $request)
+    public function runExportExecution($executionId, \Jaspersoft\Dto\ReportExecution\Export\Request $request)
     {
-        $url = $this->makeUrl($execution->requestId, false, false, true);
+        $url = $this->makeUrl($executionId, false, false, true);
         $response = $this->service->prepAndSend($url, array(200), 'POST', $request->toJSON(), true);
 
         return Export::createFromJSON(json_decode($response));
@@ -210,13 +209,13 @@ class ReportExecutionService
     /**
      * Get the status value of an Export Execution
      *
-     * @param ReportExecution $execution
-     * @param Export $export
+     * @param string $executionId
+     * @param string $exportId
      * @return Status
      */
-    public function getExportExecutionStatus(ReportExecution $execution, Export $export)
+    public function getExportExecutionStatus($executionId, $exportId)
     {
-        $url = $this->makeUrl($execution->requestId, true, false, true, false, $export->id);
+        $url = $this->makeUrl($executionId, true, false, true, false, $exportId);
         $response = $this->service->prepAndSend($url, array(200), 'GET', null, true);
 
         return Status::createFromJSON(json_decode($response));
@@ -226,32 +225,34 @@ class ReportExecutionService
      * This method will download an export resource, an array is returned, one with an outputResource object that
      * describes the type of binary data, and the "body" which is the binary content of the resource.
      *
-     * @param ReportExecution $execution
-     * @param Export $export
+     * @param string $executionId
+     * @param string $exportId
      * @return array
      */
-    public function getExportOutputResource(ReportExecution $execution, Export $export)
+    public function getExportOutputResource($executionId, $exportId)
     {
-        $url = $this->makeUrl($execution->requestId, false, false, true, true, $export->id);
+        $url = $this->makeUrl($executionId, false, false, true, true, $exportId);
         $response = $this->service->makeRequest($url, array(200), 'GET', null, true, 'application/json', '*/*');
 
         $headers = RESTRequest::splitHeaderArray($response['headers']);
-        $outputResource = OutputResource::createFromHeaders($headers);
 
-        return array("outputResource" => $outputResource, "content" => $response['body']);
+        $outputResource = BinaryOutputResource::createFromHeaders($headers);
+        $outputResource->binaryContent = $response['body'];
+
+        return $outputResource;
     }
 
     /**
      * Get the binary data of an attachment for a report
      *
-     * @param ReportExecution $execution
-     * @param Export $export
+     * @param string $executionId
+     * @param string $exportId
      * @param string $attachmentName the name of the attachment (found in the fileName field of an Attachment object)
      * @return string
      */
-    public function getExportOutputResourceAttachment(ReportExecution $execution, Export $export, $attachmentName)
+    public function getExportOutputResourceAttachment($executionId, $exportId, $attachmentName)
     {
-        $url = $this->makeUrl($execution->requestId, false, false, true, false, $export->id, true, $attachmentName);
+        $url = $this->makeUrl($executionId, false, false, true, false, $exportId, true, $attachmentName);
         $response = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', '*/*');
 
         return $response;

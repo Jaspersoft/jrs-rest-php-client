@@ -1,0 +1,7 @@
+
+$exportRequest = new \Jaspersoft\Dto\ReportExecution\Export\Request();
+$exportRequest->outputFormat = "html";
+$exportRequest->pages = "5-15";
+$exportRequest->allowInlineScripts = true;
+
+$exportData = $c->reportExecutionService()->runExportExecution($executionData->requestId, $exportRequest);

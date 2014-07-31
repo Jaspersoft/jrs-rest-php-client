@@ -537,6 +537,52 @@ end of skeleton -->
                             </pre>
     </article>
 
+    <article id="export_execution">
+        <h3> Run an Export Execution </h3>
+        <p>
+            The <code>runExportExecution</code> method can be used to get the report output in a specific format without re-running the report execution. This can be helpful if the report was executed in one format
+            but now you require a different format. It uses its own Request object, <code>Jaspersoft\Dto\ReportExecution\Export\Request</code>.
+            <br><br>
+            You must also supply a ReportExecution object of a previous report execution you wish to re-run to this method.
+        </p>
+                                <pre><code><?php inject_sample('code/export_execution.txt'); ?>
+                                    </code>
+                                </pre>
+    </article>
+
+    <article id="export_execution_status">
+        <h3> Obtain the Status of an Export Execution </h3>
+        <p>
+            Similar to a Report Execution, you can request the status of an Export Execution as well. You must provide both the ReportExecution object you obtained when running your report execution, and the
+            Export object obtained when running the new Export Execution. A status object will be created in response to this request. This status object will describe the state of the export execution at the time of
+            the call.
+        </p>
+                                    <pre><code><?php inject_sample('code/export_execution_status.txt'); ?>
+                                        </code>
+                                    </pre>
+    </article>
+
+    <article id="export_execution_resource">
+        <h3> Get an Output Resource from an Export </h3>
+        <p>
+            After a Report Execution has completed, and an Export has completed within that execution, you can obtain the binary data of the Export Resource. This is the binary data of the report in its requested format.
+        </p>
+                                        <pre><code><?php inject_sample('code/export_execution_resource.txt'); ?>
+                                            </code>
+                                        </pre>
+    </article>
+
+    <article id="export_execution_attachment">
+        <h3> Obtain an Attachment from an Export Execution </h3>
+        <p>
+            Some reports contain elements that are considered attachments, such as images. These can also be obtained via the Report Execution service. The attachment filename and content type can be found from the
+            export details of a completed report.
+        </p>
+                                            <pre><code><?php inject_sample('code/export_execution_attachment.txt'); ?>
+                                                </code>
+                                            </pre>
+    </article>
+
 	<h2 id="options_service"> optionsService() </h2>
 	
 	<article id="get_options">

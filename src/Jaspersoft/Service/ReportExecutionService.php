@@ -3,14 +3,17 @@
 namespace Jaspersoft\Service;
 
 use Jaspersoft\Client\Client;
+use Jaspersoft\Dto\ReportExecution\Attachment;
+use Jaspersoft\Dto\ReportExecution\Export\Export;
+use Jaspersoft\Dto\ReportExecution\OutputResource;
 use Jaspersoft\Dto\ReportExecution\Parameter;
 use Jaspersoft\Dto\ReportExecution\Request;
 use Jaspersoft\Dto\ReportExecution\ReportExecution;
 use Jaspersoft\Dto\ReportExecution\Status;
 use Jaspersoft\Exception\DtoException;
-use Jaspersoft\Exception\ReportExecutionException;
 use Jaspersoft\Exception\RESTRequestException;
 use Jaspersoft\Service\Criteria\ReportExecutionSearchCriteria;
+use Jaspersoft\Tool\RESTRequest;
 use Jaspersoft\Tool\Util;
 
 /**
@@ -32,16 +35,33 @@ class ReportExecutionService
         $this->base_url = $client->getURL();
     }
 
-    private function makeUrl($id = null, $status = false, $parameters = false)
+    private function makeUrl($id = null, $status = false, $parameters = false, $exports = false,
+                             $outputResource = false, $exportOutput = null, $attachments = false, $attachmentUri = null)
     {
         $result = $this->base_url . '/reportExecutions';
         if (!empty($id)) {
             $result .= '/' . $id;
         }
+        // parameters and exports are mutually exclusive
+        if ($parameters) {
+            $result .= '/parameters';
+        } else if ($exports) {
+            $result .= '/exports';
+            if (is_string($exportOutput)) {
+                $result .= '/' . $exportOutput;
+            }
+        }
         if ($status) {
             $result .= '/status';
-        } else if ($parameters) {
-            $result .= '/parameters';
+        }
+        if ($outputResource) {
+            $result .= '/outputResource';
+        }
+        if ($attachments) {
+            $result .= "/attachments";
+            if (is_string($attachmentUri)) {
+                $result .= '/' . $attachmentUri;
+            }
         }
         return $result;
     }
@@ -82,7 +102,6 @@ class ReportExecutionService
      *
      * @param ReportExecution $reportExecution
      * @return Status|bool
-     * @throws \Exception
      * @throws \Jaspersoft\Exception\RESTRequestException
      * @throws \Jaspersoft\Exception\ReportExecutionException
      */
@@ -106,7 +125,7 @@ class ReportExecutionService
      * Obtain details about a Report Execution. Until the report is completed (or failed), this will be similar to the
      * object returned by the runReportExecution method.
      *
-     * @param $executionId
+     * @param string $executionId
      * @return ReportExecution
      */
     public function getReportExecutionDetails($executionId)
@@ -172,6 +191,72 @@ class ReportExecutionService
         }
         $this->service->prepAndSend($url, array(204), 'POST', json_encode($parameters), true);
     }
+
+    /**
+     * Re-run an execution using new export values
+     *
+     * @param ReportExecution $execution
+     * @param \Jaspersoft\Dto\ReportExecution\Export\Request $request
+     * @return Export
+     */
+    public function runExportExecution(ReportExecution $execution, \Jaspersoft\Dto\ReportExecution\Export\Request $request)
+    {
+        $url = $this->makeUrl($execution->requestId, false, false, true);
+        $response = $this->service->prepAndSend($url, array(200), 'POST', $request->toJSON(), true);
+
+        return Export::createFromJSON(json_decode($response));
+    }
+
+    /**
+     * Get the status value of an Export Execution
+     *
+     * @param ReportExecution $execution
+     * @param Export $export
+     * @return Status
+     */
+    public function getExportExecutionStatus(ReportExecution $execution, Export $export)
+    {
+        $url = $this->makeUrl($execution->requestId, true, false, true, false, $export->id);
+        $response = $this->service->prepAndSend($url, array(200), 'GET', null, true);
+
+        return Status::createFromJSON(json_decode($response));
+    }
+
+    /**
+     * This method will download an export resource, an array is returned, one with an outputResource object that
+     * describes the type of binary data, and the "body" which is the binary content of the resource.
+     *
+     * @param ReportExecution $execution
+     * @param Export $export
+     * @return array
+     */
+    public function getExportOutputResource(ReportExecution $execution, Export $export)
+    {
+        $url = $this->makeUrl($execution->requestId, false, false, true, true, $export->id);
+        $response = $this->service->makeRequest($url, array(200), 'GET', null, true, 'application/json', '*/*');
+
+        $headers = RESTRequest::splitHeaderArray($response['headers']);
+        $outputResource = OutputResource::createFromHeaders($headers);
+
+        return array("outputResource" => $outputResource, "content" => $response['body']);
+    }
+
+    /**
+     * Get the binary data of an attachment for a report
+     *
+     * @param ReportExecution $execution
+     * @param Export $export
+     * @param string $attachmentName the name of the attachment (found in the fileName field of an Attachment object)
+     * @return string
+     */
+    public function getExportOutputResourceAttachment(ReportExecution $execution, Export $export, $attachmentName)
+    {
+        $url = $this->makeUrl($execution->requestId, false, false, true, false, $export->id, true, $attachmentName);
+        $response = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', '*/*');
+
+        return $response;
+    }
+
 
 
 }

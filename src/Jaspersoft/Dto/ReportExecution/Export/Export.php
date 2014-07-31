@@ -3,6 +3,9 @@
 namespace Jaspersoft\Dto\ReportExecution\Export;
 
 use Jaspersoft\Dto\DTOObject;
+use Jaspersoft\Dto\ReportExecution\Attachment;
+use Jaspersoft\Dto\ReportExecution\Options;
+use Jaspersoft\Dto\ReportExecution\OutputResource;
 
 class Export extends DTOObject {
 

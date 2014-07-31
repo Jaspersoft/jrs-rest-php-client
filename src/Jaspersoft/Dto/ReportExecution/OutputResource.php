@@ -28,5 +28,18 @@ class OutputResource extends DTOObject
      */
     public $outputFinal;
 
+    public static function createFromHeaders($headerSet)
+    {
+        $result = new self();
+        $result->outputFinal = (isset($headerSet['output-final']) && $headerSet['output-final'] == "true") ? 'true' : 'false';
+        if (isset($headerSet['Content-Disposition'])) {
+            preg_match('/filename="(.*)"/', $headerSet['Content-Disposition'], $matches);
+            $result->fileName = end($matches);
+        }
+        $result->contentType = (isset($headerSet['Content-Type'])) ? $headerSet['Content-Type'] : null;
+
+        return $result;
+    }
+
 
 } 

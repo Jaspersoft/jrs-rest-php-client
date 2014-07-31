@@ -31,6 +31,9 @@ Additionally, a distributed autoloader is included if oyu want to simply include
 
 	require_once "autoload.dist.php"
 
+Online Documentation
+--------------------
+Preview the [documentation online] (http://community.jaspersoft.com/wiki/php-client-sample-code) at the Jaspersoft Community website.
 
 Security Notice
 ----------------

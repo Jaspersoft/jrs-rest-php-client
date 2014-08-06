@@ -24,6 +24,7 @@
 
   <style>
   .deprecated_notice { color: #f00; font-style: italic; }
+  code { background-color: #efefef; }
   #section_group { font-size: 32pt; }
   </style>
 
@@ -202,7 +203,7 @@ end of skeleton -->
 		<p>
             The repository service is capable of uploading binary files as well. These must be handled differently than
             other types of resources.
-		</p><p>
+
             The following example shows how to upload an image to the JasperReports Server repository.
 		</p>
 		<pre><code><?php inject_sample('code/create_binary_resource.txt'); ?>
@@ -265,96 +266,96 @@ end of skeleton -->
 
 <h2 id="permission_service"> permissionService() </h2>
 
-<article id="search_permissions">
-    <h3> Searching Permissions </h3>
-    <p>
-        You can search for user permissions to a give resource in the repository by using the <code>searchRepositoryPermissions</code>
-   	    function. Provide the URI for the resource as the first argument. Other arguments are available to filter the results as needed.
-   	    The following example lists all the set permission recipients for "/reports/samples/AllAccounts":
-    </p>
-		<pre><code><?php inject_sample('code/search_permissions.txt'); ?>
-        </code>
-		</pre>
-</article>
-
-<article id="update_permissions">
-    <h3> Updating Permissions </h3>
-    <p>
-        To update permissions, you must retrieve existing permissions, modify them, and then pass them to the <code>updateRepositoryPermissions</code>
-        function. The following example retrieves permissions for a report, alters the first one to have no access, and updates it on the server.
-    </p>
-		<pre><code><?php inject_sample('code/update_permissions.txt'); ?>
-        </code>
-		</pre>
-</article>
-
-<article id="update_permission">
-    <h3> Updating a Single Permission </h3>
-    <p>
-        You can update one permission at a time as shown in the following code example. It is also possible to create a new permission object from
-        scratch and use it to update a single permission if desired.
-    </p>
-            <pre><code><?php inject_sample('code/update_permission.txt'); ?>
+    <article id="search_permissions">
+        <h3> Searching Permissions </h3>
+        <p>
+            You can search for user permissions to a give resource in the repository by using the <code>searchRepositoryPermissions</code>
+            function. Provide the URI for the resource as the first argument. Other arguments are available to filter the results as needed.
+            The following example lists all the set permission recipients for "/reports/samples/AllAccounts":
+        </p>
+            <pre><code><?php inject_sample('code/search_permissions.txt'); ?>
             </code>
             </pre>
-</article>
+    </article>
+
+    <article id="update_permissions">
+        <h3> Updating Permissions </h3>
+        <p>
+            To update permissions, you must retrieve existing permissions, modify them, and then pass them to the <code>updateRepositoryPermissions</code>
+            function. The following example retrieves permissions for a report, alters the first one to have no access, and updates it on the server.
+        </p>
+            <pre><code><?php inject_sample('code/update_permissions.txt'); ?>
+            </code>
+            </pre>
+    </article>
+
+    <article id="update_permission">
+        <h3> Updating a Single Permission </h3>
+        <p>
+            You can update one permission at a time as shown in the following code example. It is also possible to create a new permission object from
+            scratch and use it to update a single permission if desired.
+        </p>
+                <pre><code><?php inject_sample('code/update_permission.txt'); ?>
+                </code>
+                </pre>
+    </article>
 
 
-<article id="create_permissions">
-    <h3> Creating Permissions </h3>
-    <p>
-        Permissions can be created by first describing the permissions in Permission objects, then passing them to the server. The following example
-        creates a new permisison for joeuser in organization_1 to administer the AllAccounts report.
-    </p>
-		<pre><code><?php inject_sample('code/create_permissions.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="create_permissions">
+        <h3> Creating Permissions </h3>
+        <p>
+            Permissions can be created by first describing the permissions in Permission objects, then passing them to the server. The following example
+            creates a new permisison for joeuser in organization_1 to administer the AllAccounts report.
+        </p>
+            <pre><code><?php inject_sample('code/create_permissions.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
-<article id="delete_permissions">
-    <h3> Deleting Permissions </h3>
-    <p>
-        Removing permissions is possible by passing the permission to the deleteRepositoryPermissions function. The example below will delete the
-        permission created in the previous example.
-    </p>
-		<pre><code><?php inject_sample('code/delete_permissions.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="delete_permissions">
+        <h3> Deleting Permissions </h3>
+        <p>
+            Removing permissions is possible by passing the permission to the deleteRepositoryPermissions function. The example below will delete the
+            permission created in the previous example.
+        </p>
+            <pre><code><?php inject_sample('code/delete_permissions.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
 <h2 id="importExportService"> importExportService() </h2>
 
-<article id="export_service">
-    <h3> Exporting Resources </h3>
-    <p>
-        Using this service, you can export data from the server to store or import to another server. You must set the user credentials
-        to a system admin (<code>superuser</code> by default) when calling this service. Data is compressed as a zip archive and sent as
-        binary data. First construct an <code>ExportTask</code> object that defines what data is to be extracted, then pass it to the
-        <code>startExportTask</code> function. Data can then be stored using PHP file I/O functions, or streamed to a browser by preparing
-        the proper headers and echoing the binary data.
-    </p><p>
-        The following example requests an export, then refreshes the status of the export every 10 seconds. When it is finished, it downloads
-        the data as a zip file, stores it in a file (export.zip), and offers a link to download the file.
-    </p>
-		<pre><code><?php inject_sample('code/export_service.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="export_service">
+        <h3> Exporting Resources </h3>
+        <p>
+            Using this service, you can export data from the server to store or import to another server. You must set the user credentials
+            to a system admin (<code>superuser</code> by default) when calling this service. Data is compressed as a zip archive and sent as
+            binary data. First construct an <code>ExportTask</code> object that defines what data is to be extracted, then pass it to the
+            <code>startExportTask</code> function. Data can then be stored using PHP file I/O functions, or streamed to a browser by preparing
+            the proper headers and echoing the binary data.
+        </p><p>
+            The following example requests an export, then refreshes the status of the export every 10 seconds. When it is finished, it downloads
+            the data as a zip file, stores it in a file (export.zip), and offers a link to download the file.
+        </p>
+            <pre><code><?php inject_sample('code/export_service.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
-<article id="import_service">
-    <h3> Importing Resources </h3>
-    <p>
-        The import service allows you to import data that was previously exported. There are various flags that can be set to alter what
-        data is imported; see the REST API documentation for specific examples of such flags.
-    </p><p>
-        The following example submits an import from the file "import_data.zip" assumed to be stored in the same folder as the PHP file.
-        It displays "Import in progress..." and checks the status every 10 seconds until it is complete. Then it announces that the import
-        has completed.
-    </p>
-		<pre><code><?php inject_sample('code/import_service.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="import_service">
+        <h3> Importing Resources </h3>
+        <p>
+            The import service allows you to import data that was previously exported. There are various flags that can be set to alter what
+            data is imported; see the REST API documentation for specific examples of such flags.
+        </p><p>
+            The following example submits an import from the file "import_data.zip" assumed to be stored in the same folder as the PHP file.
+            It displays "Import in progress..." and checks the status every 10 seconds until it is complete. Then it announces that the import
+            has completed.
+        </p>
+            <pre><code><?php inject_sample('code/import_service.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
 <h1 id="section_group"> Reporting Services </h1>
 
@@ -583,7 +584,7 @@ end of skeleton -->
                                             </pre>
     </article>
 
-	<h2 id="options_service"> optionsService() </h2>
+<h2 id="options_service"> optionsService() </h2>
 	
 	<article id="get_options">
 		<h3> Listing Report Options </h3>
@@ -710,7 +711,7 @@ end of skeleton -->
 	</article>
 	
 
-	<h2 id="query_service"> queryService() </h2>
+<h2 id="query_service"> queryService() </h2>
 	
 	<article id="execute_query">
 		<h3> Executing a Query </h3>
@@ -727,165 +728,165 @@ end of skeleton -->
 
 <h1 id="section_group"> Administration Services </h1>
 
-	<h2 id="organization_service"> organizationService() </h2>
+<h2 id="organization_service"> organizationService() </h2>
 
-<article id="search_organization">
-    <h3> Searching for Organizations </h3>
-    <p>
-        Use the <code>searchOrganization</code> function to search for organizations by ID.
-    </p>
-		<pre><code><?php inject_sample('code/search_organization.txt'); ?>
-        </code>
-		</pre>
-</article>
-
-<article id="get_organization">
-    <h3> Getting Organization Details</h3>
-    <p>
-        Once you know the full ID of a specific organization, use the <code>getOrganization</code> function to request its detailed
-        information. This function returns an <code>Organization</code> object.
-    </p>
-            <pre><code><?php inject_sample('code/get_organization.txt'); ?>
+    <article id="search_organization">
+        <h3> Searching for Organizations </h3>
+        <p>
+            Use the <code>searchOrganization</code> function to search for organizations by ID.
+        </p>
+            <pre><code><?php inject_sample('code/search_organization.txt'); ?>
             </code>
             </pre>
-</article>
+    </article>
 
-<article id="create_organization">
-    <h3> Creating an Organization </h3>
-    <p>
-        To create a new organization, define a new <code>Organization</code> object and pass it to the <code>createOrganization</code> function.
-    </p>
-		<pre><code><?php inject_sample('code/create_organization.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="get_organization">
+        <h3> Getting Organization Details</h3>
+        <p>
+            Once you know the full ID of a specific organization, use the <code>getOrganization</code> function to request its detailed
+            information. This function returns an <code>Organization</code> object.
+        </p>
+                <pre><code><?php inject_sample('code/get_organization.txt'); ?>
+                </code>
+                </pre>
+    </article>
 
-<article id="update_organization">
-    <h3> Updating an Organization </h3>
-    <p>
-        To modify an organization, obtain its <code>Organization</code> object with the <code>searchOrganization</code>
-        or <code>getOrganization</code> functions. Then modify the fields you wish to update and pass it to the
-        <code>updateOrganization</code> function.
-    </p>
-		<pre><code><?php inject_sample('code/update_organization.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="create_organization">
+        <h3> Creating an Organization </h3>
+        <p>
+            To create a new organization, define a new <code>Organization</code> object and pass it to the <code>createOrganization</code> function.
+        </p>
+            <pre><code><?php inject_sample('code/create_organization.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
-<article id="delete_organization">
-    <h3> Deleting Organizations </h3>
-    <p>
-		To delete an organization, obtain its <code>Organization</code> object with the <code>searchOrganization</code>
-        or <code>getOrganization</code> functions, and pass it to the <code>deleteOrganization</code> function.
-    </p>
-		<pre><code><?php inject_sample('code/delete_organization.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="update_organization">
+        <h3> Updating an Organization </h3>
+        <p>
+            To modify an organization, obtain its <code>Organization</code> object with the <code>searchOrganization</code>
+            or <code>getOrganization</code> functions. Then modify the fields you wish to update and pass it to the
+            <code>updateOrganization</code> function.
+        </p>
+            <pre><code><?php inject_sample('code/update_organization.txt'); ?>
+            </code>
+            </pre>
+    </article>
+
+    <article id="delete_organization">
+        <h3> Deleting Organizations </h3>
+        <p>
+            To delete an organization, obtain its <code>Organization</code> object with the <code>searchOrganization</code>
+            or <code>getOrganization</code> functions, and pass it to the <code>deleteOrganization</code> function.
+        </p>
+            <pre><code><?php inject_sample('code/delete_organization.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
 <h2 id="role_service"> roleService() </h2>
 
-<article id="get_many_roles">
-    <h3> Searching for Roles </h3>
-    <p>
-        Use the the <code>searchRoles</code> function to request all the roles of an organization, or all roles on the server.
-        Optionally, you can search based on specific criteria for roles. The following example returns all roles on the server.
-    </p>
-		<pre><code><?php inject_sample('code/get_many_roles.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="get_many_roles">
+        <h3> Searching for Roles </h3>
+        <p>
+            Use the the <code>searchRoles</code> function to request all the roles of an organization, or all roles on the server.
+            Optionally, you can search based on specific criteria for roles. The following example returns all roles on the server.
+        </p>
+            <pre><code><?php inject_sample('code/get_many_roles.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
-<article id="get_role">
-    <h3> Getting a Specific Role </h3>
-    <p>
-        If you know the name of the role, you can request it specifically using the <code>getRole</code> function.
-        This function returns a <code>Role</code> object.
-    </p>
-		<pre><code><?php inject_sample('code/get_role.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="get_role">
+        <h3> Getting a Specific Role </h3>
+        <p>
+            If you know the name of the role, you can request it specifically using the <code>getRole</code> function.
+            This function returns a <code>Role</code> object.
+        </p>
+            <pre><code><?php inject_sample('code/get_role.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
-<article id="create_role">
-    <h3> Creating a Role </h3>
-    <p>
-        To create a role, describe it in a <code>Role</code> object, then pass it to the <code>createRole</code> function.
-        The following example creates a new role in organization_1.
-    </p>
-		<pre><code><?php inject_sample('code/create_role.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="create_role">
+        <h3> Creating a Role </h3>
+        <p>
+            To create a role, describe it in a <code>Role</code> object, then pass it to the <code>createRole</code> function.
+            The following example creates a new role in organization_1.
+        </p>
+            <pre><code><?php inject_sample('code/create_role.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
-<article id="update_role">
-    <h3> Updating a Role </h3>
-    <p>
-        To upate a role, pass an updated <code>Role</code> object to the <code>updateRole</code> function. If you change the
-        name of the role, you must pass the old name of the role as the second argument.
-    </p>
-		<pre><code><?php inject_sample('code/update_role.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="update_role">
+        <h3> Updating a Role </h3>
+        <p>
+            To upate a role, pass an updated <code>Role</code> object to the <code>updateRole</code> function. If you change the
+            name of the role, you must pass the old name of the role as the second argument.
+        </p>
+            <pre><code><?php inject_sample('code/update_role.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
-<article id="delete_role">
-    <h3> Deleting a Role </h3>
-    <p>
-        To delete a role, first retrieve the <code>Role</code> object representing the role you wish to remove, then pass it
-        to the <code>deleteRole</code> function.
-    </p>
-		<pre><code><?php inject_sample('code/delete_role.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="delete_role">
+        <h3> Deleting a Role </h3>
+        <p>
+            To delete a role, first retrieve the <code>Role</code> object representing the role you wish to remove, then pass it
+            to the <code>deleteRole</code> function.
+        </p>
+            <pre><code><?php inject_sample('code/delete_role.txt'); ?>
+            </code>
+            </pre>
+    </article>
 <h2 id="user_service"> userService() </h2>
 
-<article id="search_user">
-    <h3> Searching for Users </h3>
-    <p>
-        Using the <code>searchUsers</code> function you can search for several users based on various critera. This function
-        returns an array of <code>UserLookup</code> objects that can be used with the <code>getUserByLookup</code> function
-        to retrieve their fully described <code>User</code> objects.
-    </p><p>
-        The example below finds all users of organization_1 containing 'j' in their username, and prints out the roles
-        assigned to each user.
-    </p>
-		<pre><code><?php inject_sample('code/search_user.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="search_user">
+        <h3> Searching for Users </h3>
+        <p>
+            Using the <code>searchUsers</code> function you can search for several users based on various critera. This function
+            returns an array of <code>UserLookup</code> objects that can be used with the <code>getUserByLookup</code> function
+            to retrieve their fully described <code>User</code> objects.
+        </p><p>
+            The example below finds all users of organization_1 containing 'j' in their username, and prints out the roles
+            assigned to each user.
+        </p>
+            <pre><code><?php inject_sample('code/search_user.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
-<article id="create_user">
-    <h3> Creating a User </h3>
-    <p>
-        To create a user, define a <code>User</code> object that fully describes the user, and pass it to the <code>addOrUpdateUser</code> function.
-    </p>
-		<pre><code><?php inject_sample('code/create_user.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="create_user">
+        <h3> Creating a User </h3>
+        <p>
+            To create a user, define a <code>User</code> object that fully describes the user, and pass it to the <code>addOrUpdateUser</code> function.
+        </p>
+            <pre><code><?php inject_sample('code/create_user.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
-<article id="update_user">
-    <h3> Updating a User </h3>
-    <p>
-        To update a user, pass an updated <code>User</code> object to the <code>addOrUpdateUser</code> function.
-    </p>
-		<pre><code><?php inject_sample('code/update_user.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="update_user">
+        <h3> Updating a User </h3>
+        <p>
+            To update a user, pass an updated <code>User</code> object to the <code>addOrUpdateUser</code> function.
+        </p>
+            <pre><code><?php inject_sample('code/update_user.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
-<article id="delete_user">
-    <h3> Delete User </h3>
-    <p>
-        To delete a user, first retrieve the <code>User</code> object representing the user you wish to remove, then pass it
-        to the <code>deleteUser</code> function.
-    </p>
-		<pre><code><?php inject_sample('code/delete_user.txt'); ?>
-        </code>
-		</pre>
-</article>
+    <article id="delete_user">
+        <h3> Delete User </h3>
+        <p>
+            To delete a user, first retrieve the <code>User</code> object representing the user you wish to remove, then pass it
+            to the <code>deleteUser</code> function.
+        </p>
+            <pre><code><?php inject_sample('code/delete_user.txt'); ?>
+            </code>
+            </pre>
+    </article>
 
 	<article id="attribute_functions">
 		<h3> Reading Attributes </h3>

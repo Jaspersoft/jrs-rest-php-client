@@ -172,5 +172,25 @@ class JobService
         $body = json_encode(array("jobId" => (array) $jobsToResume));
         return $this->service->prepAndSend($url, array(200), 'POST', $body, false, 'application/json', 'application/json');
 	}
+
+    /**
+     * Obtain a listing of calendar names, optionally filtered by calendar type
+     *
+     * Possible calendarType values:
+     *  "annual", "base", "cron", "daily", "holiday", "monthly", "weekly"
+     *
+     * @param string $calendarType Type of calendar to filter by
+     * @return array Set of defined calendar names
+     */
+    public function getCalendarNames($calendarType = null)
+    {
+        $url = $this->restUrl2 . '/jobs/calendars';
+        $url .= (!empty($calendarType)) ? Util::query_suffix(array("calendarType" => $calendarType)) : null;
+
+        $response = $this->service->prepAndSend($url, array(200), 'GET', null, true);
+        if (empty($response)) return null;
+        $calendars = json_decode($response);
+        return $calendars->calendarName;
+    }
 	
 }

@@ -70,7 +70,7 @@ abstract class FlaggedCalendar extends BaseCalendar {
     public function jsonSerialize() {
         $pre = parent::jsonSerialize();
         if (!empty($this->excludeDaysFlags)) {
-            $pre->excludeDaysFlags = array("excludeDayFlag" => $this->generateFlagArray());
+            $pre['excludeDaysFlags'] = array("excludeDayFlag" => $this->generateFlagArray());
         }
 
         return $pre;

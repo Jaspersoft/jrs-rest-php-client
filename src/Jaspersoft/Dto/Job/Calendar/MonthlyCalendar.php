@@ -7,6 +7,8 @@ namespace Jaspersoft\Dto\Job\Calendar;
 class MonthlyCalendar extends FlaggedCalendar {
 
     const MONTHLY_FILL_INDEX = 31;
+    public $calendarType = "monthly";
+
 
     public function addExcludeDay($day)
     {
@@ -33,7 +35,7 @@ class MonthlyCalendar extends FlaggedCalendar {
     {
         $flagArray = array_fill(0, MonthlyCalendar::MONTHLY_FILL_INDEX, false);
         foreach ($this->excludeDaysFlags as $key) {
-            $flagArray[$key] = true;
+            $flagArray[$key - 1] = true;
         }
         return $flagArray;
     }

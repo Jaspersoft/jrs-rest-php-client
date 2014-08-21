@@ -7,6 +7,7 @@ namespace Jaspersoft\Dto\Job\Calendar;
 class WeeklyCalendar extends FlaggedCalendar {
 
     const WEEKLY_FILL_INDEX = 6;
+    public $calendarType = "weekly";
 
     public function addExcludeDay($day) {
         if (!is_int($day) || $day < 0 || $day > 6) {

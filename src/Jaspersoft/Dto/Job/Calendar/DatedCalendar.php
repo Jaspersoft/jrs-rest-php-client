@@ -43,6 +43,7 @@ abstract class DatedCalendar extends BaseCalendar {
         $key = array_search($date, $this->excludeDays);
         if (!($key === False)) {
             unset($this->excludeDays[$key]);
+            $this->excludeDays = array_values($this->excludeDays);
         }
     }
 
@@ -68,7 +69,8 @@ abstract class DatedCalendar extends BaseCalendar {
     public function jsonSerialize() {
         $pre = parent::jsonSerialize();
         // Return hidden nesting for supplying to server
-        $pre->excludeDays = (!empty($pre->excludeDays)) ? array("excludeDay" => $pre->excludeDays) : null;
+        $pre['excludeDays'] = (!empty($pre['excludeDays'])) ? array("excludeDay" => $this->excludeDays) : null;
+        return $pre;
     }
 
 } 

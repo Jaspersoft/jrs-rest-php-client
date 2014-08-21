@@ -62,8 +62,9 @@ abstract class DatedCalendar extends BaseCalendar {
         $pre = parent::createFromJSON($json_obj);
         // Hide this nesting from user
         if (!empty($pre->excludeDays->excludeDay)) {
-
+            $pre->excludeDays = $pre->excludeDays->excludeDay;
         }
+        return $pre;
     }
 
     public function jsonSerialize() {

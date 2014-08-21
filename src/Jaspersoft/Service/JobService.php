@@ -2,6 +2,7 @@
 namespace Jaspersoft\Service;
 
 use Jaspersoft\Client\Client;
+use Jaspersoft\Exception\RESTRequestException;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Job\Job;
 use Jaspersoft\Dto\Job\JobState;
@@ -13,6 +14,7 @@ use Jaspersoft\Dto\Job\JobSummary;
  */
 class JobService
 {
+    const CALENDAR_NAMESPACE = "Jaspersoft\\Dto\\Job\\Calendar";
 	protected $service;
 	protected $restUrl2;
 
@@ -192,5 +194,22 @@ class JobService
         $calendars = json_decode($response);
         return $calendars->calendarName;
     }
-	
+
+    public function getCalendar($calendarName)
+    {
+        // rawurlencode will convert spaces to %20 as required by server
+        $url = $this->restUrl2 . '/jobs/calendars/' . rawurlencode($calendarName);
+        $response = $this->service->prepAndSend($url, array(200), 'GET', null, true);
+        $calendarData = json_decode($response);
+        if (empty($calendarData->calendarType)) {
+            throw new RESTRequestException("JobService: Data format not expected.");
+        }
+        $className = JobService::CALENDAR_NAMESPACE . '\\'. ucfirst($calendarData->calendarType) . "Calendar";
+
+        if (class_exists($className)) {
+            return $className::createFromJSON($calendarData);
+        } else {
+            throw new RESTRequestException("JobService: Unrecognized calendar type returned by server");
+        }
+    }
 }

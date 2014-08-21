@@ -20,7 +20,7 @@ abstract class DatedCalendar extends BaseCalendar {
      * @param string $date YYYY-MM-DD
      */
     public function addExcludeDate($date) {
-
+        $this->excludeDays[] = $date;
     }
 
     /**
@@ -29,7 +29,9 @@ abstract class DatedCalendar extends BaseCalendar {
      * @param array $dates Set of strings in format: YYYY-MM-DD
      */
     public function addExcludeDates(array $dates) {
-
+        foreach ($dates as $date) {
+            $this->addExcludeDate($date);
+        }
     }
 
     /**
@@ -38,7 +40,10 @@ abstract class DatedCalendar extends BaseCalendar {
      * @param string $date YYYY-MM-DD
      */
     public function removeExcludeDate($date) {
-
+        $key = array_search($date, $this->excludeDays);
+        if (!($key === False)) {
+            unset($this->excludeDays[$key]);
+        }
     }
 
     /**
@@ -47,7 +52,23 @@ abstract class DatedCalendar extends BaseCalendar {
      * @param array $dates Set of strings in format: YYYY-MM-DD
      */
     public function removeExcludeDates(array $dates) {
+        foreach ($dates as $date) {
+            $this->removeExcludeDate($date);
+        }
+    }
 
+    public static function createFromJSON($json_obj) {
+        $pre = parent::createFromJSON($json_obj);
+        // Hide this nesting from user
+        if (!empty($pre->excludeDays->excludeDay)) {
+
+        }
+    }
+
+    public function jsonSerialize() {
+        $pre = parent::jsonSerialize();
+        // Return hidden nesting for supplying to server
+        $pre->excludeDays = (!empty($pre->excludeDays)) ? array("excludeDay" => $pre->excludeDays) : null;
     }
 
 } 

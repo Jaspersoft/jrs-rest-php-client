@@ -5,30 +5,21 @@ use Jaspersoft\Dto\User\User;
 use Jaspersoft\Dto\Role\Role;
 use Jaspersoft\Dto\User\UserLookup;
 use Jaspersoft\Tool\Util;
-use Jaspersoft\Client\Client;
 use Jaspersoft\Dto\Attribute\Attribute;
 
 /**
  * Class UserService
  * @package Jaspersoft\Service
  */
-class UserService
+class UserService extends JRSService
 {
-	protected $service;
-	protected $restUrl2;
-	
-	public function __construct(Client &$client)
-	{
-		$this->service = $client->getService();
-		$this->restUrl2 = $client->getURL();
-	}
 	
 	private function makeUserUrl($organization, $username = null, $params = null)
 	{
         if(!empty($organization)) {
-            $url = $this->restUrl2 . "/organizations/" . $organization . "/users";
+            $url = $this->service_url . "/organizations/" . $organization . "/users";
         } else {
-            $url = $this->restUrl2 . "/users";
+            $url = $this->service_url . "/users";
         }
         if (!empty($username)) {
             $url .= '/' . $username;
@@ -44,10 +35,10 @@ class UserService
     private function makeAttributeUrl($username, $tenantID = null, $attributeNames = null, $attrName = null)
     {
         if (!empty($tenantID)) {
-            $url = $this->restUrl2 . "/organizations/" . $tenantID . "/users/" . $username .
+            $url = $this->service_url . "/organizations/" . $tenantID . "/users/" . $username .
                 "/attributes";
         } else {
-            $url = $this->restUrl2 . "/users" . $username . "/attributes";
+            $url = $this->service_url . "/users" . $username . "/attributes";
         }
         // Allow for parametrized attribute searches
         if (!empty($attributeNames)) {

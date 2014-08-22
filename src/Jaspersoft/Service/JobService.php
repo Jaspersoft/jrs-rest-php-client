@@ -1,7 +1,6 @@
 <?php
 namespace Jaspersoft\Service;
 
-use Jaspersoft\Client\Client;
 use Jaspersoft\Dto\Job\Calendar\BaseCalendar;
 use Jaspersoft\Exception\RESTRequestException;
 use Jaspersoft\Tool\Util;
@@ -13,21 +12,13 @@ use Jaspersoft\Dto\Job\JobSummary;
  * Class JobService
  * @package Jaspersoft\Service
  */
-class JobService
+class JobService extends JRSService
 {
     const CALENDAR_NAMESPACE = "Jaspersoft\\Dto\\Job\\Calendar";
-	protected $service;
-	protected $restUrl2;
-
-    public function __construct(Client &$client)
-    {
-        $this->service = $client->getService();
-        $this->restUrl2 = $client->getURL();
-    }
 		
     private function makeUrl($params = null)
     {
-        $url = $this->restUrl2 . '/jobs';
+        $url = $this->service_url . '/jobs';
         if (!empty($params))
             $url .= '?' . Util::query_suffix($params);
         return $url;
@@ -90,7 +81,7 @@ class JobService
 	 */
 	public function getJob($id)
     {
-		$url = $this->restUrl2 . '/jobs/' . $id;
+		$url = $this->service_url . '/jobs/' . $id;
 		$data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/job+json', 'application/job+json');
         return Job::createFromJSON(json_decode($data));
 	}
@@ -103,7 +94,7 @@ class JobService
 	 */
 	public function createJob(Job $job)
 	{
-		$url = $this->restUrl2 . '/jobs';
+		$url = $this->service_url . '/jobs';
 		$data = $this->service->prepAndSend($url, array(201, 200), 'PUT', $job->toJSON(), true, 'application/job+json', 'application/job+json');
         return Job::createFromJSON(json_decode($data));
 	}
@@ -116,7 +107,7 @@ class JobService
 	 */
 	public function updateJob($job)
 	{
-		$url = $this->restUrl2 . '/jobs/' . $job->id;
+		$url = $this->service_url . '/jobs/' . $job->id;
 		$data = $this->service->prepAndSend($url, array(201, 200), 'POST', $job->toJSON(), true, 'application/job+json', 'application/job+json');
         return Job::createFromJSON(json_decode($data));
 	}
@@ -132,7 +123,7 @@ class JobService
 	 */
 	public function deleteJob($id)
     {
-		$url = $this->restUrl2 . '/jobs/' . $id;
+		$url = $this->service_url . '/jobs/' . $id;
 		$data = $this->service->prepAndSend($url, array(200), 'DELETE', null, true);
         return $data;
 	}
@@ -145,7 +136,7 @@ class JobService
 	 */
 	public function getJobState($id)
     {
-		$url = $this->restUrl2 . '/jobs/' . $id . '/state';
+		$url = $this->service_url . '/jobs/' . $id . '/state';
 		$data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
 		return JobState::createFromJSON(json_decode($data));
 	}
@@ -158,7 +149,7 @@ class JobService
 	 */
 	public function pauseJob($jobsToStop = null)
     {
-		$url = $this->restUrl2 . '/jobs/pause';
+		$url = $this->service_url . '/jobs/pause';
         $body = json_encode(array("jobId" => (array) $jobsToStop));
 		return $this->service->prepAndSend($url, array(200), 'POST', $body, false, 'application/json', 'application/json');
 	}
@@ -171,7 +162,7 @@ class JobService
 	 */
 	public function resumeJob($jobsToResume = null)
     {
-		$url = $this->restUrl2 . '/jobs/resume';
+		$url = $this->service_url . '/jobs/resume';
         $body = json_encode(array("jobId" => (array) $jobsToResume));
         return $this->service->prepAndSend($url, array(200), 'POST', $body, false, 'application/json', 'application/json');
 	}
@@ -187,7 +178,7 @@ class JobService
      */
     public function getCalendarNames($calendarType = null)
     {
-        $url = $this->restUrl2 . '/jobs/calendars';
+        $url = $this->service_url . '/jobs/calendars';
         $url .= (!empty($calendarType)) ? Util::query_suffix(array("calendarType" => $calendarType)) : null;
 
         $response = $this->service->prepAndSend($url, array(200), 'GET', null, true);
@@ -206,7 +197,7 @@ class JobService
     public function getCalendar($calendarName)
     {
         // rawurlencode will convert spaces to %20 as required by server
-        $url = $this->restUrl2 . '/jobs/calendars/' . rawurlencode($calendarName);
+        $url = $this->service_url . '/jobs/calendars/' . rawurlencode($calendarName);
         $response = $this->service->prepAndSend($url, array(200), 'GET', null, true);
         $calendarData = json_decode($response);
         if (empty($calendarData->calendarType)) {
@@ -231,7 +222,7 @@ class JobService
      */
     public function createOrUpdateCalendar(BaseCalendar $calendar, $calendarName, $replace = false, $updateTriggers = false)
     {
-        $url = $this->restUrl2 . '/jobs/calendars/' . rawurlencode($calendarName) . '?' .
+        $url = $this->service_url . '/jobs/calendars/' . rawurlencode($calendarName) . '?' .
             Util::query_suffix(array("replace" => $replace, "updateTriggers" => $updateTriggers));
         $body = $calendar->toJSON();
         $this->service->prepAndSend($url, array(200), 'PUT', $body, false);
@@ -243,7 +234,7 @@ class JobService
      * @param string $calendarName
      */
     public function deleteCalendar($calendarName) {
-        $url = $this->restUrl2 . '/jobs/calendars/' . rawurlencode($calendarName);
+        $url = $this->service_url . '/jobs/calendars/' . rawurlencode($calendarName);
         $this->service->prepAndSend($url, array(204), 'DELETE');
     }
 

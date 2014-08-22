@@ -18,24 +18,16 @@ if (!defined("RESOURCE_NAMESPACE"))
  * Class RepositoryService
  * @package Jaspersoft\Service
  */
-class RepositoryService
+class RepositoryService extends JRSService
 {
-    private $service;
-    private $base_url;
-
-    public function __construct(Client &$client)
-    {
-        $this->service = $client->getService();
-        $this->base_url = $client->getURL();
-    }
 
     private function makeUrl(RepositorySearchCriteria $criteria = null, $uri = null, $expanded = null)
     {
-        $result = $this->base_url . '/resources';
+        $result = $this->service_url . '/resources';
         if (!empty($criteria))
             $result .= '?' . $criteria->toQueryParams();
         else
-            $result = $this->base_url . '/resources' . $uri;
+            $result = $this->service_url . '/resources' . $uri;
         if (!empty($expanded))
             $result .= '?expanded=true';
         return $result;

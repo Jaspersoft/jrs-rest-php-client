@@ -2,7 +2,6 @@
 
 namespace Jaspersoft\Service;
 
-use Jaspersoft\Client\Client;
 use Jaspersoft\Dto\ReportExecution\Attachment;
 use Jaspersoft\Dto\ReportExecution\BinaryOutputResource;
 use Jaspersoft\Dto\ReportExecution\Export\Export;
@@ -24,21 +23,13 @@ use Jaspersoft\Tool\Util;
  * Class ReportExecutionService
  * @package Jaspersoft\Service
  */
-class ReportExecutionService
+class ReportExecutionService extends JRSService
 {
-    private $service;
-    private $base_url;
-
-    public function __construct(Client &$client)
-    {
-        $this->service = $client->getService();
-        $this->base_url = $client->getURL();
-    }
 
     private function makeUrl($id = null, $status = false, $parameters = false, $exports = false,
                              $outputResource = false, $exportOutput = null, $attachments = false, $attachmentUri = null)
     {
-        $result = $this->base_url . '/reportExecutions';
+        $result = $this->service_url . '/reportExecutions';
         if (!empty($id)) {
             $result .= '/' . $id;
         }

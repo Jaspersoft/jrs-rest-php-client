@@ -1,7 +1,6 @@
 <?php
 namespace Jaspersoft\Service;
 
-use Jaspersoft\Client\Client;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Permission\RepositoryPermission;
 
@@ -9,16 +8,8 @@ use Jaspersoft\Dto\Permission\RepositoryPermission;
  * Class PermissionService
  * @package Jaspersoft\Service
  */
-class PermissionService
+class PermissionService extends JRSService
 {
-	protected $service;
-	protected $restUrl2;
-
-    public function __construct(Client &$client)
-    {
-        $this->service = $client->getService();
-        $this->restUrl2 = $client->getURL();
-    }
 
     private function batchDataToArray($json_data)
     {
@@ -42,7 +33,7 @@ class PermissionService
      */
     public function searchRepositoryPermissions($uri, $effectivePermissions = null, $recipientType = null, $recipientId = null, $resolveAll = null)
     {
-		$url = $this->restUrl2 . '/permissions' . $uri;
+		$url = $this->service_url . '/permissions' . $uri;
 		$url .= '?' . Util::query_suffix(array(
 								"effectivePermissions" => $effectivePermissions,
 								"recipientType" => $recipientType,
@@ -63,7 +54,7 @@ class PermissionService
      */
     public function getRepositoryPermission($uri, $recipientUri)
     {
-        $url = $this->restUrl2 . '/permissions' . $uri;
+        $url = $this->service_url . '/permissions' . $uri;
         $url .= ";recipient=" . str_replace('/', '%2F', $recipientUri);
         $data = $this->service->prepAndSend($url, array(200), 'GET', null, true);
         return RepositoryPermission::createFromJSON($data);
@@ -79,7 +70,7 @@ class PermissionService
      */
     public function updateRepositoryPermission(RepositoryPermission $permission)
     {
-        $url = $this->restUrl2 . '/permissions' . $permission->uri;
+        $url = $this->service_url . '/permissions' . $permission->uri;
         $url .= ";recipient=" . str_replace('/', '%2F', $permission->recipient);
         $data = $this->service->prepAndSend($url, array(200), 'PUT', json_encode($permission), true);
         return RepositoryPermission::createFromJSON($data);
@@ -94,7 +85,7 @@ class PermissionService
      */
 	public function updateRepositoryPermissions($uri, $permissions)
     {
-		$url = $this->restUrl2 . '/permissions' . $uri;
+		$url = $this->service_url . '/permissions' . $uri;
 		$body = json_encode(array('permission' => $permissions));
 		$permissions = $this->service->prepAndSend($url, array(200), 'PUT', $body, true, 'application/collection+json', 'application/json');
         return self::batchDataToArray($permissions);
@@ -108,7 +99,7 @@ class PermissionService
      */
 	public function createRepositoryPermissions($permissions)
     {
-		$url = $this->restUrl2 . '/permissions';
+		$url = $this->service_url . '/permissions';
 		$body = json_encode(array('permission' => $permissions));
 		$permissions = $this->service->prepAndSend($url, array(201), 'POST', $body, true, 'application/collection+json', 'application/json');
         return self::batchDataToArray($permissions);
@@ -122,7 +113,7 @@ class PermissionService
      */
     public function createRepositoryPermission(RepositoryPermission $permission)
     {
-        $url = $this->restUrl2 . '/permissions';
+        $url = $this->service_url . '/permissions';
         $body = json_encode($permission);
         $response = $this->service->prepAndSend($url, array(201), 'POST', $body, true);
         return RepositoryPermission::createFromJSON($response);
@@ -136,7 +127,7 @@ class PermissionService
      */
 	public function deleteRepositoryPermission(RepositoryPermission $permission)
     {
-		$url = $this->restUrl2 . '/permissions' . $permission->uri . ';recipient=' . str_replace('/', '%2F', $permission->recipient);
+		$url = $this->service_url . '/permissions' . $permission->uri . ';recipient=' . str_replace('/', '%2F', $permission->recipient);
 		$this->service->prepAndSend($url, array(204), 'DELETE', null, false);
 	}		
 

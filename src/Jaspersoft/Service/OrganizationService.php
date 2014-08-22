@@ -3,26 +3,17 @@ namespace Jaspersoft\Service;
 
 use Jaspersoft\Dto\Organization\Organization;
 use Jaspersoft\Tool\Util;
-use Jaspersoft\Client\Client;
 
 /**
  * Class OrganizationService
  * @package Jaspersoft\Service
  */
-class OrganizationService
+class OrganizationService extends JRSService
 {
-	protected $service;
-	protected $restUrl2;
-
-    public function __construct(Client &$client)
-    {
-        $this->service = $client->getService();
-        $this->restUrl2 = $client->getURL();
-    }
 	
 	private function makeUrl($organization = null, $params = null)
 	{
-        $url = $this->restUrl2 . '/organizations';
+        $url = $this->service_url . '/organizations';
         if (!empty($organization)) {
             $url .= '/' . $organization;
             return $url;

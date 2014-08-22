@@ -1,7 +1,6 @@
 <?php
 namespace Jaspersoft\Service;
 
-use Jaspersoft\Client\Client;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Report\InputControl;
 
@@ -9,16 +8,8 @@ use Jaspersoft\Dto\Report\InputControl;
  * Class ReportService
  * @package Jaspersoft\Service
  */
-class ReportService
+class ReportService extends JRSService
 {
-	protected $service;
-	protected $restUrl2;
-
-    public function __construct(Client &$client)
-    {
-        $this->service = $client->getService();
-        $this->restUrl2 = $client->getURL();
-    }
 
     /**
      * This function runs and retrieves the binary data of a report.
@@ -40,7 +31,7 @@ class ReportService
 	public function runReport($uri, $format = 'pdf', $pages = null, $attachmentsPrefix = null, $inputControls = null,
                                 $interactive = true, $onePagePerSheet = false, $freshData = true, $saveDataSnapshot = false, $transformerKey = null)
     {
-		$url = $this->restUrl2 . '/reports' . $uri . '.' . $format;
+		$url = $this->service_url . '/reports' . $uri . '.' . $format;
         if (empty($inputControls))
             $url .= '?' . Util::query_suffix(compact("pages", "attachmentsPrefix", "interactive", "onePagePerSheet", "freshData", "saveDataSnapshot", "transformerKey"));
         else
@@ -57,7 +48,7 @@ class ReportService
 	 */
 	public function getReportInputControls($uri)
     {
-		$url = $this->restUrl2 . '/reports' . $uri . '/inputControls/values';
+		$url = $this->service_url . '/reports' . $uri . '/inputControls/values';
 		$data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
 		return InputControl::createFromJSON($data);
 	}

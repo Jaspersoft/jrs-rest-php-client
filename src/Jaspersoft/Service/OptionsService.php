@@ -1,7 +1,6 @@
 <?php
 namespace Jaspersoft\Service;
 
-use Jaspersoft\Client\Client;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Options\ReportOptions;
 
@@ -9,16 +8,8 @@ use Jaspersoft\Dto\Options\ReportOptions;
  * Class OptionsService
  * @package Jaspersoft\Service
  */
-class OptionsService
+class OptionsService extends JRSService
 {
-	protected $service;
-	protected $restUrl2;
-
-    public function __construct(Client &$client)
-    {
-        $this->service = $client->getService();
-        $this->restUrl2 = $client->getURL();
-    }
 	
 	/**
 	 * Get report options
@@ -28,7 +19,7 @@ class OptionsService
 	 */
 	public function getReportOptions($uri)
     {
-		$url = $this->restUrl2 . '/reports' . $uri . '/options';
+		$url = $this->service_url . '/reports' . $uri . '/options';
 		$data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
 		return ReportOptions::createFromJSON($data);
 	}
@@ -51,7 +42,7 @@ class OptionsService
 	 */
 	public function updateReportOptions($uri, $controlOptions, $label, $overwrite)
     {
-		$url = $this->restUrl2 . '/reports' . $uri . '/options';
+		$url = $this->service_url . '/reports' . $uri . '/options';
         $url .= '?' . Util::query_suffix(array('label' => utf8_encode($label), 'overwrite' => $overwrite));
 		$body = json_encode($controlOptions);
 		$data = $this->service->prepAndSend($url, array(200), 'POST', $body, true, 'application/json', 'application/json');
@@ -70,7 +61,7 @@ class OptionsService
 	 */
 	public function deleteReportOptions($uri, $optionsLabel)
     {
-		$url = $this->restUrl2 . '/reports' . $uri . '/options/' . $optionsLabel;
+		$url = $this->service_url . '/reports' . $uri . '/options/' . $optionsLabel;
 		$this->service->prepAndSend($url, array(200), 'DELETE', null, false);
 	}
 }

@@ -2,6 +2,7 @@
 namespace Jaspersoft\Service;
 
 use Jaspersoft\Client\Client;
+use Jaspersoft\Dto\Job\Calendar\BaseCalendar;
 use Jaspersoft\Exception\RESTRequestException;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Dto\Job\Job;
@@ -195,6 +196,13 @@ class JobService
         return $calendars->calendarName;
     }
 
+    /**
+     * Retrieve a calendar and its properties
+     *
+     * @param string $calendarName Name of the calendar to obtain details of
+     * @return BaseCalendar
+     * @throws \Jaspersoft\Exception\RESTRequestException
+     */
     public function getCalendar($calendarName)
     {
         // rawurlencode will convert spaces to %20 as required by server
@@ -212,4 +220,31 @@ class JobService
             throw new RESTRequestException("JobService: Unrecognized calendar type returned by server");
         }
     }
+
+    /**
+     * Create or Update a calendar
+     *
+     * @param BaseCalendar $calendar A DTO representing the new or altered calendar
+     * @param string $calendarName Name of the calendar to create or update
+     * @param bool $replace Should an existing calendar of the same name be overwritten?
+     * @param bool $updateTriggers Should an existing jobs using this calendar adhere to the changes made?
+     */
+    public function createOrUpdateCalendar(BaseCalendar $calendar, $calendarName, $replace = false, $updateTriggers = false)
+    {
+        $url = $this->restUrl2 . '/jobs/calendars/' . rawurlencode($calendarName) . '?' .
+            Util::query_suffix(array("replace" => $replace, "updateTriggers" => $updateTriggers));
+        $body = $calendar->toJSON();
+        $this->service->prepAndSend($url, array(200), 'PUT', $body, false);
+    }
+
+    /**
+     * Delete a calendar by its name
+     *
+     * @param string $calendarName
+     */
+    public function deleteCalendar($calendarName) {
+        $url = $this->restUrl2 . '/jobs/calendars/' . rawurlencode($calendarName);
+        $this->service->prepAndSend($url, array(204), 'DELETE');
+    }
+
 }

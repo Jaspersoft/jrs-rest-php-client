@@ -31,6 +31,7 @@ class Client
     protected $reportService;
     protected $importExportService;
     protected $queryService;
+    protected $domainService;
 
 	public function __construct($serverUrl, $username, $password, $orgId = null)
 	{
@@ -135,6 +136,14 @@ class Client
             $this->queryService = new service\QueryService($this);
         }
         return $this->queryService;
+    }
+
+    public function domainService()
+    {
+        if (!isset($this->domainService)) {
+            $this->domainService = new service\DomainService($this);
+        }
+        return $this->domainService;
     }
 
     /**

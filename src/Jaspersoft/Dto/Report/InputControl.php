@@ -3,7 +3,11 @@ namespace Jaspersoft\Dto\Report;
 use Jaspersoft\Dto\DTOObject;
 
 /**
+ * Deprecated in 2.1, use Jaspersoft\Dto\Report\InputControls\InputControlState instead.
+ * This class will be removed in v3.0.0
+ *
  * Class InputControl
+ * @deprecated
  * @package Jaspersoft\Dto\Report
  */
 class InputControl extends DTOObject

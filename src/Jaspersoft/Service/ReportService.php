@@ -132,8 +132,8 @@ class ReportService extends JRSService
      */
     public function updateReportInputControlValues($uri, array $parameters)
     {
-        $url = $this->service_url . '/reports' . $uri . '/inputControls/' . join(';', array_keys($controls)) . '/values';
-        $response = $this->service->prepAndSend($url, array(200), 'POST', json_encode($controls), true);
+        $url = $this->service_url . '/reports' . $uri . '/inputControls/' . join(';', array_keys($parameters)) . '/values';
+        $response = $this->service->prepAndSend($url, array(200), 'POST', json_encode($parameters), true);
 
         $json_obj = json_decode($response);
         $result = array();

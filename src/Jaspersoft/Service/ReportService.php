@@ -123,11 +123,10 @@ class ReportService extends JRSService
 
 
     /**
-     * Update the values of a report's input controls
+     * Update the values of a report's input controls, and obtain the updated input control states as a result
      *
      * @param string $uri
-     * @param array Set of parameters in format: array("id" => array("value"), "id2" => array("value2"));
-     * @throws \Jaspersoft\Exception\DtoException
+     * @param array $parameters Set of parameters in format: array("id" => array("value"), "id2" => array("value2"));
      * @return array
      */
     public function updateReportInputControlValues($uri, array $parameters)
@@ -139,6 +138,26 @@ class ReportService extends JRSService
         $result = array();
         foreach ($json_obj->inputControlState as $state) {
             $result[] = InputControlState::createFromJSON($state);
+        }
+        return $result;
+    }
+
+    /**
+     * Update the values of a report's input controls, and obtain the new structure as a result
+     *
+     * @param string $uri
+     * @param array $parameters Set of parameters in format: array("id" => array("value"), "id2" => array("value2"));
+     * @return array Set of InputControl objects
+     */
+    public function updateReportsInputControls($uri, array $parameters)
+    {
+        $url = $this->service_url . '/reports' . $uri . '/inputControls';
+        $response = $this->service->prepAndSend($url, array(200), 'POST', json_encode($parameters), true);
+
+        $json_obj = json_decode($response);
+        $result = array();
+        foreach ($json_obj->inputControl as $control) {
+            $result[] = InputControl::createFromJSON($control);
         }
         return $result;
     }

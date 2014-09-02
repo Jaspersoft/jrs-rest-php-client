@@ -3,7 +3,6 @@ namespace Jaspersoft\Service;
 
 use Jaspersoft\Dto\Report\InputControls\InputControl;
 use Jaspersoft\Dto\Report\InputControls\InputControlState;
-use Jaspersoft\Exception\DtoException;
 use Jaspersoft\Tool\Util;
 
 /**
@@ -45,13 +44,13 @@ class ReportService extends JRSService
 	/**
 	 * Returns a set of InputControl items defining the values of InputControls
      *
-     * @deprecated Use getReportInputControlValues instead
+     * @deprecated Use getInputControlValues instead
 	 * @param string $uri
 	 * @return array
 	 */
 	public function getReportInputControls($uri)
     {
-        return $this->getReportInputControlValues($uri);
+        return $this->getInputControlValues($uri);
 	}
 
     /**
@@ -60,7 +59,7 @@ class ReportService extends JRSService
      * @param string $uri
      * @return array
      */
-    public function getReportInputControlValues($uri)
+    public function getInputControlValues($uri)
     {
         $url = $this->service_url . '/reports' . $uri . '/inputControls/values';
         $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
@@ -80,7 +79,7 @@ class ReportService extends JRSService
      * @param string $uri Report to obtain structure from
      * @return array
      */
-    public function getReportInputControlStructure($uri) {
+    public function getInputControlStructure($uri) {
         $url = $this->service_url . '/reports' . $uri . '/inputControls';
         $data = $this->service->prepAndSend($url, array(200), 'GET', null, true);
         $json_obj = json_decode($data);
@@ -102,7 +101,7 @@ class ReportService extends JRSService
      * @param array $controls A set of InputControl
      * @return array The new structure
      */
-    public function updateReportInputControlOrder($uri, array $controls)
+    public function updateInputControlOrder($uri, array $controls)
     {
         $url = $this->service_url . '/reports' . $uri . '/inputControls';
         $body = array("inputControl" => array());
@@ -129,7 +128,7 @@ class ReportService extends JRSService
      * @param array $parameters Set of parameters in format: array("id" => array("value"), "id2" => array("value2"));
      * @return array
      */
-    public function updateReportInputControlValues($uri, array $parameters)
+    public function updateInputControlValues($uri, array $parameters)
     {
         $url = $this->service_url . '/reports' . $uri . '/inputControls/' . join(';', array_keys($parameters)) . '/values';
         $response = $this->service->prepAndSend($url, array(200), 'POST', json_encode($parameters), true);
@@ -149,7 +148,7 @@ class ReportService extends JRSService
      * @param array $parameters Set of parameters in format: array("id" => array("value"), "id2" => array("value2"));
      * @return array Set of InputControl objects
      */
-    public function updateReportsInputControls($uri, array $parameters)
+    public function updateInputControls($uri, array $parameters)
     {
         $url = $this->service_url . '/reports' . $uri . '/inputControls';
         $response = $this->service->prepAndSend($url, array(200), 'POST', json_encode($parameters), true);

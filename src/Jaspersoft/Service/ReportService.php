@@ -50,7 +50,15 @@ class ReportService extends JRSService
 	 */
 	public function getReportInputControls($uri)
     {
-        return $this->getInputControlValues($uri);
+        $url = $this->service_url . '/reports' . $uri . '/inputControls/values';
+        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+        $json_obj = json_decode($data);
+        $result = array();
+
+        foreach ($json_obj->inputControlState as $state) {
+            $result[] = \Jaspersoft\Dto\Report\InputControl::createFromJSON($state);
+        }
+        return $result;
 	}
 
     /**

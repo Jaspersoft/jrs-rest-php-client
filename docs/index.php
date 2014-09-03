@@ -26,6 +26,7 @@
   .deprecated_notice { color: #f00; font-style: italic; }
   code { background-color: #efefef; }
   #section_group { font-size: 32pt; }
+    .flowchart { max-width: 700px; }
   </style>
 
   </head>
@@ -405,6 +406,10 @@ end of skeleton -->
 	</article>
 
     <h2 id="executions_service"> reportExecutionsService() </h2>
+
+    <h3>Asynchronous v. Synchronous Report Execution process Flow Chart</h3>
+
+    <img src="assets/report_execution_flowchart.png" class="flowchart" />
 
     <article id="execution_request">
         <h3> Creating a Report Execution Request </h3>

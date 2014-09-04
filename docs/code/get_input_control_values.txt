@@ -1,0 +1,10 @@
+
+$values = $c->reportService()->getInputControlValues("/public/samples/reports/Cascading_multi_select");
+foreach ($values as $ic) {
+    echo "Control ID: " . $ic->id . "<hr>";
+    foreach ($ic->options as $opt) {
+         $label = $opt['label'];
+         $selected = ($opt['selected']) ? 'true' : 'false';
+         echo "\t Option: " . $label . " | \t\t\t " . $selected . "<br>";
+    }
+}

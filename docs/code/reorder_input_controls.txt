@@ -1,0 +1,12 @@
+
+$controls = $c->reportService()->getInputControlStructure("/public/samples/reports/Cascading_multi_select");
+
+// Swap array elements
+$temp = $controls[0];
+$controls[0] = $controls[2];
+$controls[2] = $temp;
+
+$newControls = $c->reportService()->updateInputControlOrder("/public/samples/reports/Cascading_multi_select", $controls);
+
+
+

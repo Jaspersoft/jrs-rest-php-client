@@ -1,0 +1,4 @@
+
+$inputControlStructure = $c->reportService()->getInputControlStructure("/public/samples/Cascading_multi_select_report");
+
+

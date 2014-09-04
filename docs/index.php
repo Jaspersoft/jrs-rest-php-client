@@ -27,6 +27,7 @@
   code { background-color: #efefef; }
   #section_group { font-size: 32pt; }
     .flowchart { max-width: 700px; }
+      h4 { font-size: 16pt;  }
   </style>
 
   </head>
@@ -393,10 +394,28 @@ end of skeleton -->
 		</code>
 		</pre>
 	</article>
+
+    <h4>Managing Input Controls of a Report</h4>
+
+
+    <article id="get_input_control_structure">
+        <h3> Retrieving a Report's Input Control Structure </h3>
+        <p>
+            The structure of the input controls for a report can be obtained using the method getInputControlStructure() by providing the URI of the report. An array of objects of the type Jaspersoft\Dto\Report\InputControls\InputControl will be
+            returned, each element in the returned array defines an input control of the report.
+
+            Such structures define metadata about the input controls and also reflect their order.
+        </p>
+            <pre><code><?php inject_sample('code/get_input_control_structure.txt'); ?>
+                </code>
+            </pre>
+    </article>
+
 	
 	<article id="get_input_controls">
-		<h3> Retrieving Input Control Values </h3>
-		<p>
+        <h3> <s> Retrieving Input Control Values </s> </h3>
+        <span class="deprecated_notice">Deprecated: Instead use reportService#getInputControlValues(), which will return an array of objects of the type: Jaspersoft\Dto\Report\InputControls\InputControlState</span>
+        <p>
 			You can retrieve the input controls defined for a report, their possible values, and other metadata about controls.
 			The following example lists each control and its corresponding values.
 		</p>
@@ -405,9 +424,79 @@ end of skeleton -->
 		</pre>
 	</article>
 
-    <h2 id="executions_service"> reportExecutionsService() </h2>
+    <article id="get_input_control_structure">
+        <h3> Retrieving a Report's Input Control Structure </h3>
+        <p>
+            The structure of the input controls for a report can be obtained using the method getInputControlStructure() by providing the URI of the report. An array of objects of the type Jaspersoft\Dto\Report\InputControls\InputControl will be
+            returned, each element in the returned array defines an input control of the report.
 
-    <h3>Asynchronous v. Synchronous Report Execution process Flow Chart</h3>
+            Such structures define metadata about the input controls and also reflect their order.
+        </p>
+                <pre><code><?php inject_sample('code/get_input_control_structure.txt'); ?>
+                    </code>
+                </pre>
+    </article>
+
+    <article id="get_input_control_values">
+        <h3> Retrieving a Report's Input Control Values </h3>
+        <p>
+            You can also obtain data about the state of the input control, such info describes the selection state of values for the
+            input control. The returned data structure is an array filled with InputControlState objects. You can extract data about the values from the options field.
+            The example below lists each input control ID its options as well as the options selection status.
+        </p>
+                    <pre><code><?php inject_sample('code/get_input_control_values.txt'); ?>
+                        </code>
+                    </pre>
+    </article>
+
+    <article id="reorder_input_controls">
+        <h3> Reordering input controls </h3>
+        <p>
+            This client is capable of adjusting the order in which input controls are displayed on a report as well. First you must obtain the InputControl array for the report using
+            <a href="#get_input_control_structure">getInputControlStructure</a> then you can swap the elements in that array and pass it to the updateInputControlOrder function. It is important that
+            the rest of the data contained in these InputControl objects remains unchanged.
+        </p>
+                        <pre><code><?php inject_sample('code/reorder_input_controls.txt'); ?>
+                            </code>
+                        </pre>
+    </article>
+
+    <article id="update_input_control_values">
+        <h3> Updating input control values </h3>
+        <p>
+            By creating a parameter array in the form array("option" => array("value")) you can define the selected values of the input controls. Supply this array and the
+            URI of the report to update which values are selected.
+        </p>
+                            <pre><code><?php inject_sample('code/update_input_control_values.txt'); ?>
+                                </code>
+                            </pre>
+    </article>
+
+    <article id="update_input_control_values">
+        <h3> Updating input control values </h3>
+        <p>
+            By creating a parameter array in the form array("option" => array("value")) you can define the selected values of the input controls. Supply this array and the
+            URI of the report to update which values are selected. This method will return an array of InputControlState items.
+        </p>
+                                <pre><code><?php inject_sample('code/update_input_control_values.txt'); ?>
+                                    </code>
+                                </pre>
+    </article>
+
+    <article id="update_input_control_structure">
+        <h3> Updating input controls with structure </h3>
+        <p>
+            By creating a parameter array in the form array("option" => array("value")) you can define the selected values of the input controls. Supply this array and the
+            URI of the report to update which values are selected. This method will return an array of InputControl items.
+        </p>
+                                    <pre><code><?php inject_sample('code/update_input_control_structure.txt'); ?>
+                                        </code>
+                                    </pre>
+    </article>
+
+<h2 id="executions_service"> reportExecutionsService() </h2>
+
+    <h4>Asynchronous v. Synchronous Report Execution process Flow Chart</h4>
 
     <img src="assets/report_execution_flowchart.png" class="flowchart" />
 

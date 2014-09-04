@@ -148,6 +148,19 @@ end of skeleton -->
 
 <h1 id="section_group"> Repository and Resource Services </h1>
 
+    <h2 id="domain_service"> domainService() </h2>
+
+    <article id="domain_metadata">
+    <h3> Obtaining Metadata About a Domain </h3>
+    <p>
+        Given the URI of a domain resource, you can obtain metadata about such resource using getMetadata in the domainService. The metadata object has
+        a rootLevel element which contains "MetaLevel" and "MetaItem" elements describing the domain's properties.
+    </p>
+        <pre><code><?php inject_sample('code/domain_metadata.txt'); ?>
+            </code>
+        </pre>
+    </article>
+
 	<h2 id="repository_service"> repositoryService() </h2>
 		
 	<article id="get_repository">
@@ -168,7 +181,7 @@ end of skeleton -->
 		<h3> Creating a Resource </h3>
 		<p>
 			Many types of resources can be created. See the namespace <code>\Jaspersoft\Dto\Resource</code> to see the types you may
-            work with. Note: <code>CompositeResource</code> and <code>Resource</code> are abstract classes and are not expected to be insantisted
+            work with. Note: <code>CompositeResource</code> and <code>Resource</code> are abstract classes and are not expected to be instantiated
             or used with any 'CRUD' operations.
 		</p>
 		<pre><code><?php inject_sample('code/create_resource.txt'); ?>

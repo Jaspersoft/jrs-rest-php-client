@@ -833,13 +833,13 @@ end of skeleton -->
             </pre>
     </article>
 
-    <article id="get_calendars">
+    <article id="calendar_get">
         <h3> Get Names of Calendars </h3>
         <p>
             You can obtain a list of all the calendars on the server, or you can filter them by the type of calendar they are (annual, weekly, holiday, etc).
             These can be used when defining scheduled jobs.
         </p>
-        <pre><code><?php inject_sample('code/get_calendars.txt'); ?>
+        <pre><code><?php inject_sample('code/calendar_get.txt'); ?>
             </code>
         </pre>
     </article>
@@ -852,6 +852,26 @@ end of skeleton -->
             <pre><code><?php inject_sample('code/calendar_details.txt'); ?>
                 </code>
             </pre>
+    </article>
+
+    <article id="calendar_create">
+        <h3> Create or Update a Calendar </h3>
+        <p>
+            A calendar can be created or updated by constructing first a calendar object.
+        </p>
+                <pre><code><?php inject_sample('code/calendar_create.txt'); ?>
+                    </code>
+                </pre>
+    </article>
+
+    <article id="calendar_delete">
+        <h3> Delete a Calendar </h3>
+        <p>
+            Delete the calendar by supplying its name.
+        </p>
+                    <pre><code><?php inject_sample('code/calendar_create.txt'); ?>
+                        </code>
+                    </pre>
     </article>
 
 

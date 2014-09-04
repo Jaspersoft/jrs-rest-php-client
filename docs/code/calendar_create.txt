@@ -1,0 +1,9 @@
+
+
+$noMWS = new WeeklyCalendar();
+$noMWS->addExcludeDays(array(
+            WeeklyCalendar::MONDAY,
+            WeeklyCalendar::WEDNESDAY,
+            WeeklyCalendar::SUNDAY));
+
+$c->jobService()->createOrUpdateCalendar($noMWS, "MON_WED_SUN");

@@ -1,0 +1,3 @@
+
+$calendars = $c->jobService()->getCalendarNames(); //all defined calendars
+$annual_calendars = $c->jobService()->getCalendarNames("annual"); // only annual calendars

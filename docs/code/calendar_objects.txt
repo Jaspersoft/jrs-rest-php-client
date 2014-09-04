@@ -1,0 +1,13 @@
+
+use Jaspersoft\Dto\Job\Calendar\WeeklyCalendar;
+use Jaspersoft\Dto\Job\Calendar\HolidayCalendar;
+
+$noMWS = new WeeklyCalendar();
+$noMWS->addExcludeDays(array(
+            WeeklyCalendar::MONDAY,
+            WeeklyCalendar::WEDNESDAY,
+            WeeklyCalendar::SUNDAY));
+
+$noNewYears = new HolidayCalendar();
+$noNewYears->addExcludeDate("2015-01-01");
+

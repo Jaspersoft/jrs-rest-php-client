@@ -1,0 +1,2 @@
+
+$newYears = $c->jobService()->getCalendarDetails("NEW_YEARS_CALENDAR");

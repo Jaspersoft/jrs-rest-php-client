@@ -1051,7 +1051,58 @@ $c-&gt;jobService()-&gt;updateJob($job);		</code>
 		<pre><code>$c-&gt;jobService()-&gt;deleteJob('90210');		</code>
 		</pre>
 	</article>
-	
+
+    <h4> Working with Calendars </h4>
+
+    <article id="calendar_objects">
+        <h3> Calendar Objects </h3>
+        <p>
+           The calendar objects have some convenience functions to add or remove dates from a calendar's exclusion list. There are two categories of calendars, those which
+            use flags, and those which use dates. See the FlaggedCalendar and DatedCalendar classes to learn more about these methods. An example below creates a weekly calendar
+            that excludes Mondays Wednesdays and Sundays.
+
+            When working with DatedCalendars, one must use YYYY-MM-DD format.
+        </p>
+            <pre><code>
+use Jaspersoft\Dto\Job\Calendar\WeeklyCalendar;
+use Jaspersoft\Dto\Job\Calendar\HolidayCalendar;
+
+$noMWS = new WeeklyCalendar();
+$noMWS-&gt;addExcludeDays(array(
+            WeeklyCalendar::MONDAY,
+            WeeklyCalendar::WEDNESDAY,
+            WeeklyCalendar::SUNDAY));
+
+$noNewYears = new HolidayCalendar();
+$noNewYears-&gt;addExcludeDate(&quot;2015-01-01&quot;);
+
+                </code>
+            </pre>
+    </article>
+
+    <article id="get_calendars">
+        <h3> Get Names of Calendars </h3>
+        <p>
+            You can obtain a list of all the calendars on the server, or you can filter them by the type of calendar they are (annual, weekly, holiday, etc).
+            These can be used when defining scheduled jobs.
+        </p>
+        <pre><code>
+$calendars = $c-&gt;jobService()-&gt;getCalendarNames(); //all defined calendars
+$annual_calendars = $c-&gt;jobService()-&gt;getCalendarNames(&quot;annual&quot;); // only annual calendars            </code>
+        </pre>
+    </article>
+
+    <article id="calendar_details">
+        <h3> Get Details About a Calendar </h3>
+        <p>
+            Given the name of a calendar you can obtain details about the calendar, such as what days are excluded.
+        </p>
+            <pre><code>
+$newYears = $c-&gt;jobService()-&gt;getCalendarDetails(&quot;NEW_YEARS_CALENDAR&quot;);
+                </code>
+            </pre>
+    </article>
+
 
 <h2 id="query_service"> queryService() </h2>
 	

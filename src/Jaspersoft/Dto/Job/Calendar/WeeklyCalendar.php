@@ -9,6 +9,14 @@ class WeeklyCalendar extends FlaggedCalendar {
     const WEEKLY_FILL_INDEX = 6;
     public $calendarType = "weekly";
 
+    const SUNDAY = 0;
+    const MONDAY = 1;
+    const TUESDAY = 2;
+    const WEDNESDAY = 3;
+    const THURSDAY = 4;
+    const FRIDAY = 5;
+    const SATURDAY = 6;
+
     public function addExcludeDay($day) {
         if (!is_int($day) || $day < 0 || $day > 6) {
             throw new \DomainException("You must describe days of the week using integers between 0 and 6");

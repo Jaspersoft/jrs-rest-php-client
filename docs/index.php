@@ -816,7 +816,44 @@ end of skeleton -->
 		</code>
 		</pre>
 	</article>
-	
+
+    <h4> Working with Calendars </h4>
+
+    <article id="calendar_objects">
+        <h3> Calendar Objects </h3>
+        <p>
+           The calendar objects have some convenience functions to add or remove dates from a calendar's exclusion list. There are two categories of calendars, those which
+            use flags, and those which use dates. See the FlaggedCalendar and DatedCalendar classes to learn more about these methods. An example below creates a weekly calendar
+            that excludes Mondays Wednesdays and Sundays.
+
+            When working with DatedCalendars, one must use YYYY-MM-DD format.
+        </p>
+            <pre><code><?php inject_sample('code/calendar_objects.txt'); ?>
+                </code>
+            </pre>
+    </article>
+
+    <article id="get_calendars">
+        <h3> Get Names of Calendars </h3>
+        <p>
+            You can obtain a list of all the calendars on the server, or you can filter them by the type of calendar they are (annual, weekly, holiday, etc).
+            These can be used when defining scheduled jobs.
+        </p>
+        <pre><code><?php inject_sample('code/get_calendars.txt'); ?>
+            </code>
+        </pre>
+    </article>
+
+    <article id="calendar_details">
+        <h3> Get Details About a Calendar </h3>
+        <p>
+            Given the name of a calendar you can obtain details about the calendar, such as what days are excluded.
+        </p>
+            <pre><code><?php inject_sample('code/calendar_details.txt'); ?>
+                </code>
+            </pre>
+    </article>
+
 
 <h2 id="query_service"> queryService() </h2>
 	

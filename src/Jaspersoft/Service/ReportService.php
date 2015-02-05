@@ -89,7 +89,12 @@ class ReportService extends JRSService
      */
     public function getInputControlStructure($uri) {
         $url = $this->service_url . '/reports' . $uri . '/inputControls';
-        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true);
+        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true);
+
+        if(!$data) {
+            return [];
+        }
+
         $json_obj = json_decode($data);
 
         $result = array();

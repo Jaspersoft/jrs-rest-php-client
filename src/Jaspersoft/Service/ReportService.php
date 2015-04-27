@@ -91,10 +91,9 @@ class ReportService extends JRSService
         $url = $this->service_url . '/reports' . $uri . '/inputControls';
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true);
 
-        if(!$data) {
-            return [];
+        if (!empty($data)) {
+            return array();
         }
-
         $json_obj = json_decode($data);
 
         $result = array();

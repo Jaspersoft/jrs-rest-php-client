@@ -51,9 +51,16 @@ class ReportService extends JRSService
 	public function getReportInputControls($uri)
     {
         $url = $this->service_url . '/reports' . $uri . '/inputControls/values';
-        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
-        $json_obj = json_decode($data);
+        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
+
         $result = array();
+        $json_obj = json_decode($data);
+
+        // JRS returns an OK status code with an error message string as the body... so if we cannot parse it into an
+        // array, we know that there was an error
+        if (empty($json_obj)) {
+            return $result;
+        }
 
         foreach ($json_obj->inputControlState as $state) {
             $result[] = \Jaspersoft\Dto\Report\InputControl::createFromJSON($state);
@@ -74,6 +81,10 @@ class ReportService extends JRSService
         $json_obj = json_decode($data);
         $result = array();
 
+        if (empty($json_obj)) {
+            return $result;
+        }
+
         foreach ($json_obj->inputControlState as $state) {
             $result[] = InputControlState::createFromJSON($state);
         }
@@ -91,9 +102,10 @@ class ReportService extends JRSService
         $url = $this->service_url . '/reports' . $uri . '/inputControls';
         $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true);
 
-        if (!empty($data)) {
+        if (empty($data)) {
             return array();
         }
+
         $json_obj = json_decode($data);
 
         $result = array();

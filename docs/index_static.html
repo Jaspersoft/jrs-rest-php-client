@@ -692,7 +692,7 @@ $newStruct = $c-&gt;reportService()-&gt;updateInputControls(&quot;/public/sample
 $request = new \Jaspersoft\Dto\ReportExecution\Request();
 $request-&gt;reportUnitUri = &quot;/public/Samples/Reports/AllAccounts&quot;;
 $request-&gt;async = true;
-$request-&gt;outputFormat = &quot;pdf&quot;;
+$request-&gt;outputFormat = &quot;html&quot;;
 $request-&gt;attachmentsPrefix = &quot;{contextPath}/rest_v2/reportExecutions/{reportExecutionId}/exports/{exportExecutionId}/attachments/&quot;;
                 </code>
             </pre>
@@ -1080,7 +1080,7 @@ $noNewYears-&gt;addExcludeDate(&quot;2015-01-01&quot;);
             </pre>
     </article>
 
-    <article id="get_calendars">
+    <article id="calendar_get">
         <h3> Get Names of Calendars </h3>
         <p>
             You can obtain a list of all the calendars on the server, or you can filter them by the type of calendar they are (annual, weekly, holiday, etc).
@@ -1098,9 +1098,43 @@ $annual_calendars = $c-&gt;jobService()-&gt;getCalendarNames(&quot;annual&quot;)
             Given the name of a calendar you can obtain details about the calendar, such as what days are excluded.
         </p>
             <pre><code>
-$newYears = $c-&gt;jobService()-&gt;getCalendarDetails(&quot;NEW_YEARS_CALENDAR&quot;);
+$newYears = $c-&gt;jobService()-&gt;getCalendar(&quot;NEW_YEARS_CALENDAR&quot;);
                 </code>
             </pre>
+    </article>
+
+    <article id="calendar_create">
+        <h3> Create or Update a Calendar </h3>
+        <p>
+            A calendar can be created or updated by constructing first a calendar object.
+        </p>
+                <pre><code>
+
+$noMWS = new WeeklyCalendar();
+$noMWS-&gt;addExcludeDays(array(
+            WeeklyCalendar::MONDAY,
+            WeeklyCalendar::WEDNESDAY,
+            WeeklyCalendar::SUNDAY));
+
+$c-&gt;jobService()-&gt;createOrUpdateCalendar($noMWS, &quot;MON_WED_SUN&quot;);                    </code>
+                </pre>
+    </article>
+
+    <article id="calendar_delete">
+        <h3> Delete a Calendar </h3>
+        <p>
+            Delete the calendar by supplying its name.
+        </p>
+                    <pre><code>
+
+$noMWS = new WeeklyCalendar();
+$noMWS-&gt;addExcludeDays(array(
+            WeeklyCalendar::MONDAY,
+            WeeklyCalendar::WEDNESDAY,
+            WeeklyCalendar::SUNDAY));
+
+$c-&gt;jobService()-&gt;createOrUpdateCalendar($noMWS, &quot;MON_WED_SUN&quot;);                        </code>
+                    </pre>
     </article>
 
 
@@ -1210,6 +1244,14 @@ try {
    printf('Organization deletion failure: %s', $e-&gt;getMessage());
 }            </code>
             </pre>
+    </article>
+
+    <article id="attributes_organization">
+        <h3> Managing Organization Attributes  </h3>
+        <p>
+            Managing attributes for an organization is very similar to <a href="#attribute_functions">managing attributes for users</a>.
+            The functions use the same names, but are available in organizationService and require Organization objects as arguments.
+        </p>
     </article>
 
 <h2 id="role_service"> roleService() </h2>

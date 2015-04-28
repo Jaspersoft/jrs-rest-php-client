@@ -948,6 +948,14 @@ end of skeleton -->
             </pre>
     </article>
 
+    <article id="attributes_organization">
+        <h3> Managing Organization Attributes  </h3>
+        <p>
+            Managing attributes for an organization is very similar to <a href="#attribute_functions">managing attributes for users</a>.
+            The functions use the same names, but are available in organizationService and require Organization objects as arguments.
+        </p>
+    </article>
+
 <h2 id="role_service"> roleService() </h2>
 
     <article id="get_many_roles">

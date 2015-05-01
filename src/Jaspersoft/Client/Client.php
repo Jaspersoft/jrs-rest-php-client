@@ -146,6 +146,14 @@ class Client
         return $this->domainService;
     }
 
+    public function thumbnailService()
+    {
+        if (!isset($this->thumbnailService)) {
+            $this->thumbnailService = new service\ThumbnailService($this);
+        }
+        return $this->thumbnailService;
+    }
+
     /**
      * Set the amount of time cURL is permitted to wait for a response to a request before timing out.
      *

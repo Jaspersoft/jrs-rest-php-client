@@ -1,0 +1,13 @@
+
+$reports = array(
+    "/public/Samples/Reports/07g.RevenueDetailReport",
+    "/public/Samples/Reports/5g.AccountsReport",
+    "/public/Samples/Reports/06g.ProfitDetailReport"
+);
+
+$thumbnails = $c->thumbnailService()->getResourceThumbnails($reports);
+
+foreach ($thumbnails as $t) {
+    echo "<h2>" . $t->uri . "</h2><br>";
+    echo "<img src='data:image/jpeg;base64," . $t->thumbnailData . "'><br>";
+}

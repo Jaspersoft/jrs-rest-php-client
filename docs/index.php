@@ -372,6 +372,48 @@ end of skeleton -->
             </pre>
     </article>
 
+    <h2 id="thumbail_service"> thumbnailService() </h2>
+
+        The Thumbnail Service allows you to obtain a JPEG thumbnail of a report from the reporting server. There are two forms
+        that a thumbnail can be retrieved as: a base64 string or raw JPEG binary data.
+
+        <article id="thumbnail_string">
+            <h3> Obtaining the Base64 String of a Thumbnail </h3>
+            <p>
+                This method allows you to obtain a base64 encoded string of the thumbnail. You can decrypt this into binary content, or
+                you can serve it by HTML using the Data URI scheme. Take note that base64 encoded strings are 33% larger than the decoded
+                content they are created from. This implies a higher bandwidth and download times for images; however, thumbnails are relatively small files.
+            </p>
+            <pre><code><?php inject_sample('code/thumbnail_string.txt'); ?>
+                </code>
+            </pre>
+        </article>
+
+        <article id="thumbnail_jpeg">
+            <h3> Obtaining the JPEG binary data of a Thumbnail </h3>
+            <p>
+                If you would like to obtain the binary data for a thumbnail, you can request it instead using the following method. You can then write
+                to a file, or serve the content to a web browser by additionally serving the proper Content-Type headers.
+            </p>
+            <pre><code><?php inject_sample('code/thumbnail_jpeg.txt'); ?>
+                </code>
+            </pre>
+        </article>
+
+        <article id="thumbnails_get">
+            <h3> Obtaining several Thumbnails </h3>
+            <p>
+                If you would like to obtain several thumbnails at once, you can construct an array of report URIs and request all the
+                thumbnails at once. This will occur in once HTTP transaction, but the only form that can be obtained by this method
+                are Base64 encoded strings. If you would like to obtain binary, you will have to perform multiple HTTP transactions by
+                iterating through your array and calling the <a href="#thumbnail_jpeg">getThumbnailAsJpeg</a> method.
+            </p>
+            <pre><code><?php inject_sample('code/thumbnails_get.txt'); ?>
+                </code>
+            </pre>
+        </article>
+
+
 <h1 id="section_group"> Reporting Services </h1>
 
 	<h2 id="report_service"> reportService() </h2>

@@ -1,4 +1,4 @@
-PHP REST Client for JRS
+PHP REST Client for JasperReports Server
 =======================================
 
 Introduction

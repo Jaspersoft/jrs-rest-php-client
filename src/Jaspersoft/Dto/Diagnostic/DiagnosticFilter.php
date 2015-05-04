@@ -15,9 +15,15 @@ class DiagnosticFilter extends DTOObject
     {
         $obj = parent::createFromJSON($json_obj);
         $obj->resource = DiagnosticFilterResource::createFromJSON($json_obj->resource);
+        return $obj;
     }
 
-    public function toJSON() {
-
+    public function jsonSerialize()
+    {
+        $result = parent::jsonSerialize();
+        if (is_a($this->resource, "DiagnosticFilterResource")) {
+            $result->resource = $this->resource->jsonSerialize();
+        }
+        return $result;
     }
 }

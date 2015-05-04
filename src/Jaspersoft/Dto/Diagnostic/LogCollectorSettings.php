@@ -4,7 +4,7 @@ namespace Jaspersoft\Dto\Diagnostic;
 
 use Jaspersoft\Dto\DTOObject;
 
-class Collector extends DTOObject
+class LogCollectorSettings extends DTOObject
 {
 
     /* Read-only value */
@@ -32,6 +32,15 @@ class Collector extends DTOObject
         $result->name = $json_obj->name;
         $result->verbosity = $json_obj->verbosity;
         $result->filterBy = DiagnosticFilter::createFromJSON($result->filterBy);
+        return $result;
+    }
+
+    public function jsonSerialize()
+    {
+        $result = parent::jsonSerialize();
+        if (is_a($this->filterBy, "DiagnosticFilter")) {
+            $result->filterBy = $this->filterBy->jsonSerialize();
+        }
         return $result;
     }
 

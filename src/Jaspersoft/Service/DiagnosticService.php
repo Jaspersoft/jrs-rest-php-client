@@ -3,7 +3,7 @@
 namespace Jaspersoft\Service;
 
 
-use Jaspersoft\Dto\Diagnostic\Collector;
+use Jaspersoft\Dto\Diagnostic\LogCollectorSettings;
 
 /**
  * Class DiagnosticService
@@ -15,16 +15,19 @@ class DiagnosticService extends JRSService
 
     private function makeUrl()
     {
-        $result = $this->service_url . '/diagnostic';
+        // For now, only Log Collectors are a diagnostic tool
+        // so we can assume all URLs will contain /collectors
+        $result = $this->service_url . '/diagnostic/collectors';
 
+        return $result;
     }
 
     /**
      * Create and start a diagnostic log collector
      *
-     * @param Collector $collector
+     * @param LogCollectorSettings $collector
      */
-    public function createCollector(Collector $collector)
+    public function createLogCollector(LogCollectorSettings $collector)
     {
 
     }
@@ -33,7 +36,7 @@ class DiagnosticService extends JRSService
      * Obtain metadata about all Log Collectors
      *
      */
-    public function collectorStates()
+    public function logCollectorStates()
     {
 
     }
@@ -43,17 +46,28 @@ class DiagnosticService extends JRSService
      *
      * @param $id
      */
-    public function collectorState($id)
+    public function logCollectorState($id)
     {
 
     }
 
     /**
-     * Read and download the content of a Log Collector as a zip file
+     * Download the content of a Log Collector as a zip file
      *
      * @param $id
+     * @return string Binary content of zip file
      */
-    public function collectorContentZip($id)
+    public function downloadLogCollectorContentZip($id)
+    {
+
+    }
+
+    /**
+     * Download the content of all Log Collectors with status "STOP" as a zip file
+     *
+     * @return string Binary content of zip file
+     */
+    public function downloadAllLogCollectorContentZip()
     {
 
     }
@@ -61,9 +75,9 @@ class DiagnosticService extends JRSService
     /**
      * Make changes to a Log Collector's settings
      *
-     * @param Collector $collector
+     * @param LogCollectorSettings $collector
      */
-    public function updateCollector(Collector $collector)
+    public function updateLogCollector(LogCollectorSettings $collector)
     {
 
     }
@@ -72,7 +86,7 @@ class DiagnosticService extends JRSService
      * Delete all Log Collector folders
      *
      */
-    public function deleteAllCollectors()
+    public function deleteAllLogCollectors()
     {
 
     }
@@ -82,7 +96,7 @@ class DiagnosticService extends JRSService
      *
      * @param $id
      */
-    public function deleteCollector($id)
+    public function deleteLogCollector($id)
     {
 
     }

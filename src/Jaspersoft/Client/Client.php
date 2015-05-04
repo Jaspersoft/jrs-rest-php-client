@@ -146,6 +146,14 @@ class Client
         return $this->domainService;
     }
 
+    public function diagnosticService()
+    {
+        if (!isset($this->diagnosticService)) {
+            $this->diagnosticService = new service\DiagnosticService($this);
+        }
+        return $this->diagnosticService;
+    }
+
     public function thumbnailService()
     {
         if (!isset($this->thumbnailService)) {

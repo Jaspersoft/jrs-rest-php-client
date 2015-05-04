@@ -26,10 +26,16 @@ class DiagnosticService extends JRSService
      * Create and start a diagnostic log collector
      *
      * @param LogCollectorSettings $collector
+     * @return LogCollectorSettings Representation of created log collector
      */
     public function createLogCollector(LogCollectorSettings $collector)
     {
-
+        $url = self::makeUrl();
+        $jsonData = json_encode($collector->jsonSerialize());
+        
+        $result = $this->service->prepAndSend($url, array(200), "POST", $jsonData, true);
+        $resultObject = json_decode($result);
+        return LogCollectorSettings::createFromJSON($resultObject);
     }
 
     /**

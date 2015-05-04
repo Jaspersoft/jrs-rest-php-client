@@ -146,6 +146,14 @@ class Client
         return $this->domainService;
     }
 
+    public function diagnosticService()
+    {
+        if (!isset($this->diagnosticService)) {
+            $this->diagnosticService = new service\DiagnosticService($this);
+        }
+        return $this->diagnosticService;
+    }
+
     /**
      * Set the amount of time cURL is permitted to wait for a response to a request before timing out.
      *

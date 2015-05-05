@@ -305,7 +305,9 @@ class RESTRequest
 				$parseURL = parse_url($this->url);
 				// Save current cURL resource since prepAndSend() will wipe it out.
 				$tmpHandle = curl_copy_handle($curlHandle);
+				$tmpURL = $this->url;
 				$this->prepAndSend($parseURL['host'].$parseURL['path']. "?".$this->token['principalParameter']."=" . $this->token['token'], array(200,302),"GET");
+				$this->url = $tmpURL;
 				$curlHandle = $tmpHandle;
 			}
 			curl_setopt($curlHandle, CURLOPT_COOKIESESSION, false);

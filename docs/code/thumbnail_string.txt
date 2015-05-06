@@ -1,0 +1,3 @@
+
+echo "<img src='data:image/jpeg;base64,". $c->thumbnailService()->getThumbnailAsBase64String("/public/Samples/Reports/07g.RevenueDetailReport")
+    . "'>'";

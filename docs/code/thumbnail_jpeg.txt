@@ -1,0 +1,3 @@
+
+header("Content-Type: image/jpeg");
+echo $c->getThumbnailAsJpeg("/public/Samples/Reports/06g.ProfitDetailReport");

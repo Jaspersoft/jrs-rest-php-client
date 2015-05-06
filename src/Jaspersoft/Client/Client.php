@@ -32,6 +32,8 @@ class Client
     protected $importExportService;
     protected $queryService;
     protected $domainService;
+    protected $thumbnailService;
+    protected $diagnosticService;
 
 	public function __construct($serverUrl, $username, $password, $orgId = null)
 	{

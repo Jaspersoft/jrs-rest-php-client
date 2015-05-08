@@ -3,6 +3,8 @@
 namespace Jaspersoft\Service;
 
 
+use Jaspersoft\Dto\Diagnostic\DiagnosticFilter;
+use Jaspersoft\Dto\Diagnostic\DiagnosticFilterResource;
 use Jaspersoft\Dto\Diagnostic\LogCollectorSettings;
 use Jaspersoft\Exception\MissingValueException;
 use Jaspersoft\Exception\RESTRequestException;
@@ -138,6 +140,27 @@ class DiagnosticService extends JRSService
 
         $response = $this->service->prepAndSend($url, array(200), "PUT", $collector->toJSON(), true);
         return LogCollectorSettings::createFromJSON(json_decode($response));
+    }
+
+    public function stopAllLogCollectors()
+    {
+        $url = self::makeUrl();
+
+        $body = json_encode(array("patch" =>
+            array(array("field" => "status", "value" => "STOPPED"))));
+
+        $response = $this->service->prepAndSend($url, array(200), "PATCH", $body, true);
+        $responseObj = json_decode($response);
+        if (!empty($responseObj)) {
+
+            $result = array();
+            foreach ($responseObj->CollectorSettingsList as $lcs) {
+                $result[] = LogCollectorSettings::createFromJSON($lcs);
+            }
+            return $result;
+        } else {
+            return array();
+        }
     }
 
     /**

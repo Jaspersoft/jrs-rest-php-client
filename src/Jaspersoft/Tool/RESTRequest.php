@@ -129,6 +129,9 @@ class RESTRequest
                     $this->verb = 'PUT';
                     $this->executeBinarySend($this->curl_handle);
                     break;
+                case 'PATCH':
+                    $this->executePatch($this->curl_handle);
+                    break;
 				default:
 					throw new \InvalidArgumentException('Current verb (' . $this->verb . ') is an invalid REST verb.');
 			}
@@ -156,6 +159,18 @@ class RESTRequest
 	{
 		$this->doExecute($ch);
 	}
+
+    protected function executePatch ($ch)
+    {
+        if (!is_string($this->request_body))
+        {
+            $this->buildPostBody();
+        }
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->request_body);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->verb);
+
+        $this->doExecute($ch);
+    }
 
 	protected function executePost ($ch)
 	{

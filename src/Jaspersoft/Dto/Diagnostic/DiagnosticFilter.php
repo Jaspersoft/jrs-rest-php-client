@@ -22,8 +22,10 @@ class DiagnosticFilter extends DTOObject
     {
         $result = parent::jsonSerialize();
         if (is_a($this->resource, "DiagnosticFilterResource")) {
-            $result->resource = $this->resource->jsonSerialize();
+            $result['resource'] = $this->resource->jsonSerialize();
         }
-        return $result;
+        // Internal Server Error if "resource" is set to null
+        // so we will filter null values for now
+        return array_filter($result, function($v) { return isset($v); });
     }
 }

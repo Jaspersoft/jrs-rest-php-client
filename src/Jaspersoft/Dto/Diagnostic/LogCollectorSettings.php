@@ -31,14 +31,14 @@ class LogCollectorSettings extends DTOObject
         $result->id = $json_obj->id;
         $result->name = $json_obj->name;
         $result->verbosity = $json_obj->verbosity;
-        $result->filterBy = DiagnosticFilter::createFromJSON($json_obj->filterBy);
+        $result->filterBy = LogCollectorFilter::createFromJSON($json_obj->filterBy);
         return $result;
     }
 
     public function jsonSerialize()
     {
         $result = parent::jsonSerialize();
-        if (is_a($this->filterBy, "\\Jaspersoft\\Dto\\Diagnostic\\DiagnosticFilter")) {
+        if (is_a($this->filterBy, "\\Jaspersoft\\Dto\\Diagnostic\\LogCollectorFilter")) {
             $result['filterBy'] = $this->filterBy->jsonSerialize();
         }
 

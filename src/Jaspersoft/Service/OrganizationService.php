@@ -143,9 +143,9 @@ class OrganizationService extends JRSService
 	}
 
     /**
-     * Retrieve attributes of a user.
+     * Retrieve attributes of an organization.
      *
-     * @param Organization $user
+     * @param Organization $organization
      * @param array $attributeNames
      * @return null|array
      * @throws \Exception

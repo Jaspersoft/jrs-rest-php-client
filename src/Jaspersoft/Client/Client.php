@@ -33,7 +33,7 @@ class Client
     protected $queryService;
     protected $domainService;
     protected $thumbnailService;
-    protected $diagnosticService;
+    protected $logCollectorService;
 
 	public function __construct($serverUrl, $username, $password, $orgId = null)
 	{
@@ -148,12 +148,12 @@ class Client
         return $this->domainService;
     }
 
-    public function diagnosticService()
+    public function logCollectorService()
     {
-        if (!isset($this->diagnosticService)) {
-            $this->diagnosticService = new service\DiagnosticService($this);
+        if (!isset($this->logCollectorService)) {
+            $this->logCollectorService = new service\LogCollectorService($this);
         }
-        return $this->diagnosticService;
+        return $this->logCollectorService;
     }
 
     public function thumbnailService()

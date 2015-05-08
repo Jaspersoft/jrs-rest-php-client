@@ -3,24 +3,20 @@
 namespace Jaspersoft\Service;
 
 
-use Jaspersoft\Dto\Diagnostic\DiagnosticFilter;
-use Jaspersoft\Dto\Diagnostic\DiagnosticFilterResource;
 use Jaspersoft\Dto\Diagnostic\LogCollectorSettings;
 use Jaspersoft\Exception\MissingValueException;
 use Jaspersoft\Exception\RESTRequestException;
 
 /**
- * Class DiagnosticService
+ * Class LogCollectorService
  *
  * @package Jaspersoft\Service
  */
-class DiagnosticService extends JRSService
+class LogCollectorService extends JRSService
 {
 
     private function makeUrl($id = null, $download = false)
     {
-        // For now, log collector is the only diagnostic tool available by REST
-        // so we can assume all URLs will contain /collectors
         $result = $this->service_url . '/diagnostic/collectors';
         if (isset($id)) {
             $result .= "/" . $id;
@@ -142,6 +138,11 @@ class DiagnosticService extends JRSService
         return LogCollectorSettings::createFromJSON(json_decode($response));
     }
 
+    /**
+     * Stop all running log collectors
+     *
+     * @return array New representation of existing Log Collectors following modification
+     */
     public function stopAllLogCollectors()
     {
         $url = self::makeUrl();

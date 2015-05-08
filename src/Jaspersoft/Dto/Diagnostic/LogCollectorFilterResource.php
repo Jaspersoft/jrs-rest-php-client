@@ -5,7 +5,7 @@ namespace Jaspersoft\Dto\Diagnostic;
 
 use Jaspersoft\Dto\DTOObject;
 
-class DiagnosticFilterResource extends DTOObject
+class LogCollectorFilterResource extends DTOObject
 {
     public $uri;
     public $includeDataSnapshot;

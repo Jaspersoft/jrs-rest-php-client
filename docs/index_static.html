@@ -473,6 +473,62 @@ while($continue) {
             </pre>
     </article>
 
+    <h2 id="thumbail_service"> thumbnailService() </h2>
+
+        The Thumbnail Service allows you to obtain a JPEG thumbnail of a report from the reporting server. There are two forms
+        that a thumbnail can be retrieved as: a base64 string or raw JPEG binary data.
+
+        <article id="thumbnail_string">
+            <h3> Obtaining the Base64 String of a Thumbnail </h3>
+            <p>
+                This method allows you to obtain a base64 encoded string of the thumbnail. You can decrypt this into binary content, or
+                you can serve it by HTML using the Data URI scheme. Take note that base64 encoded strings are 33% larger than the decoded
+                content they are created from. This implies a higher bandwidth and download times for images; however, thumbnails are relatively small files.
+            </p>
+            <pre><code>
+echo &quot;&lt;img src='data:image/jpeg;base64,&quot;. $c-&gt;thumbnailService()-&gt;getThumbnailAsBase64String(&quot;/public/Samples/Reports/07g.RevenueDetailReport&quot;)
+    . &quot;'&gt;'&quot;;                </code>
+            </pre>
+        </article>
+
+        <article id="thumbnail_jpeg">
+            <h3> Obtaining the JPEG binary data of a Thumbnail </h3>
+            <p>
+                If you would like to obtain the binary data for a thumbnail, you can request it instead using the following method. You can then write
+                to a file, or serve the content to a web browser by additionally serving the proper Content-Type headers.
+            </p>
+            <pre><code>
+header(&quot;Content-Type: image/jpeg&quot;);
+echo $c-&gt;getThumbnailAsJpeg(&quot;/public/Samples/Reports/06g.ProfitDetailReport&quot;);
+                </code>
+            </pre>
+        </article>
+
+        <article id="thumbnails_get">
+            <h3> Obtaining several Thumbnails </h3>
+            <p>
+                If you would like to obtain several thumbnails at once, you can construct an array of report URIs and request all the
+                thumbnails at once. This will occur in once HTTP transaction, but the only form that can be obtained by this method
+                are Base64 encoded strings. If you would like to obtain binary, you will have to perform multiple HTTP transactions by
+                iterating through your array and calling the <a href="#thumbnail_jpeg">getThumbnailAsJpeg</a> method.
+            </p>
+            <pre><code>
+$reports = array(
+    &quot;/public/Samples/Reports/07g.RevenueDetailReport&quot;,
+    &quot;/public/Samples/Reports/5g.AccountsReport&quot;,
+    &quot;/public/Samples/Reports/06g.ProfitDetailReport&quot;
+);
+
+$thumbnails = $c-&gt;thumbnailService()-&gt;getResourceThumbnails($reports);
+
+foreach ($thumbnails as $t) {
+    echo &quot;&lt;h2&gt;&quot; . $t-&gt;uri . &quot;&lt;/h2&gt;&lt;br&gt;&quot;;
+    echo &quot;&lt;img src='data:image/jpeg;base64,&quot; . $t-&gt;thumbnailData . &quot;'&gt;&lt;br&gt;&quot;;
+}                </code>
+            </pre>
+        </article>
+
+
 <h1 id="section_group"> Reporting Services </h1>
 
 	<h2 id="report_service"> reportService() </h2>
@@ -1429,6 +1485,99 @@ $c-&gt;userService()-&gt;addOrUpdateAttribute($CAuser, $animal_attr);		</code>
 $c-&gt;userService()-&gt;deleteAttributes($joeUser);		</code>
 		</pre>
 	</article>
+
+        <h1 id="section_group"> Diagnostic Services </h1>
+
+        <h2 id="logcollector_service"> logCollectorService() </h2>
+        <p> The Log Collector service allows you to capture filtered log data and download the logs as zip archives </p>
+
+        <article id="logcollector_create">
+            <h3> Creating a log collector </h3>
+            <p>
+                You can create a log collector by giving it a name, and defining filtering properties. There are also three levels
+                of verbosity you can choose from: LOW, MEDIUM or HIGH. These will allow you to obtain more or less information, as needed.
+
+                Log Collectors can filter by various criteria, including session IDs, user IDs, and resources. You may optionally
+                request data snapshots as well.
+            </p>
+		<pre><code>
+
+$fb = new LogCollectorFilter();
+$fb-&gt;userId = &quot;jasperadmin|organization_1&quot;;
+
+$lcs = new LogCollectorSettings();
+$lcs-&gt;name = &quot;jasperadmin log&quot;;
+$lcs-&gt;verbosity = &quot;HIGH&quot;;
+$lcs-&gt;filterBy = $fb;
+
+$jasperadmin_log = $c-&gt;logCollectorService-&gt;createLogCollector($lcs);            </code>
+		</pre>
+        </article>
+
+        <article id="logcollector_state">
+            <h3> Obtaining the state of a Log Collector </h3>
+            <p>
+               Once log collectors have been created, you may request information about the state they are in. There are three distinct states
+                a collector may be in at any given time: RUNNING -> SHUTTING_DOWN -> STOPPED.
+
+                The Log collector state moves only in one direction, and cannot be restarted once it has stopped. After stopping a log collector,
+                you are safe to request its content as a zip archive using <a href="logcollector_download">a download method.</a>
+
+                You may request a specific log collector's state by ID, or you may request all log collector states at once.
+            </p>
+		<pre><code>
+$collectors = $c-&gt;logCollectorService-&gt;logCollectorStates();
+
+$jasperadmin_log_state = $c-&gt;logCollectorService-&gt;logCollectorState($jasperadmin_log-&gt;id());            </code>
+		</pre>
+        </article>
+
+        <article id="logcollector_update">
+            <h3> Updating a Log Collector </h3>
+            <p>
+                You may update the settings of an existing Log Collector by using the updateLogCollector method. Note that you cannot change
+                the name of the log collector. You may also not restart a log collector which has already stopped.
+            </p>
+		<pre><code>
+$jasperadmin_log-&gt;verbosity = &quot;LOW&quot;;
+$jasperadmin_log = $c-&gt;logCollectorService()-&gt;updateLogCollector($jasperadmin_log);            </code>
+		</pre>
+        </article>
+
+        <article id="logcollector_stopall">
+            <h3> Stopping all Log Collectors </h3>
+            <p>
+                To stop all running log collectors, you may use the stopAllLogCollectors method. Following this you will be able to download all their content.
+            </p>
+		<pre><code>
+$c-&gt;logCollectorService()-&gt;stopAllLogCollectors();            </code>
+		</pre>
+        </article>
+
+        <article id="logcollector_download">
+            <h3> Downloading all Log Collectors </h3>
+            <p>
+               You may download the content of one log collector by supplying its ID to downloadLogCollectorContentZip, or you can download the content of all log collectors at once using downloadAllLogCollectorContentZip.
+            </p>
+		<pre><code>
+$allLogs = $c-&gt;logCollectorService()-&gt;downloadAllLogCollectorContentZip();
+header(&quot;Content-Type: application/zip&quot;);
+header(&quot;Content-Disposition: attachment;filename=logs.zip&quot;);
+
+echo $allLogs;            </code>
+		</pre>
+        </article>
+
+        <article id="logcollector_delete">
+            <h3> Deleting all Log Collectors </h3>
+            <p>
+                Once you have downloaded the content of a log collector and no longer wish to retain it on the server, you can delete it using deleteLogCollector.
+                You may also delete all the existing log collectors using deleteAllLogCollectors.
+            </p>
+		<pre><code>
+$c-&gt;logCollectorService()-&gt;deleteAllLogCollectors();            </code>
+		</pre>
+        </article>
 
 
 	<!-- END OF ARTICLE SECTION -->

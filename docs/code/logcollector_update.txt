@@ -1,0 +1,3 @@
+
+$jasperadmin_log->verbosity = "LOW";
+$jasperadmin_log = $c->logCollectorService()->updateLogCollector($jasperadmin_log);

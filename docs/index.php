@@ -1137,6 +1137,83 @@ end of skeleton -->
 		</pre>
 	</article>
 
+        <h1 id="section_group"> Diagnostic Services </h1>
+
+        <h2 id="logcollector_service"> logCollectorService() </h2>
+        <p> The Log Collector service allows you to capture filtered log data and download the logs as zip archives </p>
+
+        <article id="logcollector_create">
+            <h3> Creating a log collector </h3>
+            <p>
+                You can create a log collector by giving it a name, and defining filtering properties. There are also three levels
+                of verbosity you can choose from: LOW, MEDIUM or HIGH. These will allow you to obtain more or less information, as needed.
+
+                Log Collectors can filter by various criteria, including session IDs, user IDs, and resources. You may optionally
+                request data snapshots as well.
+            </p>
+		<pre><code><?php inject_sample('code/logcollector_create.txt'); ?>
+            </code>
+		</pre>
+        </article>
+
+        <article id="logcollector_state">
+            <h3> Obtaining the state of a Log Collector </h3>
+            <p>
+               Once log collectors have been created, you may request information about the state they are in. There are three distinct states
+                a collector may be in at any given time: RUNNING -> SHUTTING_DOWN -> STOPPED.
+
+                The Log collector state moves only in one direction, and cannot be restarted once it has stopped. After stopping a log collector,
+                you are safe to request its content as a zip archive using <a href="logcollector_download">a download method.</a>
+
+                You may request a specific log collector's state by ID, or you may request all log collector states at once.
+            </p>
+		<pre><code><?php inject_sample('code/logcollector_state.txt'); ?>
+            </code>
+		</pre>
+        </article>
+
+        <article id="logcollector_update">
+            <h3> Updating a Log Collector </h3>
+            <p>
+                You may update the settings of an existing Log Collector by using the updateLogCollector method. Note that you cannot change
+                the name of the log collector. You may also not restart a log collector which has already stopped.
+            </p>
+		<pre><code><?php inject_sample('code/logcollector_update.txt'); ?>
+            </code>
+		</pre>
+        </article>
+
+        <article id="logcollector_stopall">
+            <h3> Stopping all Log Collectors </h3>
+            <p>
+                To stop all running log collectors, you may use the stopAllLogCollectors method. Following this you will be able to download all their content.
+            </p>
+		<pre><code><?php inject_sample('code/logcollector_stopall.txt'); ?>
+            </code>
+		</pre>
+        </article>
+
+        <article id="logcollector_download">
+            <h3> Downloading all Log Collectors </h3>
+            <p>
+               You may download the content of one log collector by supplying its ID to downloadLogCollectorContentZip, or you can download the content of all log collectors at once using downloadAllLogCollectorContentZip.
+            </p>
+		<pre><code><?php inject_sample('code/logcollector_download.txt'); ?>
+            </code>
+		</pre>
+        </article>
+
+        <article id="logcollector_delete">
+            <h3> Deleting all Log Collectors </h3>
+            <p>
+                Once you have downloaded the content of a log collector and no longer wish to retain it on the server, you can delete it using deleteLogCollector.
+                You may also delete all the existing log collectors using deleteAllLogCollectors.
+            </p>
+		<pre><code><?php inject_sample('code/logcollector_delete.txt'); ?>
+            </code>
+		</pre>
+        </article>
+
 
 	<!-- END OF ARTICLE SECTION -->
     </section>

@@ -1,0 +1,4 @@
+
+$collectors = $c->logCollectorService->logCollectorStates();
+
+$jasperadmin_log_state = $c->logCollectorService->logCollectorState($jasperadmin_log->id());

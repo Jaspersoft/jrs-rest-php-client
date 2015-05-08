@@ -1,0 +1,11 @@
+
+
+$fb = new LogCollectorFilter();
+$fb->userId = "jasperadmin|organization_1";
+
+$lcs = new LogCollectorSettings();
+$lcs->name = "jasperadmin log";
+$lcs->verbosity = "HIGH";
+$lcs->filterBy = $fb;
+
+$jasperadmin_log = $c->logCollectorService->createLogCollector($lcs);

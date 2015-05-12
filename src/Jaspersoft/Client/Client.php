@@ -34,6 +34,7 @@ class Client
     protected $domainService;
     protected $thumbnailService;
     protected $logCollectorService;
+    protected $serverService;
 
 	public function __construct($serverUrl, $username, $password, $orgId = null)
 	{
@@ -164,6 +165,15 @@ class Client
         return $this->thumbnailService;
     }
 
+    public function serverService()
+    {
+        if (!isset($this->serverService)) {
+            $this->serverService = new service\ServerService($this);
+        }
+        return $this->serverService;
+    }
+
+
     /**
      * Set the amount of time cURL is permitted to wait for a response to a request before timing out.
      *
@@ -185,6 +195,7 @@ class Client
      * - License type and expiration
      *
      * @return array
+     * @deprecated Function moved to \Jaspersoft\Service\ServerService#serverInfo()
      */
     public function serverInfo()
     {

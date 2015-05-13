@@ -191,18 +191,22 @@ class UserService extends JRSService
     }
 
     /**
-     * Create a non-existent attribute, or update an existing attribute
+     * Create a new attributes, or update an existing one.
+     *
+     * If a new attribute is created, a truthy value will be returned, if the attribute is updated,
+     * an Attribute object representing the updated attribute will be returned.
      *
      * @param \Jaspersoft\Dto\User\User $user
      * @param \Jaspersoft\Dto\Attribute\Attribute $attribute
-     * @return bool|null
+     * @return bool|\Jaspersoft\Dto\Attribute\Attribute
      */
     public function addOrUpdateAttribute(User $user, $attribute)
     {
         $url = self::makeAttributeUrl($user->username, $user->tenantId, null, $attribute->name);
         $data = json_encode($attribute);
-        return $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, false,
-            'application/json', 'application/json');
+        $response = $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, true);
+
+        return Attribute::createFromJSON(json_decode($response));
     }
 
     /**
@@ -210,12 +214,20 @@ class UserService extends JRSService
      *
      * @param User $user
      * @param array $attributes
+     * @return array The server representation of the replaced attributes
      */
     public function replaceAttributes(User $user, array $attributes)
     {
         $url = self::makeAttributeUrl($user->username, $user->tenantId);
         $data = json_encode(array('attribute' => $attributes));
-        $this->service->prepAndSend($url, array(200), 'PUT', $data, 'application/json', 'application/json');
+        $response = $this->service->prepAndSend($url, array(200), 'PUT', $data, true);
+        $response = json_decode($response);
+
+        $result = array();
+        foreach ($response->attribute as $attr) {
+            $result[] = Attribute::createFromJSON($attr);
+        }
+        return $result;
     }
 
     /**
@@ -223,6 +235,7 @@ class UserService extends JRSService
      *
      * @param \Jaspersoft\Dto\User\User $user
      * @param array $attributes
+     * @return bool
      */
     public function deleteAttributes(User $user, $attributes = null)
     {
@@ -230,8 +243,6 @@ class UserService extends JRSService
         if (!empty($attributes)) {
             $url .= '?' . Util::query_suffix(array('name' => $attributes));
         }
-        $this->service->prepAndSend($url, array(204), 'DELETE', null, false,
-            'application/json', 'application/json');
+        return $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
     }
-
 }

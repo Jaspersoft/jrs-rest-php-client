@@ -182,8 +182,9 @@ class OrganizationService extends JRSService
     {
         $url = self::makeAttributeUrl($organization->id, null, $attribute->name);
         $data = json_encode($attribute);
-        return $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, false,
-            'application/json', 'application/json');
+        $response = $this->service->prepAndSend($url, array(201, 200), 'PUT', $data, true);
+
+        return Attribute::createFromJSON(json_decode($response));
     }
 
     /**
@@ -191,12 +192,20 @@ class OrganizationService extends JRSService
      *
      * @param Organization $organization
      * @param array $attributes
+     * @return array The server representation of the replaced attributes
      */
     public function replaceAttributes(Organization $organization, array $attributes)
     {
         $url = self::makeAttributeUrl($organization->id);
         $data = json_encode(array('attribute' => $attributes));
-        $this->service->prepAndSend($url, array(200), 'PUT', $data, 'application/json', 'application/json');
+        $response = $this->service->prepAndSend($url, array(200), 'PUT', $data, true);
+        $response = json_decode($response);
+
+        $result = array();
+        foreach ($response->attribute as $attr) {
+            $result[] = Attribute::createFromJSON($attr);
+        }
+        return $result;
     }
 
     /**
@@ -204,6 +213,7 @@ class OrganizationService extends JRSService
      *
      * @param Organization $organization
      * @param array $attributes
+     * @return bool
      */
     public function deleteAttributes(Organization $organization, $attributes = null)
     {
@@ -211,8 +221,7 @@ class OrganizationService extends JRSService
         if (!empty($attributes)) {
             $url .= '?' . Util::query_suffix(array('name' => $attributes));
         }
-        $this->service->prepAndSend($url, array(204), 'DELETE', null, false,
-            'application/json', 'application/json');
+        return $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
     }
 
 }

@@ -171,25 +171,18 @@ class UserService extends JRSService
      */
     public function getAttributes(User $user, $attributeNames = null)
     {
-        $result = array();
         $url = self::makeAttributeUrl($user->username, $user->tenantId, $attributeNames);
-        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
-
-        if(!empty($data)) {
-            $json = json_decode($data);
-        } else {
+        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true);
+        $jsonObj = json_decode($data);
+        if (!empty($jsonObj)) {
+            $result = array();
+            foreach ($jsonObj->attribute as $attr) {
+                $result[] = Attribute::createFromJSON($attr);
+            }
             return $result;
+        } else {
+            return array();
         }
-
-        foreach($json->attribute as $element) {
-            // Secure attributes will not have a value, and must be set to null otherwise
-            $element->value = (empty($element->value)) ? null : $element->value;
-            $tempAttribute = new Attribute(
-                $element->name,
-                $element->value);
-            $result[] = $tempAttribute;
-        }
-        return $result;
     }
 
     /**

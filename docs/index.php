@@ -1105,10 +1105,20 @@ end of skeleton -->
 	<article id="attribute_functions">
 		<h3> Reading Attributes </h3>
 		<p>
-			User attributes are name-value pairs that administrators can assign to any user. To read the attributes on a given user,
-			pass a <code>User</code> object to the <code>getAttributes</code> function. You can also specifiy specific attributes
-			that you wish to read, otherwise all attributes for the user will be returned.
-		</p>
+			Attributes can be set on Users, Organizations, as well as the Server. They can be read as in the example below,
+            to manage Organization attributes, you must use the OrganizationService, and supply an Organization object rather than a User object.
+
+            When managing server attributes, the function signature differs and requires no first argument. Some properties are "Read-Only" such as:
+        </p>
+            <ul>
+                <li>inherited</li>
+                <li>permissionMask</li>
+                <li>holder</li>
+            </ul>
+        <p>
+            The secure attribute can be set. Secure attributes will not retrieve their value when read. It also will only be set as true
+            if it is secure. Otherwise, the secure property will not be set. You can update an attribute to be secure by setting secure true, then using addOrUpdateAttribute.
+        </p>
 		<pre><code><?php inject_sample('code/get_attributes.txt'); ?>
 		</code>
 		</pre>
@@ -1117,9 +1127,9 @@ end of skeleton -->
 	<article id="add_attributes">
 		<h3> Adding or Updating Attributes </h3>
 		<p>
-			Use <code>addOrUpdateAttribute</code> function to create or update an attribute for a user. Specify the name and value
+			Use <code>addOrUpdateAttribute</code> function to create or update an attribute. Specify the name and value
 			in an <code>Attribute</code> object. If the attribute name matches an existing attribute, its value is updated. If the
-			attribute name does not exist for the given user, the attribute is added to the user.
+			attribute name does not exist, the attribute is created.
 		</p>
 		<pre><code><?php inject_sample('code/add_attributes.txt'); ?>
 		</code>
@@ -1129,8 +1139,8 @@ end of skeleton -->
 	<article id="delete_attributes">
 		<h3> Deleting Attributes </h3>
 		<p>
-			To remove attributes from a user, pass a <code>User</code> object and an array of attribute names (not <code>Attribute</code>
-			objects) to the <code>deleteAttributes</code> function. If no attribute names are given, all attributes are removed.
+			To remove attributes, create an array of attribute names (not <code>Attribute</code>
+			objects) and supply it to the <code>deleteAttributes</code> function. <em>If no attribute names are given, all attributes are removed.</em>
 		</p>
 		<pre><code><?php inject_sample('code/delete_attributes.txt'); ?>
 		</code>

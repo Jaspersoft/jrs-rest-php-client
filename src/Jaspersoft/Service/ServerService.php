@@ -54,7 +54,7 @@ class ServerService extends JRSService
     public function getAttributes($attributeNames = null)
     {
         $url = self::makeAttributeUrl($attributeNames);
-        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true);
+        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true);
         $jsonObj = json_decode($data);
         if (!empty($jsonObj)) {
             $result = array();

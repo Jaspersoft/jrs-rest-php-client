@@ -182,6 +182,8 @@ class UserService extends JRSService
         }
 
         foreach($json->attribute as $element) {
+            // Secure attributes will not have a value, and must be set to null otherwise
+            $element->value = (empty($element->value)) ? null : $element->value;
             $tempAttribute = new Attribute(
                 $element->name,
                 $element->value);

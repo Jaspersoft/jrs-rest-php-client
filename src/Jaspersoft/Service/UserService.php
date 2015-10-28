@@ -38,7 +38,7 @@ class UserService extends JRSService
             $url = $this->service_url . "/organizations/" . $tenantID . "/users/" . $username .
                 "/attributes";
         } else {
-            $url = $this->service_url . "/users" . $username . "/attributes";
+            $url = $this->service_url . "/users/" . $username . "/attributes";
         }
         // Allow for parametrized attribute searches
         if (!empty($attributeNames)) {

@@ -62,9 +62,7 @@ class ReportService extends JRSService
             return $result;
         }
 
-        foreach ($json_obj->inputControlState as $state) {
-            $result[] = \Jaspersoft\Dto\Report\InputControl::createFromJSON($state);
-        }
+        $result = \Jaspersoft\Dto\Report\InputControl::createFromJSON($data);
         return $result;
 	}
 

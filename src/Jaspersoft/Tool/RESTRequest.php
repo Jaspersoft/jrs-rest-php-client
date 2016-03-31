@@ -309,6 +309,10 @@ class RESTRequest
 				$this->prepAndSend($parseURL['host'].$parseURL['path']. "?".$this->token['principalParameter']."=" . $this->token['token'], array(200,302),"GET");
 				$this->url = $tmpURL;
 				$curlHandle = $tmpHandle;
+				
+				// @TODO: Review/Refactor for simplification in auth exchange.
+				// Replacing above with the following worked in some cases, not fully tested!
+				// $this->url .= ((stripos($this->url, '?') === false) ? '?' : '&') . $this->token['principalParameter'] . '=' . $this->token['token'];`
 			}
 			curl_setopt($curlHandle, CURLOPT_COOKIESESSION, false);
 			curl_setopt($curlHandle, CURLOPT_COOKIEJAR, $this->curl_cookiejar);   // we can keep cookies in temp dir

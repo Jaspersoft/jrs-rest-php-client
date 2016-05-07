@@ -20,6 +20,7 @@ class RESTRequest
     protected $headers;
     protected $curl_timeout;
     protected $curl_handle;
+	protected $token;
 
 	public function __construct ($url = null, $verb = 'GET', $request_body = null)
 	{
@@ -37,6 +38,10 @@ class RESTRequest
         $this->curl_timeout     = 30;
         $this->curl_handle      = curl_init();
         $this->curl_cookiejar   = null;
+		$this->token = array(
+			'principalParameter' => "",
+			'token' => ""
+		);
 
         if ($this->request_body !== null)
 		{
@@ -301,6 +306,33 @@ class RESTRequest
             curl_setopt($curlHandle, CURLOPT_COOKIEJAR, $this->curl_cookiejar);   // we can keep cookies in temp dir
             curl_setopt($curlHandle, CURLOPT_COOKIEFILE, $this->curl_cookiejar); // until curl_close is called by logout.
 		}
+		// If user/pass not set, check if token parameters have been fully set.
+		// More info: http://community.jaspersoft.com/documentation/jasperreports-authentication-cookbook/v56/token-based-authentication
+		elseif (!in_array("",$this->token))
+		{
+			// @TODO: Fix code duplication: reimplement setAuth() to intuitively handle pre-authentication tokens
+			// E.g., can we move curl_cookiejar assignment to top of setAuth() and handle independent of auth "type" (user or token)
+			if (empty($this->curl_cookiejar)) {
+				$this->curl_cookiejar = tempnam(sys_get_temp_dir(), "jrscookies_");
+
+				// Assuming this is first interaction with server, we'll authenticate with token and get JSESSIONID as cookie
+				// Parse out host/path for URL so our token is appended correctly and we don't have to deal with handling HTTP query arguments.
+				$parseURL = parse_url($this->url);
+				// Save current cURL resource since prepAndSend() will wipe it out.
+				$tmpHandle = curl_copy_handle($curlHandle);
+				$tmpURL = $this->url;
+				$this->prepAndSend($parseURL['host'].$parseURL['path']. "?".$this->token['principalParameter']."=" . $this->token['token'], array(200,302),"GET");
+				$this->url = $tmpURL;
+				$curlHandle = $tmpHandle;
+				
+				// @TODO: Review/Refactor for simplification in auth exchange.
+				// Replacing above with the following worked in some cases, not fully tested!
+				// $this->url .= ((stripos($this->url, '?') === false) ? '?' : '&') . $this->token['principalParameter'] . '=' . $this->token['token'];`
+			}
+			curl_setopt($curlHandle, CURLOPT_COOKIESESSION, false);
+			curl_setopt($curlHandle, CURLOPT_COOKIEJAR, $this->curl_cookiejar);   // we can keep cookies in temp dir
+			curl_setopt($curlHandle, CURLOPT_COOKIEFILE, $this->curl_cookiejar); // until curl_close is called by logout.
+		}
 	}
 
     protected function setTimeout(&$curlHandle)
@@ -375,6 +407,22 @@ class RESTRequest
 	public function setVerb ($verb)
 	{
 		$this->verb = $verb;
+	}
+	public function getTokenPrincipalParameter ()
+	{
+		return $this->token['principalParameter'];
+	}
+	public function setTokenPrincipalParameter ($pp)
+	{
+		$this->token['principalParameter'] = $pp;
+	}
+	public function getToken ()
+	{
+		return $this->token['token'];
+	}
+	public function setToken ($token)
+	{
+		$this->token['token'] = $token;
 	}
 
     public function closeCurlHandle($close_cookies = false) {

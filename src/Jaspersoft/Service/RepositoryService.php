@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Service;
 
 use Jaspersoft\Dto\Resource\Resource;
@@ -6,13 +7,13 @@ use Jaspersoft\Dto\Resource\File;
 use Jaspersoft\Service\Criteria\RepositorySearchCriteria;
 use Jaspersoft\Service\Result\SearchResourcesResult;
 use Jaspersoft\Tool\RESTRequest;
-use Jaspersoft\Client\Client;
 use Jaspersoft\Tool\Util;
 use Jaspersoft\Tool\MimeMapper;
 use Jaspersoft\Exception\ResourceServiceException;
 
-if (!defined("RESOURCE_NAMESPACE"))
+if (!defined("RESOURCE_NAMESPACE")) {
     define("RESOURCE_NAMESPACE", "Jaspersoft\\Dto\\Resource");
+}
 
 /**
  * Class RepositoryService
@@ -21,15 +22,13 @@ if (!defined("RESOURCE_NAMESPACE"))
 class RepositoryService extends JRSService
 {
 
-    private function makeUrl(RepositorySearchCriteria $criteria = null, $uri = null, $expanded = null)
+    private function makeUrl(RepositorySearchCriteria $criteria = null,
+                             $uri = null, $expanded = null)
     {
-        $result = $this->service_url . '/resources';
-        if (!empty($criteria))
-            $result .= '?' . $criteria->toQueryParams();
-        else
-            $result = $this->service_url . '/resources' . $uri;
-        if (!empty($expanded))
-            $result .= '?expanded=true';
+        $result = $this->service_url.'/resources';
+        if (!empty($criteria)) $result .= '?'.$criteria->toQueryParams();
+        else $result = $this->service_url.'/resources'.$uri;
+        if (!empty($expanded)) $result .= '?expanded=true';
         return $result;
     }
 
@@ -41,24 +40,25 @@ class RepositoryService extends JRSService
      */
     public function searchResources(RepositorySearchCriteria $criteria = null)
     {
-        $url = self::makeUrl($criteria);
-        $response = $this->service->makeRequest($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
+        $url      = self::makeUrl($criteria);
+        $response = $this->service->makeRequest($url, array(200, 204), 'GET',
+            null, true, 'application/json', 'application/json');
 
         if ($response['statusCode'] == 204 || $response['body'] == null) {
             // A SearchResourceResult with 0 counts, and no items
             return new SearchResourcesResult(null, 0, 0, 0);
         }
 
-        $data = $response['body'];
+        $data    = $response['body'];
         $headers = RESTRequest::splitHeaderArray($response['headers']);
 
         // If forceTotalCount is not enabled, the server doesn't return totalCount when offset is specified
-        if(!isset($headers['Total-Count']))
-            $totalCount = null;
-        else
-            $totalCount = (int) $headers['Total-Count'];
+        if (!isset($headers['Total-Count'])) $totalCount = null;
+        else $totalCount = (int) $headers['Total-Count'];
 
-        return new SearchResourcesResult(json_decode($data), (int) $headers['Result-Count'], (int) $headers['Start-Index'], $totalCount);
+        return new SearchResourcesResult(json_decode($data),
+            (int) $headers['Result-Count'], (int) $headers['Start-Index'],
+            $totalCount);
     }
 
     /**
@@ -70,26 +70,24 @@ class RepositoryService extends JRSService
      */
     public function getResource($uri, $expanded = false)
     {
-        if (!$expanded)
-            $url = self::makeUrl(null, $uri);
-        else
-            $url = self::makeUrl(null, $uri, true);
+        if (!$expanded) $url = self::makeUrl(null, $uri);
+        else $url = self::makeUrl(null, $uri, true);
 
         // If getting the root folder, we must use repository.folder+json
-        if ($uri == "/")
-            $type = "application/repository.folder+json";
-        else
-            $type = "application/repository.file+json";
+        if ($uri == "/") $type = "application/repository.folder+json";
+        else $type = "application/repository.file+json";
 
-        $response = $this->service->makeRequest($url, array(200, 204), 'GET', null, true, 'application/json', $type);
+        $response = $this->service->makeRequest($url, array(200, 204), 'GET',
+            null, true, 'application/json', $type);
 
-        $data = $response['body'];
-        $headers = $response['headers'];
+        $data         = $response['body'];
+        $headers      = $response['headers'];
         $content_type = array_values(preg_grep("#repository\.(.*)\+#", $headers));
         preg_match("#repository\.(.*)\+#", $content_type[0], $resource_type);
 
-        $class = RESOURCE_NAMESPACE . '\\' . ucfirst($resource_type[1]);
-        if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
+        $class = RESOURCE_NAMESPACE.'\\'.ucfirst($resource_type[1]);
+        if (class_exists($class) && is_subclass_of($class,
+                RESOURCE_NAMESPACE.'\\Resource')) {
             return $class::createFromJSON(json_decode($data, true), $class);
         } else {
             return Resource::createFromJSON(json_decode($data, true));
@@ -104,8 +102,9 @@ class RepositoryService extends JRSService
      */
     public function getBinaryFileData(File $file)
     {
-        $url = self::makeUrl(null, $file->uri);
-        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/' . $file->type);
+        $url  = self::makeUrl(null, $file->uri);
+        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null,
+            true, 'application/json', 'application/'.$file->type);
         return $data;
     }
 
@@ -121,26 +120,29 @@ class RepositoryService extends JRSService
      * @throws \Exception
      * @return \Jaspersoft\Dto\Resource\Resource
      */
-    public function createResource(Resource $resource, $parentFolder = null, $createFolders = true)
+    public function createResource(Resource $resource, $parentFolder = null,
+                                   $createFolders = true)
     {
         if ($parentFolder == null) {
             if (isset($resource->uri)) {
                 $verb = "PUT";
-                $url = self::makeUrl(null, $resource->uri);
+                $url  = self::makeUrl(null, $resource->uri);
             } else {
                 throw new ResourceServiceException("CreateResource: You must set either the parentFolder parameter or ".
-                                                    "set a URI for the provided resource.");
+                "set a URI for the provided resource.");
             }
         } else {
             $verb = "POST";
-            $url = self::makeUrl(null, $parentFolder);
+            $url  = self::makeUrl(null, $parentFolder);
         }
 
-        $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
+        $url  .= '?'.Util::query_suffix(array("createFolders" => $createFolders));
         $body = $resource->toJSON();
-        $data = $this->service->prepAndSend($url, array(201, 200), $verb, $body, true, $resource->contentType(), 'application/json');
+        $data = $this->service->prepAndSend($url, array(201, 200), $verb, $body,
+            true, $resource->contentType(), 'application/json');
 
-        return $resource::createFromJSON(json_decode($data, true), get_class($resource));
+        return $resource::createFromJSON(json_decode($data, true),
+                get_class($resource));
     }
 
     /**
@@ -152,15 +154,17 @@ class RepositoryService extends JRSService
      */
     public function updateResource(Resource $resource, $overwrite = false)
     {
-        $url = self::makeUrl(null, $resource->uri);
+        $url  = self::makeUrl(null, $resource->uri);
         $body = $resource->toJSON();
 
-        $url .= '?' . Util::query_suffix(array("overwrite" => $overwrite));
+        $url       .= '?'.Util::query_suffix(array("overwrite" => $overwrite));
         // Isolate the class name, lowercase it, and provide it as a filetype in the headers
-        $type = explode('\\', get_class($resource));
-        $file_type = 'application/repository.' . lcfirst(end($type)) . '+json';
-        $data = $this->service->prepAndSend($url, array(201, 200), 'PUT', $body, true, $file_type, 'application/json');
-        return $resource::createFromJSON(json_decode($data, true), get_class($resource));
+        $type      = explode('\\', get_class($resource));
+        $file_type = 'application/repository.'.lcfirst(end($type)).'+json';
+        $data      = $this->service->prepAndSend($url, array(201, 200), 'PUT',
+            $body, true, $file_type, 'application/json');
+        return $resource::createFromJSON(json_decode($data, true),
+                get_class($resource));
     }
 
     /**
@@ -174,10 +178,13 @@ class RepositoryService extends JRSService
     {
         $url = self::makeUrl(null, $resource->uri);
 
-        $body = $binaryData;
-        $response = $this->service->sendBinary($url, array(201, 200), $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, 'PUT');
-        return File::createFromJSON(json_decode($response, true), get_class($resource));
-
+        $body     = $binaryData;
+        $response = $this->service->sendBinary($url, array(201, 200), $body,
+            MimeMapper::mapType($resource->type),
+            'attachment; filename='.$resource->label, $resource->description,
+            'PUT');
+        return File::createFromJSON(json_decode($response, true),
+                get_class($resource));
     }
 
     /**
@@ -192,14 +199,19 @@ class RepositoryService extends JRSService
      * @param boolean $createFolders
      * @return \Jaspersoft\Dto\Resource\File
      */
-    public function createFileResource(File $resource, $binaryData, $parentFolder, $createFolders = true)
+    public function createFileResource(File $resource, $binaryData,
+                                       $parentFolder, $createFolders = true)
     {
         $url = self::makeUrl(null, $parentFolder);
 
-        $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
-        $body = $binaryData;
-        $response = $this->service->sendBinary($url, array(201, 200), $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, 'POST');
-        return File::createFromJSON(json_decode($response, true), get_class($resource));
+        $url      .= '?'.Util::query_suffix(array("createFolders" => $createFolders));
+        $body     = $binaryData;
+        $response = $this->service->sendBinary($url, array(201, 200), $body,
+            MimeMapper::mapType($resource->type),
+            'attachment; filename='.$resource->label, $resource->description,
+            'POST');
+        return File::createFromJSON(json_decode($response, true),
+                get_class($resource));
     }
 
     /**
@@ -211,25 +223,29 @@ class RepositoryService extends JRSService
      * @param boolean $overwrite Should files be overwritten while performing this operation?
      * @return \Jaspersoft\Dto\Resource\Resource
      */
-    public function copyResource($resourceUri, $destinationFolderUri, $createFolders = true, $overwrite = false)
+    public function copyResource($resourceUri, $destinationFolderUri,
+                                 $createFolders = true, $overwrite = false)
     {
         $url = self::makeUrl(null, $destinationFolderUri);
 
-        $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
-        $response = $this->service->makeRequest($url, array(200), 'POST', null, true, 'application/json', 'application/json', array("Content-Location: " . $resourceUri));
+        $url      .= '?'.Util::query_suffix(array("createFolders" => $createFolders,
+                "overwrite" => $overwrite));
+        $response = $this->service->makeRequest($url, array(200), 'POST', null,
+            true, 'application/json', 'application/json',
+            array("Content-Location: ".$resourceUri));
 
-        $data = $response['body'];
-        $headers = $response['headers'];
+        $data         = $response['body'];
+        $headers      = $response['headers'];
         $content_type = array_values(preg_grep("#repository\.(.*)\+#", $headers));
         preg_match("#repository\.(.*)\+#", $content_type[0], $resource_type);
 
-        $class = RESOURCE_NAMESPACE . '\\' . ucfirst($resource_type[1]);
-        if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
+        $class = RESOURCE_NAMESPACE.'\\'.ucfirst($resource_type[1]);
+        if (class_exists($class) && is_subclass_of($class,
+                RESOURCE_NAMESPACE.'\\Resource')) {
             return $class::createFromJSON(json_decode($data, true), $class);
         } else {
             return Resource::createFromJSON(json_decode($data, true));
         }
-
     }
 
     /**
@@ -241,20 +257,25 @@ class RepositoryService extends JRSService
      * @param boolean $overwrite Should files be overwritten while performing this operation?
      * @return \Jaspersoft\Dto\Resource\Resource
      */
-    public function moveResource($resourceUri, $destinationFolderUri, $createFolders = true, $overwrite = false)
+    public function moveResource($resourceUri, $destinationFolderUri,
+                                 $createFolders = true, $overwrite = false)
     {
         $url = self::makeUrl(null, $destinationFolderUri);
 
-        $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders, "overwrite" => $overwrite));
-        $response = $this->service->makeRequest($url, array(200), 'PUT', null, true, 'application/json', 'application/json', array("Content-Location: " . $resourceUri));
+        $url      .= '?'.Util::query_suffix(array("createFolders" => $createFolders,
+                "overwrite" => $overwrite));
+        $response = $this->service->makeRequest($url, array(200), 'PUT', null,
+            true, 'application/json', 'application/json',
+            array("Content-Location: ".$resourceUri));
 
-        $data = $response['body'];
-        $headers = $response['headers'];
+        $data         = $response['body'];
+        $headers      = $response['headers'];
         $content_type = array_values(preg_grep("#repository\.(.*)\+#", $headers));
         preg_match("#repository\.(.*)\+#", $content_type[0], $resource_type);
 
-        $class = RESOURCE_NAMESPACE . '\\' . ucfirst($resource_type[1]);
-        if (class_exists($class) && is_subclass_of($class, RESOURCE_NAMESPACE . '\\Resource')) {
+        $class = RESOURCE_NAMESPACE.'\\'.ucfirst($resource_type[1]);
+        if (class_exists($class) && is_subclass_of($class,
+                RESOURCE_NAMESPACE.'\\Resource')) {
             return $class::createFromJSON(json_decode($data, true), $class);
         } else {
             return Resource::createFromJSON(json_decode($data, true));
@@ -266,13 +287,13 @@ class RepositoryService extends JRSService
      *
      * @param string|array $uris URI(s) of resources to remove
      */
-    public function deleteResources($uris) {
+    public function deleteResources($uris)
+    {
         if (is_array($uris)) {
-            $url = self::makeUrl() . '?' . Util::query_suffix(array("resourceUri" => $uris));
+            $url = self::makeUrl().'?'.Util::query_suffix(array("resourceUri" => $uris));
         } else {
             $url = self::makeUrl(null, $uris);
         }
         $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
     }
-
 }

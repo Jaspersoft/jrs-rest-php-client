@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Dto\Resource;
 
 /**
@@ -14,4 +15,5 @@ class DataType extends Resource
     public $minValue;
     public $strictMin;
     public $maxLength;
+
 }

@@ -7,8 +7,8 @@ namespace Jaspersoft\Dto\ReportExecution;
 
 use Jaspersoft\Dto\DTOObject;
 
-class Status extends DTOObject {
-
+class Status extends DTOObject
+{
     /**
      * The status of the report
      * "queued" "ready" "failed", etc.
@@ -24,7 +24,6 @@ class Status extends DTOObject {
      */
     public $errorDescriptor;
 
-
     public static function createFromJSON($json_obj)
     {
         $result = new self();
@@ -37,5 +36,4 @@ class Status extends DTOObject {
         }
         return $result;
     }
-
-} 
+}

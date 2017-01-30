@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Jaspersoft\Dto\Job\Calendar;
 
 /**
@@ -10,8 +9,8 @@ namespace Jaspersoft\Dto\Job\Calendar;
  * Class FlaggedCalendar
  * @package Jaspersoft\Dto\Job\Calendar
  */
-abstract class FlaggedCalendar extends BaseCalendar {
-
+abstract class FlaggedCalendar extends BaseCalendar
+{
     public $excludeDaysFlags;
 
     /**
@@ -21,7 +20,8 @@ abstract class FlaggedCalendar extends BaseCalendar {
      *
      * @param integer $day
      */
-    public function addExcludeDay($day) {
+    public function addExcludeDay($day)
+    {
         $this->excludeDaysFlags[] = $day;
     }
 
@@ -32,7 +32,8 @@ abstract class FlaggedCalendar extends BaseCalendar {
      *
      * @param array $days
      */
-    public function addExcludeDays(array $days) {
+    public function addExcludeDays(array $days)
+    {
         foreach ($days as $day) {
             $this->addExcludeDay($day);
         }
@@ -45,7 +46,8 @@ abstract class FlaggedCalendar extends BaseCalendar {
      *
      * @param integer $day
      */
-    public function removeExcludeDay($day) {
+    public function removeExcludeDay($day)
+    {
         $key = array_search($day, $this->excludeDaysFlags);
         if (!($key === False)) {
             unset($this->excludeDaysFlags[$key]);
@@ -59,7 +61,8 @@ abstract class FlaggedCalendar extends BaseCalendar {
      *
      * @param array $days
      */
-    public function removeExcludeDays(array $days) {
+    public function removeExcludeDays(array $days)
+    {
         foreach ($days as $day) {
             $this->removeExcludeDay($day);
         }
@@ -67,7 +70,8 @@ abstract class FlaggedCalendar extends BaseCalendar {
 
     abstract protected function generateFlagArray();
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $pre = parent::jsonSerialize();
         if (!empty($this->excludeDaysFlags)) {
             $pre['excludeDaysFlags'] = array("excludeDayFlag" => $this->generateFlagArray());
@@ -75,4 +79,4 @@ abstract class FlaggedCalendar extends BaseCalendar {
 
         return $pre;
     }
-} 
+}

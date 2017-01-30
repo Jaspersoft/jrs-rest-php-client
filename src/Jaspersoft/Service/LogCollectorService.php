@@ -2,7 +2,6 @@
 
 namespace Jaspersoft\Service;
 
-
 use Jaspersoft\Dto\Diagnostic\LogCollectorSettings;
 use Jaspersoft\Exception\MissingValueException;
 use Jaspersoft\Exception\RESTRequestException;
@@ -17,9 +16,9 @@ class LogCollectorService extends JRSService
 
     private function makeUrl($id = null, $download = false)
     {
-        $result = $this->service_url . '/diagnostic/collectors';
+        $result = $this->service_url.'/diagnostic/collectors';
         if (isset($id)) {
-            $result .= "/" . $id;
+            $result .= "/".$id;
         }
         if ($download) {
             $result .= "/content";
@@ -35,10 +34,11 @@ class LogCollectorService extends JRSService
      */
     public function createLogCollector(LogCollectorSettings $collector)
     {
-        $url = self::makeUrl();
+        $url      = self::makeUrl();
         $jsonData = json_encode($collector->jsonSerialize());
-        
-        $result = $this->service->prepAndSend($url, array(200), "POST", $jsonData, true);
+
+        $result       = $this->service->prepAndSend($url, array(200), "POST",
+            $jsonData, true);
         $resultObject = json_decode($result);
         return LogCollectorSettings::createFromJSON($resultObject);
     }
@@ -51,10 +51,11 @@ class LogCollectorService extends JRSService
      */
     public function logCollectorStates()
     {
-        $url = self::makeUrl();
+        $url    = self::makeUrl();
         $result = array();
         try {
-            $response = $this->service->prepAndSend($url, array(200), "GET", null, true);
+            $response       = $this->service->prepAndSend($url, array(200),
+                "GET", null, true);
             $responseObject = json_decode($response);
 
             foreach ($responseObject->CollectorSettingsList as $lcs) {
@@ -66,7 +67,8 @@ class LogCollectorService extends JRSService
              * in the case that we get a 404 with the message "Resource collectors not found"
              */
         } catch (RESTRequestException $e) {
-            if ($e->message == "Resource collectors not found" && $e->statusCode == 404) {
+            if ($e->message == "Resource collectors not found" && $e->statusCode
+                == 404) {
                 return $result;
             } else {
                 throw $e;
@@ -85,7 +87,8 @@ class LogCollectorService extends JRSService
     {
         $url = self::makeUrl($id);
 
-        $response = $this->service->prepAndSend($url, array(200), "GET", null, true);
+        $response       = $this->service->prepAndSend($url, array(200), "GET",
+            null, true);
         $responseObject = json_decode($response);
 
         return LogCollectorSettings::createFromJSON($responseObject);
@@ -99,8 +102,9 @@ class LogCollectorService extends JRSService
      */
     public function downloadLogCollectorContentZip($id)
     {
-        $url = self::makeUrl($id, true);
-        $response = $this->service->prepAndSend($url, array(200), "GET", null, true, "application/json", "application/zip");
+        $url      = self::makeUrl($id, true);
+        $response = $this->service->prepAndSend($url, array(200), "GET", null,
+            true, "application/json", "application/zip");
 
         return $response;
     }
@@ -113,7 +117,8 @@ class LogCollectorService extends JRSService
     public function downloadAllLogCollectorContentZip()
     {
         $url = self::makeUrl(null, true);
-        return $this->service->prepAndSend($url, array(200), "GET", null, true, "application/json", "application/zip");
+        return $this->service->prepAndSend($url, array(200), "GET", null, true,
+                "application/json", "application/zip");
     }
 
     /**
@@ -134,7 +139,8 @@ class LogCollectorService extends JRSService
                 first request the LogCollectorSettings using logCollectorStates method to allow server to set ID");
         }
 
-        $response = $this->service->prepAndSend($url, array(200), "PUT", $collector->toJSON(), true);
+        $response = $this->service->prepAndSend($url, array(200), "PUT",
+            $collector->toJSON(), true);
         return LogCollectorSettings::createFromJSON(json_decode($response));
     }
 
@@ -150,7 +156,8 @@ class LogCollectorService extends JRSService
         $body = json_encode(array("patch" =>
             array(array("field" => "status", "value" => "STOPPED"))));
 
-        $response = $this->service->prepAndSend($url, array(200), "PATCH", $body, true);
+        $response    = $this->service->prepAndSend($url, array(200), "PATCH",
+            $body, true);
         $responseObj = json_decode($response);
         if (!empty($responseObj)) {
 
@@ -186,7 +193,4 @@ class LogCollectorService extends JRSService
         $url = self::makeUrl($id);
         return $this->service->prepAndSend($url, array(200), "DELETE");
     }
-
-
-
 }

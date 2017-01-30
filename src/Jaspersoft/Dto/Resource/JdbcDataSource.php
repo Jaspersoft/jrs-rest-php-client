@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Dto\Resource;
 
 /**
@@ -12,4 +13,5 @@ class JdbcDataSource extends Resource
     public $username;
     public $connectionUrl;
     public $timezone;
+
 }

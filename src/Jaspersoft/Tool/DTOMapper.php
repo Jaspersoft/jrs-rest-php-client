@@ -1,11 +1,11 @@
 <?php
+
 namespace Jaspersoft\Tool;
 
 use Jaspersoft\Exception\ResourceServiceException;
 
 abstract class DTOMapper
 {
-
     /** Some DTOs provide a collection of elements. This array identifies the unique key for these sets, so that the
      * array can be converted between an indexed or associative array.
      *
@@ -44,7 +44,8 @@ abstract class DTOMapper
 
     public static function isCollectionField($field, $class)
     {
-        return (isset(static::$collectionKeyValue[$class])) and array_key_exists($field, static::$collectionKeyValue[$class]);
+        return (isset(static::$collectionKeyValue[$class])) and array_key_exists($field,
+                static::$collectionKeyValue[$class]);
     }
 
     public static function collectionFields($class)
@@ -67,12 +68,11 @@ abstract class DTOMapper
     public static function unmapCollection($associative_array, $class, $field)
     {
         // To be used with jsonSerialize method
-        $pair = self::collectionKeyValuePair($class, $field);
+        $pair           = self::collectionKeyValuePair($class, $field);
         $unmapped_array = array();
         foreach ($associative_array as $k => $v) {
             $unmapped_array[] = array($pair[0] => $k, $pair[1] => $v);
         }
         return $unmapped_array;
     }
-
-} 
+}

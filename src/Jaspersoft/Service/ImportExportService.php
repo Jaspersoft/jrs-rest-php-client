@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Service;
 
 use Jaspersoft\Tool\Util;
@@ -21,9 +22,10 @@ class ImportExportService extends JRSService
      */
     public function startExportTask(ExportTask $et)
     {
-        $url = $this->service_url . '/export';
+        $url       = $this->service_url.'/export';
         $json_data = $et->toJSON();
-        $data = $this->service->prepAndSend($url, array(200), 'POST', $json_data, true, 'application/json', 'application/json');
+        $data      = $this->service->prepAndSend($url, array(200), 'POST',
+            $json_data, true, 'application/json', 'application/json');
         return TaskState::createFromJSON(json_decode($data));
     }
 
@@ -35,8 +37,9 @@ class ImportExportService extends JRSService
      */
     public function getExportState($id)
     {
-        $url = $this->service_url . '/export' . '/' . $id . '/state';
-        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+        $url  = $this->service_url.'/export'.'/'.$id.'/state';
+        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true,
+            'application/json', 'application/json');
         return TaskState::createFromJSON(json_decode($data));
     }
 
@@ -51,8 +54,9 @@ class ImportExportService extends JRSService
      */
     public function fetchExport($id, $filename = 'export.zip')
     {
-        $url = $this->service_url . '/export' . '/' . $id . '/' . $filename;
-        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/zip');
+        $url  = $this->service_url.'/export'.'/'.$id.'/'.$filename;
+        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true,
+            'application/json', 'application/zip');
         return $data;
     }
 
@@ -65,8 +69,9 @@ class ImportExportService extends JRSService
      */
     public function startImportTask(ImportTask $it, $file_data)
     {
-        $url = $this->service_url . '/import' . '?' . Util::query_suffix($it->queryData());
-        $data = $this->service->prepAndSend($url, array(200, 201), 'POST', $file_data, true, 'application/zip', 'application/json');
+        $url  = $this->service_url.'/import'.'?'.Util::query_suffix($it->queryData());
+        $data = $this->service->prepAndSend($url, array(200, 201), 'POST',
+            $file_data, true, 'application/zip', 'application/json');
         return TaskState::createFromJSON(json_decode($data));
     }
 
@@ -78,8 +83,9 @@ class ImportExportService extends JRSService
      */
     public function getImportState($id)
     {
-        $url = $this->service_url . '/import' . '/' . $id . '/state';
-        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+        $url  = $this->service_url.'/import'.'/'.$id.'/state';
+        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true,
+            'application/json', 'application/json');
         return TaskState::createFromJSON(json_decode($data));
     }
 }

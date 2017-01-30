@@ -2,7 +2,6 @@
 
 namespace Jaspersoft\Dto\Diagnostic;
 
-
 use Jaspersoft\Dto\DTOObject;
 
 class LogCollectorFilter extends DTOObject
@@ -13,7 +12,7 @@ class LogCollectorFilter extends DTOObject
 
     public static function createFromJSON($json_obj)
     {
-        $obj = parent::createFromJSON($json_obj);
+        $obj           = parent::createFromJSON($json_obj);
         $obj->resource = LogCollectorFilterResource::createFromJSON($json_obj->resource);
         return $obj;
     }
@@ -26,6 +25,9 @@ class LogCollectorFilter extends DTOObject
         }
         // Internal Server Error if "resource" is set to null
         // so we will filter null values for now
-        return array_filter($result, function($v) { return isset($v); });
+        return array_filter($result,
+            function($v) {
+            return isset($v);
+        });
     }
 }

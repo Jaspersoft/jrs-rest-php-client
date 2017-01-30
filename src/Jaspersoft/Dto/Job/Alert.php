@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Dto\Job;
 
 /**
@@ -96,8 +97,7 @@ class Alert
                 // of address for this attribute in its JSON hierarchy
                 if ($k == "toAddresses") {
                     $result[$k] = array("address" => $this->toAddresses);
-                }
-                else {
+                } else {
                     $result[$k] = $v;
                 }
             }
@@ -123,5 +123,4 @@ class Alert
         }
         return $result;
     }
-
 }

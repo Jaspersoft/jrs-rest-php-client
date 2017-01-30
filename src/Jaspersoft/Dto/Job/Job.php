@@ -1,5 +1,7 @@
 <?php
+
 namespace Jaspersoft\Dto\Job;
+
 use Jaspersoft\Dto\DTOObject;
 
 /**
@@ -11,7 +13,6 @@ use Jaspersoft\Dto\DTOObject;
  */
 class Job extends DTOObject
 {
-
     /**
      * Job execution alert settings
      *
@@ -119,16 +120,18 @@ class Job extends DTOObject
      * @var string */
     public $outputTimeZone;
 
-	public function __construct($label = null, $trigger = null, $source = null, $baseOutputFilename = null,
-                                $outputFormats = null, $repositoryDestination = null)
+    public function __construct($label = null, $trigger = null, $source = null,
+                                $baseOutputFilename = null,
+                                $outputFormats = null,
+                                $repositoryDestination = null)
     {
-        $this->label = $label;
-        $this->trigger = $trigger;
-        $this->source = $source;
-        $this->baseOutputFilename = $baseOutputFilename;
-        $this->outputFormats = $outputFormats;
+        $this->label                 = $label;
+        $this->trigger               = $trigger;
+        $this->source                = $source;
+        $this->baseOutputFilename    = $baseOutputFilename;
+        $this->outputFormats         = $outputFormats;
         $this->repositoryDestination = $repositoryDestination;
-	}
+    }
 
     public function jsonSerialize()
     {
@@ -137,7 +140,7 @@ class Job extends DTOObject
             if (isset($v)) {
                 if (is_object($v)) {
                     $result[$k] = $v->jsonSerialize();
-                // OutputFormats requires a special case because of its hierarchical sublevel "outputFormat"
+                    // OutputFormats requires a special case because of its hierarchical sublevel "outputFormat"
                 } else if ($k == "outputFormats") {
                     $result[$k] = array("outputFormat" => $v);
                 } else {
@@ -150,7 +153,7 @@ class Job extends DTOObject
 
     public static function createFromJSON($json_obj)
     {
-        $result = new self();        
+        $result = new self();
 
         // Handle complex and special cases
         // Then remove them from the data array as not to be reprocessed below
@@ -160,15 +163,15 @@ class Job extends DTOObject
         }
         if (isset($json_obj->trigger)) {
             $result->trigger = Trigger::createFromJSON($json_obj->trigger);
-            unset ($json_obj->trigger);
+            unset($json_obj->trigger);
         }
         if (isset($json_obj->source)) {
             $result->source = Source::createFromJSON($json_obj->source);
-            unset ($json_obj->source);
+            unset($json_obj->source);
         }
         if (isset($json_obj->outputFormats)) {
             $result->outputFormats = $json_obj->outputFormats->outputFormat;
-            unset ($json_obj->outputFormats);
+            unset($json_obj->outputFormats);
         }
         if (isset($json_obj->repositoryDestination)) {
             $result->repositoryDestination = RepositoryDestination::createFromJSON($json_obj->repositoryDestination);
@@ -186,7 +189,4 @@ class Job extends DTOObject
 
         return $result;
     }
-
 }
-
-?>

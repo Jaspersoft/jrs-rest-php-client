@@ -1,9 +1,9 @@
 <?php
+
 namespace Jaspersoft\Dto\Job;
 
 class RepositoryDestination
 {
-
     /**
      * Read-only value of server-declared ID
      *
@@ -103,8 +103,7 @@ class RepositoryDestination
             if (isset($v)) {
                 if ($k == "outputFTPInfo") {
                     $result[$k] = $v->jsonSerialize();
-                }
-                else {
+                } else {
                     $result[$k] = $v;
                 }
             }

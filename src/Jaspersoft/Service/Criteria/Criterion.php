@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Service\Criteria;
 
 use Jaspersoft\Tool\Util;
@@ -9,6 +10,7 @@ use Jaspersoft\Tool\Util;
  */
 class Criterion
 {
+
     public function toArray()
     {
         return get_object_vars($this);

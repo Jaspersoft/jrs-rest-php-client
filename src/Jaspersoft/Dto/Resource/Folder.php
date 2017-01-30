@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Dto\Resource;
 
 /**
@@ -7,4 +8,5 @@ namespace Jaspersoft\Dto\Resource;
  */
 class Folder extends Resource
 {
+
 }

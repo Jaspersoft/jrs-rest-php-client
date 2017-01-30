@@ -2,7 +2,7 @@
 
 namespace Jaspersoft\Exception;
 
+class DtoException extends \Exception
+{
 
-class DtoException extends \Exception {
-
-} 
+}

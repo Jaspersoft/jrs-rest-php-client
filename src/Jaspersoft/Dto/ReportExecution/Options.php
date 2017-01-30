@@ -2,11 +2,10 @@
 
 namespace Jaspersoft\Dto\ReportExecution;
 
-
 use Jaspersoft\Dto\DTOObject;
 
-class Options extends DTOObject {
-
+class Options extends DTOObject
+{
     /**
      * The type of output (e.g: html, pdf, xls, etc...)
      *
@@ -28,4 +27,4 @@ class Options extends DTOObject {
      */
     public $allowInlineScripts;
 
-} 
+}

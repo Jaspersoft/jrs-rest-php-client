@@ -1,7 +1,7 @@
 <?php
 
-
 namespace Jaspersoft\Service;
+
 use Jaspersoft\Dto\Attribute\Attribute;
 use Jaspersoft\Tool\Util;
 
@@ -16,11 +16,11 @@ class ServerService extends JRSService
 
     private function makeAttributeUrl($attributeNames = null, $attrName = null)
     {
-        $url = $this->service_url . '/attributes';
+        $url = $this->service_url.'/attributes';
         if (isset($attributeNames)) {
-            $url .= '?' . Util::query_suffix(array('name' => $attributeNames));
+            $url .= '?'.Util::query_suffix(array('name' => $attributeNames));
         } else if (isset($attrName)) {
-            $url .= '/' . str_replace(' ', '%20', $attrName);
+            $url .= '/'.str_replace(' ', '%20', $attrName);
         }
         return $url;
     }
@@ -39,8 +39,9 @@ class ServerService extends JRSService
      */
     public function serverInfo()
     {
-        $url = $this->service_url . '/serverInfo';
-        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+        $url  = $this->service_url.'/serverInfo';
+        $data = $this->service->prepAndSend($url, array(200), 'GET', null, true,
+            'application/json', 'application/json');
         return json_decode($data, true);
     }
 
@@ -53,8 +54,9 @@ class ServerService extends JRSService
      */
     public function getAttributes($attributeNames = null)
     {
-        $url = self::makeAttributeUrl($attributeNames);
-        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true);
+        $url     = self::makeAttributeUrl($attributeNames);
+        $data    = $this->service->prepAndSend($url, array(200, 204), 'GET',
+            null, true);
         $jsonObj = json_decode($data);
         if (!empty($jsonObj)) {
             $result = array();
@@ -76,9 +78,10 @@ class ServerService extends JRSService
      */
     public function addOrUpdateAttribute(Attribute $attribute)
     {
-        $url = self::makeAttributeUrl(null, $attribute->name);
-        $body = json_encode($attribute);
-        $response = $this->service->prepAndSend($url, array(200, 201), 'PUT', $body, true);
+        $url      = self::makeAttributeUrl(null, $attribute->name);
+        $body     = json_encode($attribute);
+        $response = $this->service->prepAndSend($url, array(200, 201), 'PUT',
+            $body, true);
 
         if (!empty($response)) {
             return Attribute::createFromJSON(json_decode($response));
@@ -96,12 +99,13 @@ class ServerService extends JRSService
      */
     public function replaceAttributes(array $attributes)
     {
-        $url = self::makeAttributeUrl();
+        $url  = self::makeAttributeUrl();
         $data = json_encode(array("attribute" => $attributes));
 
-        $replaced = $this->service->prepAndSend($url, array(200), 'PUT', $data, true);
+        $replaced = $this->service->prepAndSend($url, array(200), 'PUT', $data,
+            true);
         $replaced = json_decode($replaced);
-        $result = array();
+        $result   = array();
         foreach ($replaced->attribute as $attr) {
             $result[] = Attribute::createFromJSON($attr);
         }
@@ -119,11 +123,10 @@ class ServerService extends JRSService
     public function deleteAttributes($attributes = null)
     {
         $url = self::makeAttributeUrl();
-        if (!empty($attributes))
-        {
-            $url .= '?' . Util::query_suffix(array('name' => $attributes));
+        if (!empty($attributes)) {
+            $url .= '?'.Util::query_suffix(array('name' => $attributes));
         }
-        return $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
+        return $this->service->prepAndSend($url, array(204), 'DELETE', null,
+                false);
     }
-
 }

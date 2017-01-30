@@ -1,17 +1,17 @@
 <?php
-require_once __DIR__ . "/BaseTest.php";
-use Jaspersoft\Tool\TestUtils as u;
+require_once __DIR__."/BaseTest.php";
 
-class QueryServiceTest extends BaseTest {
-
+class QueryServiceTest extends BaseTest
+{
     protected $jc;
     protected $newUser;
     protected $query;
 
-    public function setUp() {
-		parent::setUp();
-		
-		$this->qs = $this->jc->queryService();
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->qs    = $this->jc->queryService();
         $this->query = <<<EOF
 <query>
     <queryFields>
@@ -20,14 +20,15 @@ class QueryServiceTest extends BaseTest {
     </queryFields>
 </query>
 EOF;
-
     }
 
-    public function tearDown() {
-		parent::tearDown();
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
-    public function testQueryExecution() {
+    public function testQueryExecution()
+    {
         $run = $this->qs->executeQuery('/Domains/Simple_Domain', $this->query);
         // If data is set, then data was collected and the requst was successful
         $this->assertTrue(isset($run['values'][0]['value'][0]));

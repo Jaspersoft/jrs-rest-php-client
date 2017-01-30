@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Dto\Job;
 
 /**
@@ -10,7 +11,6 @@ namespace Jaspersoft\Dto\Job;
  */
 class OutputFTPInfo
 {
-
     /**
      * FTP Server Username
      * @var string
@@ -79,7 +79,8 @@ class OutputFTPInfo
      */
     public $pbsz;
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $result = array();
         foreach (get_object_vars($this) as $k => $v) {
             if (isset($v)) {
@@ -97,5 +98,4 @@ class OutputFTPInfo
         }
         return $result;
     }
-
 }

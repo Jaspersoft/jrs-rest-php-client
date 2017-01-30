@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Dto\Resource;
 
 /**
@@ -16,4 +17,5 @@ class InputControl extends CompositeResource
     public $visibleColumns;
     public $valueColumn;
     public $query;
+
 }

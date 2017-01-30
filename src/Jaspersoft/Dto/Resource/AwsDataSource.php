@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Dto\Resource;
 
 /**
@@ -19,4 +20,5 @@ class AwsDataSource extends Resource
     public $dbInstanceIdentifier;
     public $dbService;
     public $timezone;
+
 }

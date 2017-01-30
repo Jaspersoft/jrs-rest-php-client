@@ -2,7 +2,6 @@
 
 namespace Jaspersoft\Service;
 
-use Jaspersoft\Dto\ReportExecution\Attachment;
 use Jaspersoft\Dto\ReportExecution\BinaryOutputResource;
 use Jaspersoft\Dto\ReportExecution\Export\Export;
 use Jaspersoft\Dto\ReportExecution\Parameter;
@@ -26,12 +25,14 @@ use Jaspersoft\Tool\Util;
 class ReportExecutionService extends JRSService
 {
 
-    private function makeUrl($id = null, $status = false, $parameters = false, $exports = false,
-                             $outputResource = false, $exportOutput = null, $attachments = false, $attachmentUri = null)
+    private function makeUrl($id = null, $status = false, $parameters = false,
+                             $exports = false, $outputResource = false,
+                             $exportOutput = null, $attachments = false,
+                             $attachmentUri = null)
     {
-        $result = $this->service_url . '/reportExecutions';
+        $result = $this->service_url.'/reportExecutions';
         if (!empty($id)) {
-            $result .= '/' . $id;
+            $result .= '/'.$id;
         }
         // parameters and exports are mutually exclusive
         if ($parameters) {
@@ -39,7 +40,7 @@ class ReportExecutionService extends JRSService
         } else if ($exports) {
             $result .= '/exports';
             if (is_string($exportOutput)) {
-                $result .= '/' . $exportOutput;
+                $result .= '/'.$exportOutput;
             }
         }
         if ($status) {
@@ -51,7 +52,7 @@ class ReportExecutionService extends JRSService
         if ($attachments) {
             $result .= "/attachments";
             if (is_string($attachmentUri)) {
-                $result .= '/' . $attachmentUri;
+                $result .= '/'.$attachmentUri;
             }
         }
         return $result;
@@ -65,8 +66,9 @@ class ReportExecutionService extends JRSService
      */
     public function runReportExecution(Request $request)
     {
-        $url = $this->makeUrl();
-        $response = $this->service->prepAndSend($url, array(200), 'POST', $request->toJSON(), true);
+        $url      = $this->makeUrl();
+        $response = $this->service->prepAndSend($url, array(200), 'POST',
+            $request->toJSON(), true);
 
         return ReportExecution::createFromJSON(json_decode($response));
     }
@@ -79,8 +81,9 @@ class ReportExecutionService extends JRSService
      */
     public function getReportExecutionStatus($executionId)
     {
-        $url = $this->makeUrl($executionId, true);
-        $response = $this->service->prepAndSend($url, array(200), 'GET', null, true, "application/json", "application/status+json");
+        $url      = $this->makeUrl($executionId, true);
+        $response = $this->service->prepAndSend($url, array(200), 'GET', null,
+            true, "application/json", "application/status+json");
 
         return Status::createFromJSON(json_decode($response));
     }
@@ -101,7 +104,8 @@ class ReportExecutionService extends JRSService
         $url = $this->makeUrl($executionId, true);
 
         try {
-            $response = $this->service->prepAndSend($url, array(200), 'PUT', json_encode(array("value" => "cancelled")), true);
+            $response = $this->service->prepAndSend($url, array(200), 'PUT',
+                json_encode(array("value" => "cancelled")), true);
         } catch (RESTRequestException $e) {
             if ($e->statusCode == 204) {
                 return false;
@@ -121,8 +125,9 @@ class ReportExecutionService extends JRSService
      */
     public function getReportExecutionDetails($executionId)
     {
-        $url = $this->makeUrl($executionId);
-        $response = $this->service->prepAndSend($url, array(200), 'GET', null, true);
+        $url      = $this->makeUrl($executionId);
+        $response = $this->service->prepAndSend($url, array(200), 'GET', null,
+            true);
 
         return ReportExecution::createFromJSON(json_decode($response));
     }
@@ -138,9 +143,10 @@ class ReportExecutionService extends JRSService
      */
     public function searchReportExecutions(ReportExecutionSearchCriteria $criteria)
     {
-        $url = $this->makeUrl() . '?' . $criteria->toQueryParams();
+        $url = $this->makeUrl().'?'.$criteria->toQueryParams();
         try {
-            $response = $this->service->prepAndSend($url, array(200), 'GET', null, true);
+            $response = $this->service->prepAndSend($url, array(200), 'GET',
+                null, true);
         } catch (RESTRequestException $e) {
             if ($e->statusCode == 204) {
                 return array();
@@ -148,7 +154,7 @@ class ReportExecutionService extends JRSService
                 throw $e;
             }
         }
-        $result = array();
+        $result     = array();
         $executions = json_decode($response);
         foreach ($executions->reportExecution as $reportExecution) {
             $result[] = ReportExecution::createFromJSON($reportExecution);
@@ -164,22 +170,25 @@ class ReportExecutionService extends JRSService
      * @param bool $freshData Should fresh data be fetched? (Default: true)
      * @throws DtoException
      */
-    public function updateReportExecutionParameters($executionId, array $newParameters, $freshData = true)
+    public function updateReportExecutionParameters($executionId,
+                                                    array $newParameters,
+                                                    $freshData = true)
     {
         $url = $this->makeUrl($executionId, false, true);
         if (is_bool($freshData)) {
-            $url .= '?' . Util::query_suffix(array("freshData" => $freshData));
+            $url .= '?'.Util::query_suffix(array("freshData" => $freshData));
         }
         $parameters = array();
-        foreach($newParameters as $p) {
+        foreach ($newParameters as $p) {
             if ($p instanceof Parameter) {
                 $parameters[] = $p->jsonSerialize();
             } else {
-                throw new DtoException(get_called_class() . ": The parameter field must contain
+                throw new DtoException(get_called_class().": The parameter field must contain
                         only Jaspersoft\\DTO\\ReportExecution\\Parameter item(s)");
             }
         }
-        $this->service->prepAndSend($url, array(204), 'POST', json_encode($parameters), true);
+        $this->service->prepAndSend($url, array(204), 'POST',
+            json_encode($parameters), true);
     }
 
     /**
@@ -189,10 +198,12 @@ class ReportExecutionService extends JRSService
      * @param \Jaspersoft\Dto\ReportExecution\Export\Request $request
      * @return Export
      */
-    public function runExportExecution($executionId, \Jaspersoft\Dto\ReportExecution\Export\Request $request)
+    public function runExportExecution($executionId,
+                                       \Jaspersoft\Dto\ReportExecution\Export\Request $request)
     {
-        $url = $this->makeUrl($executionId, false, false, true);
-        $response = $this->service->prepAndSend($url, array(200), 'POST', $request->toJSON(), true);
+        $url      = $this->makeUrl($executionId, false, false, true);
+        $response = $this->service->prepAndSend($url, array(200), 'POST',
+            $request->toJSON(), true);
 
         return Export::createFromJSON(json_decode($response));
     }
@@ -206,8 +217,10 @@ class ReportExecutionService extends JRSService
      */
     public function getExportExecutionStatus($executionId, $exportId)
     {
-        $url = $this->makeUrl($executionId, true, false, true, false, $exportId);
-        $response = $this->service->prepAndSend($url, array(200), 'GET', null, true);
+        $url      = $this->makeUrl($executionId, true, false, true, false,
+            $exportId);
+        $response = $this->service->prepAndSend($url, array(200), 'GET', null,
+            true);
 
         return Status::createFromJSON(json_decode($response));
     }
@@ -222,12 +235,14 @@ class ReportExecutionService extends JRSService
      */
     public function getExportOutputResource($executionId, $exportId)
     {
-        $url = $this->makeUrl($executionId, false, false, true, true, $exportId);
-        $response = $this->service->makeRequest($url, array(200), 'GET', null, true, 'application/json', '*/*');
+        $url      = $this->makeUrl($executionId, false, false, true, true,
+            $exportId);
+        $response = $this->service->makeRequest($url, array(200), 'GET', null,
+            true, 'application/json', '*/*');
 
         $headers = RESTRequest::splitHeaderArray($response['headers']);
 
-        $outputResource = BinaryOutputResource::createFromHeaders($headers);
+        $outputResource                = BinaryOutputResource::createFromHeaders($headers);
         $outputResource->binaryContent = $response['body'];
 
         return $outputResource;
@@ -241,14 +256,14 @@ class ReportExecutionService extends JRSService
      * @param string $attachmentName the name of the attachment (found in the fileName field of an Attachment object)
      * @return string
      */
-    public function getExportOutputResourceAttachment($executionId, $exportId, $attachmentName)
+    public function getExportOutputResourceAttachment($executionId, $exportId,
+                                                      $attachmentName)
     {
-        $url = $this->makeUrl($executionId, false, false, true, false, $exportId, true, $attachmentName);
-        $response = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', '*/*');
+        $url      = $this->makeUrl($executionId, false, false, true, false,
+            $exportId, true, $attachmentName);
+        $response = $this->service->prepAndSend($url, array(200), 'GET', null,
+            true, 'application/json', '*/*');
 
         return $response;
     }
-
-
-
 }

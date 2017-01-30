@@ -1,5 +1,7 @@
 <?php
+
 namespace Jaspersoft\Dto\Report\InputControls;
+
 use Jaspersoft\Dto\DTOObject;
 
 /**
@@ -14,18 +16,22 @@ class InputControlState extends DTOObject
      * @var string
      */
     public $uri;
+
     /**
      * @var string
      */
     public $id;
+
     /**
      * @var string
      */
     public $value;
+
     /**
      * @var string
      */
     public $error;
+
     /**
      * @var array
      */
@@ -42,5 +48,4 @@ class InputControlState extends DTOObject
         }
         return $parent;
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Dto\Resource;
 
 use Jaspersoft\Tool\DTOMapper;
@@ -19,7 +20,8 @@ abstract class CollectiveResource extends Resource
         $parent = parent::jsonSerialize();
         foreach (DTOMapper::collectionFields($this->name()) as $field) {
             if (!empty($parent[$field])) {
-                $parent[$field] = DTOMapper::unmapCollection($parent[$field], $this->name(), $field);
+                $parent[$field] = DTOMapper::unmapCollection($parent[$field],
+                        $this->name(), $field);
             }
         }
         return $parent;
@@ -27,14 +29,14 @@ abstract class CollectiveResource extends Resource
 
     public static function createFromJSON($json_data, $type = null)
     {
-        $class = self::className();
+        $class  = self::className();
         $parent = parent::createFromJSON($json_data, get_called_class());
         foreach (DTOMapper::collectionFields($class) as $field) {
             if (!empty($parent->$field)) {
-                $parent->$field = DTOMapper::mapCollection($parent->$field, $class, $field);
+                $parent->$field = DTOMapper::mapCollection($parent->$field,
+                        $class, $field);
             }
         }
         return $parent;
     }
-
-} 
+}

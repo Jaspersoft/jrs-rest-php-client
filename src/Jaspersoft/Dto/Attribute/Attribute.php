@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Jaspersoft\Dto\Attribute;
-
 
 use Jaspersoft\Dto\DTOObject;
 
@@ -11,8 +9,8 @@ use Jaspersoft\Dto\DTOObject;
  *
  * @package Jaspersoft\Dto\Attribute
  */
-class Attribute extends DTOObject {
-
+class Attribute extends DTOObject
+{
     public $name;
     public $value;
     public $description;
@@ -23,8 +21,7 @@ class Attribute extends DTOObject {
 
     public function __construct($name = null, $value = null)
     {
-        $this->name = $name;
+        $this->name  = $name;
         $this->value = $value;
     }
-
 }

@@ -4,8 +4,8 @@ namespace Jaspersoft\Dto\ReportExecution\Export;
 
 use Jaspersoft\Dto\DTOObject;
 
-class Request extends DTOObject {
-
+class Request extends DTOObject
+{
     /**
      * Format to export to (html, pdf, xls, etc.)
      *
@@ -47,7 +47,4 @@ class Request extends DTOObject {
      */
     public $baseUrl;
 
-
-
-
-} 
+}

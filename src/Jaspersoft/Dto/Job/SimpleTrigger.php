@@ -1,9 +1,9 @@
 <?php
+
 namespace Jaspersoft\Dto\Job;
 
 class SimpleTrigger extends Trigger
 {
-
     /**
      * How many times trigger will fire
      * @var int
@@ -26,10 +26,12 @@ class SimpleTrigger extends Trigger
      */
     public $recurrenceIntervalUnit;
 
-    public function __construct($occurrenceCount = null, $recurrenceInterval = null, $recurrenceIntervalUnit = null)
+    public function __construct($occurrenceCount = null,
+                                $recurrenceInterval = null,
+                                $recurrenceIntervalUnit = null)
     {
-        $this->occurrenceCount = $occurrenceCount;
-        $this->recurrenceInterval = $recurrenceInterval;
+        $this->occurrenceCount        = $occurrenceCount;
+        $this->recurrenceInterval     = $recurrenceInterval;
         $this->recurrenceIntervalUnit = $recurrenceIntervalUnit;
     }
 
@@ -41,5 +43,4 @@ class SimpleTrigger extends Trigger
         }
         return $result;
     }
-
-} 
+}

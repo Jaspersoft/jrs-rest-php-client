@@ -1,5 +1,7 @@
 <?php
+
 namespace Jaspersoft\Dto\Job;
+
 use Jaspersoft\Dto\DTOObject;
 
 /**
@@ -11,7 +13,6 @@ use Jaspersoft\Dto\DTOObject;
  */
 abstract class Trigger extends DTOObject
 {
-
     /**
      * Read-only value of server-declared ID
      *
@@ -119,14 +120,11 @@ abstract class Trigger extends DTOObject
     {
         if (isset($json_obj->simpleTrigger)) {
             return SimpleTrigger::createFromJSON($json_obj->simpleTrigger);
-        }
-        else if (isset($json_obj->calendarTrigger)) {
+        } else if (isset($json_obj->calendarTrigger)) {
             return CalendarTrigger::createFromJSON($json_obj->calendarTrigger);
-        }
-        else {
+        } else {
             //TODO: add proper exception handling
             return null;
         }
     }
-
-} 
+}

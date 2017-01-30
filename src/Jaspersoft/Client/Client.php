@@ -1,7 +1,8 @@
 <?php
+
 namespace Jaspersoft\Client;
 
-use Jaspersoft\Service as service;
+use Jaspersoft\Service as Service;
 use Jaspersoft\Tool\RESTRequest;
 
 define("BASE_REST2_URL", "/rest_v2");
@@ -17,10 +18,10 @@ class Client
 {
     private $restReq;
     private $restUrl2;
-	protected $hostname;
-	protected $username;
-	protected $password;
-	protected $orgId;
+    protected $hostname;
+    protected $username;
+    protected $password;
+    protected $orgId;
     protected $repositoryService;
     protected $userService;
     protected $organizationService;
@@ -36,107 +37,107 @@ class Client
     protected $logCollectorService;
     protected $serverService;
 
-	public function __construct($serverUrl, $username, $password, $orgId = null)
-	{
-		$this->serverUrl = $serverUrl;
-		$this->username = $username;
-		$this->password = $password;
-		$this->orgId = $orgId;
+    public function __construct($serverUrl, $username, $password, $orgId = null)
+    {
+        $this->serverUrl = $serverUrl;
+        $this->username  = $username;
+        $this->password  = $password;
+        $this->orgId     = $orgId;
 
-		$this->restReq = new RESTRequest();
-		if (!empty($this->orgId)) {
-			$this->restReq->setUsername($this->username .'|'. $this->orgId);
-		} else {
-			$this->restReq->setUsername($this->username);
-		}
-		$this->restReq->setPassword($this->password);
-		$this->restUrl2 = $this->serverUrl . BASE_REST2_URL;
-	}
+        $this->restReq = new RESTRequest();
+        if (!empty($this->orgId)) {
+            $this->restReq->setUsername($this->username.'|'.$this->orgId);
+        } else {
+            $this->restReq->setUsername($this->username);
+        }
+        $this->restReq->setPassword($this->password);
+        $this->restUrl2 = $this->serverUrl.BASE_REST2_URL;
+    }
 
     public function repositoryService()
     {
         if (!isset($this->repositoryService)) {
-            $this->repositoryService = new service\RepositoryService($this);
+            $this->repositoryService = new Service\RepositoryService($this);
         }
         return $this->repositoryService;
     }
 
-	public function userService()
+    public function userService()
     {
         if (!isset($this->userService)) {
-            $this->userService = new service\UserService($this);
+            $this->userService = new Service\UserService($this);
         }
         return $this->userService;
-	}
-	
-	public function organizationService()
+    }
+
+    public function organizationService()
     {
         if (!isset($this->organizationService)) {
-            $this->organizationService = new service\OrganizationService($this);
+            $this->organizationService = new Service\OrganizationService($this);
         }
         return $this->organizationService;
-	}
-	
-	public function roleService()
+    }
+
+    public function roleService()
     {
         if (!isset($this->roleService)) {
-            $this->roleService = new service\RoleService($this);
+            $this->roleService = new Service\RoleService($this);
         }
         return $this->roleService;
-	}
-	
-	public function jobService()
+    }
+
+    public function jobService()
     {
         if (!isset($this->jobService)) {
-            $this->jobService = new service\JobService($this);
+            $this->jobService = new Service\JobService($this);
         }
         return $this->jobService;
-	}
-	
-	public function permissionService()
+    }
+
+    public function permissionService()
     {
         if (!isset($this->permissionService)) {
-            $this->permissionService = new service\PermissionService($this);
+            $this->permissionService = new Service\PermissionService($this);
         }
         return $this->permissionService;
-	}
-	
-	public function optionsService()
+    }
+
+    public function optionsService()
     {
         if (!isset($this->optionsService)) {
-            $this->optionsService = new service\OptionsService($this);
+            $this->optionsService = new Service\OptionsService($this);
         }
         return $this->optionsService;
-	}
-	
-	public function reportService()
+    }
+
+    public function reportService()
     {
         if (!isset($this->reportService)) {
-            $this->reportService = new service\ReportService($this);
+            $this->reportService = new Service\ReportService($this);
         }
         return $this->reportService;
-	}
+    }
 
     public function reportExecutionService()
     {
         if (!isset($this->reportExecutionService)) {
-            $this->reportExecutionService = new service\ReportExecutionService($this);
+            $this->reportExecutionService = new Service\ReportExecutionService($this);
         }
         return $this->reportExecutionService;
     }
-	
-	public function importExportService()
+
+    public function importExportService()
     {
         if (!isset($this->importExportService)) {
-            $this->importExportService = new service\ImportExportService($this);
+            $this->importExportService = new Service\ImportExportService($this);
         }
         return $this->importExportService;
     }
-	
-	public function queryService()
+
+    public function queryService()
     {
         if (!isset($this->queryService)) {
-            $this->queryService = new service\QueryService($this);
+            $this->queryService = new Service\QueryService($this);
         }
         return $this->queryService;
     }
@@ -144,7 +145,7 @@ class Client
     public function domainService()
     {
         if (!isset($this->domainService)) {
-            $this->domainService = new service\DomainService($this);
+            $this->domainService = new Service\DomainService($this);
         }
         return $this->domainService;
     }
@@ -152,7 +153,7 @@ class Client
     public function logCollectorService()
     {
         if (!isset($this->logCollectorService)) {
-            $this->logCollectorService = new service\LogCollectorService($this);
+            $this->logCollectorService = new Service\LogCollectorService($this);
         }
         return $this->logCollectorService;
     }
@@ -160,7 +161,7 @@ class Client
     public function thumbnailService()
     {
         if (!isset($this->thumbnailService)) {
-            $this->thumbnailService = new service\ThumbnailService($this);
+            $this->thumbnailService = new Service\ThumbnailService($this);
         }
         return $this->thumbnailService;
     }
@@ -168,11 +169,10 @@ class Client
     public function serverService()
     {
         if (!isset($this->serverService)) {
-            $this->serverService = new service\ServerService($this);
+            $this->serverService = new Service\ServerService($this);
         }
         return $this->serverService;
     }
-
 
     /**
      * Set the amount of time cURL is permitted to wait for a response to a request before timing out.
@@ -183,7 +183,7 @@ class Client
     {
         $this->restReq->defineTimeout($seconds);
     }
-	
+
     /**
      * Obtain information about the server
      *
@@ -199,8 +199,9 @@ class Client
      */
     public function serverInfo()
     {
-        $url = $this->restUrl2 . '/serverInfo';
-        $data = $this->restReq->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');
+        $url  = $this->restUrl2.'/serverInfo';
+        $data = $this->restReq->prepAndSend($url, array(200), 'GET', null, true,
+            'application/json', 'application/json');
         return json_decode($data, true);
     }
 
@@ -208,13 +209,19 @@ class Client
      * Provides the constructed RESTv2 URL for the defined JasperReports Server
      * @return string
      */
-    public function getURL() { return $this->restUrl2; }
+    public function getURL()
+    {
+        return $this->restUrl2;
+    }
 
     /**
      * Provides the RESTRequest object to be reused by the services that require it
      * @return RESTRequest
      */
-    public function getService() { return $this->restReq; }
+    public function getService()
+    {
+        return $this->restReq;
+    }
 
     /**
      * Destroy your session on the server and locally forget related cookies
@@ -222,7 +229,7 @@ class Client
      */
     public function logoutSession()
     {
-        $url = $this->serverUrl . "/logout.html";
+        $url = $this->serverUrl."/logout.html";
         $this->restReq->prepAndSend($url, array(302), 'GET');     // Kill server session
         $this->restReq->closeCurlHandle(true);                    // cleanup client resources
     }

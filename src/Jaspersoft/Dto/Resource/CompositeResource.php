@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Dto\Resource;
 
 use Jaspersoft\Tool\CompositeDTOMapper;
@@ -13,17 +14,19 @@ if (!defined("RESOURCE_NAMESPACE")) {
  */
 abstract class CompositeResource extends Resource
 {
+
     protected function resolveSubresource($field, $value, $class)
     {
-        if (is_string($value))
-        {
+        if (is_string($value)) {
             // Subresource is a reference to another resource
-            return array(CompositeDTOMapper::referenceKey($field, $class) => array("uri" => $value));
+            return array(CompositeDTOMapper::referenceKey($field, $class) => array(
+                    "uri" => $value));
         } else if (is_object($value)) {
-            if (is_a($value, RESOURCE_NAMESPACE . "\\File")) {
+            if (is_a($value, RESOURCE_NAMESPACE."\\File")) {
                 // File-based resources can represent several types of data
                 // We must find the proper field title, and use it instead of "file"
-                $resolveField = CompositeDTOMapper::fileResourceFieldReverse($field, $class);
+                $resolveField = CompositeDTOMapper::fileResourceFieldReverse($field,
+                        $class);
                 if ($resolveField !== null) {
                     return array($resolveField => $value->jsonSerialize());
                 }
@@ -35,13 +38,16 @@ abstract class CompositeResource extends Resource
                 $resourceCollection = array();
                 // Subresource is a collection of other resources which may or may not be references/local definitions
                 if (CompositeDTOMapper::isCollectionField($field, $class)) {
-                    $pair = CompositeDTOMapper::collectionKeyValuePair($class, $field);
+                    $pair = CompositeDTOMapper::collectionKeyValuePair($class,
+                            $field);
                     foreach ($value as $k => $v) {
-                        $resourceCollection[] = $this->resolveSubresource($k, $v, $class) + array($pair[0] => $k);
+                        $resourceCollection[] = $this->resolveSubresource($k,
+                                $v, $class) + array($pair[0] => $k);
                     }
                 } else {
                     foreach ($value as $k => $v) {
-                        $resourceCollection[] = $this->resolveSubresource($field, $v, $class);
+                        $resourceCollection[] = $this->resolveSubresource($field,
+                            $v, $class);
                     }
                 }
                 return $resourceCollection;
@@ -51,16 +57,20 @@ abstract class CompositeResource extends Resource
                 foreach ($value as $k => $v) {
                     if (CompositeDTOMapper::isReferenceKey($k)) {
                         $items[$k] = $this->resolveSubresource($k, $v, $class);
-                    } else if (CompositeDTOMapper::isCollectionField($field, $class)) {
-                        $collectionKeyValuePair = CompositeDTOMapper::collectionKeyValuePair($class, $field);
-                        $fileField = $collectionKeyValuePair[1];
-                        $items[$k] = $this->resolveSubresource($fileField, $v, $class);
+                    } else if (CompositeDTOMapper::isCollectionField($field,
+                            $class)) {
+                        $collectionKeyValuePair = CompositeDTOMapper::collectionKeyValuePair($class,
+                                $field);
+                        $fileField              = $collectionKeyValuePair[1];
+                        $items[$k]              = $this->resolveSubresource($fileField,
+                            $v, $class);
                     } else {
                         $items[$k] = $v;
                     }
                 }
                 if (CompositeDTOMapper::isCollectionField($field, $class)) {
-                    return CompositeDTOMapper::unmapCollection($items, $class, $field);
+                    return CompositeDTOMapper::unmapCollection($items, $class,
+                            $field);
                 } else {
                     return $items;
                 }
@@ -75,33 +85,35 @@ abstract class CompositeResource extends Resource
     {
         $expectedReferenceKey = CompositeDTOMapper::referenceKey($field, $class);
 
-        if(array_key_exists($expectedReferenceKey, $value)) {
+        if (array_key_exists($expectedReferenceKey, $value)) {
             // This value is a reference and should return a string
             return $value[$expectedReferenceKey]['uri'];
         } else if (array_key_exists(0, $value)) {
             // This value is an array and should return an array of elements
             $subElements = array();
             foreach ($value as $item) {
-                $subElements[] = self::synthesizeSubresource($field, $item, $class);
+                $subElements[] = self::synthesizeSubresource($field, $item,
+                        $class);
             }
 
             if (CompositeDTOMapper::isCollectionField($field, $class)) {
-                return CompositeDTOMapper::mapCollection($subElements, $class, $field);
-            }
-            else {
+                return CompositeDTOMapper::mapCollection($subElements, $class,
+                        $field);
+            } else {
                 return $subElements;
             }
         } else if (sizeof($value) == 1) {
             // This value is an object (local definition) and should build a new object based on this data
-            $element = array_keys($value);
-            $className = RESOURCE_NAMESPACE . '\\' . ucfirst(end($element));
+            $element   = array_keys($value);
+            $className = RESOURCE_NAMESPACE.'\\'.ucfirst(end($element));
             if (class_exists($className)) {
                 return $className::createFromJSON(end($value), $className);
             } else {
                 // This may be a File-based subresource (e.g: schema, accessGrantSchema...)
                 $fileType = CompositeDTOMapper::fileResourceField($field, $class);
                 if ($fileType != null) {
-                    return File::createFromJSON(end($value), RESOURCE_NAMESPACE . "\\File");
+                    return File::createFromJSON(end($value),
+                            RESOURCE_NAMESPACE."\\File");
                 } else {
                     //TODO: Unknown Data Exception
                     return null;
@@ -133,11 +145,12 @@ abstract class CompositeResource extends Resource
      */
     public function jsonSerialize()
     {
-        $allFields = parent::jsonSerialize();
+        $allFields       = parent::jsonSerialize();
         $compositeFields = CompositeDTOMapper::compositeFields(get_class($this));
         foreach ($compositeFields as $key) {
             if (isset($this->$key)) {
-                $allFields[$key] = $this->resolveSubresource($key, $this->$key, $this->name());
+                $allFields[$key] = $this->resolveSubresource($key, $this->$key,
+                    $this->name());
             }
         }
         return $allFields;
@@ -153,17 +166,16 @@ abstract class CompositeResource extends Resource
      */
     public static function createFromJSON($json_data, $type = null)
     {
-        $className = explode('\\', $type);
-        $className = lcfirst(end($className));
+        $className = lcfirst(end(explode('\\', $type)));
 
-        $allFields = parent::createFromJSON($json_data, $type);
+        $allFields       = parent::createFromJSON($json_data, $type);
         $compositeFields = CompositeDTOMapper::compositeFields(get_class($allFields));
         foreach ($compositeFields as $key) {
             if (isset($allFields->$key)) {
-                $allFields->$key = self::synthesizeSubresource($key, $json_data[$key], $className);
+                $allFields->$key = self::synthesizeSubresource($key,
+                        $json_data[$key], $className);
             }
         }
         return $allFields;
-
     }
 }

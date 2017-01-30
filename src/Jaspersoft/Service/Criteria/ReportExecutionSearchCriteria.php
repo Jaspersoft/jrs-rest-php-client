@@ -48,5 +48,4 @@ class ReportExecutionSearchCriteria extends Criterion
      */
     public $fireTimeTo;
 
-
 }

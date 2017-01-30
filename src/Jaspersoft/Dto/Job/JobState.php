@@ -1,11 +1,11 @@
 <?php
+
 namespace Jaspersoft\Dto\Job;
 
 use Jaspersoft\Dto\DTOObject;
 
 class JobState extends DTOObject
 {
-
     /**
      * A timestamp of the last time the job was ran
      *
@@ -30,24 +30,23 @@ class JobState extends DTOObject
      * @var string
      */
     public $value;
-    
-    public function __construct($previousFireTime = null, $nextFireTime = null, $value = null)
+
+    public function __construct($previousFireTime = null, $nextFireTime = null,
+                                $value = null)
     {
         $this->previousFireTime = $previousFireTime;
-        $this->nextFireTime = $nextFireTime;
-        $this->value = $value;
+        $this->nextFireTime     = $nextFireTime;
+        $this->value            = $value;
     }
 
     public static function createFromJSON($json_obj)
     {
         if (!isset($json_obj->previousFireTime))
-            $json_obj->previousFireTime = null;
-        if (!isset($json_obj->nextFireTime))
-            $json_obj->nextFireTime = null;
-        if (!isset($json_obj->value))
-            $json_obj->value = null;
+                $json_obj->previousFireTime = null;
+        if (!isset($json_obj->nextFireTime)) $json_obj->nextFireTime     = null;
+        if (!isset($json_obj->value)) $json_obj->value            = null;
 
-        return new self($json_obj->previousFireTime, $json_obj->nextFireTime, $json_obj->value);
+        return new self($json_obj->previousFireTime, $json_obj->nextFireTime,
+            $json_obj->value);
     }
-    
 }

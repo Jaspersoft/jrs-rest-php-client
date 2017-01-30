@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Service\Criteria;
 
 /**
@@ -68,7 +69,6 @@ class RepositorySearchCriteria extends Criterion
 
     public function __construct($q = null)
     {
-		$this->q = $q;
+        $this->q = $q;
     }
-
 }

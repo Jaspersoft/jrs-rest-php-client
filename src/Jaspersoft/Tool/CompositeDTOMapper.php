@@ -1,9 +1,9 @@
 <?php
+
 namespace Jaspersoft\Tool;
 
 abstract class CompositeDTOMapper extends DTOMapper
 {
-
     /**
      * The Reference Map contains a mapping of field keys to their respective
      * reference key names. This map is necessary because some of these keys cannot be
@@ -56,7 +56,8 @@ abstract class CompositeDTOMapper extends DTOMapper
         "ReportUnit" => array("dataSource", "jrxml", "query", "inputControls", "resources"),
         "DomainTopic" => array("dataSource", "jrxml", "query", "inputControls", "resources"),
         "SecureMondrianConnection" => array("dataSource", "schema", "accessGrantSchemas"),
-        "SemanticLayerDataSource" => array("schema", "dataSource", "securityFile", "bundles")
+        "SemanticLayerDataSource" => array("schema", "dataSource", "securityFile",
+            "bundles")
     );
 
     /** A collection of mappings of field names for file-based resources that appear as
@@ -78,7 +79,6 @@ abstract class CompositeDTOMapper extends DTOMapper
             "file" => "file"
         )
     );
-
 
     /** Return a value from a map given the key
      *
@@ -167,7 +167,8 @@ abstract class CompositeDTOMapper extends DTOMapper
         if (!empty($class) and array_key_exists($class, static::$fileResourceMap)) {
             return self::forwardResolve($field, static::$fileResourceMap[$class]);
         } else {
-            return self::forwardResolve($field, static::$fileResourceMap["default"]);
+            return self::forwardResolve($field,
+                    static::$fileResourceMap["default"]);
         }
     }
 
@@ -176,8 +177,8 @@ abstract class CompositeDTOMapper extends DTOMapper
         if (!empty($class) and array_key_exists($class, static::$fileResourceMap)) {
             return self::reverseResolve($field, static::$fileResourceMap[$class]);
         } else {
-            return self::reverseResolve($field, static::$fileResourceMap["default"]);
+            return self::reverseResolve($field,
+                    static::$fileResourceMap["default"]);
         }
     }
-
 }

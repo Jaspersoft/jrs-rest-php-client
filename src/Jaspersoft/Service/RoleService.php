@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Service;
 
 use Jaspersoft\Client\Client;
@@ -11,18 +12,16 @@ use Jaspersoft\Dto\Role\Role;
  */
 class RoleService extends JRSService
 {
-	
-	private function makeUrl($organization = null, $roleName = null, $params = null)
+
+    private function makeUrl($organization = null, $roleName = null,
+                             $params = null)
     {
-        if(!empty($organization))
-            $url = $this->service_url . '/organizations/' . $organization . '/roles';
-        else
-            $url = $this->service_url . '/roles';
-        if (!empty($roleName))
-            $url .= '/' . $roleName;
+        if (!empty($organization))
+                $url = $this->service_url.'/organizations/'.$organization.'/roles';
+        else $url = $this->service_url.'/roles';
+        if (!empty($roleName)) $url .= '/'.$roleName;
         // If a role name is defined, no parameters are expected
-        else if (!empty($params))
-            $url .= '?' . Util::query_suffix($params);
+        else if (!empty($params)) $url .= '?'.Util::query_suffix($params);
         return $url;
     }
 
@@ -40,19 +39,24 @@ class RoleService extends JRSService
      * @return array
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
-    public function searchRoles($organization = null, $includeSubOrgs = null, $user = null, $hasAllUsers = false, $q = null, $limit = 0, $offset = 0)
+    public function searchRoles($organization = null, $includeSubOrgs = null,
+                                $user = null, $hasAllUsers = false, $q = null,
+                                $limit = 0, $offset = 0)
     {
-        $result = array();
-        $url = self::makeUrl($organization, null, compact('includeSubOrgs', 'user', 'hasAllUsers', 'q', 'limit', 'offset'));
-        $data = $this->service->prepAndSend($url, array(200, 204), 'GET', null, true, 'application/json', 'application/json');
-        $data = (!empty($data)) ? json_decode($data, true) : null;
-        if ($data === null)
-            return $result;
+        $result   = array();
+        $url      = self::makeUrl($organization, null,
+                compact('includeSubOrgs', 'user', 'hasAllUsers', 'q', 'limit',
+                    'offset'));
+        $data     = $this->service->prepAndSend($url, array(200, 204), 'GET',
+            null, true, 'application/json', 'application/json');
+        $data     = (!empty($data)) ? json_decode($data, true) : null;
+        if ($data === null) return $result;
         foreach ($data['role'] as $r)
-            $result[] = @new Role($r['name'], $r['tenantId'], $r['externallyDefined']);
+            $result[] = @new Role($r['name'], $r['tenantId'],
+                $r['externallyDefined']);
         return $result;
     }
-	
+
     /**
      * Get a Role by its name
      *
@@ -63,12 +67,13 @@ class RoleService extends JRSService
      */
     public function getRole($roleName, $organization = null)
     {
-        $url = self::makeUrl($organization, $roleName);
-        $resp = $this->service->prepAndSend($url, array(200), 'GET', null, true, 'application/json', 'application/json');	
-		$data = json_decode($resp);
+        $url  = self::makeUrl($organization, $roleName);
+        $resp = $this->service->prepAndSend($url, array(200), 'GET', null, true,
+            'application/json', 'application/json');
+        $data = json_decode($resp);
         return @new Role($data->name, $data->tenantId, $data->externallyDefined);
     }
-	
+
     /**
      * Add a new role.
      *
@@ -80,9 +85,10 @@ class RoleService extends JRSService
     public function createRole(Role $role)
     {
         $url = self::makeUrl($role->tenantId, $role->name);
-        $this->service->prepAndSend($url, array(201, 200), 'PUT', json_encode($role), false, 'application/json', 'application/json');
+        $this->service->prepAndSend($url, array(201, 200), 'PUT',
+            json_encode($role), false, 'application/json', 'application/json');
     }
-	
+
     /**
      * Remove a role currently in existence.
      *
@@ -91,12 +97,12 @@ class RoleService extends JRSService
      * @param \Jaspersoft\Dto\Role\Role $role
      * @throws \Jaspersoft\Exception\RESTRequestException
      */
-	public function deleteRole(Role $role)
+    public function deleteRole(Role $role)
     {
         $url = self::makeUrl($role->tenantId, $role->name);
         $this->service->prepAndSend($url, array(204), 'DELETE', null, false);
-	}
-	
+    }
+
     /**
      * Update a role currently in existence.
      *
@@ -111,7 +117,7 @@ class RoleService extends JRSService
     public function updateRole(Role $role, $oldName = null)
     {
         $url = self::makeUrl($role->tenantId, $oldName);
-        $this->service->prepAndSend($url, array(200, 201), 'PUT', json_encode($role), false, 'application/json', 'application/json');
+        $this->service->prepAndSend($url, array(200, 201), 'PUT',
+            json_encode($role), false, 'application/json', 'application/json');
     }
-	
 }

@@ -2,8 +2,8 @@
 
 namespace Jaspersoft\Dto;
 
-
-abstract class DTOObject {
+abstract class DTOObject
+{
 
     /**
      * Creates an array based representation of class data to be serialized
@@ -39,9 +39,8 @@ abstract class DTOObject {
      */
     public static function jsonField($plural = false)
     {
-        $field = explode('\\', get_called_class());
-        $field = lcfirst(end($field));
-        return $plural ? $field . "s" : $field;
+        $field = lcfirst(end(explode('\\', get_called_class())));
+        return $plural ? $field."s" : $field;
     }
 
     /**
@@ -55,7 +54,7 @@ abstract class DTOObject {
     public static function createFromJSON($json_obj)
     {
         $source_class = get_called_class();
-        $result = new $source_class();
+        $result       = new $source_class();
 
         foreach ($json_obj as $k => $v) {
             if (!empty($v)) {
@@ -64,5 +63,4 @@ abstract class DTOObject {
         }
         return $result;
     }
-
 }

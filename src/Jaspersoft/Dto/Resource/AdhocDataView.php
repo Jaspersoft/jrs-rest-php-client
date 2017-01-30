@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Dto\Resource;
 
 /**
@@ -13,4 +14,5 @@ class AdhocDataView extends Resource
      * @var Jaspersoft\Dto\Resource
      */
     public $dataSource;
+
 }

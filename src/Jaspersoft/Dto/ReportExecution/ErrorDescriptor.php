@@ -4,8 +4,8 @@ namespace Jaspersoft\Dto\ReportExecution;
 
 use Jaspersoft\Dto\DTOObject;
 
-class ErrorDescriptor extends DTOObject {
-
+class ErrorDescriptor extends DTOObject
+{
     /**
      * @var string
      */
@@ -23,5 +23,4 @@ class ErrorDescriptor extends DTOObject {
      */
     public $parameters;
 
-
-} 
+}

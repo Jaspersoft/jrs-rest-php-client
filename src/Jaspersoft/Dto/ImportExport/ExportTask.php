@@ -1,5 +1,7 @@
 <?php
+
 namespace Jaspersoft\Dto\ImportExport;
+
 use Jaspersoft\Dto\DTOObject;
 
 /**
@@ -15,19 +17,22 @@ class ExportTask extends DTOObject
      *
      * @var array
      */
-    public $users = array();
+    public $users      = array();
+
     /**
      * Uris of resources to be exported
      *
      * @var array
      */
-    public $uris = array();
+    public $uris       = array();
+
     /**
      * List of role names to be exported
      *
      * @var array
      */
-    public $roles = array();
+    public $roles      = array();
+
     /**
      * Parameters for defining type of exports
      *

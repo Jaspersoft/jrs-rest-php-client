@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Dto\Resource;
 
 /**
@@ -7,7 +8,6 @@ namespace Jaspersoft\Dto\Resource;
  */
 class ReportUnit extends CompositeResource
 {
-
     public $alwaysPromptControls;
     public $controlsLayout;
     public $inputControlRenderingView;
@@ -33,8 +33,8 @@ class ReportUnit extends CompositeResource
     public function jsonSerialize()
     {
         if (!empty($this->resources)) {
-            $parent = parent::jsonSerialize();
-            $parent_resources = $parent['resources'];
+            $parent                          = parent::jsonSerialize();
+            $parent_resources                = $parent['resources'];
             unset($parent['resources']);
             $parent['resources']['resource'] = $parent_resources;
             return $parent;

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Jaspersoft\Dto\Job\Calendar;
 
 /**
@@ -10,8 +9,8 @@ namespace Jaspersoft\Dto\Job\Calendar;
  * Class DatedCalendar
  * @package Jaspersoft\Dto\Job\Calendar
  */
-abstract class DatedCalendar extends BaseCalendar {
-
+abstract class DatedCalendar extends BaseCalendar
+{
     public $excludeDays;
 
     /**
@@ -19,7 +18,8 @@ abstract class DatedCalendar extends BaseCalendar {
      *
      * @param string $date YYYY-MM-DD
      */
-    public function addExcludeDate($date) {
+    public function addExcludeDate($date)
+    {
         $this->excludeDays[] = $date;
     }
 
@@ -28,7 +28,8 @@ abstract class DatedCalendar extends BaseCalendar {
      *
      * @param array $dates Set of strings in format: YYYY-MM-DD
      */
-    public function addExcludeDates(array $dates) {
+    public function addExcludeDates(array $dates)
+    {
         foreach ($dates as $date) {
             $this->addExcludeDate($date);
         }
@@ -39,7 +40,8 @@ abstract class DatedCalendar extends BaseCalendar {
      *
      * @param string $date YYYY-MM-DD
      */
-    public function removeExcludeDate($date) {
+    public function removeExcludeDate($date)
+    {
         $key = array_search($date, $this->excludeDays);
         if (!($key === False)) {
             unset($this->excludeDays[$key]);
@@ -52,13 +54,15 @@ abstract class DatedCalendar extends BaseCalendar {
      *
      * @param array $dates Set of strings in format: YYYY-MM-DD
      */
-    public function removeExcludeDates(array $dates) {
+    public function removeExcludeDates(array $dates)
+    {
         foreach ($dates as $date) {
             $this->removeExcludeDate($date);
         }
     }
 
-    public static function createFromJSON($json_obj) {
+    public static function createFromJSON($json_obj)
+    {
         $pre = parent::createFromJSON($json_obj);
         // Hide this nesting from user
         if (!empty($pre->excludeDays->excludeDay)) {
@@ -67,11 +71,12 @@ abstract class DatedCalendar extends BaseCalendar {
         return $pre;
     }
 
-    public function jsonSerialize() {
-        $pre = parent::jsonSerialize();
+    public function jsonSerialize()
+    {
+        $pre                = parent::jsonSerialize();
         // Return hidden nesting for supplying to server
-        $pre['excludeDays'] = (!empty($pre['excludeDays'])) ? array("excludeDay" => $this->excludeDays) : null;
+        $pre['excludeDays'] = (!empty($pre['excludeDays'])) ? array("excludeDay" => $this->excludeDays)
+                : null;
         return $pre;
     }
-
-} 
+}

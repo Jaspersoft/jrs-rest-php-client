@@ -1,9 +1,9 @@
 <?php
+
 namespace Jaspersoft\Dto\Job;
 
 class CalendarTrigger extends Trigger
 {
-
     /**
      * Pattern that determines minute part of trigger fire times
      *
@@ -79,13 +79,14 @@ class CalendarTrigger extends Trigger
      */
     public $monthDays;
 
-
-    public function __construct($minutes = null, $hours = null, $daysType = null, $weekDays = null, $monthDays = null)
+    public function __construct($minutes = null, $hours = null,
+                                $daysType = null, $weekDays = null,
+                                $monthDays = null)
     {
-        $this->minutes = $minutes;
-        $this->hours = $hours;
-        $this->daysType = $daysType;
-        $this->weekDays = $weekDays;
+        $this->minutes   = $minutes;
+        $this->hours     = $hours;
+        $this->daysType  = $daysType;
+        $this->weekDays  = $weekDays;
         $this->monthDays = $monthDays;
     }
 
@@ -99,16 +100,13 @@ class CalendarTrigger extends Trigger
         $result = array();
         foreach (get_object_vars($this) as $k => $v) {
             // $v is not checked for null like other jsonSerialize functions, all values should be defined here
-
             // Two special cases occur because they require sublevels in their JSON
             // encoding to be considered valid.
             if ($k == "months") {
                 $result[$k] = array("month" => $this->months);
-            }
-            else if ($k == "weekDays") {
+            } else if ($k == "weekDays") {
                 $result[$k] = array("day" => $this->weekDays);
-            }
-            else {
+            } else {
                 $result[$k] = $v;
             }
         }
@@ -128,15 +126,12 @@ class CalendarTrigger extends Trigger
         foreach ($json_obj as $k => $v) {
             if ($k == "months") {
                 $result->$k = $v->month;
-            }
-            else if ($k == "weekDays") {
+            } else if ($k == "weekDays") {
                 $result->$k = $v->day;
-            }
-            else {
+            } else {
                 $result->$k = $v;
             }
         }
         return $result;
     }
-
-} 
+}

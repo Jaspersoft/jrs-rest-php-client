@@ -5,11 +5,10 @@
 
 namespace Jaspersoft\Dto\ReportExecution;
 
-
 use Jaspersoft\Dto\DTOObject;
 
-class Parameter extends DTOObject {
-
+class Parameter extends DTOObject
+{
     /**
      * Name of the input control (parameter)
      *
@@ -28,5 +27,4 @@ class Parameter extends DTOObject {
     {
         return array("name" => $this->name, "value" => (array) $this->value);
     }
-
-} 
+}

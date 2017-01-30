@@ -1,5 +1,7 @@
 <?php
+
 namespace Jaspersoft\Dto\ReportExecution;
+
 use Jaspersoft\Dto\DTOObject;
 use Jaspersoft\Dto\ReportExecution\Export\Export;
 
@@ -10,7 +12,6 @@ use Jaspersoft\Dto\ReportExecution\Export\Export;
  */
 class ReportExecution extends DTOObject
 {
-
     /**
      * Status of the execution
      * @var string
@@ -77,5 +78,4 @@ class ReportExecution extends DTOObject
         }
         return $result;
     }
-
 }

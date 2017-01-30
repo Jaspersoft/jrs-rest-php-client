@@ -1,5 +1,7 @@
 <?php
+
 namespace Jaspersoft\Dto\ImportExport;
+
 use Jaspersoft\Dto\DTOObject;
 
 /**
@@ -14,22 +16,27 @@ class ImportTask extends DTOObject
      * @var boolean
      */
     public $update;
+
     /**
      * @var boolean
      */
     public $skipUserUpdate;
+
     /**
      * @var boolean
      */
     public $includeAccessEvents;
+
     /**
      * @var boolean
      */
     public $includeAuditEvents;
+
     /**
      * @var boolean
      */
     public $includeMonitoringEvents;
+
     /**
      * @var boolean
      */
@@ -47,5 +54,4 @@ class ImportTask extends DTOObject
         }
         return $data;
     }
-
 }

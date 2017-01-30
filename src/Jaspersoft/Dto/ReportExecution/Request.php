@@ -1,8 +1,9 @@
 <?php
+
 namespace Jaspersoft\Dto\ReportExecution;
+
 use Jaspersoft\Dto\DTOObject;
 use Jaspersoft\Exception\DtoException;
-use Jaspersoft\Exception\ReportExecutionException;
 
 /**
  * Describes a request for a Report Execution
@@ -13,7 +14,6 @@ use Jaspersoft\Exception\ReportExecutionException;
  */
 class Request extends DTOObject
 {
-
     /**
      * URI of the Report to be executed
      *
@@ -117,11 +117,11 @@ class Request extends DTOObject
             $params = null;
             if (is_array($this->parameters)) {
                 $paramSet = array();
-                foreach($this->parameters as $p) {
+                foreach ($this->parameters as $p) {
                     if ($p instanceof Parameter) {
                         $paramSet[] = $p->jsonSerialize();
                     } else {
-                        throw new DtoException(get_called_class() . ": The parameter field must contain
+                        throw new DtoException(get_called_class().": The parameter field must contain
                         only Jaspersoft\\DTO\\ReportExecution\\Parameter item(s)");
                     }
                 }
@@ -130,7 +130,7 @@ class Request extends DTOObject
                 if ($this->parameters instanceof Parameter) {
                     $params = array($this->parameters->jsonSerialize()); // Server expects array even for 1 element
                 } else {
-                    throw new DtoException(get_called_class() . ": The parameter field must contain
+                    throw new DtoException(get_called_class().": The parameter field must contain
                         only Jaspersoft\\DTO\\ReportExecution\\Parameter item(s)");
                 }
             }

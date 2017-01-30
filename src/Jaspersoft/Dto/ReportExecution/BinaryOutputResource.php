@@ -1,11 +1,9 @@
 <?php
 
-
 namespace Jaspersoft\Dto\ReportExecution;
 
-
-class BinaryOutputResource extends OutputResource {
-
+class BinaryOutputResource extends OutputResource
+{
     /**
      * The binary content of a resource in a string
      *
@@ -13,4 +11,4 @@ class BinaryOutputResource extends OutputResource {
      */
     public $binaryContent;
 
-} 
+}

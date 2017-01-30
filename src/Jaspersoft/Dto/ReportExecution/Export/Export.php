@@ -7,8 +7,8 @@ use Jaspersoft\Dto\ReportExecution\Attachment;
 use Jaspersoft\Dto\ReportExecution\Options;
 use Jaspersoft\Dto\ReportExecution\OutputResource;
 
-class Export extends DTOObject {
-
+class Export extends DTOObject
+{
     /**
      * Unique ID of export
      *
@@ -51,10 +51,11 @@ class Export extends DTOObject {
      */
     public $attachments;
 
-    public static function createFromJSON($json_data) {
+    public static function createFromJSON($json_data)
+    {
         $result = new self();
         foreach ($json_data as $k => $v) {
-            if (!empty ($v)) {
+            if (!empty($v)) {
                 if (is_array($v)) {
                     if ($k == Attachment::jsonField(true)) {
                         $attachments = array();
@@ -65,9 +66,9 @@ class Export extends DTOObject {
                     }
                 } elseif (is_object($v)) {
                     if ($k == OutputResource::jsonField())
-                        $result->$k = OutputResource::createFromJSON($v);
+                            $result->$k = OutputResource::createFromJSON($v);
                     if ($k == Options::jsonField())
-                        $result->$k = Options::createFromJSON($v);
+                            $result->$k = Options::createFromJSON($v);
                 } else {
                     $result->$k = $v;
                 }
@@ -75,5 +76,4 @@ class Export extends DTOObject {
         }
         return $result;
     }
-
-} 
+}

@@ -1,17 +1,17 @@
 <?php
 
-
 namespace Jaspersoft\Dto\Domain;
 
-
-class MetaLevel extends AbstractMetaEntity {
-
+class MetaLevel extends AbstractMetaEntity
+{
     /** @var  array */
     public $items;
+
     /** @var  array */
     public $subLevels;
 
-    public static function createFromJSON($json_obj) {
+    public static function createFromJSON($json_obj)
+    {
         $parent = parent::createFromJSON($json_obj);
         if (!empty($json_obj->items)) {
             unset($parent->items);
@@ -53,5 +53,4 @@ class MetaLevel extends AbstractMetaEntity {
 
         return $parent;
     }
-
-} 
+}

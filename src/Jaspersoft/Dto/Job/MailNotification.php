@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaspersoft\Dto\Job;
 
 /**
@@ -7,7 +8,6 @@ namespace Jaspersoft\Dto\Job;
  */
 class MailNotification
 {
-
     /**
      * Read-only value of server-declared ID
      *
@@ -117,14 +117,11 @@ class MailNotification
                 // attributes of the MailNotification, so they are special cases handled below
                 if ($k == "toAddresses") {
                     $result[$k] = array("address" => $this->toAddresses);
-                }
-                else if ($k == "ccAddresses") {
+                } else if ($k == "ccAddresses") {
                     $result[$k] = array("address" => $this->ccAddresses);
-                }
-                else if ($k == "bccAddresses") {
+                } else if ($k == "bccAddresses") {
                     $result[$k] = array("address" => $this->bccAddresses);
-                }
-                else {
+                } else {
                     $result[$k] = $v;
                 }
             }
@@ -155,5 +152,4 @@ class MailNotification
         }
         return $result;
     }
-
 }

@@ -2,11 +2,10 @@
 
 namespace Jaspersoft\Dto\ReportExecution\Export;
 
-
 use Jaspersoft\Dto\DTOObject;
 
-class ExportExecution extends DTOObject {
-
+class ExportExecution extends DTOObject
+{
     /**
      * Unique ID of Export Execution
      *
@@ -28,5 +27,4 @@ class ExportExecution extends DTOObject {
      */
     public $status;
 
-
-} 
+}

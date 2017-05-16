@@ -37,6 +37,7 @@ class RESTRequest
         $this->curl_timeout     = 30;
         $this->curl_handle      = curl_init();
         $this->curl_cookiejar   = null;
+        $this->auth_token		= null;
 
         if ($this->request_body !== null)
 		{
@@ -85,6 +86,7 @@ class RESTRequest
 		$this->accept_type 		= 'application/json';
 		$this->file_to_upload	= null;
         $this->headers          = null;
+        $this->auth_token		= null;
         if (!is_resource($this->curl_handle)) {
             $this->curl_handle = curl_init();
         }
@@ -284,6 +286,8 @@ class RESTRequest
             $this->headers[] = "Content-Type: " . $this->content_type;
         if (!empty($this->accept_type))
 		    $this->headers[] = "Accept: " . $this->accept_type;
+		if ($this->auth_token !== null)
+			$this->headers[] = "pp: " . $this->auth_token;
         if (!empty($this->headers))
             curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $this->headers);
 	}
@@ -292,7 +296,8 @@ class RESTRequest
 	{
 		if ($this->username !== null && $this->password !== null)
 		{
-            if (empty($this->curl_cookiejar)) {
+			curl_setopt($curlHandle, CURLOPT_HTTPHEADER, array('Authorization'));
+			if (empty($this->curl_cookiejar)) {
                 $this->curl_cookiejar = tempnam(sys_get_temp_dir(), "jrscookies_");
             }
 			curl_setopt($curlHandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -375,6 +380,10 @@ class RESTRequest
 	public function setVerb ($verb)
 	{
 		$this->verb = $verb;
+	}
+	public function setAuthToken ($auth_token)
+	{
+		$this->auth_token = $auth_token;
 	}
 
     public function closeCurlHandle($close_cookies = false) {

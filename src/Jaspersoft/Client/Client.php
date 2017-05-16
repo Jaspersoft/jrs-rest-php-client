@@ -21,6 +21,7 @@ class Client
 	protected $username;
 	protected $password;
 	protected $orgId;
+	protected $authToken;
     protected $repositoryService;
     protected $userService;
     protected $organizationService;
@@ -36,12 +37,13 @@ class Client
     protected $logCollectorService;
     protected $serverService;
 
-	public function __construct($serverUrl, $username, $password, $orgId = null)
+	public function __construct($serverUrl, $username, $password, $orgId = null, $authToken = null)
 	{
 		$this->serverUrl = $serverUrl;
 		$this->username = $username;
 		$this->password = $password;
 		$this->orgId = $orgId;
+		$this->authToken = $authToken;
 
 		$this->restReq = new RESTRequest();
 		if (!empty($this->orgId)) {
@@ -51,6 +53,10 @@ class Client
 		}
 		$this->restReq->setPassword($this->password);
 		$this->restUrl2 = $this->serverUrl . BASE_REST2_URL;
+		if($authToken !== null)
+		{
+			$this->restReq->setAuthToken($authToken);
+		}
 	}
 
     public function repositoryService()
@@ -173,6 +179,11 @@ class Client
         return $this->serverService;
     }
 
+    public function setAuthToken($token)
+	{
+		$this->authToken = $token;
+		$this->restReq->setAuthToken($token);
+	}
 
     /**
      * Set the amount of time cURL is permitted to wait for a response to a request before timing out.

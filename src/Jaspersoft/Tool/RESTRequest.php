@@ -86,7 +86,6 @@ class RESTRequest
 		$this->accept_type 		= 'application/json';
 		$this->file_to_upload	= null;
         $this->headers          = null;
-        $this->auth_token		= null;
         if (!is_resource($this->curl_handle)) {
             $this->curl_handle = curl_init();
         }

@@ -39,7 +39,7 @@ class ImportTask extends DTOObject
     {
         $data = array();
         foreach (get_object_vars($this) as $k => $v) {
-            if (!empty($v) && $v == true) {
+            if (!empty($v) && $v === true) {
                 $data[$k] = 'true';
             } elseif (!empty($v)) {
                 $data[$k] = $v;

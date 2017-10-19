@@ -15,7 +15,7 @@ To use this client, you will need:
 
 Installation
 -------------
-Add the following to your composer.json file for your project, or run `php composer.phar reqiure jaspersoft/rest-client v2.0.0` in the directory of your project
+Add the following to your composer.json file for your project, or run `php composer.phar require jaspersoft/rest-client v2.0.0` in the directory of your project
 
     {
 	    "require": {

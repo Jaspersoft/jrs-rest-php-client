@@ -260,7 +260,7 @@ class RESTRequest
         $response = curl_exec($curlHandle);
         $this->response_info = curl_getinfo($curlHandle);
 
-        $response = preg_replace("/^(?:HTTP\/1.1 100 Continue.*?\\r\\n\\r\\n)+/ms", "", $response);
+        $response = preg_replace("/^(?:HTTP\/1.1 100.*?\\r\\n\\r\\n)+/ms", "", $response);
 
         //  100-continue chunks are returned on multipart communications
         $headerblock = strstr($response, "\r\n\r\n", true);

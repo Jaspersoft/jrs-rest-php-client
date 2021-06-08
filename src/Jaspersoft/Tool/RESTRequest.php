@@ -519,7 +519,18 @@ class RESTRequest
     }
 
 
-    public function sendBinary($url, $expectedCodes = array(200), $body, $contentType, $contentDisposition, $contentDescription, $verb = "POST")
+   /**
+    * @param $url
+    * @param $expectedCodes
+    * @param $body
+    * @param $contentType
+    * @param $contentDisposition
+    * @param $contentDescription
+    * @param string $verb
+    * @return null
+    * @throws RESTRequestException
+    */
+    public function sendBinary($url, $expectedCodes, $body, $contentType, $contentDisposition, $contentDescription, $verb = "POST")
     {
         $this->flush();
         $this->setUrl($url);

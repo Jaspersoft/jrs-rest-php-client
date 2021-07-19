@@ -17,10 +17,10 @@ class Client
 {
     private $restReq;
     private $restUrl2;
-	protected $hostname;
-	protected $username;
-	protected $password;
-	protected $orgId;
+ 	 protected $hostname;
+	 protected $username;
+	 protected $password;
+	 protected $orgId;
     protected $repositoryService;
     protected $userService;
     protected $organizationService;
@@ -36,7 +36,7 @@ class Client
     protected $logCollectorService;
     protected $serverService;
 
-	public function __construct($serverUrl, $username, $password, $orgId = null)
+	public function __construct(string $serverUrl, string $username, string $password, $orgId = null)
 	{
 		$this->serverUrl = $serverUrl;
 		$this->username = $username;

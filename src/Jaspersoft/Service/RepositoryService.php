@@ -175,7 +175,8 @@ class RepositoryService extends JRSService
         $url = self::makeUrl(null, $resource->uri);
 
         $body = $binaryData;
-        $response = $this->service->sendBinary($url, array(201, 200), $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, 'PUT');
+        $response = $this->service->sendBinary($url, $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, 'PUT', array(201, 200));
+        
         return File::createFromJSON(json_decode($response, true), get_class($resource));
 
     }
@@ -198,7 +199,7 @@ class RepositoryService extends JRSService
 
         $url .= '?' . Util::query_suffix(array("createFolders" => $createFolders));
         $body = $binaryData;
-        $response = $this->service->sendBinary($url, array(201, 200), $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, 'POST');
+        $response = $this->service->sendBinary($url, $body, MimeMapper::mapType($resource->type), 'attachment; filename=' . $resource->label, $resource->description, 'POST', array(201, 200));
         return File::createFromJSON(json_decode($response, true), get_class($resource));
     }
 

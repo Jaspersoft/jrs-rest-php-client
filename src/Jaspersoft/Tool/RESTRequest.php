@@ -6,22 +6,25 @@ use Jaspersoft\Exception\RESTRequestException;
 class RESTRequest
 {
 
-	protected $url;
-	protected $verb;
-	protected $request_body;
-	protected $request_length;
-	protected $username;
-	protected $password;
-	protected $accept_type;
-	protected $content_type;
-	protected $response_body;
-	protected $response_info;
-	protected $file_to_upload = array();
+    protected $url;
+    protected $verb;
+    protected $request_body;
+    protected $request_length;
+    protected $username;
+    protected $password;
+    protected $accept_type;
+    protected $content_type;
+    protected $response_body;
+    protected $response_headers;
+    protected $response_info;
+    protected $file_to_upload = array();
     protected $headers;
     protected $curl_timeout;
     protected $curl_handle;
+    protected $curl_cookiejar;
+    protected $options;
 
-	public function __construct ($url = null, $verb = 'GET', $request_body = null)
+    public function __construct ($url = null, $verb = 'GET', $request_body = null, $options = array())
 	{
 		$this->url				= $url;
 		$this->verb				= $verb;
@@ -37,6 +40,7 @@ class RESTRequest
         $this->curl_timeout     = 30;
         $this->curl_handle      = curl_init();
         $this->curl_cookiejar   = null;
+        $this->options = $options;
 
         if ($this->request_body !== null)
 		{
@@ -276,6 +280,9 @@ class RESTRequest
 
 	protected function setCurlOpts (&$curlHandle)
 	{
+        $ssl_verifypeer = $this->getOptionValue('ssl_verifypeer',true);
+        $ssl_cainfo = $this->getOptionValue('ssl_cainfo','');
+
 		curl_setopt($curlHandle, CURLOPT_URL, $this->url);
 		curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curlHandle, CURLOPT_HEADER, true);
@@ -286,6 +293,10 @@ class RESTRequest
 		    $this->headers[] = "Accept: " . $this->accept_type;
         if (!empty($this->headers))
             curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $this->headers);
+        if (!empty($ssl_cainfo))
+            curl_setopt($curlHandle, CURLOPT_CAINFO, $ssl_cainfo);
+        if (!$ssl_verifypeer)
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
 	}
 
 	protected function setAuth (&$curlHandle)
@@ -336,6 +347,23 @@ class RESTRequest
 	{
 		$this->content_type = $content_type;
 	}
+    public function getOptions ()
+    {
+        return $this->options;
+    }
+    public function setOptions ($options = array())
+    {
+        $this->options = $options;
+    }
+    protected function getOptionValue($option_name, $default_value = null)
+    {
+        $option_value = $default_value;
+        if (is_array($this->options) && array_key_exists($option_name, $this->options))
+        {
+            $option_value = $this->options[$option_name];
+        }
+        return $option_value;
+    }
 	public function getPassword ()
 	{
 		return $this->password;
@@ -519,7 +547,7 @@ class RESTRequest
     }
 
 
-    public function sendBinary($url, $expectedCodes = array(200), $body, $contentType, $contentDisposition, $contentDescription, $verb = "POST")
+    public function sendBinary($url, $body, $contentType, $contentDisposition, $contentDescription, $verb = "POST", $expectedCodes = array(200))
     {
         $this->flush();
         $this->setUrl($url);

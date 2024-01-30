@@ -15,7 +15,7 @@ class Util
                 $params[$k] = ($v) ? 'true' : 'false';
             }
         }
-        $url = http_build_query($params, null, '&');
+        $url = http_build_query($params, '', '&');
         return preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', $url);
     }
 

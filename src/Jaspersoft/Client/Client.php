@@ -17,10 +17,11 @@ class Client
 {
     private $restReq;
     private $restUrl2;
-	protected $hostname;
-	protected $username;
-	protected $password;
-	protected $orgId;
+    private $serverUrl;
+    protected $hostname;
+    protected $username;
+    protected $password;
+    protected $orgId;
     protected $repositoryService;
     protected $userService;
     protected $organizationService;
@@ -35,13 +36,15 @@ class Client
     protected $thumbnailService;
     protected $logCollectorService;
     protected $serverService;
+    protected $options;
 
-	public function __construct($serverUrl, $username, $password, $orgId = null)
+  public function __construct($serverUrl, $username, $password, $orgId = null, $options = array())
 	{
 		$this->serverUrl = $serverUrl;
 		$this->username = $username;
 		$this->password = $password;
 		$this->orgId = $orgId;
+    $this->options = $options;
 
 		$this->restReq = new RESTRequest();
 		if (!empty($this->orgId)) {
@@ -49,6 +52,7 @@ class Client
 		} else {
 			$this->restReq->setUsername($this->username);
 		}
+    $this->restReq->setOptions($this->options);
 		$this->restReq->setPassword($this->password);
 		$this->restUrl2 = $this->serverUrl . BASE_REST2_URL;
 	}

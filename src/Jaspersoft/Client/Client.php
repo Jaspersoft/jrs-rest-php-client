@@ -17,6 +17,7 @@ class Client
 {
     private $restReq;
     private $restUrl2;
+    private $serverUrl;
     protected $hostname;
     protected $username;
     protected $password;

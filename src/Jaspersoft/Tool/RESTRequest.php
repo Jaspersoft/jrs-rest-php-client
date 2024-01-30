@@ -6,20 +6,22 @@ use Jaspersoft\Exception\RESTRequestException;
 class RESTRequest
 {
 
-	protected $url;
-	protected $verb;
-	protected $request_body;
-	protected $request_length;
-	protected $username;
-	protected $password;
-	protected $accept_type;
-	protected $content_type;
-	protected $response_body;
-	protected $response_info;
-	protected $file_to_upload = array();
+    protected $url;
+    protected $verb;
+    protected $request_body;
+    protected $request_length;
+    protected $username;
+    protected $password;
+    protected $accept_type;
+    protected $content_type;
+    protected $response_body;
+    protected $response_headers;
+    protected $response_info;
+    protected $file_to_upload = array();
     protected $headers;
     protected $curl_timeout;
     protected $curl_handle;
+    protected $curl_cookiejar;
     protected $options;
 
     public function __construct ($url = null, $verb = 'GET', $request_body = null, $options = array())
@@ -545,7 +547,7 @@ class RESTRequest
     }
 
 
-    public function sendBinary($url, $expectedCodes = array(200), $body, $contentType, $contentDisposition, $contentDescription, $verb = "POST")
+    public function sendBinary($url, $body, $contentType, $contentDisposition, $contentDescription, $verb = "POST", $expectedCodes = array(200))
     {
         $this->flush();
         $this->setUrl($url);
